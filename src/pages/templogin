@@ -1,0 +1,73 @@
+import React, { useState } from "react";
+import { FaArrowLeft } from "react-icons/fa6";
+import { Wrapper } from "../shared/Wrapper";
+export const Login = () => {
+    const [GuestLogin, setGuestLogin] = useState(false);
+    return (
+        <React.Fragment>
+
+         
+
+            <Wrapper>
+                <div className="grid grid-cols-12 items-center">
+                    <div className="col-span-1"></div>
+                    <div className="col-span-4 mt-16 ">
+                        <form className="bg-[#E2E8F04D] border-[#E2E8F0] rounded-[10px]  border px-6 py-10">
+                            <div className="text-center mb-10">
+                                <h3 className=" text-2xl text-[#030303] font-semibold">Returning Customers</h3>
+                                <p className="text-[#000000] text-sm">Sign in for faster checkout.</p>
+                            </div>
+                            <input type="text" placeholder="Enter your username" className="w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border border-[#66666666] rounded-[4px]" />
+                            <div className="relative">
+                                <input type="password" placeholder="Enter you Password" className="w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border border-[#66666666] rounded-[4px] pr-12" />
+                                <span className="absolute top-1/2 right-5 translate-y-[-50%] cursor-pointer"><img src={process.env.PUBLIC_URL + "/icons/eye.png"} alt="" /></span>
+                            </div>
+
+                            <p className="text-[#64748B]  text-sm my-5">Forgot Password?</p>
+                            <button className="block w-full bg-primary text-white px-3 py-4 font-semibold text-base rounded-[4px]">Login</button>
+
+                            <span className="relative block text-center text-[22px] text-black my-7 after:absolute after:left-0 after:w-[40%] after:h-[1px] after:bg-[#E2E8F0] after:top-1/2 after:translate-y-[-50%]
+                            before:absolute before:right-0 before:w-[40%] before:h-[1px] before:bg-[#E2E8F0] before:top-1/2 before:translate-y-[-50%]
+                            ">Or</span>
+
+                            <button className="border rounded-[4px] bg-[#FFFFFF66] border-[#03030399]  w-full py-3 px-3 flex items-center justify-center"><img src={process.env.PUBLIC_URL + "/icons/apple.png"} className="mr-2" alt="" />Sign In with Apple</button>
+                            <button className="border rounded-[4px] bg-[#FFFFFF66] border-[#03030399]  w-full py-3 px-3 flex items-center justify-center mt-3"><img src={process.env.PUBLIC_URL + "/icons/google.png"} className="mr-2" alt="" />Sign In with Outlook</button>
+                            <p className="mt-4 text-[#212121] text-sm">By registering you agree to the user <span className="font-semibold">Terms & Condition</span> and
+                                <span className="font-semibold"> Privacy Policy</span></p>
+                        </form>
+                    </div>
+                    <div className="col-span-2 text-center">
+                        <h1 className="relative text-[#000000] text-[22px]
+                        after:absolute after:bottom-[60px] after:w-[2px] after:h-[200px] after:bg-[#E2E8F0] after:left-1/2
+                       before:absolute before:top-[60px] before:w-[2px] before:h-[200px] before:bg-[#E2E8F0] before:left-1/2
+                       ">Or</h1>
+                    </div>
+                    <div className="col-span-4 mt-16">
+                        <form className="bg-[#E2E8F04D] border-[#E2E8F0] rounded-[10px]  border px-6 py-10" onSubmit={(e) => e.preventDefault()}>
+                            <div>
+                                <div className="text-center mb-10">
+                                    <h3 className=" text-2xl text-[#030303] font-semibold">{GuestLogin ? "Enter Contact Details For Delivery" : "New Customers"}</h3>
+                                    {!GuestLogin ? <p className="text-[#000000] text-sm mt-5">Don't have an account? No problem, you can check out as a guest. You'll have the option to create
+                                        an account during checkout.</p> : null}
+                                </div>
+
+                                {GuestLogin ? (
+                                    <div>
+                                        <input type="text" placeholder="Mobile Number" className="w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border border-[#66666666] rounded-[4px]" />
+                                        <input type="email" placeholder="Enter you Email" className="w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border border-[#66666666] rounded-[4px] pr-12" />
+                                    </div>
+                                ) : null}
+
+                                {!GuestLogin ? <button className="block w-full bg-primary text-white px-3 py-4 font-semibold text-base rounded-[4px]" onClick={() => setGuestLogin(true)}>Continue as a Guest</button>
+                                    : <button className="block w-full bg-primary text-white px-3 py-4 font-semibold text-base rounded-[4px] mt-5" onClick={() => setGuestLogin(false)}>Confirm & Pay</button>}
+                            </div>
+
+
+                        </form>
+                    </div>
+                    <div className="col-span-1"></div>
+                </div>
+            </Wrapper>
+        </React.Fragment>
+    )
+}
