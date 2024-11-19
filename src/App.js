@@ -20,6 +20,14 @@ import { FaRegCircleCheck } from "react-icons/fa6";
 import { Checkout } from "./pages/checkout/Checkout";
 import { ReviewCheckout } from "./pages/checkout/ReviewCheckout";
 import { ProductsByCategory } from "./pages/ProductsByCategory";
+import AllOrders from "./pages/ProfileRegistration/AllOrders";
+import Reviews from "./pages/Reviews/Reviews";
+import BrowsingHistory from "./pages/BrowsingHistory/BrowsingHistory";
+import Wishlist from "./pages/Wishlist/Wishlist";
+import CouponsOffers from "./pages/CouponeOffers/CouponsOffers";
+import Addresses from "./pages/Addresses/Addresses";
+import CreditBalance from "./pages/CreditBalance/CreditBalance";
+import AccountSecurity from "./pages/AccountSecurity/AccountSecurity";
 const App = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
@@ -94,17 +102,24 @@ const App = () => {
             )
           }
         />
+        <Route path="/collections/:category/:subcategory/:id" element={<ProductsByCategory />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/" element={<Navigate replace to="/home" />} />
         <Route path="/products" element={<ProductListing />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/collections/:id" element={<CollectionPage />} />
-        <Route path="/collections/:category/:subcategory/:id" element={<ProductsByCategory />} />
         <Route path="/settings" element={<SettingsLayout />} />
         <Route path="/login" element={<Login />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/checkout" element={<Checkout />} />
         <Route path="/review-checkout" element={<ReviewCheckout />} />
-        <Route path="/" element={<Navigate replace to="/home" />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/all-orders" element={<AllOrders/>} />
+        <Route path="/reviews" element={<Reviews/>} />
+        <Route path="/browsing-history" element={<BrowsingHistory/>} />
+        <Route path="/wishlist" element={<Wishlist/>} />
+        <Route path="/coupons-offers" element={<CouponsOffers/>} />
+        <Route path="/addresses" element={<Addresses/>} />
+        <Route path="/creditBalance" element={<CreditBalance/>} />
+        <Route path="/AccountSecurity" element={<AccountSecurity/>} />
       </Routes>
 
       <ToastContainer
