@@ -17,7 +17,6 @@ import { useParams } from 'react-router-dom';
 export const CollectionPage = () => {
     const [selectedCat, setSelectedCat] = useState([]);
     const { id } = useParams();
-
     const navigate = useNavigate();
     const [minValue, set_minValue] = useState(25);
     const [maxValue, set_maxValue] = useState(75);
@@ -62,7 +61,7 @@ export const CollectionPage = () => {
         fetchCategories();
 
     }, [location])
-
+ 
     const collectionBreadCrumb = [
         {
             url: "/",
@@ -147,7 +146,7 @@ export const CollectionPage = () => {
                                         <div className="overflow-y-auto max-h-[250px]">
                                             {cat.children ? cat.children.map((cat2, index2) => {
                                                 return (
-                                                    <Link key={index2} className="mt-1 block text-[#666666] text-base underline" to={"/collections/" + cat2.slug} >{cat2.name}</Link>
+                                                    <Link key={index} className="mt-1 block text-[#666666] text-base underline" to={`/collections/${id}/${cat2.slug}/${cat2.id}?type=1`} >{cat2.name}</Link>
                                                 )
                                             }) : null}
                                         </div>
