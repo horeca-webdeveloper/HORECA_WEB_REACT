@@ -15,97 +15,33 @@ export const CompareProducts = ({ productLoader, product, compareProductFields }
     const [secondLayer, setSecondLayer] = useState([]);
     const [thirdLayer, setThirdLayer] = useState([]);
     const [forthLayer, setForthLayer] = useState([]);
-    const [fifthLayer, setFifthLayer] = useState([])
-
-
+    const [fifthLayer, setFifthLayer] = useState([]);
 
     useEffect(() => {
-        if (product.specifications) {
-            let firstLayerTemp = [];
-            product.specifications.map((spec) => {
-                firstLayerTemp.push(spec.spec_name)
-            })
-            setFirstLayer(firstLayerTemp.sort())
+        if (product.specifications && product.compare_products) {
+            const firstLayerTemp = product.specifications.map(spec => spec.spec_name).sort();
+            setFirstLayer(firstLayerTemp);
+            const secondLayerTemp = firstLayerTemp.map(first => {
+                const spec = product.specifications.find(sec => sec.spec_name === first);
+                return spec ? spec.spec_value : "N/A";
+            });
+            setSecondLayer(secondLayerTemp);
+            const thirdLayerTemp = firstLayerTemp.map(first => {
+                const spec = product.compare_products[0]?.specifications.find(sec => sec.spec_name === first);
+                return spec ? spec.spec_value : "N/A";
+            });
+            setThirdLayer(thirdLayerTemp);
+            const forthLayerTemp = firstLayerTemp.map(first => {
+                const spec = product.compare_products[1]?.specifications.find(sec => sec.spec_name === first);
+                return spec ? spec.spec_value : "N/A";
+            });
+            setForthLayer(forthLayerTemp);
+            const fifthLayerTemp = firstLayerTemp.map(first => {
+                const spec = product.compare_products[2]?.specifications.find(sec => sec.spec_name === first);
+                return spec ? spec.spec_value : "N/A";
+            });
+            setFifthLayer(fifthLayerTemp);
         }
-
-
-        if (product.compare_products && firstLayer) {
-            let secondLayerTemp = [];
-            let found;
-            firstLayer.map((first, index) => {
-                found = false;
-                product.specifications.map((sec, index2) => {
-                    if (first === sec.spec_name) {
-                        secondLayerTemp.push(sec.spec_value)
-                        found = true;
-                    }
-                })
-                if (!found) {
-                    secondLayerTemp.push("N/A")
-                }
-            })
-
-            setSecondLayer(secondLayerTemp)
-        }
-
-        if (product.compare_products && firstLayer) {
-            let thirdLayerTemp = [];
-            let found;
-            firstLayer.map((first, index) => {
-                found = false;
-                product.compare_products[0].specifications.map((sec, index2) => {
-                    if (first === sec.spec_name) {
-                        thirdLayerTemp.push(sec.spec_value)
-                        found = true;
-                    }
-                })
-                if (!found) {
-                    thirdLayerTemp.push("N/A")
-                }
-            })
-
-            setThirdLayer(thirdLayerTemp)
-        }
-
-        if (product.compare_products && firstLayer) {
-            let forthLayerTemp = [];
-            let found;
-            firstLayer.map((first, index) => {
-                found = false;
-                product.compare_products[1].specifications.map((sec, index2) => {
-                    if (first === sec.spec_name) {
-                        forthLayerTemp.push(sec.spec_value)
-                        found = true;
-                    }
-                })
-                if (!found) {
-                    forthLayerTemp.push("N/A")
-                }
-            })
-
-            setForthLayer(forthLayerTemp)
-        }
-
-        if (product.compare_products && firstLayer) {
-            let fifthLayerTemp = [];
-            let found;
-            firstLayer.map((first, index) => {
-                found = false;
-                product.compare_products[2].specifications.map((sec, index2) => {
-                    if (first === sec.spec_name) {
-                        fifthLayerTemp.push(sec.spec_value)
-                        found = true;
-                    }
-                })
-                if (!found) {
-                    fifthLayerTemp.push("N/A")
-                }
-            })
-
-            setFifthLayer(fifthLayerTemp)
-        }
-
-
     }, [product])
 
 
