@@ -120,7 +120,6 @@ export const ProductCard = ({ classes, product, flashSale }) => {
     const onMouseLeaveFunction = (video) => {
         setIsHovered(false)
         if (video && JSON.parse(video)[0]) {
-            console.log(video)
             var playPromise = videoRef?.current?.pause();
             if (playPromise !== undefined) {
                 playPromise.then(_ => {

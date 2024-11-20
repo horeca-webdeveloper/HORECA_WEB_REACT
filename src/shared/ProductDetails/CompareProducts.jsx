@@ -72,7 +72,7 @@ export const CompareProducts = ({ productLoader, product, compareProductFields }
                                 </th>
                                 {product.compare_products ? product.compare_products.map((compare, index) => {
                                     return (
-                                        <React.Fragment key={index} >
+                                        <React.Fragment key={compare.id} >
                                             {index < 3 ? (
                                                 <th className="w-1/5 p-5  relative  border border-x-[1px] bg-white">
                                                     <div className='flex flex-col mt-5'>

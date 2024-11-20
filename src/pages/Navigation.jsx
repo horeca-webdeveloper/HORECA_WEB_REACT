@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Wrapper } from "../shared/Wrapper";
 import { Link, useParams } from "react-router-dom";
 import { ControlledMenu, useHover, useMenuState, SubMenu, MenuItem } from "@szhsin/react-menu";
 import { useCart } from '../context/CartContext';
 import { CiSearch } from "react-icons/ci";
 import { useLocalCartCount } from "../context/LocalCartCount";
+import { debounce } from "lodash";
 import {
   currencyMenu,
 } from "../data/navbar";
@@ -66,7 +67,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
   }, [isFocused]);
 
   const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
+  const handleBlur = () => setIsFocused(true);
   useEffect(() => {
     let search = location.search ? location.search.split("=")[1] : "";
     let filterName = search.replaceAll('-', " ");
@@ -120,7 +121,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
       setCategoryList(response.data.categories);
       setProducts(response.data.products)
       setLoader(false)
-      console.log(response.data)
+ 
 
     } catch (error) {
       console.error('Error:', error);
@@ -131,9 +132,34 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
   useEffect(() => {
     fetchProducts()
   }, [searchValue])
+ 
+  const handleSearch = useCallback(
+    debounce((event) => { 
+      setSearchValue(event.target.value);
+    }, 300),
+    []
+  );
+ 
+  const handleClick=useCallback((url)=>{
+    setIsFocused(false)
+    navigate(url);
+   
+  })
 
-  const handlerSearchValue = (value) => {
-    setSearchValue(value);
+
+  // Function to highlight the search term in the text
+  const highlightText = (text, searchTerm) => {
+    if (!searchTerm) return text; // If no search term, return the original text
+
+    // Create a regular expression for case-insensitive matching of the search term
+    const regex = new RegExp(`(${searchTerm})`, 'gi'); 
+
+    // Split and wrap the matched parts in <span> elements with the "highlight" class
+    return text.split(regex).map((part, index) => 
+      regex.test(part) 
+        ? <span key={index} className="highlight">{part}</span> 
+        : part
+    );
   }
   return (
     <React.Fragment>
@@ -298,8 +324,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
               type="text"
               className="h-full w-full border-l border-r-gray-300 px-3 text-base text-[#64748B] outline-none"
               placeholder="I'm shopping for..."
-              value={searchValue}
-              onChange={(e) => handlerSearchValue(e.target.value)}
+              onChange={handleSearch}
               onFocus={handleFocus}
               onBlur={handleBlur}
             />
@@ -316,8 +341,9 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">Products</div>
                   <div className="basis-3/4 py-4 px-3 bg-white">
                     {products.slice(0, 7).map((prod, index) => (
-                      <Link
-                        to={`product/${prod.id}`}
+                      <div
+                      style={{ cursor: 'pointer' }} 
+                        onClick={()=>handleClick(`product/${prod.id}`)}
                         key={prod.id}
                         className={`flex p-2 ${selectedIndex === index ? 'bg-[#def9ec]' : 'hover:bg-[#def9ec]'}`}
                       >
@@ -325,10 +351,13 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                           <img className="max-w-[40px]" src={`https://testhssite.com/storage/${prod.image}`} alt={prod.name} />
                         </div>
                         <div className="ml-3">
-                          <span className="line-clamp-1 text-[#2E2F32] font-semibold text-[14px]">{prod.name}</span>
+                          <span className="line-clamp-1 text-[#2E2F32] font-semibold text-[14px]">
+                          {highlightText(prod.name, searchValue)}
+                            
+                           </span>
                           <span className="text-[#64748B] text-sm">SAR {prod.sale_price}</span>
                         </div>
-                      </Link>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -340,13 +369,15 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   <div className="basis-3/4 py-4 px-3 bg-white">
 
                     {categoryList.slice(0, 4).map((cat, index) => (
-                      <Link
-                        to={`/collections/${cat.slug}`}
+                      <div
+                       
+                        style={{ cursor: 'pointer' }} 
+                        onClick={()=>handleClick(`/collections/${cat.slug}`)}
                         key={cat.id}
                         className={`flex p-2 ${selectedIndex === index + products.length ? 'bg-[#def9ec]' : 'hover:bg-[#def9ec]'}`}
                       >
                         <span className="line-clamp-1 text-[#64748B] font-semibold text-base">{cat.name}</span>
-                      </Link>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -357,13 +388,15 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   <div className="basis-1/4 py-4 px-3 text-primary font-semibold border-r-2 text-base">Brands</div>
                   <div className="basis-3/4 py-4 px-3 bg-white">
                     {brands.slice(0, 4).map((brand, index) => (
-                      <Link
-                        to={`/collections/${brand.id}`}
+                      <div
+                      
+                        style={{ cursor: 'pointer' }} 
+                        onClick={()=>handleClick(`/collections/${brand.id}`)}
                         key={brand.id}
                         className={`flex p-2 ${selectedIndex === index + products.length + categoryList.length ? 'bg-[#def9ec]' : 'hover:bg-[#def9ec]'}`}
                       >
                         <span className="line-clamp-1 text-[#64748B] font-semibold text-base">{brand.name}</span>
-                      </Link>
+                      </div>
                     ))}
                   </div>
                 </div>

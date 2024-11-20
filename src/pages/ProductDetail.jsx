@@ -35,14 +35,12 @@ import { CartButton } from '../shared/CartButton';
 import { MdOutlineAddShoppingCart } from "react-icons/md"
 import { useLocalCartCount } from '../context/LocalCartCount';
 import { ToastContainer, toast } from 'react-toastify';
+import Documents from '../components/Documents';
 
 
 function Model({ url, onLoaded }) {
   const { scene, isLoading } = useGLTF(url);
-
-
   useEffect(() => {
-
     if (!isLoading) {
       onLoaded();
     }
@@ -54,7 +52,8 @@ function Model({ url, onLoaded }) {
 export const ProductDetail = () => {
   const { id } = useParams(); // Access the id from the URL
   const [seeMore, setSeeMore] = useState(true);
-
+  const videoRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
   // const slider1 = useRef();
@@ -82,7 +81,7 @@ export const ProductDetail = () => {
   const [selectedBuyMore, setSelectedBuyMore] = useState();
   const [maxBuyMoreSaveMore, setMaxBuyMoreSaveMore] = useState();
   const [variants, setVariants] = useState([])
-
+  const [mediaArray, setMediaArray] = useState([]);
   const handleModelLoaded = () => {
     setLoader(false);
   };
@@ -110,7 +109,8 @@ export const ProductDetail = () => {
     setLoader(true);
     try {
       const response = await apiClient.get(`${authToken ? "/products" : "/products-guest"}`, {
-        params: { id }
+        params: { id },
+
       });
 
       setProduct(response.data.data.data[0]);
@@ -119,6 +119,9 @@ export const ProductDetail = () => {
       setVariants(response.data.data.data[0].sameBrandSkuProducts)
       temp.sort();
       setCompareProductsFields(temp)
+
+
+
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -238,7 +241,7 @@ export const ProductDetail = () => {
   };
 
   const thumbnailSliderSettings = {
-    slidesToShow: product && product.images && product.images.length < 4 ? product.images.length : 4,
+    slidesToShow: product && product.images && product.images.length < 4 ? product.images.length : 8,
     // slidesToShow: 1,
     slidesToScroll: 1,
     asNavFor: nav1,
@@ -291,6 +294,19 @@ export const ProductDetail = () => {
     }
   }
 
+  useEffect(() => {
+    if (!!product && product.images) {
+      setMediaArray([...product.images, ...JSON.parse(product.video_path)]);
+    }
+
+  }, [product]);
+
+  // Function to check if an item is an image
+  const isImage = (filename) => {
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+    return imageExtensions.some((ext) => filename.toLowerCase().endsWith(ext));
+  };
+
 
 
   return (
@@ -326,17 +342,38 @@ export const ProductDetail = () => {
 
                               {!productLoader ? (
                                 <Slider {...mainSliderSettings} ref={(slider1) => setNav1(slider1)} className="product__slide">
-                                  {product.images ? product.images.map((image, index) => (
+                                  {mediaArray ? mediaArray.map((item, index) => (
                                     <React.Fragment key={index}>
+
                                       <div className="flex justify-center relative">
-                                        <div className='absolute right-4 top-4 bg-primary text-white flex items-center justify-center rounded-full p-2 cursor-pointer' onClick={() => setThreeDView(true)}>
-                                          <Md3dRotation size={24} />
-                                        </div>
-                                        <img
-                                          src={`${`https://testhssite.com/storage/${image}`}`}
-                                          alt={`Slide ${index}`}
-                                          className="w-full h-auto object-contain rounded-lg"
-                                        />
+
+                                        {isImage(item) ?
+                                          <>
+                                            <div className='absolute right-4 top-4 bg-primary text-white flex items-center justify-center rounded-full p-2 cursor-pointer' onClick={() => setThreeDView(true)}>
+                                              <Md3dRotation size={24} />
+                                            </div>
+                                            <img
+                                              src={`${`https://testhssite.com/storage/${item}`}`}
+                                              alt={`Slide ${index}`}
+                                              className="w-full h-auto object-contain rounded-lg"
+                                            /></> :
+
+                                          <video
+                                            width="100%"
+                                            controls
+                                            ref={videoRef}
+                                            autoPlay={false}
+                                            muted={true}
+                                            loop={true}
+                                            className="w-full object-contain rounded-lg"
+                                            style={{height:'565px'}}
+
+                                          >
+                                            <source src={`https://testhssite.com/storage/${item}`} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                          </video>}
+                                        
+}
                                       </div>
                                     </React.Fragment>
                                   )) : null}
@@ -399,16 +436,30 @@ export const ProductDetail = () => {
                         <div className="w-full mt-4">
                           {!productLoader ? (
                             <Slider {...thumbnailSliderSettings} ref={(slider2) => setNav2(slider2)}>
-                              {product.images && product.images.length > 1 ? product.images.map((image, index) => (
+                              {mediaArray && mediaArray.length > 1 ? mediaArray.map((item, index) => (
                                 <div
                                   key={index}
-                                  className={`px-2 ${activeSlide === index ? 'border-2 border-primary rounded-md' : ''}`}
+                                  className={`px-1 ${activeSlide === index ? 'border-2 border-primary rounded-md' : ''}`}
                                 >
+                                    {isImage(item) ?
                                   <img
-                                    src={`${`https://testhssite.com/storage/${image}`}`}
+                                    src={`${`https://testhssite.com/storage/${item}`}`}
                                     alt={`Thumbnail ${index}`}
-                                    className="w-full h-24 object-contain rounded-lg cursor-pointer "
-                                  />
+                                    className="w-full h-16 object-contain rounded-lg cursor-pointer "
+                                  />:
+                                  <video
+                                  
+                                  ref={videoRef}
+                                  autoPlay={false}
+                                  muted={true}
+                                  loop={true}
+                                  className="w-full h-16 object-contain rounded-lg cursor-pointer "
+
+                                >
+                                  <source src={`https://testhssite.com/storage/${item}`} type="video/mp4" />
+                                  Your browser does not support the video tag.
+                                </video>}
+                                    
                                 </div>
                               )) : null}
                             </Slider>
@@ -746,7 +797,10 @@ export const ProductDetail = () => {
                 </div>
               </div>
             </div>
+
+            <Documents docs={!!product && product.documents} />
           </div>
+
 
 
           <CompareProducts productLoader={productLoader} product={product} compareProductFields={compareProductFields} />
