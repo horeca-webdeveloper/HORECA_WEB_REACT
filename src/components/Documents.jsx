@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { Link } from 'react-router-dom';
 import { Page,Document } from 'react-pdf/dist/esm/entry.webpack';
-import pdf from '../../src/dummy.pdf';
+ 
 const Documents = ({ docs }) => {
     let documents = [];
     try {
@@ -25,10 +25,10 @@ const Documents = ({ docs }) => {
                 {documentArray.length > 0 ? (
                     documentArray.map((item, index) => {
                         return (
-                            <div class="p-1 flex justify-center items-center">
+                            <div class="p-1 flex justify-center items-center" key={index}>
                              <Link to={`https://testhssite.com/storage/${item.path}`} target='_blank'>  
 
-<iframe src={`https://testhssite.com/storage/${item.path}`} scrolling="no" style={{height:'100px',width:'100px',overflow: "hidden"}}/>
+        <iframe src={`https://testhssite.com/storage/${item.path}`}  title={item.title}  style={{height:'100px',width:'100px'}}/>
                                     {/* <Document file={`https://testhssite.com/storage/${item.path}`} style={{ height: '40px', width: '40px' }}>
                                         <Page pageNumber={1} scale={0.10}/>
                                     </Document> */}
