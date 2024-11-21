@@ -1,6 +1,6 @@
 import React from "react";
 
-const Popup = ({ setShowPopup }) => {
+const Popup = ({ setShowPopup, popupHeading }) => {
   return (
     <div>
       <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm">
@@ -8,7 +8,7 @@ const Popup = ({ setShowPopup }) => {
         <div className="modal relative bg-white w-[650px] flex flex-col rounded-lg shadow-lg">
           <div className="flex items-center justify-between bg-[#DEF9EC] rounded-t-lg p-2">
             <p className="font-sans p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-              Update a Shipping Address shipping Address
+              {popupHeading} a Shipping Address
             </p>
             <button onClick={() => setShowPopup(false)}>X</button>
           </div>
@@ -79,7 +79,7 @@ const Popup = ({ setShowPopup }) => {
                 Cancel
               </button>
               <button className="flex mb-[5px] bg-[#DEF9EC] items-center justify-center rounded-md font-sans w-[180px] h-[40px] text-[#186737] text-[16px] font-medium leading-[16px] text-left underline-offset-auto decoration-slice">
-                Update
+                {popupHeading}
               </button>
             </div>
           </div>

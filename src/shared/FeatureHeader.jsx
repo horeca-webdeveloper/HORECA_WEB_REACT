@@ -12,10 +12,12 @@ export const FeatureHeader = ({
   return (
     <div>
       <div
-        className={`flex flex-col hidden items-center justify-between ${classes} border-b border-[#E2E8F0] pb-5`}
+        className={`flex flex-col items-center ${classes} border-b border-[#E2E8F0] pb-5`}
       >
-        <h2 className="text-black-100 font-semibold text-2xl">{title}</h2>
-        <ul className="text-gray-700 text-lg flex flex-row">
+        <h2 className="text-black-100 font-semibold text-sm sm:text-2xl">
+          {title}
+        </h2>
+        <ul className="flex items-center text-gray-700 text-[12px] sm:text-lg overflow-hidden">
           {loader
             ? // Show loading skeletons if loading
               Array.from({ length: 5 }).map((_, index) => (
@@ -32,9 +34,9 @@ export const FeatureHeader = ({
                 const isSelected = brand === selectedItem;
                 return (
                   <li
-                    className={`inline mx-3 cursor-pointer hover:text-primary transition-all ${
-                      isSelected ? " text-primary" : ""
-                    }`}
+                    // className={`inline mx-3 min-w-[60px] cursor-pointer hover:text-primary transition-all ${
+                    //   isSelected ? " text-primary" : ""
+                    // }`}
                     key={index}
                     onClick={() => setSelectedItem(brand)}
                   >

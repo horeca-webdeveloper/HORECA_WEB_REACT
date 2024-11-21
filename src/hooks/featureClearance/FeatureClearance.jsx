@@ -5,44 +5,48 @@ import { ProductCard } from "../../shared/ProductCard";
 import { Link } from "react-router-dom";
 
 export const FeatureClearance = () => {
-    const [timeLeft, setTimeLeft] = useState({
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0
-    });
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
-    const timestamp = 1733746735; // Your timestamp here
+  const timestamp = 1733746735; // Your timestamp here
 
-    useEffect(() => {
-        function updateTimeLeft() {
-            const now = Math.floor(Date.now() / 1000); // Current time in seconds since epoch
-            const difference = timestamp - now;
+  useEffect(() => {
+    function updateTimeLeft() {
+      const now = Math.floor(Date.now() / 1000); // Current time in seconds since epoch
+      const difference = timestamp - now;
 
-            if (difference <= 0) {
-                setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-                return;
-            }
+      if (difference <= 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
 
-            const days = Math.floor(difference / (24 * 3600));
-            const hours = Math.floor((difference % (24 * 3600)) / 3600);
-            const minutes = Math.floor((difference % 3600) / 60);
-            const seconds = difference % 60;
+      const days = Math.floor(difference / (24 * 3600));
+      const hours = Math.floor((difference % (24 * 3600)) / 3600);
+      const minutes = Math.floor((difference % 3600) / 60);
+      const seconds = difference % 60;
 
-            setTimeLeft({ days, hours, minutes, seconds });
-        }
+      setTimeLeft({ days, hours, minutes, seconds });
+    }
 
-        updateTimeLeft(); // Initial calculation
+    updateTimeLeft(); // Initial calculation
 
-        const intervalId = setInterval(updateTimeLeft, 1000);
+    const intervalId = setInterval(updateTimeLeft, 1000);
 
-        return () => clearInterval(intervalId); // Cleanup on component unmount
-    }, [timestamp]);
+    return () => clearInterval(intervalId); // Cleanup on component unmount
+  }, [timestamp]);
 
-    return (
-        <Wrapper>
-            <img className="w-full my-8 rounded-md" src={process.env.PUBLIC_URL + "/images/blog/banner/long-banner.jpg"} alt="" />
-            {/* <div className="flex items-center justify-between">
+  return (
+    <Wrapper>
+      <img
+        className="w-full my-8 rounded-md"
+        src={process.env.PUBLIC_URL + "/images/blog/banner/long-banner.jpg"}
+        alt=""
+      />
+      {/* <div className="flex items-center justify-between">
                 <h3 className="text-black-100 font-semibold text-2xl">Flash Clearance Deals</h3>
                 <div className="rounded-[4px] border border-gray-400 px-5 py-1 font-semibold min-w-96 text-center">
                     <span className="text-primary text-xl mx-2">Sales End in</span>
@@ -58,11 +62,20 @@ export const FeatureClearance = () => {
                 ))}
             </div> */}
 
-            <div className="flex flex-row items-center justify-center p-3 bg-[#F9FAFB] text-[#4B5563] rounded-[4px] border border-gray-300 mt-8">
-                <h2 className="text-[22px] font-bold">SUMMER CLEAREANCE SALE</h2>
-                <p className="mx-8 text-base ">Up to 50% discount offers along with unlimited campaigns and deals</p>
-                <Link to="/" className="text-base border-2 rounded-[4px] font-semibold border-[#4B5563] border-dashed px-4 py-2">Discover More</Link>
-            </div>
-        </Wrapper>
-    );
+      <div className="flex flex-col items-center justify-center p-3 bg-[#F9FAFB] text-[#4B5563] rounded-[4px] border border-gray-300 mt-8 sm:flex-row">
+        <h2 className="text-[22px] font-bold text-center">
+          SUMMER CLEAREANCE SALE
+        </h2>
+        <p className="mx-8 text-base text-center">
+          Up to 50% discount offers along with unlimited campaigns and deals
+        </p>
+        <Link
+          to="/"
+          className="text-base border-2 rounded-[4px] font-semibold border-[#4B5563] sm:mt-[10px] text-center border-dashed px-4 py-2"
+        >
+          Discover More
+        </Link>
+      </div>
+    </Wrapper>
+  );
 };

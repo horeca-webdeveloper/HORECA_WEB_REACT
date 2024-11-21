@@ -31,7 +31,7 @@ export const FeatureProduct = ({
         loader={featureCatLoader}
         classes={"mt-14 mb-6"}
       />
-      <div className="grid sm:grid-cols-5 grid-cols-2 gap-5">
+      <div className="flex grid-cols-5 gap-5 sm:grid overflow-hidden sm:overflow-x-auto sm:space-x-5">
         {featureCatLoader ? (
           Array.from({ length: 10 }).map((_, index) => (
             <Skeleton key={index} className="col-span-1 mt-1 min-h-[550px]" />

@@ -312,11 +312,13 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             <img
               src={process.env.PUBLIC_URL + "/icons/Drawer.png"}
               alt="Horeca Store"
+              className="block sm:hidden"
             />
           </Link>
         </div>
         <Link to="/home">
           <img
+            className="ml-[40px] sm:ml-[0px]"
             src={process.env.PUBLIC_URL + "/images/logo.png"}
             alt="Horeca Store"
           />
