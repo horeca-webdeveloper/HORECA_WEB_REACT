@@ -19,8 +19,8 @@ const Documents = ({ docs }) => {
     return (
         <div className="bg-white rounded-md p-5 border-2 border-[#E2E8F0] mt-3">
             {/* Badge Section */}
-            <span className="text-black-200 document-text">Resources And Downloads</span>
-            <div class="grid grid-cols-3 gap-2">
+            <span className="text-black-200 document-text mb-3">Resources And Downloads</span>
+            <div class="grid grid-cols-3 gap-2 mt-3">
                 {/* Ensure documentArray is an array before using .map */}
                 {documentArray.length > 0 ? (
                     documentArray.map((item, index) => {
@@ -28,7 +28,7 @@ const Documents = ({ docs }) => {
                             <div class="p-1 flex justify-center items-center" key={index}>
                              <Link to={`https://testhssite.com/storage/${item.path}`} target='_blank'>  
 
-        <iframe src={`https://testhssite.com/storage/${item.path}`}  title={item.title}  style={{height:'100px',width:'100px'}}/>
+                                 <iframe src={`https://testhssite.com/storage/${item.path}`}  title={item.title}  style={{height:'100px',width:'100px'}}/>
                                     {/* <Document file={`https://testhssite.com/storage/${item.path}`} style={{ height: '40px', width: '40px' }}>
                                         <Page pageNumber={1} scale={0.10}/>
                                     </Document> */}

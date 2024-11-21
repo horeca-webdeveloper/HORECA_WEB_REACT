@@ -313,15 +313,17 @@ export const ProductDetail = () => {
     <Wrapper>
       {product ? (<React.Fragment>
         {!productLoader ? <Breadcrumb items={productDetailsBreadCrumb} classes={"mt-7"} /> : <Skeleton className='mt-7' width="30%" height="30px" count={1} />}
-        <div className='grid grid-cols-12 gap-x-8'>
-          <div className='col-span-9'>
-            <div className='grid grid-cols-10 gap-6'>
-              <div className='col-span-6 mt-4'>
-                <div className=" mx-auto">
-                  <div className="product-slider-container">
-                    <div className="flex flex-col items-center w-full">
-                      <div className="flex flex-col items-center w-full">
-                        <div className="w-full relative ">
+        <div className="grid grid-cols-12 gap-x-8">
+        <div className="col-span-12 md:col-span-9 lg:col-span-9">
+          <div className="grid grid-cols-12 md:grid-cols-12 lg:grid-cols-12 gap-6">
+{/* 
+            product images */}
+           <div className="col-span-12 md:col-span-12 lg:col-span-6 mt-4">
+           <div className="mx-auto">
+            <div className="product-slider-container">
+            <div className="flex flex-col items-center w-full">
+            <div className="flex flex-col items-center w-full">
+              <div className="w-full relative">
                           {!threeDView ? (
                             <React.Fragment>
                               {!productLoader && product.images && product.images.length > 2 ? (<React.Fragment>
@@ -366,7 +368,7 @@ export const ProductDetail = () => {
                                             muted={true}
                                             loop={true}
                                             className="w-full object-contain rounded-lg"
-                                            style={{height:'565px'}}
+                                            style={{ height: '565px' }}
 
                                           >
                                             <source src={`https://testhssite.com/storage/${item}`} type="video/mp4" />
@@ -441,25 +443,25 @@ export const ProductDetail = () => {
                                   key={index}
                                   className={`px-1 ${activeSlide === index ? 'border-2 border-primary rounded-md' : ''}`}
                                 >
-                                    {isImage(item) ?
-                                  <img
-                                    src={`${`https://testhssite.com/storage/${item}`}`}
-                                    alt={`Thumbnail ${index}`}
-                                    className="w-full h-16 object-contain rounded-lg cursor-pointer "
-                                  />:
-                                  <video
-                                  
-                                  ref={videoRef}
-                                  autoPlay={false}
-                                  muted={true}
-                                  loop={true}
-                                  className="w-full h-16 object-contain rounded-lg cursor-pointer "
+                                  {isImage(item) ?
+                                    <img
+                                      src={`${`https://testhssite.com/storage/${item}`}`}
+                                      alt={`Thumbnail ${index}`}
+                                      className="w-full h-16 object-contain rounded-lg cursor-pointer "
+                                    /> :
+                                    <video
 
-                                >
-                                  <source src={`https://testhssite.com/storage/${item}`} type="video/mp4" />
-                                  Your browser does not support the video tag.
-                                </video>}
-                                    
+                                      ref={videoRef}
+                                      autoPlay={false}
+                                      muted={true}
+                                      loop={true}
+                                      className="w-full h-16 object-contain rounded-lg cursor-pointer "
+
+                                    >
+                                      <source src={`https://testhssite.com/storage/${item}`} type="video/mp4" />
+                                      Your browser does not support the video tag.
+                                    </video>}
+
                                 </div>
                               )) : null}
                             </Slider>
@@ -480,7 +482,10 @@ export const ProductDetail = () => {
                   <div className='border-[#E2E8F0] border-2 rounded-full p-3 ml-3 cursor-pointer hover:bg-primary transition-all hover:text-white' onClick={() => handlerSendEmail()}><MdOutlineEmail size={16} /></div>
                 </div>
               </div>
-              <div className='col-span-4 mt-4'>
+
+                          {/* product details content  */}
+
+              <div className='col-span-12 md:col-span-12 lg:col-span-6 mt-4'>
                 {/* Tag Wrapper  */}
 
                 {!productLoader ?
@@ -506,6 +511,8 @@ export const ProductDetail = () => {
                     </ul>
                   </div>
                 </div> : <Skeleton count={1} width={"75%"} className='my-2' height={"40px"} />}
+
+                   
 
                 {/* Product Title  */}
                 <div className=''>
@@ -594,15 +601,19 @@ export const ProductDetail = () => {
 
               </div>
 
+        {/* end product details contents */}
               <FrequentlyBought product={product} productLoader={productLoader} settings={settings} />
 
               {!productLoader ? (
                 <div className='col-span-10 mt-10'>
+
+                  
                   {PRODUCT_DETAIL ? PRODUCT_DETAIL.map((product, index) => {
                     const isSelected = selectedDetail === product.id;
                     return (
                       <React.Fragment key={index}>
-                        <button onClick={() => setSelectedDetail(product.id)} className={`text-[#64748B] rounded-md border-gray-200 mr-6 border 
+
+                        <button onClick={() => setSelectedDetail(product.id)} className={`text-[#64748B] rounded-md border-gray-200 mr-2 border 
                          bg-[#F9FAFC] py-2 px-5 text-base transition-all hover:text-primary hover:bg-[#DEF9EC] ${isSelected ? "!bg-[#DEF9EC]  text-primary" : ""}`}
                         >{product.title}</button>
                       </React.Fragment>
@@ -675,7 +686,8 @@ export const ProductDetail = () => {
               </div>}
             </div>
           </div>
-          <div className='col-span-3 mt-4'>
+    
+          <div className="col-span-12 md:col-span-3 lg:col-span-3 mt-4">
             <div className='bg-gray-100 rounded-md  p-5 border-2 border-[#E2E8F0]'>
               {/* Badge Section  */}
               {!productLoader ? <span className='text-primary bg-[#DEF9EC] px-4 py-2 rounded-[4px] text-xs font-semibold'>15 days easy refund</span> : <Skeleton count={1} width={"40%"} height={"25px"} />}
@@ -721,33 +733,7 @@ export const ProductDetail = () => {
 
 
 
-              {/* <ProtectionPlan /> */}
-
-              {/* Calculation Estimated  */}
-              {/* <div className='w-full h-[1px] border border-[#E2E8F0]  my-4'></div>
-              <div className='flex items-center justify-between'>
-                <h2 className='font-semibold text-base text-black-100'>Calculate Estimated Shipping Cost</h2>
-                <img src={process.env.PUBLIC_URL + "/icons/exclaim.png"} alt="" />
-              </div>
-
-              <div className="flex items-center justify-between mt-3">
-                <div className='relative'>
-                  <input type="text" placeholder="Enter Delivery Address" className="text-[#64748B] pl-2 border border-[#E2E8F0] rounded-md text-xs py-3 w-[200px] pr-10" />
-                  <img className='absolute top-1/2 -translate-y-[50%] right-2' src={process.env.PUBLIC_URL + "/icons/calc.png"} alt="" />
-                </div>
-                <button className="text-primary bg-[#DEF9EC] rounded-md px-5 py-2 font-semibold">
-                  Calculate
-                </button>
-              </div>
-
-              <div className='flex items-center justify-between mt-3'>
-                <span className='text-sm text-black-100'>Business Delivery</span>
-                <span className='text-sm font-semibold text-black-100'>SAR 250.00</span>
-              </div>
-              <div className='flex items-center justify-between mt-3'>
-                <span className='text-sm text-black-100'>Business Delivery W/Liftgate</span>
-                <span className='text-sm font-semibold text-black-100'>SAR 250.00</span>
-              </div> */}
+             
 
 
               <div className='w-full h-[1px] border border-[#E2E8F0]  my-4'></div>
@@ -1007,7 +993,7 @@ const RenderingBought = ({ prod, index, settings, setTotalAmount, setTotalSaveAm
 
   return (
     <React.Fragment>
-      <div className={` col-span-1 border-gray-300 rounded-[4px] p-4 cursor-pointer product__card__wrapper group transition-all border-2  hover:border-primary duration-700 my-3 relative`}
+      <div className={`col-span-2 md:col-span-2 lg:col-span-1 border-gray-300 rounded-[4px] p-4 cursor-pointer product__card__wrapper group transition-all border-2  hover:border-primary duration-700 my-3 relative`}
         onMouseEnter={() => sliderRef.current.slickPlay()}
         onMouseLeave={() => sliderRef.current.slickPause()}
       >
@@ -1123,6 +1109,8 @@ const FrequentlyBought = ({ product, productLoader, settings }) => {
       {product.frequently_bought_together && product.frequently_bought_together.length === 3 ? <div className='col-span-10 border border-[#E2E8F0] rounded-md py-5 px-4'>
         {!productLoader ? <h2 className='text-lg  text-black-100 font-bold'>Frequently bought together</h2> : <Skeleton height={"40px"} width={"20%"} />}
         <div className='grid grid-cols-4 gap-8'>
+
+       
           {product.frequently_bought_together ? product.frequently_bought_together.map((prod, index) => {
             return (
               <RenderingBought key={index} setTotalProducts={setTotalProducts} prod={prod} index={index} settings={settings} setTotalAmount={setTotalAmount} setTotalSaveAmount={setTotalSaveAmount} setIds={setIds} />
@@ -1141,7 +1129,7 @@ const FrequentlyBought = ({ product, productLoader, settings }) => {
                 <Skeleton className='w-full h-[350px]' />
               </div>
             </React.Fragment>}
-          {!productLoader ? <div className='col-span-1'>
+          {!productLoader ? <div className='col-span-2 md:col-span-2 lg:col-span-1'>
             <div className='flex flex-col h-full items-center justify-center '>
               {totalAmount > 0 ?
                 <React.Fragment>

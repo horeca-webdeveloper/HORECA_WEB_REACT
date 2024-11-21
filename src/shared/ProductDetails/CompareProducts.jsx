@@ -53,7 +53,12 @@ export const CompareProducts = ({ productLoader, product, compareProductFields }
         <React.Fragment>
             {!productLoader ?
                 <div className='col-span-12 my-8 mt-12'>
-                    {(product && product.compare_products && product.compare_products.length && product.specifications) ? <table className="min-w-full table-auto border-collapse border-2 border-gray-300 rounded-md">
+
+                    
+                    {(product && product.compare_products && product.compare_products.length && product.specifications) ?
+                    
+                    <div class="relative overflow-x-auto">
+                    <table className="min-w-full table-auto border-collapse border-2 border-gray-300 rounded-md">
                         <thead>
                             <tr className="bg-green-100">
                                 <th className="w-1/5 p-5 text-start bg-white relative ">
@@ -120,7 +125,10 @@ export const CompareProducts = ({ productLoader, product, compareProductFields }
                             }) : null} */}
                         </tbody>
 
-                    </table> :
+                    </table>
+                    </div>
+                    
+                    :
                         <div></div>
                     }
                 </div> : <div className='col-span-12 my-8'><Skeleton className='w-full h-[900px] ' /></div>}
