@@ -142,15 +142,27 @@ export const ProductsByCategory = () => {
       behavior: "smooth",
     });
     fetchProducts();
-  }, [page,perPage,selectedReview,selectedBrands,priceRangeBool,location.search,sortBy,selectedDelivery,selectedMinPrice,selectedMaxPrice,id]);
+  }, [
+    page,
+    perPage,
+    selectedReview,
+    selectedBrands,
+    priceRangeBool,
+    location.search,
+    sortBy,
+    selectedDelivery,
+    selectedMinPrice,
+    selectedMaxPrice,
+    id,
+  ]);
 
   useEffect(() => {
     setPage(1);
   }, [sortBy, perPage]);
 
   useEffect(() => {
-    if(type==null){
-        fetchCategories();   
+    if (type == null) {
+      fetchCategories();
     }
   }, [type]);
 
@@ -261,60 +273,65 @@ export const ProductsByCategory = () => {
               </div>
             </div>
             <div className="w-full h-[1px] bg-[#E2E8F0] my-4"></div>
-            {type==1?<><div class="flex items-center justify-center">
-              <div className="title">Choose Container Type</div>
-            </div>
+            {type == 1 ? (
+              <>
+                <div className="flex items-center justify-center">
+                  <div className="title">Choose Container Type</div>
+                </div>
 
-            <div className="grid grid-cols-6 gap-6 mt-8">
-              {!!producttypes &&
-                producttypes.map((item) => {
-                  return (
-                    <div
-                      key={item.id}
-                      className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md  border-primary"}`}
-                    >
-                      <img
-                        className="w-28"
-                        src={`https://testhssite.com/storage/${item.images}`}
-                        alt={item.name}
-                      />
-                    </div>
-                  );
-                })}
-            </div>
-            </>
-            :''}
-           
+                <div className="grid grid-cols-6 gap-6 mt-8">
+                  {!!producttypes &&
+                    producttypes.map((item) => {
+                      return (
+                        <div
+                          key={item.id}
+                          className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md  border-primary"}`}
+                        >
+                          <img
+                            className="w-28"
+                            src={`https://testhssite.com/storage/${item.images}`}
+                            alt={item.name}
+                          />
+                        </div>
+                      );
+                    })}
+                </div>
+              </>
+            ) : (
+              ""
+            )}
 
             {/* Categories Display Here  */}
-            {type==null?<div className="grid grid-cols-6 gap-6 mt-8">
-              {!!categories &&
-                categories.map((cat, index) => {
-                  return (
-                    <div
-                      key={cat.id}
-                      className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md  border-primary"}`}
-                    >
-                      <Link
+            {type == null ? (
+              <div className="grid grid-cols-6 gap-6 mt-8">
+                {!!categories &&
+                  categories.map((cat, index) => {
+                    return (
+                      <div
                         key={cat.id}
-                        className="mt-1 block text-[#666666] text-base underline"
-                        to={`/collections/${category}/${cat.slug}/${cat.id}?type=1`}
+                        className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md  border-primary"}`}
                       >
-                        <img
-                          className="w-28"
-                          src={`https://testhssite.com/storage/${cat.image}`}
-                          alt={cat.name}
-                        />
-                        <h4 className="mt-2 text-base font-semibold text-primary text-center">
-                          {cat.name}
-                        </h4>
-                      </Link>
-                    </div>
-                  );
-                })}
-            </div>:null}
-            
-<br/>
+                        <Link
+                          key={cat.id}
+                          className="mt-1 block text-[#666666] text-base underline"
+                          to={`/collections/${category}/${cat.slug}/${cat.id}?type=1`}
+                        >
+                          <img
+                            className="w-28"
+                            src={`https://testhssite.com/storage/${cat.image}`}
+                            alt={cat.name}
+                          />
+                          <h4 className="mt-2 text-base font-semibold text-primary text-center">
+                            {cat.name}
+                          </h4>
+                        </Link>
+                      </div>
+                    );
+                  })}
+              </div>
+            ) : null}
+
+            <br />
             {/* Products  Display Here  */}
             <div className="grid grid-cols-4 gap-4 mt-4 mb-10">
               {loader ? (

@@ -31,7 +31,7 @@ const SidebarProfile = () => {
     {
       id: "",
       name: "Your Profiles",
-      link: "/",
+      link: "/AccountSecurity",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-4.png`,
     },
     {
@@ -99,10 +99,11 @@ const SidebarProfile = () => {
           </p>
         </div>
       </div>
-      <div className="flex flex-col w-[280px] border bg-[#f9fafc] mt-[10px] rounded-md">
+      <div className="flex flex-col w-[280px] border bg-[#f9fafc] mt-[20px] rounded-md">
         {navItems.map((button, index) => {
           return (
             <div
+              key={index}
               onClick={() => navigate(button.link)}
               className="flex cursor-pointer hover:bg-[#def9ec] m-[7px] rounded-md items-center p-[5px]"
             >

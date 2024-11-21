@@ -20,14 +20,17 @@ import { FaRegCircleCheck } from "react-icons/fa6";
 import { Checkout } from "./pages/checkout/Checkout";
 import { ReviewCheckout } from "./pages/checkout/ReviewCheckout";
 import { ProductsByCategory } from "./pages/ProductsByCategory";
-import AllOrders from "./pages/ProfileRegistration/AllOrders";
-import Reviews from "./pages/Reviews/Reviews";
-import BrowsingHistory from "./pages/BrowsingHistory/BrowsingHistory";
-import Wishlist from "./pages/Wishlist/Wishlist";
-import CouponsOffers from "./pages/CouponeOffers/CouponsOffers";
-import Addresses from "./pages/Addresses/Addresses";
-import CreditBalance from "./pages/CreditBalance/CreditBalance";
-import AccountSecurity from "./pages/AccountSecurity/AccountSecurity";
+import AllOrders from "./pages/ProfileRegistration/AllOrders/AllOrders";
+import Reviews from "./pages/ProfileRegistration/Reviews/Reviews";
+import BrowsingHistory from "./pages/ProfileRegistration/BrowsingHistory/BrowsingHistory";
+import CouponsOffers from "./pages/ProfileRegistration/CouponeOffers/CouponsOffers";
+import Addresses from "./pages/ProfileRegistration/Addresses/Addresses";
+import CreditBalance from "./pages/ProfileRegistration/CreditBalance/CreditBalance";
+import AccountSecurity from "./pages/ProfileRegistration/AccountSecurity/AccountSecurity";
+
+
+
+  import Wishlist from "./pages/ProfileRegistration/Wishlist/Wishlist";
 const App = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
-import Slider from 'react-slick';
-import { Rating } from "./Rating"
-import { BsPlusLg } from "react-icons/bs"
+import Slider from "react-slick";
+import { Rating } from "./Rating";
+import { BsPlusLg } from "react-icons/bs";
 import { FiMinus } from "react-icons/fi";
 import { FaRegHeart } from "react-icons/fa";
 import { GoHeartFill } from "react-icons/go";
@@ -10,7 +10,7 @@ import { VscGraph } from "react-icons/vsc";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 import { FaRegClock, FaHeart } from "react-icons/fa";
 import { FiTruck } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
 import { FiShoppingCart } from "react-icons/fi";
 import { apiClient } from "../utils/apiWrapper";
 import { useCart } from "../context/CartContext";
@@ -18,286 +18,355 @@ import { useLocalCartCount } from "../context/LocalCartCount";
 import { CartButton } from "./CartButton";
 import { MdPlayCircle } from "react-icons/md";
 import { FaPlay } from "react-icons/fa";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import { useWishlist } from "../context/WishListContext";
 
-
 export const ProductCard = ({ classes, product, flashSale }) => {
-    const [autoplay, setAutoplay] = useState(false)
-    const [count, setCount] = useState(1); // Local state for each card
-    const [loader, setLoader] = useState(false);
-    const [inWishList, setWishList] = useState(false);
-    const sliderRef = useRef();
-    const { triggerUpdateCart } = useCart();
-    const { totalCartItems, incrementCartItems } = useLocalCartCount();
-    const videoRef = useRef(null);
-    const [isHovered, setIsHovered] = useState(false);
-    const navigate = useNavigate();
-    const [productState, setProductState] = useState(product);
-    const { totalWishListCount, triggerUpdateWishList } = useWishlist();
+  const [autoplay, setAutoplay] = useState(false);
+  const [count, setCount] = useState(1); // Local state for each card
+  const [loader, setLoader] = useState(false);
+  const [inWishList, setWishList] = useState(false);
+  const sliderRef = useRef();
+  const { triggerUpdateCart } = useCart();
+  const { totalCartItems, incrementCartItems } = useLocalCartCount();
+  const videoRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+  const [productState, setProductState] = useState(product);
+  const { totalWishListCount, triggerUpdateWishList } = useWishlist();
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    fade: true,
+    autoplay: autoplay,
+    autoplaySpeed: 1000,
+    cssEase: "linear",
+  };
 
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        fade: true,
-        autoplay: autoplay,
-        autoplaySpeed: 1000,
-        cssEase: 'linear',
-    };
-
-    const handlerIncrement = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (count < 100) {
-            setCount(count + 1)
-        }
+  const handlerIncrement = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (count < 100) {
+      setCount(count + 1);
     }
-    const handlerDecrement = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (count > 1) {
-            setCount(count - 1)
-        }
+  };
+  const handlerDecrement = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (count > 1) {
+      setCount(count - 1);
     }
+  };
 
-
-
-    const handlerRemoveFavouriteItem = async () => {
-        const authToken = localStorage.getItem("authToken");
-        if (authToken) {
-            try {
-                console.log(productState.id)
-                const response = await apiClient.delete(`/wishlist/remove`, {
-                    params: { product_id: productState.id }
-                });
-                productState.in_wishlist = false;
-                triggerUpdateWishList()
-                notify(productState.name, response.data.message)
-
-
-            } catch (error) {
-                console.error('Error:', error);
-            } finally {
-            }
-        }
-        else {
-            navigate("/login")
-        }
+  const handlerRemoveFavouriteItem = async () => {
+    const authToken = localStorage.getItem("authToken");
+    if (authToken) {
+      try {
+        console.log(productState.id);
+        const response = await apiClient.delete(`/wishlist/remove`, {
+          params: { product_id: productState.id },
+        });
+        productState.in_wishlist = false;
+        triggerUpdateWishList();
+        notify(productState.name, response.data.message);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+      }
+    } else {
+      navigate("/login");
     }
+  };
 
-    const notify = (name, message) => {
-        toast.dismiss();
-        toast(<span className="line-clamp-2">{`${name} ${message}`}</span>)
-    };
-    const handlerAddFavouriteItem = async () => {
-        const authToken = localStorage.getItem("authToken");
-        if (authToken) {
-            try {
-                const response = await apiClient.post(`/wishlist/add`, {
-                    "product_id": productState.id,
-                });
-                let temp = productState;
-                productState.in_wishlist = true;
-                setProductState(temp)
-                triggerUpdateWishList()
-                notify(productState.name, response.data.message)
-
-            } catch (error) {
-                console.error('Error:', error);
-            } finally {
-            }
-        }
-        else {
-            navigate("/login")
-        }
-
+  const notify = (name, message) => {
+    toast.dismiss();
+    toast(<span className="line-clamp-2">{`${name} ${message}`}</span>);
+  };
+  const handlerAddFavouriteItem = async () => {
+    const authToken = localStorage.getItem("authToken");
+    if (authToken) {
+      try {
+        const response = await apiClient.post(`/wishlist/add`, {
+          product_id: productState.id,
+        });
+        let temp = productState;
+        productState.in_wishlist = true;
+        setProductState(temp);
+        triggerUpdateWishList();
+        notify(productState.name, response.data.message);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+      }
+    } else {
+      navigate("/login");
     }
+  };
 
-    const onMouseLeaveFunction = (video) => {
-        setIsHovered(false)
-        if (video && JSON.parse(video)[0]) {
-            console.log(video)
-            var playPromise = videoRef?.current?.pause();
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    videoRef.current.pause();
-                })
-                    .catch(error => {
-                    });
-            }
-        }
-        else {
-            sliderRef.current.slickPause()
-        }
+  const onMouseLeaveFunction = (video) => {
+    setIsHovered(false);
+    if (video && JSON.parse(video)[0]) {
+      console.log(video);
+      var playPromise = videoRef?.current?.pause();
+      if (playPromise !== undefined) {
+        playPromise
+          .then((_) => {
+            videoRef.current.pause();
+          })
+          .catch((error) => {});
+      }
+    } else {
+      sliderRef.current.slickPause();
     }
-    const onMouseEnterFunction = (video) => {
+  };
+  const onMouseEnterFunction = (video) => {
+    setIsHovered(true);
+    if (video && JSON.parse(video)[0]) {
+      setTimeout(() => {
+        var playPromise = videoRef?.current?.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then((_) => {
+              videoRef.current.play();
+            })
+            .catch((error) => {});
+        }
+      }, 300);
+    } else {
+      sliderRef.current.slickPlay();
+    }
+  };
+  return (
+    <React.Fragment>
+      <div
+        className={`${classes} min-h-[520px] block w-full group border-gray-300 relative rounded-[4px]  cursor-pointer product__card__wrapper group transition-all border-2 z-[70] hover:border-primary duration-700`}
+        onMouseLeave={() => onMouseLeaveFunction(product.video_path)}
+        onMouseEnter={() => onMouseEnterFunction(product.video_path)}
+      >
+        {product.sale_price < product.original_price && (
+          <React.Fragment>
+            {product.sale_price ? (
+              <p className="absolute min-w-[80px] text-center py-[5px] rounded-br-[20px] z-[60] top-0 left-0 bg-[#FCE8EA] text-sm font-semibold text-[#A6131D] inline-block">
+                {(
+                  ((product.original_price - product.sale_price) /
+                    product.original_price) *
+                  100
+                ).toFixed(0)}
+                % off
+              </p>
+            ) : null}
+          </React.Fragment>
+        )}
+        <div className="overflow-hidden relative z-50">
+          <Link to={`/product/${product.id}`}>
+            {product.video_path && JSON.parse(product.video_path)[0] ? (
+              <React.Fragment>
+                <div className="relative">
+                  {isHovered ? (
+                    <video
+                      ref={videoRef}
+                      width="100%"
+                      autoPlay={false}
+                      muted={true}
+                      loop={true}
+                      className="w-full h-[250px] object-cover"
+                    >
+                      <source
+                        src={`https://testhssite.com/storage/${
+                          JSON.parse(product.video_path)[0]
+                        }`}
+                        type="video/mp4"
+                      />
+                      Your browser does not support the video tag.
+                    </video>
+                  ) : (
+                    <img
+                      src={`https://testhssite.com/storage/${product.images[0]}`}
+                      alt={product.altText}
+                      className="w-full h-[250px]"
+                    />
+                  )}
+                </div>
+                <div className="size-8 bg-[#584f54] opacity-90 rounded-full flex items-center justify-center absolute bottom-3  left-3">
+                  <FaPlay
+                    color="white"
+                    size={16}
+                    opacity={"0.8"}
+                    className="ml-1"
+                  />
+                </div>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Slider {...settings} ref={sliderRef}>
+                  {product.images.map((image, index) => (
+                    <div key={index}>
+                      <img
+                        src={`https://testhssite.com/storage/${image}`}
+                        alt={product.altText}
+                        className="w-full h-[250px]"
+                      />
+                    </div>
+                  ))}
+                </Slider>
+              </React.Fragment>
+            )}
+          </Link>
+          <div className="absolute top-[35%] translate-y-[-50%] border border-gray-300 rounded-[4px] right-[-70px] group-hover:right-0 transition-all duration-500">
+            <VscGraph
+              size={45}
+              className="p-3 text-[#62666c] bg-white hover:text-white hover:bg-primary z-10 transition-all rounded-t-[4px]"
+            />
+            <LuEye
+              size={45}
+              className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all"
+            />
+            {!productState.in_wishlist ? (
+              <FaRegHeart
+                size={45}
+                onClick={(e) => handlerAddFavouriteItem()}
+                className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]"
+              />
+            ) : (
+              <GoHeartFill
+                size={45}
+                onClick={(e) => handlerRemoveFavouriteItem()}
+                className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]"
+              />
+            )}
+          </div>
+        </div>
 
-        setIsHovered(true)
-        if (video && JSON.parse(video)[0]) {
-            setTimeout(() => {
-                var playPromise = videoRef?.current?.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(_ => {
-                        videoRef.current.play();
-                    })
-                        .catch(error => {
-                        });
-                }
-            }, 300)
-        }
-        else {
-            sliderRef.current.slickPlay()
-        }
-    }
-    return (
-        <React.Fragment>
-            <div
-                className={`${classes} min-h-[520px] block w-full group border-gray-300 relative rounded-[4px]  cursor-pointer product__card__wrapper group transition-all border-2 z-[70] hover:border-primary duration-700`}
-                onMouseLeave={() => onMouseLeaveFunction(product.video_path)}
-                onMouseEnter={() => onMouseEnterFunction(product.video_path)}>
-                {product.sale_price < product.original_price && (
-                    <React.Fragment>
-                        {product.sale_price ? (
-                            <p className="absolute min-w-[80px] text-center py-[5px] rounded-br-[20px] z-[60] top-0 left-0 bg-[#FCE8EA] text-sm font-semibold text-[#A6131D] inline-block">
-                                {((product.original_price - product.sale_price) / (product.original_price) * 100).toFixed(0)}% off
-                            </p>
-                        ) : null}
-                    </React.Fragment>
+        <div className="mt-1 p-4">
+          <Link to={`/product/${product.id}`}>
+            <div className="">
+              <h2 className="text-lg font-semibold line-clamp-2">
+                {product.name}
+              </h2>
+            </div>
+            <div className="flex items-center mt-1">
+              <Rating rating={product.avg_rating ? product.avg_rating : "5"} />
+              <span className="text-gray-700 text-sm ml-2">
+                {product.total_reviews ? product.total_reviews : "1000"}+ Sold
+              </span>
+            </div>
+            {!flashSale ? (
+              <p className="text-gray-700 text-xs mt-1">
+                15% discount on first time order
+              </p>
+            ) : null}
+            {flashSale ? (
+              <div className="relative">
+                <ul className="relative h-5 overflow-hidden pt-[1px]">
+                  <li className="animate-slide-sequence delay-0 text-primary font-bold text-xs flex items-center">
+                    <FaRegClock />{" "}
+                    <span className="ml-2">SELLING OUT FAST</span>
+                  </li>
+                  <li className="animate-slide-sequence delay-2000 text-[#BE2535] font-bold text-xs flex items-center">
+                    <FiTruck /> <span className="ml-2">FREE DELIVERY</span>
+                  </li>
+                  <li className="animate-slide-sequence delay-4000 text-secondary font-bold text-xs flex items-center">
+                    <FiShoppingCart />{" "}
+                    <span className="ml-2">5300+ SALE RECENTLY</span>
+                  </li>
+                </ul>
+              </div>
+            ) : null}
+
+            <p className="font-semibold text-sm text-gray-700 mt-3">
+              <span className="text-black-100">Free DELIVERY</span> Get it as
+              soon as&nbsp;{product.best_delivery_date}
+            </p>
+
+            <div className="flex flex-row items-center justify-start">
+              <span className="text-primary font-semibold text-base">
+                <span>
+                  {product.currency_title ? product.currency_title : "SAR "}
+                </span>
+                {product.sale_price ? (
+                  <span className="ml-1 text-3xl font-extrabold">
+                    {product.sale_price}.
+                  </span>
+                ) : (
+                  <span className="ml-1 text-3xl font-extrabold">
+                    {product.original_price}.
+                  </span>
                 )}
-                <div className="overflow-hidden relative z-50">
-                    <Link to={`/product/${product.id}`}>
-                        {product.video_path && JSON.parse(product.video_path)[0] ? (
-                            <React.Fragment>
-                                <div className="relative">
-                                    {isHovered ? <video
-                                        ref={videoRef}
-                                        width="100%"
-                                        autoPlay={false}
-                                        muted={true}
-                                        loop={true}
-                                        className="w-full h-[250px] object-cover"
-                                    >
-                                        <source src={`https://testhssite.com/storage/${JSON.parse(product.video_path)[0]}`} type="video/mp4" />
-                                        Your browser does not support the video tag.
-                                    </video> :
-                                        <img src={`https://testhssite.com/storage/${product.images[0]}`} alt={product.altText} className="w-full h-[250px]" />
-                                    }
-                                </div>
-                                <div className="size-8 bg-[#584f54] opacity-90 rounded-full flex items-center justify-center absolute bottom-3  left-3">
-                                    <FaPlay color="white" size={16} opacity={"0.8"} className="ml-1" />
-                                </div>
-                            </React.Fragment>
-                        ) : (
-                            <React.Fragment>
-                                <Slider {...settings} ref={sliderRef}>
-                                    {product.images.map((image, index) => (
-                                        <div key={index}>
-                                            <img src={`https://testhssite.com/storage/${image}`} alt={product.altText} className="w-full h-[250px]" />
-                                        </div>
-                                    ))}
-                                </Slider>
-                            </React.Fragment>
-                        )}
-                    </Link>
-                    <div className="absolute top-[35%] translate-y-[-50%] border border-gray-300 rounded-[4px] right-[-70px] group-hover:right-0 transition-all duration-500">
-                        <VscGraph size={45} className="p-3 text-[#62666c] bg-white hover:text-white hover:bg-primary z-10 transition-all rounded-t-[4px]" />
-                        <LuEye size={45} className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all" />
-                        {!productState.in_wishlist ? <FaRegHeart size={45} onClick={(e) => handlerAddFavouriteItem()} className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]" /> : <GoHeartFill size={45} onClick={(e) => handlerRemoveFavouriteItem()} className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]" />}
 
-                    </div>
-                </div>
-
-                <div className="mt-1 p-4">
-                    <Link to={`/product/${product.id}`}>
-                        <div className="">
-                            <h2 className="text-lg font-semibold line-clamp-2">{product.name}</h2>
-                        </div>
-                        <div className="flex items-center mt-1">
-                            <Rating rating={product.avg_rating ? product.avg_rating : "5"} />
-                            <span className="text-gray-700 text-sm ml-2">{product.total_reviews ? product.total_reviews : "1000"}+ Sold</span>
-                        </div>
-                        {!flashSale ? (
-                            <p className="text-gray-700 text-xs mt-1">15% discount on first time order</p>
-                        ) : null}
-                        {flashSale ? (
-                            <div className="relative">
-                                <ul className="relative h-5 overflow-hidden pt-[1px]">
-                                    <li className="animate-slide-sequence delay-0 text-primary font-bold text-xs flex items-center">
-                                        <FaRegClock /> <span className="ml-2">SELLING OUT FAST</span>
-                                    </li>
-                                    <li className="animate-slide-sequence delay-2000 text-[#BE2535] font-bold text-xs flex items-center">
-                                        <FiTruck /> <span className="ml-2">FREE DELIVERY</span>
-                                    </li>
-                                    <li className="animate-slide-sequence delay-4000 text-secondary font-bold text-xs flex items-center">
-                                        <FiShoppingCart /> <span className="ml-2">5300+ SALE RECENTLY</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        ) : null}
-
-                        <p className="font-semibold text-sm text-gray-700 mt-3">
-                            <span className="text-black-100">Free DELIVERY</span> Get it as soon as&nbsp;{product.best_delivery_date}
-                        </p>
-
-                        <div className="flex flex-row items-center justify-start">
-                            <span className="text-primary font-semibold text-base">
-                                <span>{product.currency_title ? product.currency_title : "SAR "}</span>
-                                {product.sale_price ? <span className="ml-1 text-3xl font-extrabold">
-                                    {product.sale_price}.
-                                </span> : <span className="ml-1 text-3xl font-extrabold">
-                                    {product.original_price}.
-                                </span>}
-
-                                <span>
-                                    {product.sale_price && String(product.sale_price).split('.')[1]
-                                        ? String(product.sale_price).split('.')[1]
-                                        : "00"}
-                                </span>
-                            </span>
-                            {!product.sale_price || (product.sale_price === product.original_price) ? null : (
-                                <span className="text-gray-700 text-sm line-through ml-2 mt-2">
-                                    <span>{product.currency_title ? product.currency_title : "SAR"}&nbsp;</span>
-                                    <span>{product.original_price}.</span>
-                                    <span>
-                                        {product.price && String(product.price).split('.')[1]
-                                            ? String(product.price).split('.')[1]
-                                            : "00"}
-                                    </span>
-                                </span>
-                            )}
-                        </div>
-
-                        {!flashSale ? (
-                            <React.Fragment>
-                                {product.leftStock > 0 && product.leftStock <= 5 ? (
-                                    <p className="text-[#A6131D] text-sm mt-2">Only {product.leftStock} left in stock - order soon.</p>
-                                ) : null}
-                                {product.leftStock <= 0 ? <p className="text-[#A6131D] text-sm mt-2">Only available for pre-orders</p> : null}
-                                <span></span>
-                            </React.Fragment>
-                        ) : null}
-                    </Link>
-
-                    <div className="flex items-center">
-                        <div className="mt-2 flex items-center justify-between px-3 py-2 w-[90px] border border-[#BCE3C9] rounded-[4px]">
-                            <FiMinus className="cursor-pointer" onClick={(e) => handlerDecrement(e)} />
-                            <span className="font-semibold text-primary mx-2">{String(count).padStart(2, '0')}</span>
-                            <BsPlusLg className="cursor-pointer" onClick={(e) => handlerIncrement(e)} />
-                        </div>
-                        <CartButton icon={true} quantity={count} productId={product.id} productName={product.name} setQuantity={setCount}>
-                            <MdOutlineAddShoppingCart className="text-primary group-hover:text-white transition-all duration-500" />
-                            <span className="ml-2 font-semibold text-primary text-base group-hover:text-white transition-all duration-500">
-                                Add To Cart
-                            </span>
-                        </CartButton>
-                    </div>
-                </div>
+                <span>
+                  {product.sale_price &&
+                  String(product.sale_price).split(".")[1]
+                    ? String(product.sale_price).split(".")[1]
+                    : "00"}
+                </span>
+              </span>
+              {!product.sale_price ||
+              product.sale_price === product.original_price ? null : (
+                <span className="text-gray-700 text-sm line-through ml-2 mt-2">
+                  <span>
+                    {product.currency_title ? product.currency_title : "SAR"}
+                    &nbsp;
+                  </span>
+                  <span>{product.original_price}.</span>
+                  <span>
+                    {product.price && String(product.price).split(".")[1]
+                      ? String(product.price).split(".")[1]
+                      : "00"}
+                  </span>
+                </span>
+              )}
             </div>
 
-        </React.Fragment >
-    )
-}
+            {!flashSale ? (
+              <React.Fragment>
+                {product.leftStock > 0 && product.leftStock <= 5 ? (
+                  <p className="text-[#A6131D] text-sm mt-2">
+                    Only {product.leftStock} left in stock - order soon.
+                  </p>
+                ) : null}
+                {product.leftStock <= 0 ? (
+                  <p className="text-[#A6131D] text-sm mt-2">
+                    Only available for pre-orders
+                  </p>
+                ) : null}
+                <span></span>
+              </React.Fragment>
+            ) : null}
+          </Link>
+
+          <div className="flex items-center">
+            <div className="mt-2 flex items-center justify-between px-3 py-2 w-[90px] border border-[#BCE3C9] rounded-[4px]">
+              <FiMinus
+                className="cursor-pointer"
+                onClick={(e) => handlerDecrement(e)}
+              />
+              <span className="font-semibold text-primary mx-2">
+                {String(count).padStart(2, "0")}
+              </span>
+              <BsPlusLg
+                className="cursor-pointer"
+                onClick={(e) => handlerIncrement(e)}
+              />
+            </div>
+            <CartButton
+              icon={true}
+              quantity={count}
+              productId={product.id}
+              productName={product.name}
+              setQuantity={setCount}
+            >
+              <MdOutlineAddShoppingCart className="text-primary group-hover:text-white transition-all duration-500" />
+              <span className="ml-2 font-semibold text-primary text-base group-hover:text-white transition-all duration-500">
+                Add To Cart
+              </span>
+            </CartButton>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+};
