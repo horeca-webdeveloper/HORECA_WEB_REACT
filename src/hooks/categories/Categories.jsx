@@ -22,11 +22,13 @@ export const Categories = ({ categories }) => {
       {/* categories List  */}
       <div className="grid grid-cols-2 items-center justify-between gap-4 my-8 sm:flex sm:flex-wrap">
         {categories.map((category, index) => {
-          return (
-            <React.Fragment key={index}>
-              {index < 14 ? <Category category={category} /> : null}
-            </React.Fragment>
-          );
+          if (index < 6) {
+            return (
+              <React.Fragment key={index}>
+                {index < 14 ? <Category category={category} /> : null}
+              </React.Fragment>
+            );
+          }
         })}
       </div>
     </Wrapper>

@@ -42,7 +42,7 @@ export const FeatureClearance = () => {
   return (
     <Wrapper>
       <img
-        className="w-full my-8 rounded-md"
+        className="w-full my-8 rounded-md min-h-[150px]"
         src={process.env.PUBLIC_URL + "/images/blog/banner/long-banner.jpg"}
         alt=""
       />

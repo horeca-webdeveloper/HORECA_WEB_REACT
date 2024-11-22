@@ -143,7 +143,7 @@ export const ProductCard = ({ classes, product, flashSale }) => {
   return (
     <React.Fragment>
       <div
-        className={`${classes} min-h-[520px] block w-full group border-gray-300 relative rounded-[4px]  cursor-pointer product__card__wrapper group transition-all border-2 z-[70] hover:border-primary duration-700`}
+        className={`${classes}  min-h-[330px] sm:min-h-[520px] block w-[183px] sm:w-full group border-gray-300 relative rounded-[4px]  cursor-pointer product__card__wrapper group transition-all border-2 z-[70] hover:border-primary duration-700`}
         onMouseLeave={() => onMouseLeaveFunction(product.video_path)}
         onMouseEnter={() => onMouseEnterFunction(product.video_path)}
       >
@@ -161,7 +161,7 @@ export const ProductCard = ({ classes, product, flashSale }) => {
             ) : null}
           </React.Fragment>
         )}
-        <div className="overflow-hidden relative z-50">
+        <div className="overflow-hidden relative z-50 flex items-center justify-center sm:block">
           <Link to={`/product/${product.id}`}>
             {product.video_path && JSON.parse(product.video_path)[0] ? (
               <React.Fragment>
@@ -173,7 +173,7 @@ export const ProductCard = ({ classes, product, flashSale }) => {
                       autoPlay={false}
                       muted={true}
                       loop={true}
-                      className="w-full h-[250px] object-cover"
+                      className="w-full h-[110px] sm:h-[250px] sm:w-[100] object-cover"
                     >
                       <source
                         src={`https://testhssite.com/storage/${
@@ -187,7 +187,7 @@ export const ProductCard = ({ classes, product, flashSale }) => {
                     <img
                       src={`https://testhssite.com/storage/${product.images[0]}`}
                       alt={product.altText}
-                      className="w-full h-[250px]"
+                      className="w-[100px] h-[110px] sm:h-[250px] sm:w-full object-cover"
                     />
                   )}
                 </div>
@@ -241,16 +241,16 @@ export const ProductCard = ({ classes, product, flashSale }) => {
           </div>
         </div>
 
-        <div className="mt-1 p-4">
+        <div className="mt-1 p-2 sm:p-4 ">
           <Link to={`/product/${product.id}`}>
             <div className="">
-              <h2 className="text-lg font-semibold line-clamp-2">
+              <h2 className="text-[12px] sm:text-lg font-normal sm:font-semibold line-clamp-2">
                 {product.name}
               </h2>
             </div>
             <div className="flex items-center mt-1">
               <Rating rating={product.avg_rating ? product.avg_rating : "5"} />
-              <span className="text-gray-700 text-sm ml-2">
+              <span className="text-gray-700 text-[8px] sm:text-sm ml-2">
                 {product.total_reviews ? product.total_reviews : "1000"}+ Sold
               </span>
             </div>
@@ -277,27 +277,27 @@ export const ProductCard = ({ classes, product, flashSale }) => {
               </div>
             ) : null}
 
-            <p className="font-semibold text-sm text-gray-700 mt-3">
+            <p className="font-normal sm:font-semibold text-[12px] sm:text-sm text-gray-700 mt-3">
               <span className="text-black-100">Free DELIVERY</span> Get it as
               soon as&nbsp;{product.best_delivery_date}
             </p>
 
-            <div className="flex flex-row items-center justify-start">
-              <span className="text-primary font-semibold text-base">
-                <span>
+            <div className="flex sm:flex-row items-center">
+              <span className="flex items-center sm:flex-none text-primary font-semibold ">
+                <span className="ml-0 sm:ml-1 text-[10px] sm:text-xl font-normal sm:font-bold">
                   {product.currency_title ? product.currency_title : "SAR "}
                 </span>
                 {product.sale_price ? (
-                  <span className="ml-1 text-3xl font-extrabold">
+                  <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">
                     {product.sale_price}.
                   </span>
                 ) : (
-                  <span className="ml-1 text-3xl font-extrabold">
+                  <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">
                     {product.original_price}.
                   </span>
                 )}
 
-                <span>
+                <span className="ml-1 text-[10px] sm:text-3xl font-bold sm:font-extrabold">
                   {product.sale_price &&
                   String(product.sale_price).split(".")[1]
                     ? String(product.sale_price).split(".")[1]
@@ -306,7 +306,7 @@ export const ProductCard = ({ classes, product, flashSale }) => {
               </span>
               {!product.sale_price ||
               product.sale_price === product.original_price ? null : (
-                <span className="text-gray-700 text-sm line-through ml-2 mt-2">
+                <span className="flex items-center text-gray-700 text-[10px] sm:text-sm line-through ml-2 ">
                   <span>
                     {product.currency_title ? product.currency_title : "SAR"}
                     &nbsp;
@@ -339,16 +339,16 @@ export const ProductCard = ({ classes, product, flashSale }) => {
           </Link>
 
           <div className="flex items-center">
-            <div className="mt-2 flex items-center justify-between px-3 py-2 w-[90px] border border-[#BCE3C9] rounded-[4px]">
+            <div className="mt-2 flex items-center justify-between p-[2px] sm:px-3 sm:py-2 w-[90px] border border-[#BCE3C9] rounded-[4px]">
               <FiMinus
-                className="cursor-pointer"
+                className="cursor-pointer w-[10px] sm:w-[26px]"
                 onClick={(e) => handlerDecrement(e)}
               />
-              <span className="font-semibold text-primary mx-2">
+              <span className="font-semibold text-primary mx-2 text-[10px] sm:text-[16px]">
                 {String(count).padStart(2, "0")}
               </span>
               <BsPlusLg
-                className="cursor-pointer"
+                className="cursor-pointer w-[10px] sm:w-[26px]"
                 onClick={(e) => handlerIncrement(e)}
               />
             </div>
@@ -359,8 +359,8 @@ export const ProductCard = ({ classes, product, flashSale }) => {
               productName={product.name}
               setQuantity={setCount}
             >
-              <MdOutlineAddShoppingCart className="text-primary group-hover:text-white transition-all duration-500" />
-              <span className="ml-2 font-semibold text-primary text-base group-hover:text-white transition-all duration-500">
+              <MdOutlineAddShoppingCart className="text-primary hidden sm:block group-hover:text-white transition-all duration-500" />
+              <span className="ml-0 sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
                 Add To Cart
               </span>
             </CartButton>

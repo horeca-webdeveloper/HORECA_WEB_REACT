@@ -31,7 +31,14 @@ export const FeatureProduct = ({
         loader={featureCatLoader}
         classes={"mt-14 mb-6"}
       />
-      <div className="flex grid-cols-5 gap-5 sm:grid overflow-hidden sm:overflow-x-auto sm:space-x-5">
+      <div
+        // style={{
+        //   overflow: "auto",
+        //   scrollbarWidth: "none", // For Firefox
+        //   msOverflowStyle: "none", // For Internet Explorer and Edge
+        // }}
+        className="flex grid-cols-5 gap-2 sm:gap-5 sm:grid overflow-x-scroll sm:overflow-hidden sm:space-x-5"
+      >
         {featureCatLoader ? (
           Array.from({ length: 10 }).map((_, index) => (
             <Skeleton key={index} className="col-span-1 mt-1 min-h-[550px]" />

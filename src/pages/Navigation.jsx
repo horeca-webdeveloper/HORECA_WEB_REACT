@@ -70,6 +70,57 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     }
   }, [isFocused]);
 
+  const navItems = [
+    {
+      id: "",
+      name: "Your Orders",
+      link: "/all-orders",
+      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame.png`,
+    },
+    {
+      id: "",
+      name: "Browsing History",
+      link: "/browsing-history",
+      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-1.png`,
+    },
+    {
+      id: "",
+      name: "Your Reviews",
+      link: "/reviews",
+      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-2.png`,
+    },
+    {
+      id: "",
+      name: "Wishlist ",
+      link: "/wishlist",
+      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-3.png`,
+    },
+    {
+      id: "",
+      name: "Your Profiles",
+      link: "/AccountSecurity",
+      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-4.png`,
+    },
+    {
+      id: "",
+      name: "Coupons & Offers",
+      link: "/coupons-offers",
+      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-5.png`,
+    },
+    {
+      id: "",
+      name: "Addresses",
+      link: "/addresses",
+      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-7.png`,
+    },
+    {
+      id: "",
+      name: "Account Security",
+      link: "/AccountSecurity",
+      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-10.png`,
+    },
+  ];
+
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(false);
   useEffect(() => {
@@ -104,6 +155,21 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     navigate("/login");
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
+
+  const toggleDrawer = () => {
+    setIsOpen(!isOpen);
+    setActiveCategory(null); // Reset active category when drawer is closed
+  };
+
+  const openCategory = (category) => {
+    setActiveCategory(category); // Open the specific category
+  };
+
+  const goBackToMain = () => {
+    setActiveCategory(null); // Reset to main drawer
+  };
   const fetchProducts = async () => {
     setLoader(true);
     try {
@@ -135,7 +201,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
       {openModel && !token ? (
         <React.Fragment>
           <div
-            className="bg-[#000000a1] primary w-[10px] h-[100vh] z-[999] fixed flex items-center justify-center"
+            className="bg-[#000000a1] translate-x-[100px] primary w-[10px] h-[100vh] z-[999] fixed flex items-center justify-center"
             onClick={() => setOpenModel(false)}
           ></div>
           <div className="w-[375px] bg-white rounded-[10px] z-[9999] fixed top-[50%] left-[50%] translate-x-[-50%] hidden translate-y-[-50%]">
@@ -198,7 +264,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                 ) : null}
                 {currentLocation ? (
                   <p className="text-[13px] text-black mt-2">
-                    {currentLocation.as} {currentLocation.regionName}{" "}
+                    {currentLocation.as} {currentLocation.regionName}
                     {currentLocation.country}
                   </p>
                 ) : null}
@@ -307,9 +373,110 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
 
       {/* Main Nav*/}
       <Wrapper classes="flex items-center flex-row justify-between py-5">
+        {/* Drawer */}
         <div>
+          {/* Main Drawer */}
+          <div
+            className={`fixed inset-y-0 left-0 w-[80vw] bg-white z-[1000] text-black transform ${
+              isOpen ? "translate-x-0" : "-translate-x-full"
+            } transition-transform duration-300 ease-in-out lg:hidden`}
+          >
+            {activeCategory === null ? (
+              // Main Categories
+              <div>
+                <div className="flex items-center justify-center mt-[40px] mb-[30px] p-4 flex justify-between items-center">
+                  <button className="rounded-full bg-[#0171dc] text-[white] text-[14px] font-semibold px-[10px] py-[6px]">
+                    Sign in or create account
+                  </button>
+                  {/* <button
+                    className="text-gray-400 hover:text-black"
+                    onClick={toggleDrawer}
+                  >
+                    ✖
+                  </button> */}
+                </div>
+                <ul className="p-4 space-y-4 z-[999]">
+                  <li
+                    onClick={() => openCategory("Categories")}
+                    className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light border-b-[1px] p-2 text-[black] hover:rounded cursor-pointer"
+                  >
+                    Categories
+                  </li>
+                  <li
+                    onClick={() => openCategory("Account & Profile")}
+                    className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light p-2 text-[black] hover:rounded cursor-pointer"
+                  >
+                    Account & Profile
+                  </li>
+                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light p-2 text-[black] hover:rounded cursor-pointer">
+                    Categories
+                  </li>
+                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light border-b-[1px] p-2 text-[black] hover:rounded cursor-pointer">
+                    Profile
+                  </li>
+                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light border-b-[1px] p-2 text-[black] hover:rounded cursor-pointer">
+                    help
+                  </li>
+                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light p-2 text-[black] hover:rounded cursor-pointer">
+                    List
+                  </li>
+                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light border-b-[1px] p-2 text-[black] hover:rounded cursor-pointer">
+                    Registries
+                  </li>
+                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light p-2 text-[black] hover:rounded cursor-pointer">
+                    Department
+                  </li>
+                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light border-b-[1px] p-2 text-[black] hover:rounded cursor-pointer">
+                    Services
+                  </li>
+                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light p-2 text-[black] hover:rounded cursor-pointer">
+                    Give Feedback
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              // Subcategories Drawer
+              <div>
+                <div className="p-4 flex justify-between items-center">
+                  <button
+                    className="text-blue-500 font-bold"
+                    onClick={goBackToMain}
+                  >
+                    ← Back
+                  </button>
+                </div>
+                <ul className="p-4 space-y-4">
+                  {navItems?.map((item, index) => {
+                    return (
+                      <div className="flex items-center">
+                        <img className="h-[15px] mr-[10px]" src={item.icon} />
+                        <li
+                          key={index}
+                          onClick={() => navigate(item.link)}
+                          className="hover:bg-gray-100 p-2 text-[12px] rounded cursor-pointer"
+                        >
+                          {item.name}
+                        </li>
+                      </div>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {/* Backdrop */}
+          {isOpen && (
+            <div
+              className="fixed inset-0 bg-black z-[999] bg-opacity-50 lg:hidden"
+              onClick={toggleDrawer}
+            />
+          )}
+        </div>
+        <div className="ml-[-12%]">
           <Link to="/home">
             <img
+              onClick={toggleDrawer}
               src={process.env.PUBLIC_URL + "/icons/Drawer.png"}
               alt="Horeca Store"
               className="block sm:hidden"
@@ -350,7 +517,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
         </div>
 
         {/* Search Option Button */}
-        <div className="w-[50%] rounded-full border border-gray-300 relative ml-2 hidden sm:flex">
+        <div className="w-[50%] rounded-full border border-gray-300  relative ml-2 hidden sm:block">
           <form
             className="flex items-center h-12"
             onSubmit={(e) => handlerFormSubmit(e)}
@@ -635,7 +802,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                                       <Link to={"/collections/" + cat2.slug}>
                                         <li className="font-semibold mb-4 mt-5 text-base">
                                           {cat2.name}
-                                        </li>{" "}
+                                        </li>
                                       </Link>
                                       {cat2.children &&
                                         cat2.children.map((cat3, index3) => (
@@ -670,9 +837,9 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           </div>
         </Wrapper>
       </div>
-      <div className="w-[94%] m-auto rounded-full border border-gray-300 relative ml-2 block sm:hidden">
+      <div className="w-[94%] m-auto rounded-full border  border-gray-300 relative ml-2 block sm:hidden">
         <form
-          className="flex items-center h-12"
+          className="flex items-center h-10"
           onSubmit={(e) => handlerFormSubmit(e)}
         >
           <span className="ml-2 text-primary text-base px-5">All</span>
@@ -685,8 +852,8 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             onFocus={handleFocus}
             onBlur={handleBlur}
           />
-          <button type="submit" className="bg-primary p-2 rounded-full mr-2">
-            <CiSearch color="white" size={26} />
+          <button type="submit" className="bg-primary p-2 rounded-full mr-1">
+            <CiSearch color="white" size={18} />
           </button>
         </form>
 
