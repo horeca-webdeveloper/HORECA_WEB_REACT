@@ -21,10 +21,8 @@ export const Homepage = ({ categories }) => {
   const [selectedBrand, setSelectedBrand] = useState("");
   const [heroSlider, setHeroSlider] = useState([]);
   const [sliderLoader, setSliderLoader] = useState(true);
-
   const [brandCatLoader, setBrandCatLoader] = useState(true);
   const authToken = localStorage.getItem("authToken");
-
   const data = [
     {
       redirectLink: "#",
