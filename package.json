@@ -58,4 +58,27 @@
         "@babel/plugin-transform-private-property-in-object": "^7.25.8",
         "tailwindcss": "^3.4.6"
     }
+<<<<<<< HEAD
 }
+=======
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-private-property-in-object": "^7.25.8",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15"
+  }
+}
+>>>>>>> 212342a6119a6de6950808e5ee7e60e0220068bb

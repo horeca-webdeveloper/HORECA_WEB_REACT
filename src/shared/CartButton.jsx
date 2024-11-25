@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { apiClient } from "../utils/apiWrapper";
 import { useLocalCartCount } from "../context/LocalCartCount";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 export const CartButton = ({ productId, quantity, classes, icon, setQuantity, children, productName, image, storeId, deliveryDays, originalPrice, frontSalePrice, currencyTitle, minOrderQuantity, maxOrderQuantity }) => {
 

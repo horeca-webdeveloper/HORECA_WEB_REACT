@@ -38,6 +38,18 @@ export const FeatureProduct = ({
         loader={featureCatLoader}
         classes={"mt-14 mb-6"}
       />
+      <div
+        style={
+          window.innerWidth < 640
+            ? {
+                overflow: "auto",
+                scrollbarWidth: "none", // For Firefox
+                msOverflowStyle: "none", // For Internet Explorer and Edge
+              }
+            : {}
+        }
+        className="flex grid-cols-5 gap-2 sm:gap-5 sm:grid overflow-x-scroll sm:overflow-hidden sm:space-x-5"
+      >
 <div className={`grid sm:grid-cols-${smGrids} grid-cols-${gridCols} gap-5`}>
         {featureCatLoader ? (
           Array.from({ length: 10 }).map((_, index) => (
@@ -63,6 +75,7 @@ export const FeatureProduct = ({
             )}
           </React.Fragment>
         )}
+      </div>
       </div>
     </Wrapper>
   );
