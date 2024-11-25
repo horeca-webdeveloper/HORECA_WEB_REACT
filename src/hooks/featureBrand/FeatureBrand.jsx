@@ -20,6 +20,11 @@ export const FeatureBrand = ({
     setProducts(showFeatureProduct[0]);
   }, [selectedBrand, brandCat]);
 
+  const smallScreenCss =
+    "flex grid-cols-5 gap-2 sm:gap-5 sm:grid overflow-x-scroll sm:overflow-hidden sm:space-x-5";
+
+  const bigScreenCss = "flex grid-cols-5 gap-2 sm:gap-5 sm:grid sm:space-x-5";
+
   return (
     <Wrapper>
       <FeatureHeader
@@ -31,12 +36,16 @@ export const FeatureBrand = ({
         loader={brandCatLoader}
       />
       <div
-        // style={{
-        //   overflow: "auto",
-        //   scrollbarWidth: "none", // For Firefox
-        //   msOverflowStyle: "none", // For Internet Explorer and Edge
-        // }}
-        className="flex grid-cols-5 gap-2 sm:gap-5 sm:grid overflow-x-scroll sm:overflow-hidden sm:space-x-5"
+        style={
+          window.innerWidth < 640
+            ? {
+                overflow: "auto",
+                scrollbarWidth: "none", // For Firefox
+                msOverflowStyle: "none", // For Internet Explorer and Edge
+              }
+            : {}
+        }
+        className={window.innerWidth < 640 ? smallScreenCss : bigScreenCss}
       >
         {brandCatLoader ? (
           Array.from({ length: 10 }).map((_, index) => (

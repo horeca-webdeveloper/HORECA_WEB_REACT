@@ -473,7 +473,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             />
           )}
         </div>
-        <div className="ml-[-12%]">
+        <div className={window.innerWidth < 640 ? "ml-[-12%]" : "ml-[0]"}>
           <Link to="/home">
             <img
               onClick={toggleDrawer}

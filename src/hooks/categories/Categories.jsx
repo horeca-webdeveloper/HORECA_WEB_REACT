@@ -22,13 +22,17 @@ export const Categories = ({ categories }) => {
       {/* categories List  */}
       <div className="grid grid-cols-2 items-center justify-between gap-4 my-8 sm:flex sm:flex-wrap">
         {categories.map((category, index) => {
-          if (index < 6) {
+          const isSmallScreen = window.innerWidth < 640;
+          const maxCategories = isSmallScreen ? 6 : 14;
+
+          if (index < maxCategories) {
             return (
               <React.Fragment key={index}>
-                {index < 14 ? <Category category={category} /> : null}
+                <Category category={category} />
               </React.Fragment>
             );
           }
+          return null;
         })}
       </div>
     </Wrapper>

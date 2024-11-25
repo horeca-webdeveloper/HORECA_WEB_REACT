@@ -32,11 +32,15 @@ export const FeatureProduct = ({
         classes={"mt-14 mb-6"}
       />
       <div
-        // style={{
-        //   overflow: "auto",
-        //   scrollbarWidth: "none", // For Firefox
-        //   msOverflowStyle: "none", // For Internet Explorer and Edge
-        // }}
+        style={
+          window.innerWidth < 640
+            ? {
+                overflow: "auto",
+                scrollbarWidth: "none", // For Firefox
+                msOverflowStyle: "none", // For Internet Explorer and Edge
+              }
+            : {}
+        }
         className="flex grid-cols-5 gap-2 sm:gap-5 sm:grid overflow-x-scroll sm:overflow-hidden sm:space-x-5"
       >
         {featureCatLoader ? (

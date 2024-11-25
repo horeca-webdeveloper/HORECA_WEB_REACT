@@ -191,14 +191,16 @@ export const ProductCard = ({ classes, product, flashSale }) => {
                     />
                   )}
                 </div>
-                <div className="size-8 bg-[#584f54] opacity-90 rounded-full flex items-center justify-center absolute bottom-3  left-3">
-                  <FaPlay
-                    color="white"
-                    size={16}
-                    opacity={"0.8"}
-                    className="ml-1"
-                  />
-                </div>
+                {window.innerWidth < 640 ?? (
+                  <div className="size-8 bg-[#584f54] opacity-90 rounded-full flex items-center justify-center absolute bottom-3  left-3">
+                    <FaPlay
+                      color="white"
+                      size={16}
+                      opacity={"0.8"}
+                      className="ml-1"
+                    />
+                  </div>
+                )}
               </React.Fragment>
             ) : (
               <React.Fragment>

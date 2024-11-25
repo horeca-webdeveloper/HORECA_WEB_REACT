@@ -31,6 +31,9 @@ import AccountSecurity from "./pages/ProfileRegistration/AccountSecurity/Account
 
 
   import Wishlist from "./pages/ProfileRegistration/Wishlist/Wishlist";
+import OrderDetails from "./pages/ProfileRegistration/OrderDetails/OrderDetails";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import ContactUs from "./pages/FooterPages/ContactUs/ContactUs";
 const App = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
@@ -113,6 +116,7 @@ const App = () => {
         <Route path="/collections/:id" element={<CollectionPage />} />
         <Route path="/settings" element={<SettingsLayout />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/review-checkout" element={<ReviewCheckout />} />
         <Route path="/all-orders" element={<AllOrders/>} />
@@ -123,6 +127,8 @@ const App = () => {
         <Route path="/addresses" element={<Addresses/>} />
         <Route path="/creditBalance" element={<CreditBalance/>} />
         <Route path="/AccountSecurity" element={<AccountSecurity/>} />
+        <Route path="/order-details" element={<OrderDetails />} />
+        <Route path="/contact-us" element={<ContactUs />} />
       </Routes>
 
       <ToastContainer
