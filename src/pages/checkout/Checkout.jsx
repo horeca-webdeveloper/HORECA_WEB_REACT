@@ -19,40 +19,50 @@ import { FaLongArrowAltRight, FaCheck } from "react-icons/fa";
 import { useCart } from "../../context/CartContext";
 import { apiClient } from "../../utils/apiWrapper.js";
 import { Layout } from "./Layout.jsx";
-
+import { FeatureProduct } from "../../hooks/featureproducts/FeatureProducts.jsx";
 
 export const Checkout = () => {
+    const { triggerUpdateCart, updateTempCart } = useCart();
     const [loader, setLoader] = useState(false)
     const [activeTab, setActiveTab] = useState('saved');
     const [cartItems, setCartItems] = useState([]);
+    const [tempCartItems, setTempCartItems] = useState(JSON.parse(localStorage.getItem('CartItems')));
     const [listOfStore, setListOfStore] = useState([]);
     const [fetchCall, setFetchCall] = useState(false);
     const [cartSummaryFlag, setCartSummaryFlag] = useState(false);
     const [sameDeliveryTime, setSameDeliveryTime] = useState(false);
     const [maxDeliveryDate, setMaxDeliveryDate] = useState(0)
-    const { triggerUpdateCart } = useCart();
     const [removeItemsLoader, setRemoveItemsLoader] = useState(false);
     const [discountPercent, setDiscountPercent] = useState(0)
     const [couponCodeValue, setCouponCodeValue] = useState("");
     const [couponError, setCouponError] = useState("")
-
+    const [featureCat, setFeatureCat] = useState([]);
+    const [featureCatList, setFeatureCatList] = useState([]);
+    const [selectedCat, setSelectedCat] = useState("");
+    const [featureCatLoader, setFeatureCatLoader] = useState(true);
 
     const getDeliveryDate = (days) => {
-        days = Number(days)
-        let temp = !isNaN(days) ? days : 5
-        const futureDate = new Date(new Date().setDate(new Date().getDate() + Number(temp)));
+        // Ensure the input is a valid number. If invalid, default to 5.
+        days = isNaN(Number(days)) ? 5 : Number(days);
+        // Calculate the future date by adding the number of days to today
+        const futureDate = new Date();
+        futureDate.setDate(futureDate.getDate() + days);
+
+        // Format the date as DD/MM/YYYY
         const day = String(futureDate.getDate()).padStart(2, '0');
-        const month = String(futureDate.getMonth() + 1).padStart(2, '0');
+        const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed, so add 1
         const year = futureDate.getFullYear();
-        return `${day}/${month}/${year}`
+        const formattedDate = `${day}/${month}/${year}`;
+        // Return the formatted date
+        return formattedDate;
     };
     const fetchingCart = async () => {
         setLoader(true)
         try {
             const response = await apiClient.get('/cart');
-            setCartItems(response.data.data)
+            setCartItems(response.data.data);
             let temp = [];
-            response.data.data.map((prod) => {
+            response.data.data.forEach((prod) => {
                 if (!temp.includes(prod.product.store_id)) {
                     temp.push(prod.product.store_id)
                 }
@@ -66,19 +76,43 @@ export const Checkout = () => {
         }
     }
 
-    useEffect(() => {
-        fetchingCart();
-    }, [fetchCall])
+    const fetchCategoriesProducts = async (tempCat) => {
+        const authToken = localStorage.getItem("authToken");
+        try {
+          const response = await apiClient.get(
+            `${authToken ? "/categoryproducts" : "categoryguestproducts"}`
+          );
+          setFeatureCat(response.data.data);
+          response.data.data.map((item, index) => {
+            index < 5 ? tempCat.push(item.category_name) : console.log("");
+          });
+          setFeatureCatList(tempCat);
+          setSelectedCat(tempCat[0]);
+          setFeatureCatLoader(false);
+        } catch (error) {
+          console.error("Error:", error);
+        } finally {
+        }
+      };
 
     const handlerSameDeliveryDate = (e) => {
         setSameDeliveryTime(e.target.checked)
         let maxDeliveryDates;
         if (e.target.checked) {
-            cartItems.map((item) => {
-                maxDeliveryDates = maxDeliveryDate > Number(item.product.delivery_days) ? maxDeliveryDate : Number(item.product.delivery_days)
-            })
+            if (cartItems.length > 0) {
+                cartItems.forEach((item) => {
+                    maxDeliveryDates = maxDeliveryDate > Number(item.product.delivery_days) ? maxDeliveryDate : Number(item.product.delivery_days)
+                })
+            } else if (tempCartItems.length > 0) {
+                tempCartItems.forEach((item) => {
+                    maxDeliveryDates = maxDeliveryDate > Number(item.deliveryDays) ? maxDeliveryDate : Number(item.deliveryDays)
+                })
+            }
+
+
         }
         else {
+
             maxDeliveryDates = 0;
         }
 
@@ -96,6 +130,7 @@ export const Checkout = () => {
             setCartSummaryFlag(!cartSummaryFlag)
             setDiscountPercent(0);
             setCouponCodeValue("");
+            setListOfStore([]);
             setCouponError("")
 
         } catch (error) {
@@ -104,18 +139,62 @@ export const Checkout = () => {
             setRemoveItemsLoader(false)
         }
     }
+    //temporary cart
+    const handlerRemoveAllItemsFromCartTemp = async () => {
+        setRemoveItemsLoader(true)
+        localStorage.removeItem('CartItems');
+        localStorage.removeItem('TotalCartItems');
+        setTempCartItems(0);
+        updateTempCart(0);
+        setListOfStore([]);
+        setRemoveItemsLoader(false)
 
+    }
+
+    useEffect(() => {
+        fetchingCart();
+    }, [fetchCall]);
+
+    useEffect(() => {
+        if (cartItems.length == 0) {
+            let temp = [];
+            if (tempCartItems && tempCartItems.length > 0) {
+                tempCartItems.forEach((prod) => {
+                    if (!temp.includes(prod.storeId)) {
+                        temp.push(prod.storeId)
+                    }
+                })
+                setListOfStore(temp)
+            }
+
+
+        }
+    }, [cartItems, fetchCall]);
+
+    useEffect(() => {
+        if (sameDeliveryTime) {
+            const deliveryDate = getDeliveryDate(maxDeliveryDate);
+            localStorage.setItem('sameDeliveryDate', JSON.stringify({ sameDeliveryTime, deliveryDate }));
+        } else {
+            localStorage.removeItem('sameDeliveryDate');
+        }
+    }, [sameDeliveryTime]);
+
+    useEffect(()=>{
+        let tempCat = [];
+        fetchCategoriesProducts(tempCat);
+    },[]);
     return (
         <React.Fragment>
             <Layout cartItems={cartItems} cartSummaryFlag={cartSummaryFlag} removeItemsLoader={removeItemsLoader}>
                 <Breadcrumb items={firstBreadCrumb} classes={"mt-7"} />
-
-                <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
+                {/* show cart item */}
+                {!!cartItems && cartItems.length > 0 ? <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
                     <div className="flex items-center mt-5">
                         <h3 className="font-semibold text-[28px] text-[#424242]">Shopping Cart</h3>
                         {cartItems ? <p className="text-[#64748B] text-base ml-2">({cartItems.length} Items)</p> : null}
                     </div>
-                    {listOfStore && listOfStore.length ? (
+                    {listOfStore && listOfStore.length && cartItems.length>0 ? (
                         <div className="my-3 flex items-center justify-between">
                             <div className="flex items-center justify-between text-gray-700 mt-1">
                                 <div className="flex items-center">
@@ -123,10 +202,10 @@ export const Checkout = () => {
                                     <label className="ml-2 text-sm" htmlFor="sameDelivery">I want all items together in one shipment</label>
                                 </div>
                             </div>
-                            <button className={`text-gray-400 text-sm underline`} onClick={() => handlerRemoveAllItemsFromCart()}>Remove All Items from Cart</button>
+                            <button className={`text-gray-400 text-sm underline`} onClick={handlerRemoveAllItemsFromCart}>Remove All Items from Cart</button>
                         </div>
                     ) : null}
-                    {listOfStore && listOfStore.length ? listOfStore.map((store, index) => {
+                    {listOfStore && listOfStore.length && cartItems.length>0 ? listOfStore.map((store, index) => {
                         return (
                             <div className="rounded-[10px]  bg-[#E2E8F04D] p-4 my-5">
                                 <h2 className="text-[#424242] font-semibold text-lg mb-4">Shipment {index + 1}</h2>
@@ -169,10 +248,83 @@ export const Checkout = () => {
                             </div>
                         )
                     }) : <div className="w-full  h-[300px] text-gray-400 flex items-center justify-center font-semibold mb-10">No Product Items Available</div>}
-                </div>
+                </div> :
+
+                    //show temp cart items
+                    <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
+                        <div className="flex items-center mt-5">
+                            <h3 className="font-semibold text-[28px] text-[#424242]">Shopping Cart</h3>
+                            {tempCartItems && tempCartItems.length > 0 ? <p className="text-[#64748B] text-base ml-2">({tempCartItems.length} Items)</p> : null}
+                        </div>
+                        {listOfStore && listOfStore.length && tempCartItems.length>0 ? (
+                            <div className="my-3 flex items-center justify-between">
+                                <div className="flex items-center justify-between text-gray-700 mt-1">
+                                    <div className="flex items-center">
+                                        <input type="checkbox" id="sameDelivery" value={sameDeliveryTime} onChange={(e) => handlerSameDeliveryDate(e)} className="cursor-pointer outline-none w-4 h-4  border-primary rounded accent-primary" />
+                                        <label className="ml-2 text-sm" htmlFor="sameDelivery">I want all items together in one shipment</label>
+                                    </div>
+                                </div>
+                                <button className={`text-gray-400 text-sm underline`} onClick={handlerRemoveAllItemsFromCartTemp}>Remove All Items from Cart</button>
+                            </div>
+                        ) : null}
+
+                        {listOfStore && listOfStore.length && tempCartItems.length>0 ? listOfStore.map((store, index) => {
+                            const filteredItems = tempCartItems && tempCartItems.filter(item => item.storeId === listOfStore[index]);
+
+                            return (
+                                <>
+                                    {filteredItems.length > 0 ? <div className="rounded-[10px]  bg-[#E2E8F04D] p-4 my-5">
+                                        <h2 className="text-[#424242] font-semibold text-lg mb-4">Shipment {index + 1}</h2>
+                                        {tempCartItems && tempCartItems.filter(item => item.storeId === listOfStore[index]).map((prod, index) => {
+                                            return (
+                                                <React.Fragment>
+                                                    <div className={`flex flex-row items-center mb-8 relative "}`} key={index}>
+                                                        <Link to={`/product/${prod.productId}`}>
+                                                            <img className="max-w-[130px]" src={"https://testhssite.com/storage/" + prod.image} alt={prod.productName} />
+                                                        </Link>
+                                                        <div className="basis-1/2 ml-3" >
+                                                            <Link to={`/product/${prod.product_id}`}>
+                                                                <h3 className="text-[#030303] text-lg leading-5 ">{prod.productName}</h3>
+                                                                <p className="my-2 text-base font-semibold text-[#030303]"><span>{prod.currencyTitle}</span><span className="text-xl font-bold ml-2">{prod.originalPrice.toFixed(2)}</span><span className="text-[#B12704] ml-3">/ Each</span></p>
+                                                            </Link>
+                                                            <div>
+                                                                <Counter product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} />
+                                                                <span className="mx-3 text-[#E2E8F0]">|</span>
+                                                                <WishListButton product={prod} temp={true} />
+                                                                <span className="mx-3 text-[#E2E8F0]">|</span>
+                                                                <DeleteCartButton product={prod} setTempCartItems={setTempCartItems} temp={true} />
+                                                            </div>
+                                                        </div>
+                                                        <div className="basis-1/4 max-w-[250px] px-5">
+                                                            <div className="flex  flex-col items-center mb-4">
+                                                                <div className="flex items-start mt-4">
+                                                                    <div className="flex flex-col ml-3" >
+                                                                        <label className="text-base text-primary font-semibold">{maxDeliveryDate ? getDeliveryDate(maxDeliveryDate) : getDeliveryDate(prod.deliveryDays)}</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className=" text-[#030303] text-lg font-semibold">
+                                                            {prod.currencyTitle} {prod.originalPrice ? (prod.originalPrice * prod.quantity).toFixed(2) : (prod.originalPrice * prod.quantity).toFixed(2)}
+                                                        </div>
+                                                    </div>
+                                                </React.Fragment>
+                                            )
+                                        })}
+                                    </div> : null}
+
+                                </>
+                            )
+                        }) : <div className="w-full  h-[300px] text-gray-400 flex items-center justify-center font-semibold mb-10">No Product Items Available</div>}
+                    </div>
+
+
+                }
+
 
                 <div className="flex flex-col border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5 pt-5">
-                    <div className="flex items-center ml-5 ">
+
+                    <div className="flex items-center ml-5">
                         <button
                             className={`text-[#64748B] font-semibold text-lg px-4 pl-0 py-2  transition-all border-b-2 border-b-transparent ${activeTab === 'saved' ? ' border-b-primary' : ''}`}
                             onClick={() => setActiveTab('saved')}
@@ -186,26 +338,22 @@ export const Checkout = () => {
                             Buy it Again
                         </button>
                     </div>
+ 
 
-                    <div className="mt-4 p-4 ">
-                        {activeTab === 'saved' ? (
-                            <div className="grid grid-cols-3 gap-8 ">
-                                {buyProducts.map(((product, index) => {
-                                    return (
-                                        <ProductCard classes="col-span-1 mt-1  min-h-[600px]" key={index} product={product} />
-                                    )
-                                }))}
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-3 gap-8 ">
-                                {buyProducts.map(((product, index) => {
-                                    return (
-                                        <ProductCard classes="col-span-1 mt-1  min-h-[600px]" key={index} product={product} />
-                                    )
-                                }))}
-                            </div>
-                        )}
-                    </div>
+
+                    
+                    <FeatureProduct
+                        featureCat={featureCat}
+                        featureCatList={featureCatList}
+                        selectedCat={selectedCat}
+                        featureCatLoader={featureCatLoader}
+                        setSelectedCat={setSelectedCat}
+                        smGrid={3}
+                        gridCol={3}
+                    />
+
+ 
+                   
                 </div>
                 <div>
                 </div>

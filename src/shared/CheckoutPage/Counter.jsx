@@ -35,24 +35,45 @@ export const Counter = ({ product, cartSummaryFlag, setCartSummaryFlag }) => {
                 setLoader(false);
             }, 500)
             let cartItems = localStorage.getItem("CartItems");
+
             let tempObj = {
-                "product_id": product.product_id,
-                "quantity": 1
+                product_id: product.product_id,
+                quantity: product.quantity,
+                productName: product.productName,
+                image: product.image,
+                storeId: product.storeId,
+                deliveryDays: product.deliveryDays,
+                originalPrice: product.originalPrice,
+                frontSalePrice:product.frontSalePrice,
+                currencyTitle: product.currencyTitle
             }
+         
+            
             if (cartItems) {
                 let itemsArray = JSON.parse(cartItems);
-                itemsArray.push(tempObj);
+                let itemExists = itemsArray.findIndex(item => item.product_id === product.product_id);
+                if (itemExists != -1) {
+                    // If the item exists, update the quantity
+                    itemsArray[itemExists].quantity = product.quantity;
+                } else {
+                    itemsArray.push(tempObj); 
+                }
                 localStorage.setItem("CartItems", JSON.stringify(itemsArray));
             } else {
                 localStorage.setItem("CartItems", JSON.stringify([tempObj]));
+              
             }
-            incrementCartItems(1)
+           
             triggerUpdateCart();
         }
     }
 
     const handlerDecrement = async () => {
         setLoader(true);
+        if(product.quantity<=1){
+            setLoader(false);
+            return;
+        }
         product.quantity--;
         if (authToken) {
             try {
@@ -78,17 +99,31 @@ export const Counter = ({ product, cartSummaryFlag, setCartSummaryFlag }) => {
             }, 500)
             let cartItems = localStorage.getItem("CartItems");
             let tempObj = {
-                "product_id": product.product_id,
-                "quantity": 1
+                product_id: product.product_id,
+                quantity: product.quantity,
+                productName: product.productName,
+                image: product.image,
+                storeId: product.storeId,
+                deliveryDays: product.deliveryDays,
+                originalPrice: product.originalPrice,
+                frontSalePrice:product.frontSalePrice,
+                currencyTitle: product.currencyTitle
             }
+         
             if (cartItems) {
                 let itemsArray = JSON.parse(cartItems);
-                itemsArray.push(tempObj);
+                let itemExists = itemsArray.findIndex(item => item.product_id === product.product_id);
+                if (itemExists != -1) {
+                    // If the item exists, update the quantity
+                    itemsArray[itemExists].quantity = product.quantity;
+                } else {
+                    itemsArray.push(tempObj); 
+                }
                 localStorage.setItem("CartItems", JSON.stringify(itemsArray));
             } else {
                 localStorage.setItem("CartItems", JSON.stringify([tempObj]));
+              
             }
-            incrementCartItems(-1)
             triggerUpdateCart();
         }
     }

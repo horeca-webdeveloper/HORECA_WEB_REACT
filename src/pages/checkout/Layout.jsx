@@ -21,14 +21,12 @@ import { apiClient } from "../../utils/apiWrapper.js";
 
 export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader }) => {
 
-
     const [isVisible, setIsVisible] = useState(false);
     const [listOfStore, setListOfStore] = useState([]);
     const navigate = useNavigate();
     const [summary, setSummary] = useState({});
     const [couponCodeValue, setCouponCodeValue] = useState();
     const [cardSummaryLoader, setCartSummaryLoader] = useState(false);
-
     const [totalOrderPrice, setTotalOrderPrice] = useState(0);
     const [discountPercent, setDiscountPercent] = useState(0);
     const [couponError, setCouponError] = useState("");

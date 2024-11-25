@@ -908,7 +908,14 @@ export const BuyMoreSaveMore = ({ buyMore, productLoader, product, setSelectedBu
 
         {/* Stretchable Add to Cart button */}
         <CartButton classes={"bg-primary rounded-[4px] justify-center p-2 ml-3 flex items-center  text-base text-white font-semibold w-full transition-all"}
-          icon={true} productId={product.id} quantity={quantity} setQuantity={setQuantity} productName={product.name} >
+          icon={true} productId={product.id} quantity={quantity} setQuantity={setQuantity} productName={product.name} image={product.image}
+          storeId={product.store_id}
+          deliveryDays={product.delivery_days}
+          originalPrice={product.sale_price?product.sale_price:product.original_price}
+          frontSalePrice={product.price}
+          maxOrderQuantity={product.maximum_order_quantity}
+          minOrderQuantity={product.minimum_order_quantity}
+          currencyTitle= {product.currency_title ? product.currency_title : "SAR"}>
           <MdOutlineAddShoppingCart className="text-white group-hover:text-white transition-all duration-500" />
           <span className="ml-2 font-semibold text-white text-base group-hover:text-white transition-all duration-500">
             Add To Cart

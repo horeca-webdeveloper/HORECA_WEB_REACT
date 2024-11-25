@@ -10,11 +10,10 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
     const [totalCartCount, setTotalCartCount] = useState(0);
     const [updateCart, setUpdateCart] = useState(false); // Track updates
-    const { totalCartItems, incrementCartItems } = useLocalCartCount();
+    const { totalCartItems, incrementCartItems, deletCartItems, decreamentCartItems } = useLocalCartCount();
 
 
-
-    const fetchCartCount = async () => {
+    const fetchCartCount = async() => {
         let authToken = localStorage.getItem("authToken");
         if (authToken) {
             try {
@@ -36,12 +35,17 @@ export const CartProvider = ({ children }) => {
     const triggerUpdateCart = () => {
         setUpdateCart(prev => !prev); // Toggle to trigger re-fetch
     };
+    const updateTempCart = (quantity) => {
+        setTotalCartCount(quantity);
+        deletCartItems(quantity);
+
+    }
 
 
-
-    return (
-        <CartContext.Provider value={{ totalCartCount, triggerUpdateCart }}>
-            {children}
-        </CartContext.Provider>
+    return ( <
+        CartContext.Provider value = {
+            { totalCartCount, triggerUpdateCart, updateTempCart }
+        } > { children } <
+        /CartContext.Provider>
     );
 };

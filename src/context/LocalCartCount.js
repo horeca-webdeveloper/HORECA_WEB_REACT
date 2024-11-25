@@ -20,10 +20,25 @@ export const LocalCartCountProvider = ({ children }) => {
         });
     };
 
-    return (
-        <LocalCartCountContext.Provider value={{ totalCartItems, incrementCartItems }}>
-            {children}
-        </LocalCartCountContext.Provider>
+    // Function to decreament the quantity
+    const decreamentCartItems = (quantity) => {
+        setTotalCartItems((prevCount) => {
+            const newCount = prevCount - quantity;
+            localStorage.setItem("TotalCartItems", newCount); // Update localStorage
+            return newCount;
+        });
+    };
+
+    // Function to delete the quantity
+    const deletCartItems = (quantity) => {
+        setTotalCartItems(quantity);
+    };
+
+
+    return ( <
+        LocalCartCountContext.Provider value = {
+            { totalCartItems, incrementCartItems, decreamentCartItems, deletCartItems }
+        } > { children } < /LocalCartCountContext.Provider>
     );
 };
 
