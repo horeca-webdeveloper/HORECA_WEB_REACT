@@ -13,7 +13,7 @@ export const CartProvider = ({ children }) => {
     const { totalCartItems, incrementCartItems, deleteCartItems, decreamentCartItems } = useLocalCartCount();
 
 
-    const fetchCartCount = async() => {
+    const fetchCartCount = async () => {
         let authToken = localStorage.getItem("authToken");
         if (authToken) {
             try {
@@ -42,10 +42,8 @@ export const CartProvider = ({ children }) => {
     }
 
 
-    return ( <
-        CartContext.Provider value = {
-            { totalCartCount, triggerUpdateCart, updateTempCart }
-        } > { children } <
-        /CartContext.Provider>
+    return (<CartContext.Provider value={{ totalCartCount, triggerUpdateCart, updateTempCart }}>
+        {children}
+    </CartContext.Provider>
     );
 };
