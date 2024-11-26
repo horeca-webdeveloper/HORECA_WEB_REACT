@@ -3,12 +3,13 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { apiClient } from "../../utils/apiWrapper";
 import { useCart } from "../../context/CartContext";
 import { notify } from "../../utils/notify";
-
+import { useLocalCartCount } from "../../context/LocalCartCount";
 export const Counter = ({ product, cartSummaryFlag, setCartSummaryFlag }) => {
     const [loader, setLoader] = useState(false)
     const authToken = localStorage.getItem("authToken");
-    const { triggerUpdateCart, incrementCartItems } = useCart();
-
+    const { triggerUpdateCart } = useCart();
+    const { incrementCartItems } = useLocalCartCount();
+   
     const handlerIncrement = async () => {
         setLoader(true);
         product.quantity++;
@@ -39,13 +40,15 @@ export const Counter = ({ product, cartSummaryFlag, setCartSummaryFlag }) => {
             let tempObj = {
                 product_id: product.product_id,
                 quantity: product.quantity,
-                productName: product.productName,
+                name: product.product_name,
                 image: product.image,
-                storeId: product.storeId,
-                deliveryDays: product.deliveryDays,
-                originalPrice: product.originalPrice,
-                frontSalePrice:product.frontSalePrice,
-                currencyTitle: product.currencyTitle
+                store_id: product.store_id,
+                delivery_days: product.delivery_days,
+                original_price: product.original_price,
+                front_sale_price:product.front_sale_price,
+                currency_title: product.currency_title,
+                images:product.images,
+                video_path:product.video_path
             }
          
             
@@ -63,7 +66,8 @@ export const Counter = ({ product, cartSummaryFlag, setCartSummaryFlag }) => {
                 localStorage.setItem("CartItems", JSON.stringify([tempObj]));
               
             }
-           
+          
+             incrementCartItems(1);
             triggerUpdateCart();
         }
     }
@@ -103,7 +107,7 @@ export const Counter = ({ product, cartSummaryFlag, setCartSummaryFlag }) => {
                 quantity: product.quantity,
                 productName: product.productName,
                 image: product.image,
-                storeId: product.storeId,
+               store_id: product.store_id,
                 deliveryDays: product.deliveryDays,
                 originalPrice: product.originalPrice,
                 frontSalePrice:product.frontSalePrice,
@@ -124,6 +128,7 @@ export const Counter = ({ product, cartSummaryFlag, setCartSummaryFlag }) => {
                 localStorage.setItem("CartItems", JSON.stringify([tempObj]));
               
             }
+            incrementCartItems(-1);
             triggerUpdateCart();
         }
     }

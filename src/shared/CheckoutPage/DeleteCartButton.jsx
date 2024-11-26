@@ -37,11 +37,28 @@ export const DeleteCartButton = ({ product, setFetchCall, fetchCall, setCartSumm
         setTempCartItems(updateProduct);
 
     }
-
+const saveForLater=async(prod)=>{
+    handlerRemoveItemsFromCartTemp(prod.product_id);
+      let saveForLaterItems = localStorage.getItem("SaveForLater");
+            let tempObj =  prod;
+            if (saveForLaterItems) {
+                let itemsArray = JSON.parse(saveForLaterItems);
+                let itemExists = itemsArray.findIndex(item => item.product_id === prod.product_id);
+                if (itemExists == -1) {
+                    itemsArray.push(tempObj);  
+                } 
+                localStorage.setItem("SaveForLater", JSON.stringify(itemsArray));
+            } else {
+                localStorage.setItem("SaveForLater", JSON.stringify([tempObj]));
+                
+            }
+}
 
 
     return (
         <>
+            <button className="text-primary text-xs cursor-pointer" onClick={()=>saveForLater(product)}>Save For Later</button>
+            <span className="mx-3 text-[#E2E8F0]">|</span>
             {temp ? <button disabled={deleteCartLoader} className={`text-primary text-xs  ${deleteCartLoader ? "" : "cursor-pointer"}`} onClick={() => handlerRemoveItemsFromCartTemp(product.product_id)}>{deleteCartLoader ? "Deleting" : "Delete"}</button> : <button disabled={deleteCartLoader} className={`text-primary text-xs  ${deleteCartLoader ? "" : "cursor-pointer"}`} onClick={() => handlerRemoveItemsFromCart(product)}>{deleteCartLoader ? "Deleting" : "Delete"}</button>}
         </>
 

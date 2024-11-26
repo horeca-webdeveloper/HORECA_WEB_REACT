@@ -21,15 +21,20 @@ import { FaPlay } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import { useWishlist } from "../context/WishListContext";
 
-export const ProductCard = ({ classes, product, flashSale }) => {
+
+export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSaveForLater }) => {
  
+ 
+  const productId = product.id ? product.id : product.product_id;
+  let wishListItems = localStorage.getItem("wishListItems");
   const [autoplay, setAutoplay] = useState(false);
   const [count, setCount] = useState(1); // Local state for each card
   const [loader, setLoader] = useState(false);
   const [inWishList, setWishList] = useState(false);
   const sliderRef = useRef();
   const { triggerUpdateCart } = useCart();
-  const { totalCartItems, incrementCartItems } = useLocalCartCount();
+  const { totalWishListItems, incrementWishListItems } = useLocalCartCount();
+  
   const videoRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
@@ -63,11 +68,11 @@ export const ProductCard = ({ classes, product, flashSale }) => {
     }
   };
 
-  const handlerRemoveFavouriteItem = async () => {
+  const handlerRemoveFavouriteItem = async (product) => {
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
       try {
-        console.log(productState.id);
+
         const response = await apiClient.delete(`/wishlist/remove`, {
           params: { product_id: productState.id },
         });
@@ -78,8 +83,22 @@ export const ProductCard = ({ classes, product, flashSale }) => {
         console.error("Error:", error);
       } finally {
       }
-    } else {
-      navigate("/login");
+    } else{
+      if (wishListItems) {
+        let itemsArray = JSON.parse(wishListItems);
+        let itemExists = itemsArray.findIndex(item => item.id === product.id);
+        if (itemExists != -1) {
+            // If the item exists, delete from  wishlist
+         itemsArray.splice(itemExists,1);
+         localStorage.setItem("wishListItems", JSON.stringify(itemsArray));
+        } 
+       
+    }
+      product.in_wishlist = false;
+      incrementWishListItems(-1)
+      triggerUpdateWishList();
+      notify(product.name, "Product removed from wishlist");
+   
     }
   };
 
@@ -87,7 +106,11 @@ export const ProductCard = ({ classes, product, flashSale }) => {
     toast.dismiss();
     toast(<span className="line-clamp-2">{`${name} ${message}`}</span>);
   };
-  const handlerAddFavouriteItem = async () => {
+
+  //add wishlist
+
+  const handlerAddFavouriteItem = async (product) => {
+     
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
       try {
@@ -104,7 +127,27 @@ export const ProductCard = ({ classes, product, flashSale }) => {
       } finally {
       }
     } else {
-      navigate("/login");
+      if (wishListItems) {
+        let itemsArray = JSON.parse(wishListItems);
+        let itemExists = itemsArray.findIndex(item => item.id === product.id);
+         
+        if (itemExists == -1) {
+          itemsArray.push(product);
+          localStorage.setItem("wishListItems", JSON.stringify(itemsArray));
+          incrementWishListItems(1)
+        }  
+       
+      } else {
+        localStorage.setItem("wishListItems", JSON.stringify([product]));
+        incrementWishListItems(1)
+
+      }
+
+      product.in_wishlist = true;
+     
+      triggerUpdateWishList();
+      notify(product.name, "Product added to wishlist");
+
     }
   };
 
@@ -117,7 +160,7 @@ export const ProductCard = ({ classes, product, flashSale }) => {
           .then((_) => {
             videoRef.current.pause();
           })
-          .catch((error) => {});
+          .catch((error) => { });
       }
     } else {
       sliderRef.current.slickPause();
@@ -133,13 +176,20 @@ export const ProductCard = ({ classes, product, flashSale }) => {
             .then((_) => {
               videoRef.current.play();
             })
-            .catch((error) => {});
+            .catch((error) => { });
         }
       }, 300);
     } else {
       sliderRef.current.slickPlay();
     }
   };
+
+  const removeFromSaved = async (id) => {
+    const products = await JSON.parse(localStorage.getItem('SaveForLater'));
+    const updateProduct = products.filter((item) => item.product_id != id);
+    setTempSaveForLater(updateProduct)
+    localStorage.setItem('SaveForLater', JSON.stringify(updateProduct));
+  }
   return (
     <React.Fragment>
       <div
@@ -162,7 +212,7 @@ export const ProductCard = ({ classes, product, flashSale }) => {
           </React.Fragment>
         )}
         <div className="overflow-hidden relative z-50">
-          <Link to={`/product/${product.id}`}>
+          <Link to={`/product/${productId}`}>
             {product.video_path && JSON.parse(product.video_path)[0] ? (
               <React.Fragment>
                 <div className="relative">
@@ -176,9 +226,8 @@ export const ProductCard = ({ classes, product, flashSale }) => {
                       className="w-full h-[250px] object-cover"
                     >
                       <source
-                        src={`https://testhssite.com/storage/${
-                          JSON.parse(product.video_path)[0]
-                        }`}
+                        src={`https://testhssite.com/storage/${JSON.parse(product.video_path)[0]
+                          }`}
                         type="video/mp4"
                       />
                       Your browser does not support the video tag.
@@ -228,13 +277,13 @@ export const ProductCard = ({ classes, product, flashSale }) => {
             {!productState.in_wishlist ? (
               <FaRegHeart
                 size={45}
-                onClick={(e) => handlerAddFavouriteItem()}
+                onClick={(e) => handlerAddFavouriteItem(product)}
                 className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]"
               />
             ) : (
               <GoHeartFill
                 size={45}
-                onClick={(e) => handlerRemoveFavouriteItem()}
+                onClick={(e) => handlerRemoveFavouriteItem(product)}
                 className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]"
               />
             )}
@@ -242,7 +291,7 @@ export const ProductCard = ({ classes, product, flashSale }) => {
         </div>
 
         <div className="mt-1 p-4">
-          <Link to={`/product/${product.id}`}>
+          <Link to={`/product/${productId}`}>
             <div className="">
               <h2 className="text-lg font-semibold line-clamp-2">
                 {product.name}
@@ -253,6 +302,7 @@ export const ProductCard = ({ classes, product, flashSale }) => {
               <span className="text-gray-700 text-sm ml-2">
                 {product.total_reviews ? product.total_reviews : "1000"}+ Sold
               </span>
+
             </div>
             {!flashSale ? (
               <p className="text-gray-700 text-xs mt-1">
@@ -273,6 +323,7 @@ export const ProductCard = ({ classes, product, flashSale }) => {
                     <FiShoppingCart />{" "}
                     <span className="ml-2">5300+ SALE RECENTLY</span>
                   </li>
+
                 </ul>
               </div>
             ) : null}
@@ -299,13 +350,13 @@ export const ProductCard = ({ classes, product, flashSale }) => {
 
                 <span>
                   {product.sale_price &&
-                  String(product.sale_price).split(".")[1]
+                    String(product.sale_price).split(".")[1]
                     ? String(product.sale_price).split(".")[1]
-                    : "00"} 
+                    : "00"}
                 </span>
               </span>
               {!product.sale_price ||
-              product.sale_price === product.original_price ? null : (
+                product.sale_price === product.original_price ? null : (
                 <span className="text-gray-700 text-sm line-through ml-2 mt-2">
                   <span>
                     {product.currency_title ? product.currency_title : "SAR"}
@@ -317,6 +368,7 @@ export const ProductCard = ({ classes, product, flashSale }) => {
                       ? String(product.price).split(".")[1]
                       : "00"}
                   </span>
+
                 </span>
               )}
             </div>
@@ -355,26 +407,30 @@ export const ProductCard = ({ classes, product, flashSale }) => {
             <CartButton
               icon={true}
               quantity={count}
-              productId={product.id}
-              productName={product.name}
+              product_id={productId}
+              name={product.name}
               setQuantity={setCount}
               image={product.image}
-              storeId={product.store_id}
-              deliveryDays={product.delivery_days}
-              originalPrice={product.sale_price?product.sale_price:product.original_price}
-              frontSalePrice={product.price}
-              maxOrderQuantity={product.maximum_order_quantity}
-              minOrderQuantity={product.minimum_order_quantity}
-              currencyTitle= {product.currency_title ? product.currency_title : "SAR"}
-            
+              store_id={product.store_id}
+              delivery_days={product.delivery_days}
+              original_price={product.sale_price ? product.sale_price : product.original_price}
+              front_sale_price={product.price}
+              maximum_order_quantity={product.maximum_order_quantity}
+              minimum_order_quantity={product.minimum_order_quantity}
+              currency_title={product.currency_title ? product.currency_title : "SAR"}
+              images={product.images}
+              video_path={product.video_path}
+
             >
-              
+
               <MdOutlineAddShoppingCart className="text-primary group-hover:text-white transition-all duration-500" />
               <span className="ml-2 font-semibold text-primary text-base group-hover:text-white transition-all duration-500">
                 Add To Cart
               </span>
             </CartButton>
+
           </div>
+          {removeItem ? <button className="text-primary text-xs cursor-pointer" onClick={() => removeFromSaved(productId)}>Remove From Saved</button> : ''}
         </div>
       </div>
     </React.Fragment>

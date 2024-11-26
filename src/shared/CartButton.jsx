@@ -4,8 +4,8 @@ import { apiClient } from "../utils/apiWrapper";
 import { useLocalCartCount } from "../context/LocalCartCount";
 import { ToastContainer, toast } from 'react-toastify';
 
-export const CartButton = ({ productId, quantity, classes, icon, setQuantity, children, productName, image, storeId, deliveryDays, originalPrice, frontSalePrice, currencyTitle, minOrderQuantity, maxOrderQuantity }) => {
-
+export const CartButton = ({ product_id, quantity, classes, icon, setQuantity, children, name, image, store_id, delivery_days, original_price, front_sale_price, currency_title, maximum_order_quantity, minimum_order_quantity,images,video_path }) => {
+ 
     const { triggerUpdateCart } = useCart();
     const { totalCartItems, incrementCartItems } = useLocalCartCount();
     const [loader, setLoader] = useState(false);
@@ -21,13 +21,13 @@ export const CartButton = ({ productId, quantity, classes, icon, setQuantity, ch
             try {
                 setLoader(true);
                 const response = await apiClient.post(`/cart`, {
-                    "product_id": productId,
+                    "product_id": product_id,
                     "quantity": quantity,
                 });
                 setLoader(false)
                 setQuantity ? setQuantity(1) : console.log();
                 triggerUpdateCart();
-                notify(productName)
+                notify(name)
 
             } catch (error) {
                 console.error('Error:', error);
@@ -42,35 +42,39 @@ export const CartButton = ({ productId, quantity, classes, icon, setQuantity, ch
             }, 500)
             let cartItems = localStorage.getItem("CartItems");
             let tempObj = {
-                product_id: productId,
+                product_id: product_id,
                 quantity: quantity,
-                productName: productName,
+                name: name,
                 image: image,
-                storeId: storeId,
-                deliveryDays: deliveryDays,
-                originalPrice: originalPrice,
-                frontSalePrice: frontSalePrice,
-                currencyTitle: currencyTitle
+                store_idd: store_id,
+                delivery_days: delivery_days,
+                original_price: original_price,
+                front_sale_price: front_sale_price,
+                currency_title: currency_title,
+                maximum_order_quantity:maximum_order_quantity,
+                 minimum_order_quantity:minimum_order_quantity,
+                 images:images,
+                 video_path:video_path
             }
             if (cartItems) {
                 let itemsArray = JSON.parse(cartItems);
-                let itemExists = itemsArray.findIndex(item => item.product_id === productId);
+                let itemExists = itemsArray.findIndex(item => item.product_id === product_id);
                 if (itemExists != -1) {
                     // If the item exists, update the quantity
                     itemsArray[itemExists].quantity += quantity;
                 } else {
                     itemsArray.push(tempObj);
-                    incrementCartItems(quantity)
+                  
                 }
 
                 localStorage.setItem("CartItems", JSON.stringify(itemsArray));
             } else {
                 localStorage.setItem("CartItems", JSON.stringify([tempObj]));
-                incrementCartItems(quantity)
+                
             }
-           
+            incrementCartItems(quantity)
             triggerUpdateCart();
-            notify(productName)
+            notify(name)
             setQuantity ? setQuantity(1) : console.log()
         }
     }

@@ -475,7 +475,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             </span>
           </div>
 
-          <div className="relative mx-2 hidden sm:flex">
+          <div className="relative mx-2 hidden sm:flex cursor-pointer"    onClick={() => navigate("/checkout")}>
             <img src={process.env.PUBLIC_URL + "/icons/heart.svg"} alt="" />
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
               {totalWishListCount}

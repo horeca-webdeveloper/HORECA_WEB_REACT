@@ -10,7 +10,7 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
     const [totalCartCount, setTotalCartCount] = useState(0);
     const [updateCart, setUpdateCart] = useState(false); // Track updates
-    const { totalCartItems, incrementCartItems, deletCartItems, decreamentCartItems } = useLocalCartCount();
+    const { totalCartItems, incrementCartItems, deleteCartItems, decreamentCartItems } = useLocalCartCount();
 
 
     const fetchCartCount = async() => {
@@ -37,7 +37,7 @@ export const CartProvider = ({ children }) => {
     };
     const updateTempCart = (quantity) => {
         setTotalCartCount(quantity);
-        deletCartItems(quantity);
+        deleteCartItems(quantity);
 
     }
 

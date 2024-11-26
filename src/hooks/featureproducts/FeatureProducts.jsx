@@ -10,14 +10,12 @@ export const FeatureProduct = ({
   selectedCat,
   featureCatLoader,
   setSelectedCat,
-  smGrid,
-  gridCol,
+
   setFeaturedProducts
 }) => {
   const [products, setProducts] = useState([]);
   const [count, setCount] = useState(1);
-  const smGrids= smGrid==undefined?4:smGrid;
-  const gridCols= gridCol==undefined?3:gridCol;
+
   useEffect(() => {
     const showFeatureProduct = featureCat
       .filter((product) => selectedCat === product.category_name)
@@ -38,7 +36,7 @@ export const FeatureProduct = ({
         loader={featureCatLoader}
         classes={"mt-14 mb-6"}
       />
-<div className={`grid sm:grid-cols-${smGrids} grid-cols-${gridCols} gap-5`}>
+<div className={`grid sm:grid-cols-4 grid-cols-5 gap-5`}>
         {featureCatLoader ? (
           Array.from({ length: 10 }).map((_, index) => (
             <Skeleton key={index} className="col-span-1 mt-1 min-h-[550px]" />
