@@ -4,6 +4,7 @@ import { PiGreaterThan } from "react-icons/pi";
 
 
 export const Breadcrumb = ({ classes, items }) => {
+    
     return (
         <ul className={`${classes} flex flex-row items-center`} style={{ textTransform: 'capitalize' }}>
             {items.map((item, index) => {

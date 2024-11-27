@@ -1,21 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Breadcrumb } from "../../shared/Breadcrumb";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { notify } from "../../utils/notify.js";
 import { useLocalCartCount } from "../../context/LocalCartCount";
-import { toast } from "react-toastify";
 import { DeleteCartButton } from "../../shared/CheckoutPage/DeleteCartButton";
-import { WishListButton } from "../../shared/CheckoutPage/WishListButton.jsx";
 import { Counter } from "../../shared/CheckoutPage/Counter.jsx";
-import { InfinitySpin } from 'react-loader-spinner';
 import { ProductCard } from "../../shared/ProductCard";
-import Slider from "react-slick"
-import { fiveSlider } from "../../utils/slicksettings";
-import { Wrapper } from "../../shared/Wrapper";
-import { firstBreadCrumb, shipmentOne, recomendProduct, buyProducts } from "../../data/checkoutConfig";
-import { CustomCheckbox } from "../../shared/CustomCheckbox";
-import { FiMinus, FiPlus } from "react-icons/fi"
-import { FaLongArrowAltRight, FaCheck } from "react-icons/fa";
+import { firstBreadCrumb } from "../../data/checkoutConfig";
 import { useCart } from "../../context/CartContext";
 import { apiClient } from "../../utils/apiWrapper.js";
 import { Layout } from "./Layout.jsx";
@@ -37,9 +28,7 @@ export const Checkout = () => {
     const [removeItemsLoader, setRemoveItemsLoader] = useState(false);
     const [discountPercent, setDiscountPercent] = useState(0)
     const [couponCodeValue, setCouponCodeValue] = useState("");
-    const [couponError, setCouponError] = useState("")
-
-
+    const [couponError, setCouponError] = useState("");
 
     const getDeliveryDate = (days) => {
         // Ensure the input is a valid number. If invalid, default to 5.
@@ -108,8 +97,6 @@ export const Checkout = () => {
     const handlerRemoveAllItemsFromCart = async () => {
         setRemoveItemsLoader(true)
         try {
-            const response = await apiClient.delete(`/cart`, {
-            });
             notify("All Cart Items Succesfully Deleted")
             setFetchCall(!fetchCall)
             triggerUpdateCart();
@@ -136,15 +123,15 @@ export const Checkout = () => {
         setRemoveItemsLoader(false)
 
     }
-    const buyItAgain=async()=>{
-        let savedItems= JSON.parse(localStorage.getItem('SaveForLater'))|| [];
-        let cartItems= JSON.parse(localStorage.getItem('CartItems')) || [];
-        cartItems = cartItems.concat(savedItems);
-        localStorage.setItem('CartItems', JSON.stringify(cartItems));
-        localStorage.removeItem('SaveForLater');
-        incrementCartItems(savedItems.length);
-        triggerUpdateCart();
-    }
+    // const buyItAgain=async()=>{
+    //     let savedItems= JSON.parse(localStorage.getItem('SaveForLater'))|| [];
+    //     let cartItems= JSON.parse(localStorage.getItem('CartItems')) || [];
+    //     cartItems = cartItems.concat(savedItems);
+    //     localStorage.setItem('CartItems', JSON.stringify(cartItems));
+    //     localStorage.removeItem('SaveForLater');
+    //     incrementCartItems(savedItems.length);
+    //     triggerUpdateCart();
+    // }
 
     useEffect(() => {
         fetchingCart();
@@ -152,14 +139,15 @@ export const Checkout = () => {
 
     useEffect(() => {
         if (cartItems.length == 0) {
-
             let temp = [];
             if (tempCartItems && tempCartItems.length > 0) {
                 tempCartItems.forEach((prod) => {
+                    
                     if (!temp.includes(prod.store_id)) {
                         temp.push(prod.store_id)
                     }
                 })
+              
                 setListOfStore(temp)
             }
         }
@@ -180,10 +168,10 @@ export const Checkout = () => {
     }, [triggerUpdateCart])
 
 
-
+ 
     return (
         <React.Fragment>
-            <Layout cartItems={cartItems} cartSummaryFlag={cartSummaryFlag} removeItemsLoader={removeItemsLoader}>
+            <Layout cartItems={cartItems} tempCartItems={tempCartItems} cartSummaryFlag={cartSummaryFlag} removeItemsLoader={removeItemsLoader} listOfStore={listOfStore}  >
                 <Breadcrumb items={firstBreadCrumb} classes={"mt-7"} />
                 {/* show cart item */}
                 {!!cartItems && cartItems.length > 0 ? <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
@@ -258,7 +246,7 @@ export const Checkout = () => {
                                 <div className="flex items-center justify-between text-gray-700 mt-1">
                                     <div className="flex items-center">
                                         <input type="checkbox" id="sameDelivery" value={sameDeliveryTime} onChange={(e) => handlerSameDeliveryDate(e)} className="cursor-pointer outline-none w-4 h-4  border-primary rounded accent-primary" />
-                                        <label className="ml-2 text-sm" htmlFor="sameDelivery">I want all items together in one shipment</label>
+                                        <label className="ml-2 text-sm" htmlFor="sameDelivery">I want all items together in one shipment without additional shipping cost.</label>
                                     </div>
                                 </div>
                                 <button className={`text-gray-400 text-sm underline`} onClick={handlerRemoveAllItemsFromCartTemp}>Remove All Items from Cart</button>
@@ -296,7 +284,11 @@ export const Checkout = () => {
                                                             <div className="flex  flex-col items-center mb-4">
                                                                 <div className="flex items-start mt-4">
                                                                     <div className="flex flex-col ml-3" >
-                                                                        <label className="text-base text-primary font-semibold">{maxDeliveryDate ? getDeliveryDate(maxDeliveryDate) : getDeliveryDate(prod.delivery_days)}</label>
+                                                                        <label className="text-base text-primary font-semibold">{maxDeliveryDate ? getDeliveryDate(maxDeliveryDate) : getDeliveryDate(prod.delivery_days)}
+                                                                               
+
+                                                                        </label>
+                                                                        <span className="text-base text-primary"> Estimated Delivery</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -328,7 +320,7 @@ export const Checkout = () => {
                         </button>
                         <button
                             className={`text-[#64748B] font-semibold text-lg px-4 py-2 transition-all border-b-2 border-b-transparent ${activeTab === 'buy' ? ' border-b-primary' : ''}`}
-                            onClick={buyItAgain}
+                            onClick={() => setActiveTab('buy')}
                         >
                             Buy it Again
                         </button>
@@ -337,9 +329,8 @@ export const Checkout = () => {
                     </div>
 
                     {saveForLaterTemp && saveForLaterTemp.length <= 0 ? 
-                     <div className={`grid sm:grid-cols-3 grid-cols-3 gap-5`}>
-                    
-                    No Product items available</div> : ''}
+                         <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
+                    <div className="w-full  h-[300px] text-gray-400 flex items-center justify-center font-semibold mb-10">No Product Items Available</div></div>: ''}
                     <div className={`grid sm:grid-cols-3 grid-cols-3 gap-5`}>
                        
                         {
@@ -356,11 +347,7 @@ export const Checkout = () => {
                             })
                         }
                     </div>
-
-
-
-
-
+ 
 
                 </div>
                 <div>

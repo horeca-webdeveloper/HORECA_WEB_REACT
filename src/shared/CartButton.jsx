@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { apiClient } from "../utils/apiWrapper";
 import { useLocalCartCount } from "../context/LocalCartCount";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 export const CartButton = ({ product_id, quantity, classes, icon, setQuantity, children, name, image, store_id, delivery_days, original_price, front_sale_price, currency_title, maximum_order_quantity, minimum_order_quantity,images,video_path }) => {
  
@@ -46,7 +46,7 @@ export const CartButton = ({ product_id, quantity, classes, icon, setQuantity, c
                 quantity: quantity,
                 name: name,
                 image: image,
-                store_idd: store_id,
+                store_id: store_id,
                 delivery_days: delivery_days,
                 original_price: original_price,
                 front_sale_price: front_sale_price,

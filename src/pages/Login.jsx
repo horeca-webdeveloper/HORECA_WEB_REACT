@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Wrapper } from "../shared/Wrapper";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import axios from "axios";
 import { InfinitySpin } from "react-loader-spinner";
@@ -127,7 +127,10 @@ export const Login = () => {
             {error.includes("Login") && (
               <p className="text-red-500 text-sm">{error}</p>
             )}
-            <p className="text-[#64748B] text-sm my-5 font-semibold">
+            <p
+              onClick={() => navigate("/forgot-password")}
+              className="text-[#64748B] cursor-pointer text-sm my-5 font-semibold"
+            >
               Forgot Password?
             </p>
             <button

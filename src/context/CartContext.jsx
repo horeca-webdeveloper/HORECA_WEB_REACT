@@ -41,7 +41,6 @@ export const CartProvider = ({ children }) => {
 
     }
 
-
     return (<CartContext.Provider value={{ totalCartCount, triggerUpdateCart, updateTempCart }}>
         {children}
     </CartContext.Provider>

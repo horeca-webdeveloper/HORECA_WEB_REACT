@@ -5,6 +5,7 @@ import { Breadcrumb } from "../../../shared/Breadcrumb";
 import Popup from "./Components/Popup";
 
 const Addresses = () => {
+  const [popupHeading, setPopupHeading] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const collectionBreadCrumb = [
     {
@@ -50,7 +51,10 @@ const Addresses = () => {
               </div>
               <div className="flex items-center justify-center flex-col p-[15px]">
                 <button
-                  onClick={() => setShowPopup(true)}
+                  onClick={() => {
+                    setShowPopup(true);
+                    setPopupHeading("Update");
+                  }}
                   className="flex m-[10px] items-center justify-center rounded-md font-sans w-[180px] h-[40px] border border-[#666666] text-[16px] text-[#666666] font-medium leading-[16px] text-left underline-offset-auto decoration-slice"
                 >
                   Edit
@@ -81,7 +85,10 @@ const Addresses = () => {
               </div>
               <div className="flex items-center justify-center flex-col p-[15px]">
                 <button
-                  onClick={() => setShowPopup(true)}
+                  onClick={() => {
+                    setShowPopup(true);
+                    setPopupHeading("Update");
+                  }}
                   className="flex m-[10px] items-center justify-center rounded-md font-sans w-[180px] h-[40px] border border-[#666666] text-[16px] text-[#666666] font-medium leading-[16px] text-left underline-offset-auto decoration-slice"
                 >
                   Edit
@@ -91,9 +98,22 @@ const Addresses = () => {
                 </button>
               </div>
             </div>
+            <div>
+              <h1
+                className="mt-[20px] font-work-sans text-[16px] text-[#186737] cursor-pointer font-normal leading-[24px] text-left underline decoration-solid decoration-from-font decoration-skip-ink-none"
+                onClick={() => {
+                  setShowPopup(true);
+                  setPopupHeading("Add");
+                }}
+              >
+                Add New Address
+              </h1>
+            </div>
           </div>
         </div>
-        {showPopup && <Popup setShowPopup={setShowPopup} />}
+        {showPopup && (
+          <Popup setShowPopup={setShowPopup} popupHeading={popupHeading} />
+        )}
       </Wrapper>
     </>
   );
