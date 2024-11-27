@@ -5,11 +5,17 @@ import ReviewCard from "./Components/ReviewCard";
 import { apiClient } from "../../../utils/apiWrapper";
 import { Breadcrumb } from "../../../shared/Breadcrumb";
 import Skeleton from "react-loading-skeleton";
+import { useNavigate } from "react-router";
 
 const Reviews = () => {
   const [loader, setLoader] = useState(true);
   const [reviewData, setReviewData] = useState([]);
+  const navigate = useNavigate();
   const fetchAllReviews = async () => {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      navigate("/login");
+    }
     try {
       const response = await apiClient.get("/customer-reviews");
       setReviewData(response?.data);

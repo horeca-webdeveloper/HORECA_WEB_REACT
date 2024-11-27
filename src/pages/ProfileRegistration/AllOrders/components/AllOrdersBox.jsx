@@ -45,7 +45,7 @@ const AllOrdersBox = ({ data, id, setImageView, setShowPopup }) => {
               Payment Status
             </span>
             <p className="font-sans text-base font-normal leading-6 text-left text[#030303] decoration-slice">
-              Pending
+              pending
             </p>
           </div>
         </div>

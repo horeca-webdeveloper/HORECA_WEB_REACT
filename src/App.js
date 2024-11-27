@@ -27,13 +27,15 @@ import CouponsOffers from "./pages/ProfileRegistration/CouponeOffers/CouponsOffe
 import Addresses from "./pages/ProfileRegistration/Addresses/Addresses";
 import CreditBalance from "./pages/ProfileRegistration/CreditBalance/CreditBalance";
 import AccountSecurity from "./pages/ProfileRegistration/AccountSecurity/AccountSecurity";
-
-
-
-  import Wishlist from "./pages/ProfileRegistration/Wishlist/Wishlist";
+import Wishlist from "./pages/ProfileRegistration/Wishlist/Wishlist";
 import OrderDetails from "./pages/ProfileRegistration/OrderDetails/OrderDetails";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import ContactUs from "./pages/FooterPages/ContactUs/ContactUs";
+import FAQ from "./pages/FooterPages/FAQ/Component/FAQ";
+import TermsConsition from "./pages/FooterPages/TermsAndConditions/TermsConsition";
+import PrivacyPolicy from "./pages/FooterPages/PrivacyPolicy/PrivacyPolicy";
+import Career from "./pages/FooterPages/Career/Career";
+import { PasswordReset } from "./pages/PasswordReset";
 const App = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
@@ -129,6 +131,12 @@ const App = () => {
         <Route path="/AccountSecurity" element={<AccountSecurity/>} />
         <Route path="/order-details" element={<OrderDetails />} />
         <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/terms-condition" element={<TermsConsition />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/career" element={<Career/>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/password-reset" element={<PasswordReset />} />
       </Routes>
 
       <ToastContainer

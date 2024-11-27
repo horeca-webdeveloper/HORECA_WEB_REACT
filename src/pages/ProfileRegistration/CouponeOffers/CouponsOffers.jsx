@@ -5,11 +5,17 @@ import { Breadcrumb } from "../../../shared/Breadcrumb";
 import CouponBox from "./components/CouponBox";
 import { apiClient } from "../../../utils/apiWrapper";
 import Skeleton from "react-loading-skeleton";
+import { useNavigate } from "react-router";
 
 const CouponsOffers = () => {
   const [loader, setLoader] = useState(true);
   const [couponData, setCouponData] = useState([]);
+  const navigate = useNavigate();
   const fetchAllCoupons = async () => {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      navigate("/login");
+    }
     try {
       const response = await apiClient.get("/customer/coupons");
       setCouponData(response?.data?.coupons);

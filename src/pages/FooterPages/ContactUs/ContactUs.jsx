@@ -9,8 +9,8 @@ const ContactUs = () => {
       title: "Home",
     },
     {
-      url: "/",
-      title: "About us",
+      url: "/contact-us",
+      title: "Contact us",
     },
   ];
   return (
@@ -26,8 +26,8 @@ const ContactUs = () => {
         <p className="relative">Contact Us</p>
       </div>
       <Wrapper>
-        <div className="flex">
-          <div className="flex-1 text-[60px] p-5">
+        <div className="flex flex-col sm:flex-row">
+          <div className="flex-1 text-[40px] sm:text-[0px] text-center sm:text-start p-5">
             We’re the full package. reach out and we'll see how we can help.
           </div>
           <div className="flex-1 p-10">
@@ -72,13 +72,163 @@ const ContactUs = () => {
           <h1 className="font-bold leading-[35.19px] text-[30px]">
             Our Locations
           </h1>
-          <div class="grid grid-cols-3 gap-4">
-            <div class="bg-gray-200 p-4 h-[539px] rounded">Column 1</div>
-            <div class="bg-gray-300 p-4 h-[539px] rounded">Column 2</div>
-            <div class="bg-gray-400 p-4 h-[539px] rounded">Column 3</div>
-            <div class="bg-gray-200 p-4 h-[539px] rounded">Column 1</div>
-            <div class="bg-gray-300 p-4 h-[539px] rounded">Column 2</div>
-            <div class="bg-gray-400 p-4 h-[539px] rounded">Column 3</div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-[100px]">
+            <div className=" rounded">
+              <div>
+                <img
+                  className="w-[527px] h-[353px] rounded"
+                  src="https://images.pexels.com/photos/29497729/pexels-photo-29497729/free-photo-of-iconic-view-of-burj-khalifa-in-dubai-skyline.jpeg?auto=compress&cs=tinysrgb&w=800"
+                />
+              </div>
+              <div className="py-5">
+                <p className="text-[24px] font-normal leading-[28.15px]">
+                  Dubai, United Arab Emirates 
+                  <span className="text-[14px] text-[#64748B]">
+                    (Headquarters)
+                  </span>
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Showroom 01 - Building No 9-1 19 Street - Al Quoz - Al Quoz
+                  Industrial Area 3 - Dubai - United Arab Emirates
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Ph .+91 9650726956
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  danish@gmail.com
+                </p>
+              </div>
+            </div>
+            <div className=" h-[539px] rounded">
+              <div>
+                <img
+                  className="w-[527px] h-[353px] rounded"
+                  src="https://images.pexels.com/photos/29497729/pexels-photo-29497729/free-photo-of-iconic-view-of-burj-khalifa-in-dubai-skyline.jpeg?auto=compress&cs=tinysrgb&w=800"
+                />
+              </div>
+              <div className="py-5">
+                <p className="text-[24px] font-normal leading-[28.15px]">
+                  Dubai, United Arab Emirates 
+                  <span className="text-[14px] text-[#64748B]">
+                    (Headquarters)
+                  </span>
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Showroom 01 - Building No 9-1 19 Street - Al Quoz - Al Quoz
+                  Industrial Area 3 - Dubai - United Arab Emirates
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Ph .+91 9650726956
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  danish@gmail.com
+                </p>
+              </div>
+            </div>
+            <div className=" h-[539px] rounded">
+              <div>
+                <img
+                  className="w-[527px] h-[353px] rounded"
+                  src="https://images.pexels.com/photos/2730356/pexels-photo-2730356.jpeg?auto=compress&cs=tinysrgb&w=800"
+                />
+              </div>
+              <div className="py-5">
+                <p className="text-[24px] font-normal leading-[28.15px]">
+                  Karachi, Pakistan 
+                  <span className="text-[14px] text-[#64748B]">
+                    (Headquarters)
+                  </span>
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Showroom 01 - Building No 9-1 19 Street - Al Quoz - Al Quoz
+                  Industrial Area 3 - Dubai - United Arab Emirates
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Ph .+91 9650726956
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  danish@gmail.com
+                </p>
+              </div>
+            </div>
+            <div className=" h-[539px] rounded">
+              <div>
+                <img
+                  className="w-[527px] h-[353px] rounded"
+                  src="https://media.istockphoto.com/id/1452888631/photo/corniche-in-old-town-jeddah.jpg?b=1&s=612x612&w=0&k=20&c=E9oQfnilMZIFLMpggPWgJr4BP6D87PZk9pRr2GqvaxQ="
+                />
+              </div>
+              <div className="py-5">
+                <p className="text-[24px] font-normal leading-[28.15px]">
+                  Jeddah, The Kingdom of Saudi Arabia 
+                  <span className="text-[14px] text-[#64748B]">
+                    (Headquarters)
+                  </span>
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Showroom 01 - Building No 9-1 19 Street - Al Quoz - Al Quoz
+                  Industrial Area 3 - Dubai - United Arab Emirates
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Ph .+91 9650726956
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  danish@gmail.com
+                </p>
+              </div>
+            </div>
+            <div className=" h-[539px] rounded">
+              <div>
+                <img
+                  className="w-[527px] h-[353px] rounded"
+                  src="https://media.istockphoto.com/id/482787909/photo/corniche-doha-qatar-modern-urban-skyscrapers.jpg?b=1&s=612x612&w=0&k=20&c=RrRJ9RTn6aCqwl_BvD3U9vILcIFSOgmmt1pTgaii7Io="
+                />
+              </div>
+              <div className="py-5">
+                <p className="text-[24px] font-normal leading-[28.15px]">
+                  Doha, Qatar 
+                  <span className="text-[14px] text-[#64748B]">
+                    (Headquarters)
+                  </span>
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Showroom 01 - Building No 9-1 19 Street - Al Quoz - Al Quoz
+                  Industrial Area 3 - Dubai - United Arab Emirates
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Ph .+91 9650726956
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  danish@gmail.com
+                </p>
+              </div>
+            </div>
+            <div className=" h-[539px] rounded">
+              <div>
+                <img
+                  className="w-[527px] h-[353px] rounded"
+                  src="https://images.pexels.com/photos/27858202/pexels-photo-27858202/free-photo-of-a-train-with-a-city-skyline-in-the-background.jpeg?auto=compress&cs=tinysrgb&w=800"
+                />
+              </div>
+              <div className="py-5">
+                <p className="text-[24px] font-normal leading-[28.15px]">
+                  Texas, United State of America{" "}
+                  <span className="text-[14px] text-[#64748B]">
+                    (Headquarters)
+                  </span>
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Showroom 01 - Building No 9-1 19 Street - Al Quoz - Al Quoz
+                  Industrial Area 3 - Dubai - United Arab Emirates
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  Ph .+91 9650726956
+                </p>
+                <p className="text-[16px] leading-[24px] font-light text-[#64748B] mb-[10px]">
+                  danish@gmail.com
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </Wrapper>

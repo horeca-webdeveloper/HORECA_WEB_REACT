@@ -5,11 +5,17 @@ import WishlistBox from "./Components/WishlistBox";
 import { apiClient } from "../../../utils/apiWrapper";
 import Skeleton from "react-loading-skeleton";
 import { Breadcrumb } from "../../../shared/Breadcrumb";
+import { useNavigate } from "react-router";
 
 const Wishlist = () => {
   const [wishListData, setWishListData] = useState([]);
+  const navigate = useNavigate();
   const [loader, setLoader] = useState(true);
   const fetchAllReviews = async () => {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      navigate("/login");
+    }
     try {
       const response = await apiClient.get("/wishlist");
       setWishListData(response?.data?.wishlist);

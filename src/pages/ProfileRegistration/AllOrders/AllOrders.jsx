@@ -6,13 +6,19 @@ import { apiClient } from "../../../utils/apiWrapper";
 import Skeleton from "react-loading-skeleton";
 import { Breadcrumb } from "../../../shared/Breadcrumb";
 import ImagePopup from "../../../components/ImagePopup";
+import { useNavigate } from "react-router";
 
 const AllOrders = () => {
   const [viewedLoader, setViewedLoader] = useState(true);
   const [ordersData, setOrdersData] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [imageView, setImageView] = useState("");
+  const navigate = useNavigate();
   const fetchAllOrders = async () => {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      navigate("/login");
+    }
     try {
       const response = await apiClient.get("/orders");
       setOrdersData(response?.data);

@@ -5,10 +5,12 @@ import { FaFacebookF, FaTwitter } from "react-icons/fa";
 import { apiClient } from "../../../utils/apiWrapper";
 import { toast } from "react-toastify";
 import { Breadcrumb } from "../../../shared/Breadcrumb";
+import { useNavigate } from "react-router";
 
 const AccountSecurity = () => {
   const [editName, setEditName] = useState(true);
   const [editPhone, setEditPhone] = useState(true);
+  const navigate = useNavigate();
   const userProfileInfo = JSON.parse(localStorage.getItem("userProfile"));
   const [editAccount, setEditAccount] = useState({
     name: "",
@@ -31,6 +33,10 @@ const AccountSecurity = () => {
   };
 
   useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      navigate("/login");
+    }
     console.log(userProfileInfo);
     setEditAccount({
       ...editAccount,

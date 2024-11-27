@@ -5,11 +5,17 @@ import { apiClient } from "../../../utils/apiWrapper";
 import { ProductCard } from "../../../shared/ProductCard";
 import Skeleton from "react-loading-skeleton";
 import { Breadcrumb } from "../../../shared/Breadcrumb";
+import { useNavigate } from "react-router";
 
 const BrowsingHistory = () => {
   const [viewedProducts, setViewedProducts] = useState([]);
   const [viewedLoader, setViewedLoader] = useState(true);
+  const navigate = useNavigate();
   const fetchAllOrders = async () => {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      navigate("/login");
+    }
     try {
       const response = await apiClient.get("/recently-viewed");
       setViewedProducts(response?.data);

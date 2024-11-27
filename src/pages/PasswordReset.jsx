@@ -1,22 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { FaArrowLeft } from "react-icons/fa6";
 import { Wrapper } from "../shared/Wrapper";
-import { Link } from "react-router-dom";
-import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import axios from "axios";
-import { InfinitySpin } from "react-loader-spinner";
 import { ButtonLoader } from "../shared/buttonLoader/ButtonLoader";
-import { useNavigate } from "react-router-dom";
-export const ForgotPassword = () => {
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+export const PasswordReset = () => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loader, setLoading] = useState(false);
   const navigate = useNavigate();
   // const history = useHistory();
+  const location = useLocation(); // Get the location object
+  const token = location.state;
 
   const validateForm = () => {
     if (!email) {
       setError("Email is required");
+      return false;
+    }
+    if (!password) {
+      setError("please fill New password password");
+      return false;
+    }
+    if (!confirmPassword) {
+      setError("please fill Confirm password");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      toast("Both password should be same!");
       return false;
     }
     setError(""); // Clear any existing errors
@@ -24,16 +37,21 @@ export const ForgotPassword = () => {
   };
 
   const handleFormSubmit = async (e) => {
+    const body = {
+      email: email,
+      password: password,
+      password_confirmation: confirmPassword,
+      token: token,
+    };
+    console.log(body);
     e.preventDefault(); // Prevent default form submission
-
     if (!validateForm()) return; // Validate form before submitting
     try {
+      console.log(body);
       setLoading(true);
       const response = await axios.post(
-        "https://testhssite.com/api/forgot-password",
-        {
-          email,
-        },
+        "https://testhssite.com/api/password/reset",
+        body,
         {
           headers: {
             "Content-Type": "application/json",
@@ -41,11 +59,10 @@ export const ForgotPassword = () => {
           },
         }
       );
-      console.log(response);
-      const token = response?.data?.token;
-      navigate("/password-reset", { state: token });
+      navigate("/login");
       setLoading(false);
     } catch (error) {
+      console.log(error);
       setError("Verification Failed. Please check your Email.");
       setLoading(false);
     }
@@ -61,7 +78,7 @@ export const ForgotPassword = () => {
           >
             <div className="text-center mb-10">
               <h3 className="text-2xl text-[#030303] font-semibold">
-                Forgot Password
+                Reset Password
               </h3>
               <p className="text-[#000000] text-sm">
                 Please type your email for password reset
@@ -81,7 +98,30 @@ export const ForgotPassword = () => {
             {error.includes("Email") && (
               <p className="text-red-500 text-sm">{error}</p>
             )}
-            {error.includes("Login") && (
+            <input
+              type="password"
+              placeholder="Enter your Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${
+                error.includes("New") ? "border-red-500" : "border-[#66666666]"
+              } rounded-[4px]`}
+            />
+            {error.includes("New") && (
+              <p className="text-red-500 text-sm">{error}</p>
+            )}
+            <input
+              type="password"
+              placeholder="Confirm your Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${
+                error.includes("Confirm")
+                  ? "border-red-500"
+                  : "border-[#66666666]"
+              } rounded-[4px]`}
+            />
+            {error.includes("Confirm") && (
               <p className="text-red-500 text-sm">{error}</p>
             )}
             <p className="text-[#64748B] text-sm my-5 font-semibold"></p>

@@ -341,19 +341,21 @@ export const ProductCard = ({ classes, product, flashSale }) => {
           </Link>
 
           <div className="flex items-center">
-            <div className="mt-2 flex items-center justify-between p-[2px] sm:px-3 sm:py-2 w-[90px] border border-[#BCE3C9] rounded-[4px]">
-              <FiMinus
-                className="cursor-pointer w-[10px] sm:w-[26px]"
-                onClick={(e) => handlerDecrement(e)}
-              />
-              <span className="font-semibold text-primary mx-2 text-[10px] sm:text-[16px]">
-                {String(count).padStart(2, "0")}
-              </span>
-              <BsPlusLg
-                className="cursor-pointer w-[10px] sm:w-[26px]"
-                onClick={(e) => handlerIncrement(e)}
-              />
-            </div>
+            {
+              <div className="mt-2 flex items-center justify-between p-[2px] sm:px-3 sm:py-2 w-[280px] sm:w-[90px] border border-[#BCE3C9] rounded-[4px]">
+                <FiMinus
+                  className="cursor-pointer w-[10px] sm:w-[26px]"
+                  onClick={(e) => handlerDecrement(e)}
+                />
+                <span className="font-semibold text-primary mx-2 text-[10px] sm:text-[16px]">
+                  {String(count).padStart(2, "0")}
+                </span>
+                <BsPlusLg
+                  className="cursor-pointer w-[10px] sm:w-[26px]"
+                  onClick={(e) => handlerIncrement(e)}
+                />
+              </div>
+            }
             <CartButton
               icon={true}
               quantity={count}
@@ -361,10 +363,16 @@ export const ProductCard = ({ classes, product, flashSale }) => {
               productName={product.name}
               setQuantity={setCount}
             >
-              <MdOutlineAddShoppingCart className="text-primary hidden sm:block group-hover:text-white transition-all duration-500" />
-              <span className="ml-0 sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
-                Add To Cart
-              </span>
+              <MdOutlineAddShoppingCart className="text-primary group-hover:text-white transition-all duration-500" />
+              {window.innerWidth < 640 ? (
+                <span className="ml-0 w-[10px] sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
+                  Add
+                </span>
+              ) : (
+                <span className="ml-0 sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
+                  Add To Cart
+                </span>
+              )}
             </CartButton>
           </div>
         </div>

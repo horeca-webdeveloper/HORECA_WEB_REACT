@@ -664,7 +664,8 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           <img
             src={process.env.PUBLIC_URL + "/icons/user.svg"}
             alt=""
-            className="w-[35px] rounded-full"
+            className="w-[35px] rounded-full cursor-pointer"
+            onClick={() => navigate("/all-orders")}
           />
           <div className="flex flex-col ml-2 hidden sm:flex">
             {isLoggedIn ? (
@@ -684,7 +685,8 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             {isLoggedIn ? (
               <span
                 to=""
-                className="text-black text-sm font-semibold capitalize"
+                onClick={() => navigate("/all-orders")}
+                className="text-black text-sm font-semibold capitalize cursor-pointer"
               >
                 {userName}
               </span>
@@ -724,7 +726,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                 ? categories.map((cat, index) => {
                     return (
                       <React.Fragment key={index}>
-                        {index <= 6 ? (
+                        {index <= 5 ? (
                           <Link
                             className={`text-base text-primary mx-2 `}
                             to={"/collections/" + cat.slug}
