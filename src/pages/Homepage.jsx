@@ -15,15 +15,14 @@ export const Homepage = ({ categories }) => {
   const [featureCat, setFeatureCat] = useState([]);
   const [featureCatList, setFeatureCatList] = useState([]);
   const [selectedCat, setSelectedCat] = useState("");
+  const [featureCatLoader, setFeatureCatLoader] = useState(true);
   const [brandCat, setBrandCat] = useState([]);
   const [brandCatList, setBrandCatList] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState("");
   const [heroSlider, setHeroSlider] = useState([]);
   const [sliderLoader, setSliderLoader] = useState(true);
-  const [featureCatLoader, setFeatureCatLoader] = useState(true);
   const [brandCatLoader, setBrandCatLoader] = useState(true);
   const authToken = localStorage.getItem("authToken");
-
   const data = [
     {
       redirectLink: "#",

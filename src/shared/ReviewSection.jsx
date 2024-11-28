@@ -61,7 +61,7 @@ export const ReviewSection = ({ id }) => {
               Product Ratings & Reviews
             </h2>
           </div>
-          <div className="col-span-4">
+          <div className="col-span-12 md:col-span-4 lg:col-span-4">
             <div className="p-5 mt-4 border border-[#E2E8F0] rounded-[4px]">
               <h3 className="font-semibold text-base text-black-100 ">
                 Leave a review of this product
@@ -220,40 +220,46 @@ export const ReviewSection = ({ id }) => {
               </div>
             </div>
           </div>
-          <div className="col-span-8 p-5 mt-4 border border-[#E2E8F0] rounded-[4px]">
-            <div className="  flex items-center justify-between">
-              <p className="text-black-100 font-semibold text-base">
-                {reviewsData.reviews ? reviewsData.total_reviews : ""} Reviews
-              </p>
-              <div className="flex items-center">
-                {/* <div className="flex items-center bg-[#E2E8F0] rounded-lg px-2 py-1 mr-5">
-                  <button className="text-primary bg-white text-xs font-bold py-3 px-3 rounded-lg">
-                    All
-                  </button>
-                  <button className="bg-[#E2E8F0] text-xs font-bold py-3 px-3 rounded-lg">
-                    English
-                  </button>
-                  <button className="bg-[#E2E8F0] text-xs font-bold py-3 px-3 rounded-lg">
-                    عربي
-                  </button>
-                </div> */}
-                <Menu menuButton={<MenuButton className="border border-[#E2E8F0] px-11 py-2 text-[#030303] font-semibold mr-5 min-w-[170px]">{AllStar}</MenuButton>} transition>
-                  <MenuItem onClick={() => { setAllStar("All Star"); setStarValue(""); }} className="min-w-[170px]">All Star</MenuItem>
-                  <MenuItem onClick={() => { setAllStar("Five Star"); setStarValue(5); }}>Five Star</MenuItem>
-                  <MenuItem onClick={() => { setAllStar("Four Star"); setStarValue(4); }}>Four Star</MenuItem>
-                  <MenuItem onClick={() => { setAllStar("Three Star"); setStarValue(3); }}>Three Star</MenuItem>
-                  <MenuItem onClick={() => { setAllStar("Two Star"); setStarValue(2); }}>Two Star</MenuItem>
-                  <MenuItem onClick={() => { setAllStar("One Star"); setStarValue(1); }}>One Star</MenuItem>
-                </Menu>
+          <div className="col-span-12 md:col-span-8 lg:col-span-8 p-5 mt-4 border border-[#E2E8F0] rounded-[4px]">
+          <div className="flex items-center justify-between flex-wrap">
+  <p className="text-black-100 font-semibold text-base mr-4">
+    {reviewsData.reviews ? reviewsData.total_reviews : ""} Reviews
+  </p>
+  <div className="flex items-center space-x-4 flex-wrap">
+    
+    {/* All Star Dropdown */}
+    <Menu
+      menuButton={
+        <MenuButton className="border border-[#E2E8F0] px-6 py-2 text-[#030303] font-semibold min-w-[150px] sm:min-w-[170px]">
+          {AllStar}
+        </MenuButton>
+      }
+      transition
+    >
+      <MenuItem onClick={() => { setAllStar("All Star"); setStarValue(""); }} className="min-w-[150px] sm:min-w-[170px]">All Star</MenuItem>
+      <MenuItem onClick={() => { setAllStar("Five Star"); setStarValue(5); }}>Five Star</MenuItem>
+      <MenuItem onClick={() => { setAllStar("Four Star"); setStarValue(4); }}>Four Star</MenuItem>
+      <MenuItem onClick={() => { setAllStar("Three Star"); setStarValue(3); }}>Three Star</MenuItem>
+      <MenuItem onClick={() => { setAllStar("Two Star"); setStarValue(2); }}>Two Star</MenuItem>
+      <MenuItem onClick={() => { setAllStar("One Star"); setStarValue(1); }}>One Star</MenuItem>
+    </Menu>
 
-                <Menu menuButton={
-                  <MenuButton className="border border-[#E2E8F0] px-11 py-2 text-[#030303] font-semibold min-w-[200px]">{TopReviews}</MenuButton>} transition>
-                  <MenuItem className={"min-w-[200px]"} onClick={() => { setTopReviews("Top Reviews"); setTopReviewsValue(""); }}>Top Reviews</MenuItem>
-                  <MenuItem onClick={() => { setTopReviews("Highest"); setTopReviewsValue("highest"); }}>Highest</MenuItem>
-                  <MenuItem onClick={() => { setTopReviews("Lowest"); setTopReviewsValue("lowest"); }}>Lowest </MenuItem>
-                </Menu>
-              </div>
-            </div>
+    {/* Top Reviews Dropdown */}
+    <Menu
+      menuButton={
+        <MenuButton className="border border-[#E2E8F0] px-6 py-2 text-[#030303] font-semibold min-w-[150px] sm:min-w-[200px]">
+          {TopReviews}
+        </MenuButton>
+      }
+      transition
+    >
+      <MenuItem className={"min-w-[150px] sm:min-w-[200px]"} onClick={() => { setTopReviews("Top Reviews"); setTopReviewsValue(""); }}>Top Reviews</MenuItem>
+      <MenuItem onClick={() => { setTopReviews("Highest"); setTopReviewsValue("highest"); }}>Highest</MenuItem>
+      <MenuItem onClick={() => { setTopReviews("Lowest"); setTopReviewsValue("lowest"); }}>Lowest </MenuItem>
+    </Menu>
+  </div>
+</div>
+      
 
             <div className="w-full bg-[#E2E8F0] h-[1px] my-5"></div>
             <div className="overflow-auto max-h-[500px] mt-10">

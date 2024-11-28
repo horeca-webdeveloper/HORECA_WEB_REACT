@@ -16,18 +16,18 @@ import { WishListProvider } from './context/WishListContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <WishListProvider>
-      <LocalCartCountProvider>
-        <CartProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </CartProvider>
-      </LocalCartCountProvider>
-    </WishListProvider>
-  </React.StrictMode>
+root.render(<React.StrictMode >
+
+    <LocalCartCountProvider >
+        < WishListProvider >
+            <CartProvider >
+                <BrowserRouter >
+                    <App />
+                </BrowserRouter>
+            </CartProvider >
+        </WishListProvider>
+    </LocalCartCountProvider >
+</React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

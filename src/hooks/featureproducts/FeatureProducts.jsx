@@ -10,6 +10,8 @@ export const FeatureProduct = ({
   selectedCat,
   featureCatLoader,
   setSelectedCat,
+
+  setFeaturedProducts
 }) => {
   const [products, setProducts] = useState([]);
   const [count, setCount] = useState(1);
@@ -19,7 +21,10 @@ export const FeatureProduct = ({
       .filter((product) => selectedCat === product.category_name)
       .map((product) => product.featured_products);
     setProducts(showFeatureProduct[0]);
+
   }, [selectedCat, featureCat]);
+
+
 
   return (
     <Wrapper>
@@ -50,6 +55,7 @@ export const FeatureProduct = ({
         ) : (
           <React.Fragment>
             {products && products.length > 0 ? (
+                  
               products.map((product, index) =>
                 index < 10 ? (
                   <ProductCard

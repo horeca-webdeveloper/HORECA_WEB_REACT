@@ -387,3 +387,30 @@
     font-size: 18px;
     text-transform: capitalize;
 }
+
+.highlight {
+    background-color: #def9ec;
+    color: black;
+    font-weight: bold;
+}
+
+.document-text {
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 500;
+    color: #262626;
+    text-align: left;
+}
+
+.truncated-text {
+    width: 100%;
+    /* Or specify a custom width */
+    height: 150px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* Adjust the number of lines */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    white-space: normal;
+}

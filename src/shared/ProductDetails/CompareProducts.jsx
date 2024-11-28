@@ -53,13 +53,18 @@ export const CompareProducts = ({ productLoader, product, compareProductFields }
         <React.Fragment>
             {!productLoader ?
                 <div className='col-span-12 my-8 mt-12'>
-                    {(product && product.compare_products && product.compare_products.length && product.specifications) ? <table className="min-w-full table-auto border-collapse border-2 border-gray-300 rounded-md">
+
+                    
+                    {(product && product.compare_products && product.compare_products.length && product.specifications) ?
+                    
+                    <div class="relative overflow-x-auto">
+                    <table className="min-w-full table-auto border-collapse border-2 border-gray-300 rounded-md">
                         <thead>
                             <tr className="bg-green-100">
                                 <th className="w-1/5 p-5 text-start bg-white relative ">
-                                    <div className='absolute top-8 w-[80%]'>
+                                    <div className='absolute top-8 w-[80%]' >
                                         <h2 className='text-black-100 text-2xl font-semibold py-2'>Compare with similar products</h2>
-                                        <p className='text-[#4A4A4A] text-sm font-normal py-2'>Lorem ipsum dolor sit amet consectetur. Non nunc tincidunt mattis ut. Lobortis donec eget enim euismod quam molestie. Leo pellentesque ante amet felis dignissim ac. Lectus non volutpat tincidunt semper est. Platea quis libero eu tincidunt iaculis ut.</p>
+                                        <p className='text-[#4A4A4A] text-sm font-normal py-2 truncated-text'>Lorem ipsum dolor sit amet consectetur. Non nunc tincidunt mattis ut. Lobortis donec eget enim euismod quam molestie. Leo pellentesque ante amet felis dignissim ac. Lectus non volutpat tincidunt semper est. Platea quis libero eu tincidunt iaculis ut.</p>
                                     </div>
                                 </th>
                                 <th className="w-1/5 p-5  relative  border border-x-[1px] bg-[#DEF9EC80]">
@@ -72,7 +77,7 @@ export const CompareProducts = ({ productLoader, product, compareProductFields }
                                 </th>
                                 {product.compare_products ? product.compare_products.map((compare, index) => {
                                     return (
-                                        <React.Fragment key={index} >
+                                        <React.Fragment key={compare.id} >
                                             {index < 3 ? (
                                                 <th className="w-1/5 p-5  relative  border border-x-[1px] bg-white">
                                                     <div className='flex flex-col mt-5'>
@@ -120,7 +125,10 @@ export const CompareProducts = ({ productLoader, product, compareProductFields }
                             }) : null} */}
                         </tbody>
 
-                    </table> :
+                    </table>
+                    </div>
+                    
+                    :
                         <div></div>
                     }
                 </div> : <div className='col-span-12 my-8'><Skeleton className='w-full h-[900px] ' /></div>}

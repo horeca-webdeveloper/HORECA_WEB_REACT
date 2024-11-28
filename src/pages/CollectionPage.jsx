@@ -34,9 +34,10 @@ export const CollectionPage = () => {
             const response = await apiClient.get('/categories');
             setCategories(response.data)
             const matchedCategory = response.data.find((cat) => cat.slug === id);
+            
             setSelectedCat(matchedCategory)
             let filteredObject = []
-            matchedCategory.children.forEach(cat => {
+            !!matchedCategory && matchedCategory.children.forEach(cat => {
                 cat.children.forEach((cat2, index) => {
                     if (index < 2) {
                         let tempObj = {
@@ -48,7 +49,7 @@ export const CollectionPage = () => {
                 })
             });
             setFilterCategories(filteredObject)
-            setCategoryName(matchedCategory.name)
+            setCategoryName(matchedCategory && matchedCategory.name)
 
         } catch (error) {
             console.error('Error:', error);
@@ -59,7 +60,6 @@ export const CollectionPage = () => {
 
     useEffect(() => {
         fetchCategories();
-
     }, [location])
  
     const collectionBreadCrumb = [
@@ -75,6 +75,7 @@ export const CollectionPage = () => {
             title: categoryName ? categoryName : "",
         }
     ]
+ 
     return (
         <div>
             <Wrapper>
@@ -103,8 +104,8 @@ export const CollectionPage = () => {
                                     <React.Fragment key={index}>
                                         {index < 14 ? (
                                             <div
-                                                // onClick={() => { setSelectedCat(cat); navigate(`/collections/${cat.slug}`); setCategoryName(cat.name); }}
-                                                className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md ${cat.id === selectedCat.id ? "border-primary" : "border-transparent"
+                                               
+                                                className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md ${cat?.id === selectedCat?.id ? "border-primary" : "border-transparent"
                                                     }`}
                                             >
                                                 <img
@@ -132,7 +133,7 @@ export const CollectionPage = () => {
 
 
                         <div className="grid grid-cols-4 gap-8 mt-8 ">
-                            {selectedCat.children ? selectedCat.children.map((cat, index) => {
+                            {selectedCat && selectedCat.children ? selectedCat.children.map((cat, index) => {
                                 return (
                                     <div key={index} className="grid-cols-1 p-5 border border-gray-300  rounded-[4px] flex  flex-col transition-all hover:border-primary">
                                        <Link key={index} className="mt-1 block text-[#666666] text-base underline" to={`/collections/${id}/${cat.slug}/${cat.id}`} >

@@ -35,18 +35,9 @@ import { CartButton } from "../shared/CartButton";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 import { useLocalCartCount } from "../context/LocalCartCount";
 import { ToastContainer, toast } from "react-toastify";
-import {
-  FacebookIcon,
-  FacebookShareButton,
-  LinkedinIcon,
-  LinkedinShareButton,
-  TwitterIcon,
-  TwitterShareButton,
-} from "react-share";
 
 function Model({ url, onLoaded }) {
   const { scene, isLoading } = useGLTF(url);
-
   useEffect(() => {
     if (!isLoading) {
       onLoaded();
@@ -59,7 +50,8 @@ function Model({ url, onLoaded }) {
 export const ProductDetail = () => {
   const { id } = useParams(); // Access the id from the URL
   const [seeMore, setSeeMore] = useState(true);
-
+  const videoRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
   // const slider1 = useRef();
@@ -87,7 +79,7 @@ export const ProductDetail = () => {
   const [selectedBuyMore, setSelectedBuyMore] = useState();
   const [maxBuyMoreSaveMore, setMaxBuyMoreSaveMore] = useState();
   const [variants, setVariants] = useState([]);
-
+  const [mediaArray, setMediaArray] = useState([]);
   const handleModelLoaded = () => {
     setLoader(false);
   };
@@ -105,6 +97,7 @@ export const ProductDetail = () => {
       title: product ? product.name : "",
     },
   ];
+
   const fetchProductById = async () => {
     const authToken = localStorage.getItem("authToken");
     setLoader(true);
@@ -187,39 +180,43 @@ export const ProductDetail = () => {
     const emailSubject = `Check out this amazing product: ${product.name}`;
 
     const emailBody = `
-      Hi there,
-  
-      I wanted to share this great product with you:
-  
-      ${product.name}
-  
-      Check it out here: https://test-horeca.netlify.app/product/${product.id}
-  
-      ${
-        product.sale_price
-          ? `Sale Price: $${product.sale_price}`
-          : `Original Price: $${product.original_price}`
-      }
-      ${
-        product.sale_price && product.original_price
-          ? `Original Price: $${product.original_price} (Now: $${product.sale_price})`
-          : ""
-      }
-  
-      View the product image here: ${product.images[0]}
-  
-      Best regards
-    `;
+    Hi there,
+    
+    I wanted to share this great product with you:
+
+    ${product.name}
+    
+    You can check it out here: ${
+      "https://test-horeca.netlify.app/product/" + product.id
+    }
+    
+    ${product.sale_price ? `Sale Price: $${product.sale_price}` : ""}
+    ${
+      product.original_price && !product.sale_price
+        ? `Original Price: $${product.original_price}`
+        : ""
+    }
+    
+    ${
+      product.sale_price && product.original_price
+        ? `Original Price: $${product.original_price} (Now: $${product.sale_price})`
+        : ""
+    }
+    
+    Check out the product image here: ${product.images[0]}
+    
+    Best regards
+  `;
 
     const encodedSubject = encodeURIComponent(emailSubject);
     const encodedBody = encodeURIComponent(emailBody);
 
+    // Open the default email client with a mailto link via window.open
     const mailtoLink = `mailto:?subject=${encodedSubject}&body=${encodedBody}`;
+
+    // Use window.open() to open the mail client
     window.open(mailtoLink, "_blank");
   };
-
-  const shareUrl = `https://test-horeca.netlify.app/product/${product.id}`; // URL to share
-  const emailSubject = `Check out this amazing product: ${product.name}`;
 
   const settings = {
     dots: true,
@@ -256,7 +253,7 @@ export const ProductDetail = () => {
     slidesToShow:
       product && product.images && product.images.length < 4
         ? product.images.length
-        : 4,
+        : 8,
     // slidesToShow: 1,
     slidesToScroll: 1,
     asNavFor: nav1,
@@ -311,6 +308,18 @@ export const ProductDetail = () => {
     }
   };
 
+  useEffect(() => {
+    if (!!product && product.images) {
+      setMediaArray([...product.images, ...JSON.parse(product.video_path)]);
+    }
+  }, [product]);
+
+  // Function to check if an item is an image
+  const isImage = (filename) => {
+    const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"];
+    return imageExtensions.some((ext) => filename.toLowerCase().endsWith(ext));
+  };
+
   return (
     <Wrapper>
       {product ? (
@@ -321,14 +330,16 @@ export const ProductDetail = () => {
             <Skeleton className="mt-7" width="30%" height="30px" count={1} />
           )}
           <div className="grid grid-cols-12 gap-x-8">
-            <div className="col-span-9">
-              <div className="grid grid-cols-10 gap-6">
-                <div className="col-span-6 mt-4">
-                  <div className=" mx-auto">
+            <div className="col-span-12 md:col-span-9 lg:col-span-9">
+              <div className="grid grid-cols-12 md:grid-cols-12 lg:grid-cols-12 gap-6">
+                {/* 
+            product images */}
+                <div className="col-span-12 md:col-span-12 lg:col-span-6 mt-4">
+                  <div className="mx-auto">
                     <div className="product-slider-container">
                       <div className="flex flex-col items-center w-full">
                         <div className="flex flex-col items-center w-full">
-                          <div className="w-full relative ">
+                          <div className="w-full relative">
                             {!threeDView ? (
                               <React.Fragment>
                                 {!productLoader &&
@@ -362,23 +373,46 @@ export const ProductDetail = () => {
                                     ref={(slider1) => setNav1(slider1)}
                                     className="product__slide"
                                   >
-                                    {product.images
-                                      ? product.images.map((image, index) => (
+                                    {mediaArray
+                                      ? mediaArray.map((item, index) => (
                                           <React.Fragment key={index}>
                                             <div className="flex justify-center relative">
-                                              <div
-                                                className="absolute right-4 top-4 bg-primary text-white flex items-center justify-center rounded-full p-2 cursor-pointer"
-                                                onClick={() =>
-                                                  setThreeDView(true)
-                                                }
-                                              >
-                                                <Md3dRotation size={24} />
-                                              </div>
-                                              <img
-                                                src={`${`https://testhssite.com/storage/${image}`}`}
-                                                alt={`Slide ${index}`}
-                                                className="w-full h-auto object-contain rounded-lg"
-                                              />
+                                              {isImage(item) ? (
+                                                <>
+                                                  <div
+                                                    className="absolute right-4 top-4 bg-primary text-white flex items-center justify-center rounded-full p-2 cursor-pointer"
+                                                    onClick={() =>
+                                                      setThreeDView(true)
+                                                    }
+                                                  >
+                                                    <Md3dRotation size={24} />
+                                                  </div>
+                                                  <img
+                                                    src={`${`https://testhssite.com/storage/${item}`}`}
+                                                    alt={`Slide ${index}`}
+                                                    className="w-full h-auto object-contain rounded-lg"
+                                                  />
+                                                </>
+                                              ) : (
+                                                <video
+                                                  width="100%"
+                                                  controls
+                                                  ref={videoRef}
+                                                  autoPlay={false}
+                                                  muted={true}
+                                                  loop={true}
+                                                  className="w-full object-contain rounded-lg"
+                                                  style={{ height: "565px" }}
+                                                >
+                                                  <source
+                                                    src={`https://testhssite.com/storage/${item}`}
+                                                    type="video/mp4"
+                                                  />
+                                                  Your browser does not support
+                                                  the video tag.
+                                                </video>
+                                              )}
+                                              }
                                             </div>
                                           </React.Fragment>
                                         ))
@@ -469,21 +503,38 @@ export const ProductDetail = () => {
                                 {...thumbnailSliderSettings}
                                 ref={(slider2) => setNav2(slider2)}
                               >
-                                {product.images && product.images.length > 1
-                                  ? product.images.map((image, index) => (
+                                {mediaArray && mediaArray.length > 1
+                                  ? mediaArray.map((item, index) => (
                                       <div
                                         key={index}
-                                        className={`px-2 ${
+                                        className={`px-1 ${
                                           activeSlide === index
                                             ? "border-2 border-primary rounded-md"
                                             : ""
                                         }`}
                                       >
-                                        <img
-                                          src={`${`https://testhssite.com/storage/${image}`}`}
-                                          alt={`Thumbnail ${index}`}
-                                          className="w-full h-24 object-contain rounded-lg cursor-pointer "
-                                        />
+                                        {isImage(item) ? (
+                                          <img
+                                            src={`${`https://testhssite.com/storage/${item}`}`}
+                                            alt={`Thumbnail ${index}`}
+                                            className="w-full h-16 object-contain rounded-lg cursor-pointer "
+                                          />
+                                        ) : (
+                                          <video
+                                            ref={videoRef}
+                                            autoPlay={false}
+                                            muted={true}
+                                            loop={true}
+                                            className="w-full h-16 object-contain rounded-lg cursor-pointer "
+                                          >
+                                            <source
+                                              src={`https://testhssite.com/storage/${item}`}
+                                              type="video/mp4"
+                                            />
+                                            Your browser does not support the
+                                            video tag.
+                                          </video>
+                                        )}
                                       </div>
                                     ))
                                   : null}
@@ -517,18 +568,12 @@ export const ProductDetail = () => {
                     >
                       <MdOutlineEmail size={16} />
                     </div>
-                    <FacebookShareButton url={shareUrl} quote={emailSubject}>
-                      <FacebookIcon size={40} className="ml-[10px]" round />
-                    </FacebookShareButton>
-                    <TwitterShareButton url={shareUrl} title={emailSubject}>
-                      <TwitterIcon size={40} className="ml-[10px]" round />
-                    </TwitterShareButton>
-                    <LinkedinShareButton url={shareUrl} title={emailSubject}>
-                      <LinkedinIcon size={40} className="ml-[10px]" round />
-                    </LinkedinShareButton>{" "}
                   </div>
                 </div>
-                <div className="col-span-4 mt-4">
+
+                {/* product details content  */}
+
+                <div className="col-span-12 md:col-span-12 lg:col-span-6 mt-4">
                   {/* Tag Wrapper  */}
 
                   {!productLoader ? (
@@ -759,6 +804,7 @@ export const ProductDetail = () => {
                   </div>
                 </div>
 
+                {/* end product details contents */}
                 <FrequentlyBought
                   product={product}
                   productLoader={productLoader}
@@ -774,7 +820,7 @@ export const ProductDetail = () => {
                             <React.Fragment key={index}>
                               <button
                                 onClick={() => setSelectedDetail(product.id)}
-                                className={`text-[#64748B] rounded-md border-gray-200 mr-6 border 
+                                className={`text-[#64748B] rounded-md border-gray-200 mr-2 border 
                          bg-[#F9FAFC] py-2 px-5 text-base transition-all hover:text-primary hover:bg-[#DEF9EC] ${
                            isSelected ? "!bg-[#DEF9EC]  text-primary" : ""
                          }`}
@@ -885,7 +931,8 @@ export const ProductDetail = () => {
                 )}
               </div>
             </div>
-            <div className="col-span-3 mt-4">
+
+            <div className="col-span-12 md:col-span-3 lg:col-span-3 mt-4">
               <div className="bg-gray-100 rounded-md  p-5 border-2 border-[#E2E8F0]">
                 {/* Badge Section  */}
                 {!productLoader ? (
@@ -992,34 +1039,6 @@ export const ProductDetail = () => {
                 </p>
                 {/* Protection Plan  */}
 
-                {/* <ProtectionPlan /> */}
-
-                {/* Calculation Estimated  */}
-                {/* <div className='w-full h-[1px] border border-[#E2E8F0]  my-4'></div>
-              <div className='flex items-center justify-between'>
-                <h2 className='font-semibold text-base text-black-100'>Calculate Estimated Shipping Cost</h2>
-                <img src={process.env.PUBLIC_URL + "/icons/exclaim.png"} alt="" />
-              </div>
-
-              <div className="flex items-center justify-between mt-3">
-                <div className='relative'>
-                  <input type="text" placeholder="Enter Delivery Address" className="text-[#64748B] pl-2 border border-[#E2E8F0] rounded-md text-xs py-3 w-[200px] pr-10" />
-                  <img className='absolute top-1/2 -translate-y-[50%] right-2' src={process.env.PUBLIC_URL + "/icons/calc.png"} alt="" />
-                </div>
-                <button className="text-primary bg-[#DEF9EC] rounded-md px-5 py-2 font-semibold">
-                  Calculate
-                </button>
-              </div>
-
-              <div className='flex items-center justify-between mt-3'>
-                <span className='text-sm text-black-100'>Business Delivery</span>
-                <span className='text-sm font-semibold text-black-100'>SAR 250.00</span>
-              </div>
-              <div className='flex items-center justify-between mt-3'>
-                <span className='text-sm text-black-100'>Business Delivery W/Liftgate</span>
-                <span className='text-sm font-semibold text-black-100'>SAR 250.00</span>
-              </div> */}
-
                 <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
 
                 <div>
@@ -1123,6 +1142,8 @@ export const ProductDetail = () => {
                   </div>
                 </div>
               </div>
+
+              {/* <Documents docs={!!product && product.documents} /> */}
             </div>
 
             <CompareProducts
@@ -1292,10 +1313,24 @@ export const BuyMoreSaveMore = ({
             "bg-primary rounded-[4px] justify-center p-2 ml-3 flex items-center  text-base text-white font-semibold w-full transition-all"
           }
           icon={true}
-          productId={product.id}
+          product_id={product.id}
           quantity={quantity}
           setQuantity={setQuantity}
-          productName={product.name}
+          name={product.name}
+          image={product.image}
+          store_id={product.store_id}
+          delivery_days={product.delivery_days}
+          original_price={
+            product.sale_price ? product.sale_price : product.original_price
+          }
+          front_sale_price={product.price}
+          maximum_order_quantity={product.maximum_order_quantity}
+          minimum_order_quantity={product.minimum_order_quantity}
+          images={product.images}
+          video_path={product.video_path}
+          currency_title={
+            product.currency_title ? product.currency_title : "SAR"
+          }
         >
           <MdOutlineAddShoppingCart className="text-white group-hover:text-white transition-all duration-500" />
           <span className="ml-2 font-semibold text-white text-base group-hover:text-white transition-all duration-500">
@@ -1432,7 +1467,7 @@ const RenderingBought = ({
   return (
     <React.Fragment>
       <div
-        className={` col-span-1 border-gray-300 rounded-[4px] p-4 cursor-pointer product__card__wrapper group transition-all border-2  hover:border-primary duration-700 my-3 relative`}
+        className={`col-span-2 md:col-span-2 lg:col-span-1 border-gray-300 rounded-[4px] p-4 cursor-pointer product__card__wrapper group transition-all border-2  hover:border-primary duration-700 my-3 relative`}
         onMouseEnter={() => sliderRef.current.slickPlay()}
         onMouseLeave={() => sliderRef.current.slickPause()}
       >
@@ -1639,7 +1674,7 @@ const FrequentlyBought = ({ product, productLoader, settings }) => {
               </React.Fragment>
             )}
             {!productLoader ? (
-              <div className="col-span-1">
+              <div className="col-span-2 md:col-span-2 lg:col-span-1">
                 <div className="flex flex-col h-full items-center justify-center ">
                   {totalAmount > 0 ? (
                     <React.Fragment>

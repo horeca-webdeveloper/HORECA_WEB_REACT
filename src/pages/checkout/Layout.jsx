@@ -1,40 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Breadcrumb } from "../../shared/Breadcrumb";
 import { Link, useNavigate } from "react-router-dom";
 import { notify } from "../../utils/notify.js";
-import { useLocalCartCount } from "../../context/LocalCartCount";
-import { toast } from "react-toastify";
-import { DeleteCartButton } from "../../shared/CheckoutPage/DeleteCartButton";
-import { WishListButton } from "../../shared/CheckoutPage/WishListButton.jsx";
-import { Counter } from "../../shared/CheckoutPage/Counter.jsx";
 import { InfinitySpin } from 'react-loader-spinner';
-import { ProductCard } from "../../shared/ProductCard";
-import Slider from "react-slick"
-import { fiveSlider } from "../../utils/slicksettings";
 import { Wrapper } from "../../shared/Wrapper";
-import { firstBreadCrumb, shipmentOne, recomendProduct, buyProducts } from "../../data/checkoutConfig";
-import { CustomCheckbox } from "../../shared/CustomCheckbox";
-import { FiMinus, FiPlus } from "react-icons/fi"
 import { FaLongArrowAltRight, FaCheck } from "react-icons/fa";
-import { useCart } from "../../context/CartContext";
 import { apiClient } from "../../utils/apiWrapper.js";
 
-export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader }) => {
-
-
+export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader, tempCartItems,listOfStore }) => {
+    
     const [isVisible, setIsVisible] = useState(false);
-    const [listOfStore, setListOfStore] = useState([]);
     const navigate = useNavigate();
     const [summary, setSummary] = useState({});
     const [couponCodeValue, setCouponCodeValue] = useState();
     const [cardSummaryLoader, setCartSummaryLoader] = useState(false);
-
     const [totalOrderPrice, setTotalOrderPrice] = useState(0);
     const [discountPercent, setDiscountPercent] = useState(0);
     const [couponError, setCouponError] = useState("");
-    const [couponCodeLoader, setCouponCodeLoader] = useState(false)
-
-
+    const [couponCodeLoader, setCouponCodeLoader] = useState(false);
+    const [tempSubTotal, setSubTotal] = useState(0);
+    const [tempCurrencyTitle, setTempCurrencyTitle] = useState('USD');
+    const [tempTempSaving, setTempSaving] = useState(0);
+    const [tempShippingRate, setShippingRate] = useState(10);
+    const [tempTax, setTempTax] = useState(0);
+    const [tempDiscountPercent, setTempDiscountPercent] = useState(10);
+    const [tempTotalAmount, setTempTotalAmount] = useState(0);
     useEffect(() => {
         handlerCartSummary();
     }, [cartSummaryFlag])
@@ -93,7 +82,29 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
 
         return () => clearInterval(interval);
     }, []);
+    
+    useEffect(() => {
+        if (Object.keys(summary).length === 0) {
+            let tempSubtotal = 0;
+            let tempTempSaving = 0;
+            let tempTax = 0;
+            let tempTotalAmount = 0;
+            !!tempCartItems && tempCartItems.forEach((item, index) => {
+                tempSubtotal += item.original_price * item.quantity;
+                tempTempSaving += item.front_sale_price * item.quantity;
+            });
+            tempTax = tempSubtotal * (tempDiscountPercent / 100);
+            setSubTotal(tempSubtotal);
+            setTempSaving(tempTempSaving - tempSubTotal);
+            setTempTax(tempTax);
+            setTempTotalAmount(tempSubTotal + tempTax + tempShippingRate);
 
+        }
+    }, [summary, tempCartItems]);
+
+    const navigation = (data) => {
+        navigate('/review-checkout', data);
+    }
 
     return (
         <React.Fragment>
@@ -114,10 +125,12 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                             </form>
                         </SideWrapper>) : null}
 
+
+
                         {summary && summary.total_with_shipping ? (
                             <SideWrapper classes={"mt-4"}>
                                 {!cardSummaryLoader ? <React.Fragment>
-                                    {console.log(summary)}
+
                                     <h3 className="text-[#424242] text-[28px] font-semibold">Cart Summary</h3>
                                     <div className="w-full h-[1px] bg-gray-300 my-3"></div>
                                     {summary.subtotal ? (
@@ -188,7 +201,66 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                                         />
                                     </div>}
                             </SideWrapper>
-                        ) : null}
+                        ) :
+                            // for temporary cart items
+                            <>
+                                {!!tempCartItems && tempCartItems ? <SideWrapper classes={"mt-4"}>
+                                    <React.Fragment>
+
+                                        <h3 className="text-[#424242] text-[28px] font-semibold">Cart Summary</h3>
+                                        <div className="w-full h-[1px] bg-gray-300 my-3"></div>
+
+                                        {tempSubTotal && tempSubTotal ? (
+                                            <div className="flex items-center justify-between text-[#030303] text-base my-3 mt-5">
+                                                <span className="">Subtotal ({tempCartItems.length} items)</span>
+                                                <span className="">{tempCurrencyTitle} {(tempSubTotal).toFixed(2)}</span>
+                                            </div>
+                                        ) : null}
+
+                                        {tempTempSaving ? (
+                                            <div className="flex items-center justify-between text-primary font-bold text-base my-3">
+                                                <span className="">Savings</span>
+                                                <span className="">{tempCurrencyTitle} {(tempTempSaving).toFixed(2)}</span>
+                                            </div>
+                                        ) : null}
+
+                                        {tempShippingRate ? (
+                                            <div className="flex items-center justify-between text-[#030303] text-base my-3">
+                                                <span className="">Shipping & Handling</span>
+                                                <span className="">{tempCurrencyTitle} {(tempShippingRate)}</span>
+                                            </div>
+                                        ) : null}
+
+
+                                        {tempTax ? (
+                                            <div className="flex items-center justify-between text-[#030303] text-base my-3">
+                                                <span className="">Taxes</span>
+
+                                                <span className="">{tempCurrencyTitle} {(tempTax).toFixed(2)}</span>
+                                            </div>
+                                        ) : null}
+
+                                        <div className="w-full h-[1px] bg-gray-300 my-3"></div>
+                                        <div className="flex items-center justify-between text-[#030303] text-xl font-semibold my-3">
+                                            <span className="">Total Amount</span>
+                                            <span className="">{tempCurrencyTitle} {(tempTotalAmount).toFixed(2)} </span>
+                                        </div>
+
+                                        <button onClick={() => navigation({ state: { totalAmount: tempTotalAmount, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle,tempCartItems,listOfStore } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                            <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
+                                        </button>
+
+                                        <div className="text-[#64748B] text-xs flex items-center justify-center text-center flex-col mt-4">
+                                            <p>By placing your order, you agree to Horeca store</p>
+                                            <p><span className="font-bold">privacy notice</span> and <span className="font-bold">conditions of Use. </span></p>
+                                        </div>
+
+                                    </React.Fragment>
+                                </SideWrapper> : ''}
+                            </>
+
+
+                        }
 
                         <SideWrapper classes={"mt-4"}>
                             <div className="flex items-center ">
