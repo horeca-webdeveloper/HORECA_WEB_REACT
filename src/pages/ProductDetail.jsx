@@ -35,7 +35,7 @@ import { CartButton } from "../shared/CartButton";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 import { useLocalCartCount } from "../context/LocalCartCount";
 import { ToastContainer, toast } from "react-toastify";
-
+import Documents from "../components/Documents";
 function Model({ url, onLoaded }) {
   const { scene, isLoading } = useGLTF(url);
   useEffect(() => {
@@ -1143,7 +1143,7 @@ export const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* <Documents docs={!!product && product.documents} /> */}
+              <Documents docs={!!product && product.documents} />
             </div>
 
             <CompareProducts
