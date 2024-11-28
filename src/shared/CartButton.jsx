@@ -64,9 +64,7 @@ export const CartButton = ({ product_id, quantity, classes, icon, setQuantity, c
                     itemsArray[itemExists].quantity += quantity;
                 } else {
                     itemsArray.push(tempObj);
-                  
                 }
-
                 localStorage.setItem("CartItems", JSON.stringify(itemsArray));
             } else {
                 localStorage.setItem("CartItems", JSON.stringify([tempObj]));

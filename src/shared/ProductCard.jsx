@@ -183,7 +183,6 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
   };
 
   const removeFromSaved = async (id) => {
-    console.log("id",id);
     const products = await JSON.parse(localStorage.getItem('SaveForLater'));
     const updateProduct = products.filter((item) => item.product_id != id);
     setTempSaveForLater(updateProduct)
