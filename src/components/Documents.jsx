@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import { Link } from 'react-router-dom';
-import { Page,Document } from 'react-pdf/dist/esm/entry.webpack';
  
 const Documents = ({ docs }) => {
     let documents = [];
