@@ -6,7 +6,9 @@ import { Wrapper } from "../../shared/Wrapper";
 import { FaLongArrowAltRight, FaCheck } from "react-icons/fa";
 import { apiClient } from "../../utils/apiWrapper.js";
 
-export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader, tempCartItems,listOfStore }) => {
+export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader, tempCartItems,listOfStore,confirmAndPayFn }) => {
+    
+    
     
     const [isVisible, setIsVisible] = useState(false);
     const navigate = useNavigate();
@@ -180,7 +182,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                                         <span className="">Total Amount</span>
                                         <span className="">{summary.currency_title} {(summary.total_with_shipping).toFixed(2)} </span>
                                     </div>}
-
+                                   
                                     <button onClick={() => navigate("/review-checkout")} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                         <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
                                     </button>
@@ -245,10 +247,13 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                                             <span className="">Total Amount</span>
                                             <span className="">{tempCurrencyTitle} {(tempTotalAmount).toFixed(2)} </span>
                                         </div>
-
-                                        <button onClick={() => navigation({ state: { totalAmount: tempTotalAmount, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle,tempCartItems,listOfStore } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                       {confirmAndPayFn && confirmAndPayFn?    <button onClick={confirmAndPayFn} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                             <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
-                                        </button>
+                                        </button>:   <button onClick={() => navigation({ state: { totalAmount: tempTotalAmount, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle,tempCartItems,listOfStore } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                            <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
+                                        </button>}
+                                       
+                                         
 
                                         <div className="text-[#64748B] text-xs flex items-center justify-center text-center flex-col mt-4">
                                             <p>By placing your order, you agree to Horeca store</p>

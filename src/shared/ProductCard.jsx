@@ -336,7 +336,7 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
             <div className="flex sm:flex-row items-center">
               <span className="flex items-center sm:flex-none text-primary font-semibold ">
                 <span className="ml-0 sm:ml-1 text-[10px] sm:text-xl font-normal sm:font-bold">
-                  {product.currency_title ? product.currency_title : "SAR "}
+                  {product.currency_title ? product.currency_title : "USD "}
                 </span>
                 {product.sale_price ? (
                   <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">
@@ -359,7 +359,7 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
                 product.sale_price === product.original_price ? null : (
                 <span className="text-gray-700 text-sm line-through ml-2 mt-2">
                   <span>
-                    {product.currency_title ? product.currency_title : "SAR"}
+                    {product.currency_title ? product.currency_title : "USD"}
                     &nbsp;
                   </span>
                   <span>{product.original_price}.</span>
@@ -420,7 +420,7 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
               front_sale_price={product.price}
               maximum_order_quantity={product.maximum_order_quantity}
               minimum_order_quantity={product.minimum_order_quantity}
-              currency_title={product.currency_title ? product.currency_title : "SAR"}
+              currency_title={product.currency_title ? product.currency_title : "USD"}
               images={product.images}
               video_path={product.video_path}
              

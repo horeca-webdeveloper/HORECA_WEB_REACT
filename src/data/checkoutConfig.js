@@ -1,5 +1,4 @@
-const firstBreadCrumb = [
-    {
+const firstBreadCrumb = [{
         url: "/",
         title: "Home",
         active: false,
@@ -10,13 +9,11 @@ const firstBreadCrumb = [
     }
 ]
 
-const shipmentOne = [
-    {
+const shipmentOne = [{
         imgSource: "/images/checkout/product-1.png",
         name: "Roomwell Adjustable Height Prestige Anti-Theft Flame Retardant Metallic Cover Ironing Board, L 139 x W 40.5 cm",
         price: "12,500",
-        deliveryTime: [
-            {
+        deliveryTime: [{
                 type: "Free Standard Delivery",
                 time: "Sunday, 6 Octuber"
             },
@@ -31,8 +28,7 @@ const shipmentOne = [
         imgSource: "/images/checkout/product-1.png",
         name: "Roomwell Adjustable Height Prestige Anti-Theft Flame Retardant Metallic Cover Ironing Board, L 139 x W 40.5 cm",
         price: "12,500",
-        deliveryTime: [
-            {
+        deliveryTime: [{
                 type: "Free Standard Delivery",
                 time: "Sunday, 6 Octuber"
             },
@@ -47,8 +43,7 @@ const shipmentOne = [
         imgSource: "/images/checkout/product-1.png",
         name: "Roomwell Adjustable Height Prestige Anti-Theft Flame Retardant Metallic Cover Ironing Board, L 139 x W 40.5 cm",
         price: "12,500",
-        deliveryTime: [
-            {
+        deliveryTime: [{
                 type: "Free Standard Delivery",
                 time: "Sunday, 6 Octuber"
             },
@@ -62,13 +57,11 @@ const shipmentOne = [
 
 ]
 
-const shipmentTwo = [
-    {
+const shipmentTwo = [{
         imgSource: "/images/checkout/product-1.png",
         name: "Roomwell Adjustable Height Prestige Anti-Theft Flame Retardant Metallic Cover Ironing Board, L 139 x W 40.5 cm",
         price: "12,500",
-        deliveryTime: [
-            {
+        deliveryTime: [{
                 type: "Free Standard Delivery",
                 time: "Sunday, 6 Octuber"
             },
@@ -82,8 +75,7 @@ const shipmentTwo = [
         imgSource: "/images/checkout/product-1.png",
         name: "Roomwell Adjustable Height Prestige Anti-Theft Flame Retardant Metallic Cover Ironing Board, L 139 x W 40.5 cm",
         price: "12,500",
-        deliveryTime: [
-            {
+        deliveryTime: [{
                 type: "Free Standard Delivery",
                 time: "Sunday, 6 Octuber"
             },
@@ -98,8 +90,7 @@ const shipmentTwo = [
         imgSource: "/images/checkout/product-1.png",
         name: "Roomwell Adjustable Height Prestige Anti-Theft Flame Retardant Metallic Cover Ironing Board, L 139 x W 40.5 cm",
         price: "12,500",
-        deliveryTime: [
-            {
+        deliveryTime: [{
                 type: "Free Standard Delivery",
                 time: "Sunday, 6 Octuber"
             },
@@ -113,8 +104,7 @@ const shipmentTwo = [
 ]
 
 
-const saveProducts = [
-    {
+const saveProducts = [{
         url: "#",
         isOnSale: true,
         images: [
@@ -126,7 +116,7 @@ const saveProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -144,7 +134,7 @@ const saveProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -162,7 +152,7 @@ const saveProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -186,7 +176,7 @@ const buyProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -204,7 +194,7 @@ const buyProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -222,7 +212,7 @@ const buyProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -231,8 +221,7 @@ const buyProducts = [
 ]
 
 
-const recomendProduct = [
-    {
+const recomendProduct = [{
         url: "#",
         isOnSale: true,
         images: [
@@ -244,7 +233,7 @@ const recomendProduct = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -262,7 +251,7 @@ const recomendProduct = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -280,7 +269,7 @@ const recomendProduct = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -298,7 +287,7 @@ const recomendProduct = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -315,7 +304,7 @@ const recomendProduct = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -333,7 +322,7 @@ const recomendProduct = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -351,7 +340,7 @@ const recomendProduct = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -369,7 +358,7 @@ const recomendProduct = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -387,7 +376,7 @@ const recomendProduct = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -405,7 +394,7 @@ const recomendProduct = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,

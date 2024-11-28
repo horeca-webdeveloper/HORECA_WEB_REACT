@@ -1329,7 +1329,7 @@ export const BuyMoreSaveMore = ({
           images={product.images}
           video_path={product.video_path}
           currency_title={
-            product.currency_title ? product.currency_title : "SAR"
+            product.currency_title ? product.currency_title : "USD"
           }
         >
           <MdOutlineAddShoppingCart className="text-white group-hover:text-white transition-all duration-500" />

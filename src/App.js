@@ -35,6 +35,8 @@ import FAQ from "./pages/FooterPages/FAQ/Component/FAQ";
 import TermsConsition from "./pages/FooterPages/TermsAndConditions/TermsConsition";
 import PrivacyPolicy from "./pages/FooterPages/PrivacyPolicy/PrivacyPolicy";
 import Career from "./pages/FooterPages/Career/Career";
+import PaymentSuccess from "./pages/payment/PaymentSuccess";
+import PaymentFailed from "./pages/payment/PaymentFailed";
 import { PasswordReset } from "./pages/PasswordReset";
 const App = () => {
   const location = useLocation();
@@ -96,7 +98,7 @@ const App = () => {
         categories={categories}
         currentLocation={currentLocation}
         userProfile={userProfile}
-      />
+      />{" "}
       <Routes>
         <Route
           path="/home"
@@ -109,36 +111,40 @@ const App = () => {
               </div>
             )
           }
-        />
-        <Route path="/collections/:category/:subcategory/:id" element={<ProductsByCategory />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/" element={<Navigate replace to="/home" />} />
-        <Route path="/products" element={<ProductListing />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/collections/:id" element={<CollectionPage />} />
-        <Route path="/settings" element={<SettingsLayout />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/review-checkout" element={<ReviewCheckout />} />
-        <Route path="/all-orders" element={<AllOrders/>} />
-        <Route path="/reviews" element={<Reviews/>} />
-        <Route path="/browsing-history" element={<BrowsingHistory/>} />
-        <Route path="/wishlist" element={<Wishlist/>} />
-        <Route path="/coupons-offers" element={<CouponsOffers/>} />
-        <Route path="/addresses" element={<Addresses/>} />
-        <Route path="/creditBalance" element={<CreditBalance/>} />
-        <Route path="/AccountSecurity" element={<AccountSecurity/>} />
-        <Route path="/order-details" element={<OrderDetails />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/faq" element={<FAQ />} />
-        <Route path="/terms-condition" element={<TermsConsition />} />
-        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        <Route path="/career" element={<Career/>} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/password-reset" element={<PasswordReset />} />
-      </Routes>
-
+        />{" "}
+        <Route
+          path="/collections/:category/:subcategory/:id"
+          element={<ProductsByCategory />}
+        />{" "}
+        <Route path="/checkout" element={<Checkout />} />{" "}
+        <Route path="/" element={<Navigate replace to="/home" />} />{" "}
+        <Route path="/products" element={<ProductListing />} />{" "}
+        <Route path="/product/:id" element={<ProductDetail />} />{" "}
+        <Route path="/collections/:id" element={<CollectionPage />} />{" "}
+        <Route path="/settings" element={<SettingsLayout />} />{" "}
+        <Route path="/login" element={<Login />} />{" "}
+        <Route path="/forgot-password" element={<ForgotPassword />} />{" "}
+        <Route path="/sign-up" element={<SignUp />} />{" "}
+        <Route path="/review-checkout" element={<ReviewCheckout />} />{" "}
+        <Route path="/all-orders" element={<AllOrders />} />{" "}
+        <Route path="/reviews" element={<Reviews />} />{" "}
+        <Route path="/browsing-history" element={<BrowsingHistory />} />{" "}
+        <Route path="/wishlist" element={<Wishlist />} />{" "}
+        <Route path="/coupons-offers" element={<CouponsOffers />} />{" "}
+        <Route path="/addresses" element={<Addresses />} />{" "}
+        <Route path="/creditBalance" element={<CreditBalance />} />{" "}
+        <Route path="/AccountSecurity" element={<AccountSecurity />} />{" "}
+        <Route path="/order-details" element={<OrderDetails />} />{" "}
+        <Route path="/contact-us" element={<ContactUs />} />{" "}
+        <Route path="/faq" element={<FAQ />} />{" "}
+        <Route path="/terms-condition" element={<TermsConsition />} />{" "}
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />{" "}
+        <Route path="/career" element={<Career />} />{" "}
+        <Route path="/forgot-password" element={<ForgotPassword />} />{" "}
+        <Route path="/password-reset" element={<PasswordReset />} />{" "}
+        <Route path="/payment/success" element={<PaymentSuccess />} />{" "}
+        <Route path="/payment/cancel" element={<PaymentFailed />} />{" "}
+      </Routes>{" "}
       <ToastContainer
         icon={<FaRegCircleCheck size={20} />}
         position="bottom-right"
@@ -151,7 +157,7 @@ const App = () => {
         draggable={false}
         pauseOnHover={false}
         limit={3}
-      />
+      />{" "}
       <Footer />
     </>
   );
