@@ -12,11 +12,12 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import Popup from "../ProfileRegistration/Addresses/Components/Popup.jsx";
 
 export const ReviewCheckout = () => {
-    
+    const authToken = localStorage.getItem("authToken");
     const { triggerUpdateCart, updateTempCart } = useCart();
     const location = useLocation();
     const navigate=useNavigate();
     const { currencyTitle, savings, shippingRate, tax, totalAmount } = location.state || {};
+ 
     const [popupHeading, setPopupHeading] = useState("Shipping Information");
     const [showPopup, setShowPopup] = useState(false);
     const { incrementCartItems } = useLocalCartCount();
@@ -34,7 +35,7 @@ export const ReviewCheckout = () => {
     const [discountPercent, setDiscountPercent] = useState(0)
     const [couponCodeValue, setCouponCodeValue] = useState("");
     const [couponError, setCouponError] = useState("");
-
+    const [getData, setData] = useState('');
     const getDeliveryDate = (days) => {
         // Ensure the input is a valid number. If invalid, default to 5.
         days = isNaN(Number(days)) ? 5 : Number(days);
@@ -52,6 +53,8 @@ export const ReviewCheckout = () => {
         // Return the formatted date as "DayOfWeek, Day Month"
         return `${dayOfWeek}, ${day} ${month}`;
     };
+
+
     const fetchingCart = async () => {
         setLoader(true)
         try {
@@ -160,14 +163,53 @@ export const ReviewCheckout = () => {
         setTempSaveForLater(JSON.parse(localStorage.getItem('SaveForLater')));
     }, [triggerUpdateCart])
 
+    const handlePayments = async (data) => {
+     const userInfo=   JSON.parse(localStorage.getItem('userProfile'));
+
+        const datas = {
+          "amount": data.amount,
+          // "currency": data.currency.toUpperCase(),
+             "currency": "AED",
+          "description": userInfo.name,
+          "customer_name": userInfo.name,
+          "customer_email": userInfo.email
+        };
+
+        try {
+          setLoader(true);
+          const response = await apiClient.post(`/create-payment`, datas);
+          setData(response.data);
+        } catch (error) {
+          console.error('Error:', error);
+        } finally {
+          setLoader(false);
+        }
+      }
+
     const confirmAndPay=()=>{
+        if(authToken){
+            const data={
+                "amount":totalAmount,
+                "currency":currencyTitle,
+                
+            }
+             handlePayments(data);
+        }else{
             setShowPopup(true);
+        }
+            
     }
 
     const handleClick = () => {
         // Navigate to another route
         navigate('/checkout');
       };
+      
+      useEffect(()=>{
+        if(getData.status=="success" && getData.redirect_url){
+          window.location.href = getData.redirect_url;
+        }
+    },[getData]);
     return (
         <React.Fragment>
             <Layout cartItems={cartItems} tempCartItems={tempCartItems} cartSummaryFlag={cartSummaryFlag} removeItemsLoader={removeItemsLoader} listOfStore={listOfStore} confirmAndPayFn={confirmAndPay} >
@@ -295,12 +337,6 @@ export const ReviewCheckout = () => {
                                                                 </div>
                                                             </div>
 
-
-
-
-
-
-
                                                         </React.Fragment>
                                                     )
                                                 })}
@@ -310,15 +346,18 @@ export const ReviewCheckout = () => {
                                 </>
                             )
                         }) : <div className="w-full  h-[300px] text-gray-400 flex items-center justify-center font-semibold mb-10">No Product Items Available</div>}
-                        <div className="mx-8 my-5 px-8 border-2 border-[#E2E8F0] rounded-[10px] flex items-center justify-between py-5">
+                        
+                        
+                       
+                    </div>
+                }
+                 <div className="mx-8 my-5 px-8 border-2 border-[#E2E8F0] rounded-[10px] flex items-center justify-between py-5">
                             <div className="flex justify-between flex-col">
-                                <h4 className="text-[#B12704] text-xl font-bold">Order Total : {currencyTitle} {totalAmount.toFixed(2)}</h4>
+                                <h4 className="text-[#B12704] text-xl font-bold">Order Total : {currencyTitle && currencyTitle} {totalAmount && totalAmount.toFixed(2)}</h4>
                                 <p className="text-[#64748B] text-xs">By placing your order, you agree to Horeca store <span className="font-semibold">Privacy Notice</span>  and <span className="font-semibold">Conditions Of Use.</span></p>
                             </div>
                             <button className="bg-primary text-white flex items-center justify-center py-2 px-3 font-semibold text-base min-w-[300px] rounded-[4px] " onClick={confirmAndPay}><span className="mr-2">Confirm & Pay</span> <FaArrowRightLong /></button>
                         </div>
-                    </div>
-                }
                 <div>
                 {showPopup?<Popup setShowPopup={setShowPopup} popupHeading={popupHeading} guestUser={true} amount={totalAmount} currency={currencyTitle}/>:''}
                 </div>

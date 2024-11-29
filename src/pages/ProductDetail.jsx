@@ -995,7 +995,7 @@ export const ProductDetail = () => {
                     <div className="text-base text-gray-700 mt-2 flex items-center">
                       <span className="text-sm">As low as </span>
                       <span className="text-black-100 text-xs font-semibold ml-1">
-                        SAR
+                        USD
                       </span>
                       <span className="text-black-100 text-base font-bold ml-1">
                         {" "}

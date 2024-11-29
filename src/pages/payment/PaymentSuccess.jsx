@@ -16,7 +16,6 @@ const PaymentSuccess = () => {
   return (
     <>
       
-     
       <Wrapper className="h-screen">
         <div className="flex flex-col items-center justify-center text-center mt-[100px] mb-[100px]">
           <h1 className="leading-[70.38px] text-[60px] font-semibold">

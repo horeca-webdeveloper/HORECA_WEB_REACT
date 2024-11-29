@@ -23,7 +23,9 @@ import { useWishlist } from "../context/WishListContext";
 
 
 export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSaveForLater }) => {
- 
+  const [deleteCartLoader, setDeleteCartLoader] = useState(false);
+  const authToken = localStorage.getItem("authToken");
+
   const productId = product.id ? product.id : product.product_id;
   let wishListItems = localStorage.getItem("wishListItems");
   const [autoplay, setAutoplay] = useState(false);
@@ -33,7 +35,7 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
   const sliderRef = useRef();
   const { triggerUpdateCart } = useCart();
   const { totalWishListItems, incrementWishListItems } = useLocalCartCount();
-  
+
   const videoRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
@@ -68,7 +70,6 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
   };
 
   const handlerRemoveFavouriteItem = async (product) => {
-    const authToken = localStorage.getItem("authToken");
     if (authToken) {
       try {
         const response = await apiClient.delete(`/wishlist/remove`, {
@@ -81,22 +82,22 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
         console.error("Error:", error);
       } finally {
       }
-    } else{
+    } else {
       if (wishListItems) {
         let itemsArray = JSON.parse(wishListItems);
         let itemExists = itemsArray.findIndex(item => item.id === product.id);
         if (itemExists != -1) {
-            // If the item exists, delete from  wishlist
-         itemsArray.splice(itemExists,1);
-         localStorage.setItem("wishListItems", JSON.stringify(itemsArray));
-        } 
-       
-    }
+          // If the item exists, delete from  wishlist
+          itemsArray.splice(itemExists, 1);
+          localStorage.setItem("wishListItems", JSON.stringify(itemsArray));
+        }
+
+      }
       product.in_wishlist = false;
       incrementWishListItems(-1)
       triggerUpdateWishList();
       notify(product.name, "Product removed from wishlist");
-   
+
     }
   };
 
@@ -108,8 +109,7 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
   //add wishlist
 
   const handlerAddFavouriteItem = async (product) => {
-     
-    const authToken = localStorage.getItem("authToken");
+
     if (authToken) {
       try {
         const response = await apiClient.post(`/wishlist/add`, {
@@ -128,13 +128,13 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
       if (wishListItems) {
         let itemsArray = JSON.parse(wishListItems);
         let itemExists = itemsArray.findIndex(item => item.id === product.id);
-         
+
         if (itemExists == -1) {
           itemsArray.push(product);
           localStorage.setItem("wishListItems", JSON.stringify(itemsArray));
           incrementWishListItems(1)
-        }  
-       
+        }
+
       } else {
         localStorage.setItem("wishListItems", JSON.stringify([product]));
         incrementWishListItems(1)
@@ -142,7 +142,7 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
       }
 
       product.in_wishlist = true;
-     
+
       triggerUpdateWishList();
       notify(product.name, "Product added to wishlist");
 
@@ -182,11 +182,27 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
     }
   };
 
-  const removeFromSaved = async (id) => {
+  const handleRemoveFromSaveForlater = async (id, name) => {
+    try {
+      const response = apiClient.post('remove-from-save-for-later', {
+        "product_id": id
+      });
+      notify(name, " has been removed from cart.")
+    } catch (error) {
+      console.log("error", error);
+    }
+
+  }
+  const removeFromSaved = async (id, name) => {
+    if (authToken) {
+      handleRemoveFromSaveForlater(id, name)
+    }
+
     const products = await JSON.parse(localStorage.getItem('SaveForLater'));
     const updateProduct = products.filter((item) => item.product_id != id);
     setTempSaveForLater(updateProduct)
     localStorage.setItem('SaveForLater', JSON.stringify(updateProduct));
+    notify(name, " has been removed from cart.")
   }
   return (
     <React.Fragment>
@@ -404,41 +420,41 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
                 onClick={(e) => handlerIncrement(e)}
               />
             </div>
-            <div onClick={removeItem && (() => removeFromSaved(productId))}>
+            <div onClick={removeItem && (() => removeFromSaved(productId, product.name))}>
 
-         
-            <CartButton
-              icon={true}
-              quantity={count}
-              product_id={productId}
-              name={product.name}
-              setQuantity={setCount}
-              image={product.image}
-              store_id={product.store_id}
-              delivery_days={product.delivery_days}
-              original_price={product.sale_price ? product.sale_price : product.original_price}
-              front_sale_price={product.price}
-              maximum_order_quantity={product.maximum_order_quantity}
-              minimum_order_quantity={product.minimum_order_quantity}
-              currency_title={product.currency_title ? product.currency_title : "USD"}
-              images={product.images}
-              video_path={product.video_path}
-             
-            >
-              <MdOutlineAddShoppingCart className="text-primary group-hover:text-white transition-all duration-500" />
-              {window.innerWidth < 640 ? (
-                <span className="ml-0 w-[10px] sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
-                  Add
-                </span>
-              ) : (
-                <span className="ml-0 sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
-                  Add To Cart
-                </span>
-              )}
-            </CartButton>
+
+              <CartButton
+                icon={true}
+                quantity={count}
+                product_id={productId}
+                name={product.name}
+                setQuantity={setCount}
+                image={product.image}
+                store_id={product.store_id}
+                delivery_days={product.delivery_days}
+                original_price={product.sale_price ? product.sale_price : product.original_price}
+                front_sale_price={product.price}
+                maximum_order_quantity={product.maximum_order_quantity}
+                minimum_order_quantity={product.minimum_order_quantity}
+                currency_title={product.currency_title ? product.currency_title : "USD"}
+                images={product.images}
+                video_path={product.video_path}
+
+              >
+                <MdOutlineAddShoppingCart className="text-primary group-hover:text-white transition-all duration-500" />
+                {window.innerWidth < 640 ? (
+                  <span className="ml-0 w-[10px] sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
+                    Add
+                  </span>
+                ) : (
+                  <span className="ml-0 sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
+                    Add To Cart
+                  </span>
+                )}
+              </CartButton>
             </div>
           </div>
-          {removeItem ? <button className="text-primary text-xs cursor-pointer" onClick={() => removeFromSaved(productId)}>Remove From Saved</button> : ''}
+          {removeItem ? <button className="text-primary text-xs cursor-pointer" onClick={() => removeFromSaved(productId,product.name)}>Remove From Saved</button> : ''}
         </div>
       </div>
     </React.Fragment>
