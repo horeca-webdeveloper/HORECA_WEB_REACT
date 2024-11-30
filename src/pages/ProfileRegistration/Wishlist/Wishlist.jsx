@@ -6,26 +6,40 @@ import { apiClient } from "../../../utils/apiWrapper";
 import Skeleton from "react-loading-skeleton";
 import { Breadcrumb } from "../../../shared/Breadcrumb";
 import { useNavigate } from "react-router";
+import { useLocalCartCount } from "../../../context/LocalCartCount";
+import { useCart } from "../../../context/CartContext";
+import { useWishlist } from "../../../context/WishListContext";
+import { ToastContainer, toast } from "react-toastify";
 
 const Wishlist = () => {
   const [wishListData, setWishListData] = useState([]);
+  const notify = (text) => {
+    toast.dismiss();
+    toast(<span className="line-clamp-2">{`${text} has been added to your cart`}</span>)
+};
+  const {incrementCartItems,incrementWishListItems } = useLocalCartCount();
+  const { totalWishListCount, triggerUpdateWishList } = useWishlist();
+  const { triggerUpdateCart } = useCart();
   const navigate = useNavigate();
   const [loader, setLoader] = useState(true);
   const fetchAllReviews = async () => {
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
-      navigate("/login");
-    }
-    try {
-      const response = await apiClient.get("/wishlist");
-      setWishListData(response?.data?.wishlist);
+      setWishListData(JSON.parse(localStorage.getItem('wishListItems')));
       setLoader(false);
-      console.log(response?.data?.wishlist);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      return;
+    } else {
+      try {
+        const response = await apiClient.get("/wishlist");
+        setWishListData(response?.data?.wishlist);
+        setLoader(false);
+        console.log(response?.data?.wishlist);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        return;
+      }
     }
+
   };
 
   const handlerRemoveWishlist = async (product) => {
@@ -36,7 +50,6 @@ const Wishlist = () => {
         const response = await apiClient.delete(`/wishlist/remove`, {
           params: { product_id: product.id },
         });
-        console.log(response);
         setLoader(false);
         fetchAllReviews();
       } catch (error) {
@@ -44,10 +57,24 @@ const Wishlist = () => {
       } finally {
         return;
       }
+    }else{
+   
+      const wishListItems = JSON.parse(localStorage.getItem('wishListItems')) || [];  // Ensure it's an array, even if null
+      const updateWishList = wishListItems.filter((item) => item.id !== product.id);
+      // Update the localStorage
+      localStorage.setItem("wishListItems", JSON.stringify(updateWishList));
+      // Update the state
+      setWishListData(updateWishList);  // Directly use the updated list
+      incrementWishListItems(-1)
+      triggerUpdateWishList();
+   
+      
+      
     }
   };
 
   const handleAddToCart = async (product) => {
+
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
       try {
@@ -56,12 +83,46 @@ const Wishlist = () => {
           product_id: product.id,
           quantity: 1,
         });
+        handlerRemoveWishlist(product);
         setLoader(false);
       } catch (error) {
         console.error("Error:", error);
       } finally {
         setLoader(false);
       }
+    } else {
+      let cartItems = localStorage.getItem("CartItems");
+      let tempObj = {
+        product_id: product.id,
+        quantity: 1,
+        name: product.name,
+        image: product.image,
+        store_id: product.store_id,
+        delivery_days: product.delivery_days,
+        original_price: product.original_price,
+        front_sale_price: product.front_sale_price,
+        currency_title: product.currency_title,
+        maximum_order_quantity: product.maximum_order_quantity,
+        minimum_order_quantity:product.minimum_order_quantity,
+        images: product.images,
+        video_path: product.video_path
+      }
+      if (cartItems) {
+        let itemsArray = JSON.parse(cartItems);
+        let itemExists = itemsArray.findIndex(item => item.id === product.id);
+      
+          itemsArray.push(tempObj);
+        
+        localStorage.setItem("CartItems", JSON.stringify(itemsArray));
+      } else {
+        localStorage.setItem("CartItems", JSON.stringify([tempObj]));
+
+      }
+      incrementCartItems(1)
+      triggerUpdateCart();
+      notify(product.name)
+    handlerRemoveWishlist(product);
+ 
     }
   };
 
@@ -72,13 +133,15 @@ const Wishlist = () => {
   const collectionBreadCrumb = [
     {
       url: "/",
-      title: "Your Account",
+      title: "Order",
     },
     {
-      url: "/",
-      title: "Profile",
+
+      title: "Wishlist",
     },
   ];
+
+
   return (
     <>
       <Wrapper>
@@ -86,7 +149,7 @@ const Wishlist = () => {
       </Wrapper>
       <Wrapper>
         <div className="flex">
-          <SidebarProfile />
+          {/* <SidebarProfile /> */}
           {/* WishList Section */}
           <div className="flex flex-col p-[10px] justify-between w-[100%] h-[100%]">
             <p className=" font-light font-sans text-[18px] font-normal leading-[24px] text-left decoration-slice">
@@ -101,15 +164,23 @@ const Wishlist = () => {
                 ))
               ) : (
                 <React.Fragment>
-                  {wishListData?.map((item) => {
+                  {wishListData && wishListData.length > 0 ? <>  {wishListData?.map((item) => {
+
                     return (
                       <WishlistBox
                         handlerRemoveWishlist={handlerRemoveWishlist}
-                        data={item}
+                        data={item.product ? item.product : item}
                         handleAddToCart={handleAddToCart}
                       />
                     );
-                  })}
+                  })}</> : <>
+                    <div class="container mx-auto">
+                      <div class="grid grid-cols-1 md:grid-cols-6">
+                        <h1>Not found any products</h1>
+                      </div>
+                    </div>
+                  </>}
+
                 </React.Fragment>
               )}
             </div>

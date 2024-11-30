@@ -187,15 +187,14 @@ export const ReviewCheckout = () => {
       }
 
     const confirmAndPay=()=>{
+        const data={
+            "amount":totalAmount,
+            "currency":currencyTitle,
+        }
         if(authToken){
-            const data={
-                "amount":totalAmount,
-                "currency":currencyTitle,
-                
-            }
              handlePayments(data);
         }else{
-            setShowPopup(true);
+            navigate('/login',{ state: { totalAmount,currencyTitle}});
         }
             
     }
