@@ -41,7 +41,7 @@ export const PasswordReset = () => {
       email: email,
       password: password,
       password_confirmation: confirmPassword,
-      token: token,
+      token: location?.pathname?.split("/")[2],
     };
     console.log(body);
     e.preventDefault(); // Prevent default form submission

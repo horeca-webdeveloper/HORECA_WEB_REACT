@@ -14,6 +14,7 @@ import { apiClient } from "../utils/apiWrapper";
 
 export const Footer = () => {
   const [footerMenu, setFooterMenu] = useState([]);
+  const [footerIndex, setFooterIndex] = useState(0);
 
   const fetchMenu = async () => {
     try {
@@ -32,12 +33,13 @@ export const Footer = () => {
   return (
     <div className="bg-gray-500">
       {/* News Letter  */}
-      <Wrapper classes="flex flex-row items-center justify-center py-5 hidden sm:flex">
+      <Wrapper classes="flex flex-row items-center justify-center py-5">
         <img
+          className="hidden sm:block"
           src={process.env.PUBLIC_URL + "/images/footer/newsletter.png"}
           alt="newsletter"
         />
-        <div className="mx-10">
+        <div className="mx-10 hidden sm:block">
           <h4 className="text-black-100 text-[1.375rem] font-semibold">
             Learn first about discounts
           </h4>
@@ -45,7 +47,7 @@ export const Footer = () => {
             As well as news, special offers and promotions
           </p>
         </div>
-        <form className="relative w-1/3">
+        <form className="relative hidden sm:block w-[100%] sm:w-1/3">
           <input
             className="w-full py-[16px] pr-44 pl-5 text-[0.95rem] text-gray-800 bg-white rounded-md border border-gray-300 outline-none"
             type="email"
@@ -58,28 +60,120 @@ export const Footer = () => {
             Subscribe
           </button>
         </form>
+        {window?.innerWidth < 640 && (
+          <div className="flex flex-col w-[100%] mt-[20px]">
+            <h1 className="text-[16px] leading-[18.77px] font-semibold py-[10px]">
+              Subscribe Our News Letter
+            </h1>
+            <form className="relative w-[100%] sm:w-1/3">
+              <input
+                className="w-full py-[16px] pr-44 pl-5 h-[47px] text-[0.95rem] text-gray-800 bg-white rounded-md border border-gray-300 outline-none"
+                type="email"
+                placeholder="Enter your email address"
+              />
+              <button
+                type="submit"
+                className="flex items-center justify-center w-[90px] right-2 absolute top-[8px] h-[30px] text-base font-semibold bg-secondary rounded-sm px-7 py-2"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
+        )}
       </Wrapper>
       <hr />
-      <Wrapper classes="pt-7 pb-10">
-        <div className="grid grid-cols-2 gap-6 sm:flex sm:flex-wrap sm:gap-0">
-          {footerMenu.map((footer, index) => {
-            return (
-              <div key={footer.name} className="basis-1/5 mt-3 text-black-100">
-                <h4 className=" text-[1.375rem] font-semibold">
-                  {footer.name}
-                </h4>
-                <ul>
-                  {footer.menu_nodes.map((menu, index) => {
-                    return (
-                      <li key={index} className="text-[0.937rem] mt-4">
-                        <Link to={menu.url}>{menu.title}</Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            );
-          })}
+      <Wrapper classes="pt-0 sm:pt-7 pb-0 sm:pb-10">
+        <div className="grid grid-cols-1 gap-0 sm:gap-6 sm:flex sm:flex-wrap sm:gap-0">
+          {window.innerWidth > 640 &&
+            footerMenu.map((footer, index) => {
+              return (
+                <div
+                  key={footer.name}
+                  className="basis-1/5 border-t mt-3 text-black-100"
+                >
+                  <h4 className="mt-[20px] text-[1.375rem] font-semibold">
+                    {footer.name}
+                  </h4>
+                  <ul>
+                    {footer.menu_nodes.map((menu, index) => {
+                      return (
+                        <li key={index} className="text-[0.937rem]">
+                          <Link to={menu.url}>{menu.title}</Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              );
+            })}
+          {window.innerWidth < 640 &&
+            footerMenu.map((footer, index) => {
+              return (
+                <div key={index} className="">
+                  <div
+                    onClick={() => {
+                      if (footerIndex !== index + 1) {
+                        setFooterIndex(index + 1);
+                      } else {
+                        setFooterIndex(0);
+                      }
+                    }}
+                    className="flex items-center justify-between border-t-2 py-5"
+                  >
+                    <h4 className="leading-[25px] text-[16px] font-semibold">
+                      {footer.name}
+                    </h4>
+                    {footerIndex !== index + 1 ? (
+                      <img
+                        src={process.env.PUBLIC_URL + "/icons/arrow-down.png"}
+                      />
+                    ) : (
+                      <img
+                        src={process.env.PUBLIC_URL + "/icons/arrow-up.png"}
+                      />
+                    )}
+                  </div>
+                  {index == 3 && (
+                    <>
+                      <h4 className="border-t-2  leading-[25px] text-[16px] font-semibold pt-5">
+                        We Used Secured Payment Gateways
+                      </h4>
+                      <div className="flex flex-row mb-[10px]">
+                        <img
+                          className="mr-3 w-14 mt-5 rounded-md"
+                          src={process.env.PUBLIC_URL + "/icons/visa.jpg"}
+                          alt="visa"
+                        />
+                        <img
+                          className="mr-3 w-14 mt-5 rounded-md"
+                          src={process.env.PUBLIC_URL + "/icons/mastero.jpg"}
+                          alt="mastero"
+                        />
+                        <img
+                          className="mr-3 w-14 mt-5 rounded-md"
+                          src={process.env.PUBLIC_URL + "/icons/mastercard.jpg"}
+                          alt="mastercard"
+                        />
+                      </div>
+                    </>
+                  )}
+                  {footerIndex === index + 1 && (
+                    <ul>
+                      {footer.menu_nodes.map((menu, index) => {
+                        return (
+                          <li
+                            key={index}
+                            className="leading-[16.42px] text-[14px] font-normal py-[10px]"
+                          >
+                            <Link to={menu.url}>{menu.title}</Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
           <div className="basis-1/5 mt-3 hidden sm:block">
             <h4 className=" text-[1.375rem] font-semibold">Download</h4>
             <p className="text-gray-700 text-base mt-5">
@@ -136,7 +230,7 @@ export const Footer = () => {
 
       {/* Bottom Navigation  */}
 
-      <Wrapper classes="flex flex-col items-center justify-between py-8 sm:flex-row">
+      <Wrapper classes="flex ml-[-12%] flex-col items-center inline-block sm:flex justify-between py-8 sm:flex-row">
         <div className="text-sm text-gray-700 ">
           © 2024,{" "}
           <Link to="#" className="font-bold text-primary">
@@ -145,7 +239,7 @@ export const Footer = () => {
           </Link>{" "}
           All rights reserved
         </div>
-        <div>
+        <div className="hidden sm:block">
           <div className="flex items-center justify-center">
             <div className="flex items-center justify-center mx-5 hidden sm:flex m-[10px]">
               <img

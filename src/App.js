@@ -136,7 +136,7 @@ const App = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/career" element={<Career/>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/password-reset" element={<PasswordReset />} />
+        <Route path="/password-reset/:id" element={<PasswordReset />} />
       </Routes>
 
       <ToastContainer

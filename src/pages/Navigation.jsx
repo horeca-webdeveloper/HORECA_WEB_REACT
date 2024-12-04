@@ -44,12 +44,12 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
   const [openModel, setOpenModel] = useState(false);
   const token = localStorage.getItem("authToken");
   const { totalWishListCount, triggerUpdateWishList } = useWishlist();
-
   const combinedItems = [
     ...(products ? products.slice(0, 7) : []),
     ...(categoryList ? categoryList.slice(0, 4) : []),
     ...(brands ? brands.slice(0, 4) : []),
   ];
+  const [onHoverProfile, setOnHoverProfile] = useState(false);
 
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown") {
@@ -157,14 +157,14 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
+  const [childCategory, setChildCategory] = useState([]);
+  const [grandChildCategory, setGrandChildCategory] = useState([]);
+  const [catChildTitle, setCatChildTitle] = useState("");
+  const [grandChildTitle, setGrandChildTitle] = useState("");
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
     setActiveCategory(null); // Reset active category when drawer is closed
-  };
-
-  const openCategory = (category) => {
-    setActiveCategory(category); // Open the specific category
   };
 
   const goBackToMain = () => {
@@ -201,11 +201,11 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
       {openModel && !token ? (
         <React.Fragment>
           <div
-            className="bg-[#000000a1] translate-x-[100px] primary w-[10px] h-[100vh] z-[999] fixed flex items-center justify-center"
+            className="bg-[#000000a1] translate-x-[100px] bg-[red] primary w-[10px] h-[100vh] z-[999] fixed flex items-center justify-center"
             onClick={() => setOpenModel(false)}
           ></div>
           <div className="w-[375px] bg-white rounded-[10px] z-[9999] fixed top-[50%] left-[50%] translate-x-[-50%] hidden translate-y-[-50%]">
-            <div className="bg-[#f6f8fb] border-b  border-b-[#e2e8f0] flex items-center justify-between p-5 py-3 rounded-t-[10px]">
+            <div className="bg-[#f6f8fb] border-b  border-b-[#e2e8f0] flex items-center justify-start sm:justify-between p-5 py-3 rounded-t-[10px]">
               <span></span>
               <span
                 className="cursor-pointer"
@@ -277,7 +277,27 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           </div>
         </React.Fragment>
       ) : null}
-
+      {window.innerWidth < 640 && (
+        <div className="flex items-center bg-[#186737] p-[10px]">
+          <img
+            className="p-[2px] rounded-[2px]"
+            src={process.env.PUBLIC_URL + "/icons/location.svg"}
+            alt="Location"
+          />
+          <p className="text-[14px] ml-[10px] leading-[16.42px] font-semibold text-[white]">
+            Deliver To :
+          </p>
+          {currentLocation ? (
+            <span className="text-[white] text-sm ml-3">
+              {currentLocation.city}, {currentLocation.country}
+            </span>
+          ) : (
+            <span className="text-[white] text-sm ml-3">
+              Fetching Location...
+            </span>
+          )}
+        </div>
+      )}
       <div className="bg-gray-200 hidden sm:block">
         <Wrapper classes="flex items-center justify-between text-sm text-gray-400 py-2">
           <p className="">
@@ -372,7 +392,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
       </div>
 
       {/* Main Nav*/}
-      <Wrapper classes="flex items-center flex-row justify-between py-5">
+      <Wrapper classes="flex items-center flex-row justify-start sm:justify-between py-5">
         {/* Drawer */}
         <div>
           {/* Main Drawer */}
@@ -381,88 +401,143 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
               isOpen ? "translate-x-0" : "-translate-x-full"
             } transition-transform duration-300 ease-in-out lg:hidden`}
           >
-            {activeCategory === null ? (
+            {activeCategory == null ? (
               // Main Categories
               <div>
-                <div className="flex items-center justify-center mt-[40px] mb-[30px] p-4 flex justify-between items-center">
-                  <button className="rounded-full bg-[#0171dc] text-[white] text-[14px] font-semibold px-[10px] py-[6px]">
-                    Sign in or create account
-                  </button>
-                  {/* <button
-                    className="text-gray-400 hover:text-black"
-                    onClick={toggleDrawer}
-                  >
-                    ✖
-                  </button> */}
-                </div>
-                <ul className="p-4 space-y-4 z-[999]">
-                  <li
-                    onClick={() => openCategory("Categories")}
-                    className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light border-b-[1px] p-2 text-[black] hover:rounded cursor-pointer"
-                  >
-                    Categories
+                <ul className="z-[999]">
+                  <li className="text-[14px] font-light border-b-[1px] text-[black] cursor-pointer">
+                    <p className="p-4 bg-[#186737] text-[20px] leading-[23.46px] font-normal text-white">
+                      Main Menu
+                    </p>
                   </li>
-                  <li
-                    onClick={() => openCategory("Account & Profile")}
-                    className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light p-2 text-[black] hover:rounded cursor-pointer"
-                  >
-                    Account & Profile
-                  </li>
-                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light p-2 text-[black] hover:rounded cursor-pointer">
-                    Categories
-                  </li>
-                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light border-b-[1px] p-2 text-[black] hover:rounded cursor-pointer">
-                    Profile
-                  </li>
-                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light border-b-[1px] p-2 text-[black] hover:rounded cursor-pointer">
-                    help
-                  </li>
-                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light p-2 text-[black] hover:rounded cursor-pointer">
-                    List
-                  </li>
-                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light border-b-[1px] p-2 text-[black] hover:rounded cursor-pointer">
-                    Registries
-                  </li>
-                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light p-2 text-[black] hover:rounded cursor-pointer">
-                    Department
-                  </li>
-                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light border-b-[1px] p-2 text-[black] hover:rounded cursor-pointer">
-                    Services
-                  </li>
-                  <li className="hover:bg-[#0171dc] hover:text-[white] text-[14px] font-light p-2 text-[black] hover:rounded cursor-pointer">
-                    Give Feedback
-                  </li>
+                  {categories?.map((item, index) => {
+                    return (
+                      <li
+                        onClick={() => {
+                          if (item?.children?.length > 0) {
+                            setChildCategory(item?.children);
+                            setActiveCategory(1);
+                            setCatChildTitle(item?.name);
+                          } else {
+                            navigate(`/collections/${item.slug}`);
+                            setIsOpen(false);
+                          }
+                        }}
+                        className="hover:bg-[#0171dc] border-b-[1px] text-[black] cursor-pointer"
+                      >
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-4"
+                        >
+                          <p className="text-[16px] leading-[18.77px] text-[#186737]">
+                            {item?.name}
+                          </p>
+                          {item?.children?.length > 0 && (
+                            <img
+                              src={
+                                process.env.PUBLIC_URL +
+                                "/icons/arrow-right.png"
+                              }
+                            />
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
-            ) : (
+            ) : activeCategory == 1 ? (
               // Subcategories Drawer
               <div>
-                <div className="p-4 flex justify-between items-center">
+                <div className="text-[14px] bg-[#186737] font-light border-b-[1px] text-[black] hover:rounded cursor-pointer">
                   <button
-                    className="text-blue-500 font-bold"
+                    className="p-4 bg-[#186737] text-[20px] leading-[23.46px] font-normal text-white"
                     onClick={goBackToMain}
                   >
                     ← Back
                   </button>
                 </div>
-                <ul className="p-4 space-y-4">
-                  {navItems?.map((item, index) => {
+                <p className="text-[16px] p-4 border-b-2 font-bold leading-[18.77px] text-[#186737]">
+                  {catChildTitle}
+                </p>
+                <ul className="">
+                  {childCategory?.map((item, index) => {
+                    // console.log("subcategories", item);
+                    console.log(activeCategory);
                     return (
-                      <div className="flex items-center">
-                        <img className="h-[15px] mr-[10px]" src={item.icon} />
-                        <li
+                      <li
+                        onClick={() => {
+                          setGrandChildCategory(item?.children);
+                          setActiveCategory(2);
+                          setGrandChildTitle(item?.name);
+                        }}
+                        className=" border-b-[1px] text-[black] cursor-pointer"
+                      >
+                        <div
                           key={index}
-                          onClick={() => navigate(item.link)}
-                          className="hover:bg-gray-100 p-2 text-[12px] rounded cursor-pointer"
+                          className="flex items-center justify-between p-4"
                         >
-                          {item.name}
-                        </li>
-                      </div>
+                          <p className="text-[16px] leading-[18.77px] text-[#186737]">
+                            {item?.name}
+                          </p>
+                          {item?.children?.length > 0 && (
+                            <img
+                              src={
+                                process.env.PUBLIC_URL +
+                                "/icons/arrow-right.png"
+                              }
+                            />
+                          )}
+                        </div>
+                      </li>
                     );
                   })}
                 </ul>
               </div>
-            )}
+            ) : activeCategory == 2 ? (
+              // Subcategories Drawer
+              <div>
+                <div className="text-[14px] bg-[#186737] font-light border-b-[1px] text-[black] hover:rounded cursor-pointer">
+                  <button
+                    className="p-4 bg-[#186737] text-[20px] leading-[23.46px] font-normal text-white"
+                    onClick={() => setActiveCategory(1)}
+                  >
+                    ← Back
+                  </button>
+                </div>
+                <p className="text-[16px] p-4 border-b font-bold leading-[18.77px] text-[#186737]">
+                  {grandChildTitle}
+                </p>
+                <ul className="">
+                  {grandChildCategory?.map((item, index) => {
+                    return (
+                      <li className=" border-b-[1px] text-[black] cursor-pointer">
+                        <div
+                          key={index}
+                          onClick={() => {
+                            navigate(`/collections/${item.slug}`);
+                            setIsOpen(false);
+                          }}
+                          className="flex items-center justify-between p-4"
+                        >
+                          <p className="text-[16px] leading-[18.77px] text-[#186737]">
+                            {item?.name}
+                          </p>
+                          {item?.children?.length > 0 && (
+                            <img
+                              src={
+                                process.env.PUBLIC_URL +
+                                "/icons/arrow-right.png"
+                              }
+                            />
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ) : null}
           </div>
 
           {/* Backdrop */}
@@ -473,7 +548,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             />
           )}
         </div>
-        <div className={window.innerWidth < 640 ? "ml-[-12%]" : "ml-[0]"}>
+        <div className={window.innerWidth < 640 ? "mr-[15%]" : "ml-[0]"}>
           <Link to="/home">
             <img
               onClick={toggleDrawer}
@@ -636,7 +711,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           )}
         </div>
 
-        <div className="flex flex-row items-center justify-evenly ml-6 mr-4 sm:min-w-[200px] ">
+        <div className="flex flex-row  items-center justify-evenly ml-[15%] sm:ml-6  sm:mr-4  sm:min-w-[200px] ">
           <div className="relative mx-2 hidden sm:flex">
             <img src={process.env.PUBLIC_URL + "/icons/graph.svg"} alt="" />
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
@@ -644,7 +719,10 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             </span>
           </div>
 
-          <div className="relative mx-2 hidden sm:flex cursor-pointer"    onClick={() => navigate("/checkout")}>
+          <div
+            className="relative mx-2 hidden sm:flex cursor-pointer"
+            onClick={() => navigate("/checkout")}
+          >
             <img src={process.env.PUBLIC_URL + "/icons/heart.svg"} alt="" />
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
               {totalWishListCount}
@@ -660,14 +738,15 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             </span>
           </div>
         </div>
-        <div className="flex flex-row hidden sm:flex">
+        <div className="flex flex-row">
           <img
+            onMouseEnter={() => setOnHoverProfile(true)}
             src={process.env.PUBLIC_URL + "/icons/user.svg"}
             alt=""
             className="w-[35px] rounded-full cursor-pointer"
             onClick={() => navigate("/all-orders")}
           />
-          <div className="flex flex-col ml-2 hidden sm:flex">
+          <div className="flex hidden sm:flex flex-col ml-2 ">
             {isLoggedIn ? (
               <span
                 onClick={() => {
@@ -698,7 +777,236 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           </div>
         </div>
       </Wrapper>
-
+      {onHoverProfile && (
+        <div
+          onMouseEnter={() => setOnHoverProfile(true)}
+          onMouseLeave={() => setOnHoverProfile(false)}
+          style={{ zIndex: 1000 }}
+          className="flex bg-[white] absolute z-1000 overflow-hidden w-[80vw] border-2 shadow-md m-[10px] ml-[12%] mt-[-20px] rounded-[10px] h-[714px]"
+        >
+          <div className="flex p-5 flex-col w-[40%] border-r-2 mr-[20px]">
+            <h1 className="text-[16px] leading-[16px] font-semibold">
+              Reorder In One Click
+            </h1>
+            <h2 className="text-[14px] mb-[10px] text-[#186737] mt-[5px] leading-[16px] font-normal">
+              View All & Manage
+            </h2>
+            <div className="flex py-[10px]">
+              <img
+                className="h-[90px] w-[90px] rounded-[4px] mr-[10px]"
+                src="https://images.pexels.com/photos/2299028/pexels-photo-2299028.jpeg?auto=compress&cs=tinysrgb&w=800"
+              />
+              <div className="flex-col">
+                <p className="text-[14px] leading-[16.42px]">
+                  Lorem ipsum dolor sit amet consectetur, amet consectetur
+                </p>
+                <p className="text-[16px] leading-[18.77px] mt-[5px]">
+                  SAR : 550.0
+                </p>
+                <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+            <div className="flex py-[10px]">
+              <img
+                className="h-[90px] w-[90px] rounded-[4px] mr-[10px]"
+                src="https://images.pexels.com/photos/2299028/pexels-photo-2299028.jpeg?auto=compress&cs=tinysrgb&w=800"
+              />
+              <div className="flex-col">
+                <p className="text-[14px] leading-[16.42px]">
+                  Lorem ipsum dolor sit amet consectetur, amet consectetur
+                </p>
+                <p className="text-[16px] leading-[18.77px] mt-[5px]">
+                  SAR : 550.0
+                </p>
+                <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+            <div className="flex py-[10px]">
+              <img
+                className="h-[90px] w-[90px] rounded-[4px] mr-[10px]"
+                src="https://images.pexels.com/photos/2299028/pexels-photo-2299028.jpeg?auto=compress&cs=tinysrgb&w=800"
+              />
+              <div className="flex-col">
+                <p className="text-[14px] leading-[16.42px]">
+                  Lorem ipsum dolor sit amet consectetur, amet consectetur
+                </p>
+                <p className="text-[16px] leading-[18.77px] mt-[5px]">
+                  SAR : 550.0
+                </p>
+                <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+            <div className="flex py-[10px]">
+              <img
+                className="h-[90px] w-[90px] rounded-[4px] mr-[10px]"
+                src="https://images.pexels.com/photos/2299028/pexels-photo-2299028.jpeg?auto=compress&cs=tinysrgb&w=800"
+              />
+              <div className="flex-col">
+                <p className="text-[14px] leading-[16.42px]">
+                  Lorem ipsum dolor sit amet consectetur, amet consectetur
+                </p>
+                <p className="text-[16px] leading-[18.77px] mt-[5px]">
+                  SAR : 550.0
+                </p>
+                <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+            <div className="flex py-[10px]">
+              <img
+                className="h-[90px] w-[90px] rounded-[4px] mr-[10px]"
+                src="https://images.pexels.com/photos/2299028/pexels-photo-2299028.jpeg?auto=compress&cs=tinysrgb&w=800"
+              />
+              <div className="flex-col">
+                <p className="text-[14px] leading-[16.42px]">
+                  Lorem ipsum dolor sit amet consectetur, amet consectetur
+                </p>
+                <p className="text-[16px] leading-[18.77px] mt-[5px]">
+                  SAR : 550.0
+                </p>
+                <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="flex p-5 flex-col w-[40%] border-r-2 mr-[20px]">
+            <h1 className="text-[16px] leading-[16px] font-semibold">
+              Reorder In One Click
+            </h1>
+            <h2 className="text-[14px] mb-[10px] text-[#186737] mt-[5px] leading-[16px] font-normal">
+              View All & Manage
+            </h2>
+            <div className="flex py-[10px]">
+              <img
+                className="h-[90px] w-[90px] rounded-[4px] mr-[10px]"
+                src="https://images.pexels.com/photos/2299028/pexels-photo-2299028.jpeg?auto=compress&cs=tinysrgb&w=800"
+              />
+              <div className="flex-col">
+                <p className="text-[14px] leading-[16.42px] mt-[10px]">
+                  Lorem ipsum dolor sit amet consectetur, amet consectetur
+                </p>
+                <p className="text-[12px] leading-[14.08px] font-normal mt-[8px]">
+                  Status : Dispatch
+                </p>
+                <p className="text-[12px] text-[#186737] font-normal leading-[14.08px] mt-[8px]">
+                  Tomorrow, Sunday, 6 Oct
+                </p>
+              </div>
+            </div>
+            <div className="flex py-[10px]">
+              <img
+                className="h-[90px] w-[90px] rounded-[4px] mr-[10px]"
+                src="https://images.pexels.com/photos/2299028/pexels-photo-2299028.jpeg?auto=compress&cs=tinysrgb&w=800"
+              />
+              <div className="flex-col">
+                <p className="text-[14px] leading-[16.42px] mt-[10px]">
+                  Lorem ipsum dolor sit amet consectetur, amet consectetur
+                </p>
+                <p className="text-[12px] leading-[14.08px] font-normal mt-[8px]">
+                  Status : Dispatch
+                </p>
+                <p className="text-[12px] text-[#186737] font-normal leading-[14.08px] mt-[8px]">
+                  Tomorrow, Sunday, 6 Oct
+                </p>
+              </div>
+            </div>
+            <div className="flex py-[10px]">
+              <img
+                className="h-[90px] w-[90px] rounded-[4px] mr-[10px]"
+                src="https://images.pexels.com/photos/2299028/pexels-photo-2299028.jpeg?auto=compress&cs=tinysrgb&w=800"
+              />
+              <div className="flex-col">
+                <p className="text-[14px] leading-[16.42px] mt-[10px]">
+                  Lorem ipsum dolor sit amet consectetur, amet consectetur
+                </p>
+                <p className="text-[12px] leading-[14.08px] font-normal mt-[8px]">
+                  Status : Dispatch
+                </p>
+                <p className="text-[12px] text-[#186737] font-normal leading-[14.08px] mt-[8px]">
+                  Tomorrow, Sunday, 6 Oct
+                </p>
+              </div>
+            </div>
+            <div className="flex py-[10px]">
+              <img
+                className="h-[90px] w-[90px] rounded-[4px] mr-[10px]"
+                src="https://images.pexels.com/photos/2299028/pexels-photo-2299028.jpeg?auto=compress&cs=tinysrgb&w=800"
+              />
+              <div className="flex-col">
+                <p className="text-[14px] leading-[16.42px] mt-[10px]">
+                  Lorem ipsum dolor sit amet consectetur, amet consectetur
+                </p>
+                <p className="text-[12px] leading-[14.08px] font-normal mt-[8px]">
+                  Status : Dispatch
+                </p>
+                <p className="text-[12px] text-[#186737] font-normal leading-[14.08px] mt-[8px]">
+                  Tomorrow, Sunday, 6 Oct
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex-col w-[60%] p-5">
+            <div className="flex items-center p-5 border-b-2 justify-between">
+              <p className="text-[16px] leading-[18.77px]">Account</p>
+              <p className="text-[13px] leading-[15.75px]">
+                Your info at a glance
+              </p>
+            </div>
+            <div className="flex items-center p-5 border-b-2 justify-between">
+              <p className="text-[16px] leading-[18.77px]">Purchased</p>
+              <p className="text-[13px] leading-[15.75px]">
+                Your info at a glance
+              </p>
+            </div>
+            <div className="flex items-center p-5 border-b-2 justify-between">
+              <p className="text-[16px] leading-[18.77px]">Product Purchases</p>
+              <p className="text-[13px] leading-[15.75px]">
+                Your info at a glance
+              </p>
+            </div>
+            <div className="flex items-center p-5 border-b-2 justify-between">
+              <p className="text-[16px] leading-[18.77px]">Payment Methods</p>
+              <p className="text-[13px] leading-[15.75px]">
+                Your info at a glance
+              </p>
+            </div>
+            <div className="flex items-center p-5 border-b-2 justify-between">
+              <p className="text-[16px] leading-[18.77px]">Purchases</p>
+              <p className="text-[13px] leading-[15.75px]">
+                Your info at a glance
+              </p>
+            </div>
+            <div className="flex items-center p-5 border-b-2 justify-between">
+              <p className="text-[16px] leading-[18.77px]">Subscription</p>
+              <p className="text-[13px] leading-[15.75px]">
+                Your info at a glance
+              </p>
+            </div>
+            <div className="flex items-center p-5 border-b-2 justify-between">
+              <p className="text-[16px] leading-[18.77px]">Customer Support</p>
+              <p className="text-[13px] leading-[15.75px]">
+                Your info at a glance
+              </p>
+            </div>
+            <div className="flex items-center p-5 border-b-2 justify-between">
+              <p className="text-[16px] leading-[18.77px]">
+                Your Seller Account
+              </p>
+              <p className="text-[13px] leading-[15.75px]">
+                Your info at a glance
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="bg-[#DEF9EC] py-3 hidden sm:flex">
         <Wrapper classes="flex flex-row items-center justify-between">
           <div className="flex group relative group/cat1 mr-3  items-center justify-between w-full">
@@ -720,7 +1028,6 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                 alt=""
               />
             </div>
-
             <div className="w-[80%] flex flex-row items-center justify-between">
               {categories
                 ? categories.map((cat, index) => {
@@ -749,7 +1056,6 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   })
                 : null}
             </div>
-
             <ControlledMenu
               {...hoverProps}
               {...menuState}
@@ -839,7 +1145,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           </div>
         </Wrapper>
       </div>
-      <div className="w-[94%] m-auto rounded-full border  border-gray-300 relative ml-2 block sm:hidden">
+      <div className="w-[94%] m-auto rounded-[5px] sm:rounded-full border  border-gray-300 relative block sm:hidden">
         <form
           className="flex items-center h-10"
           onSubmit={(e) => handlerFormSubmit(e)}
@@ -854,7 +1160,10 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             onFocus={handleFocus}
             onBlur={handleBlur}
           />
-          <button type="submit" className="bg-primary p-2 rounded-full mr-1">
+          <button
+            type="submit"
+            className="bg-primary p-2 rounded-[5px] sm:rounded-full mr-1"
+          >
             <CiSearch color="white" size={18} />
           </button>
         </form>

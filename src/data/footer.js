@@ -37,7 +37,7 @@ const footerMenu = [
         ]
     },
     {
-        title: "Make Money with Us",
+        title: "Sell At Horeca",
         menuList: [
             {
                 title: "Sell on Horecastore",
@@ -107,7 +107,7 @@ const footerMenu = [
         ]
     },
     {
-        title: "For Buyers",
+        title: "For Customers",
         menuList: [
             {
                 title: "FAQ",

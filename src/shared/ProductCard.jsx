@@ -21,9 +21,13 @@ import { FaPlay } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import { useWishlist } from "../context/WishListContext";
 
-
-export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSaveForLater }) => {
- 
+export const ProductCard = ({
+  classes,
+  product,
+  flashSale,
+  removeItem,
+  setTempSaveForLater,
+}) => {
   const productId = product.id ? product.id : product.product_id;
   let wishListItems = localStorage.getItem("wishListItems");
   const [autoplay, setAutoplay] = useState(false);
@@ -33,7 +37,7 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
   const sliderRef = useRef();
   const { triggerUpdateCart } = useCart();
   const { totalWishListItems, incrementWishListItems } = useLocalCartCount();
-  
+
   const videoRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
@@ -81,22 +85,20 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
         console.error("Error:", error);
       } finally {
       }
-    } else{
+    } else {
       if (wishListItems) {
         let itemsArray = JSON.parse(wishListItems);
-        let itemExists = itemsArray.findIndex(item => item.id === product.id);
+        let itemExists = itemsArray.findIndex((item) => item.id === product.id);
         if (itemExists != -1) {
-            // If the item exists, delete from  wishlist
-         itemsArray.splice(itemExists,1);
-         localStorage.setItem("wishListItems", JSON.stringify(itemsArray));
-        } 
-       
-    }
+          // If the item exists, delete from  wishlist
+          itemsArray.splice(itemExists, 1);
+          localStorage.setItem("wishListItems", JSON.stringify(itemsArray));
+        }
+      }
       product.in_wishlist = false;
-      incrementWishListItems(-1)
+      incrementWishListItems(-1);
       triggerUpdateWishList();
       notify(product.name, "Product removed from wishlist");
-   
     }
   };
 
@@ -108,7 +110,6 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
   //add wishlist
 
   const handlerAddFavouriteItem = async (product) => {
-     
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
       try {
@@ -127,25 +128,22 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
     } else {
       if (wishListItems) {
         let itemsArray = JSON.parse(wishListItems);
-        let itemExists = itemsArray.findIndex(item => item.id === product.id);
-         
+        let itemExists = itemsArray.findIndex((item) => item.id === product.id);
+
         if (itemExists == -1) {
           itemsArray.push(product);
           localStorage.setItem("wishListItems", JSON.stringify(itemsArray));
-          incrementWishListItems(1)
-        }  
-       
+          incrementWishListItems(1);
+        }
       } else {
         localStorage.setItem("wishListItems", JSON.stringify([product]));
-        incrementWishListItems(1)
-
+        incrementWishListItems(1);
       }
 
       product.in_wishlist = true;
-     
+
       triggerUpdateWishList();
       notify(product.name, "Product added to wishlist");
-
     }
   };
 
@@ -158,7 +156,7 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
           .then((_) => {
             videoRef.current.pause();
           })
-          .catch((error) => { });
+          .catch((error) => {});
       }
     } else {
       sliderRef.current.slickPause();
@@ -174,7 +172,7 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
             .then((_) => {
               videoRef.current.play();
             })
-            .catch((error) => { });
+            .catch((error) => {});
         }
       }, 300);
     } else {
@@ -183,11 +181,11 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
   };
 
   const removeFromSaved = async (id) => {
-    const products = await JSON.parse(localStorage.getItem('SaveForLater'));
+    const products = await JSON.parse(localStorage.getItem("SaveForLater"));
     const updateProduct = products.filter((item) => item.product_id != id);
-    setTempSaveForLater(updateProduct)
-    localStorage.setItem('SaveForLater', JSON.stringify(updateProduct));
-  }
+    setTempSaveForLater(updateProduct);
+    localStorage.setItem("SaveForLater", JSON.stringify(updateProduct));
+  };
   return (
     <React.Fragment>
       <div
@@ -224,8 +222,9 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
                       className="w-full h-[110px] sm:h-[250px] sm:w-[100] object-cover"
                     >
                       <source
-                        src={`https://testhssite.com/storage/${JSON.parse(product.video_path)[0]
-                          }`}
+                        src={`https://testhssite.com/storage/${
+                          JSON.parse(product.video_path)[0]
+                        }`}
                         type="video/mp4"
                       />
                       Your browser does not support the video tag.
@@ -302,7 +301,6 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
               <span className="text-gray-700 text-[8px] sm:text-sm ml-2">
                 {product.total_reviews ? product.total_reviews : "1000"}+ Sold
               </span>
-
             </div>
             {!flashSale ? (
               <p className="text-gray-700 text-xs mt-1">
@@ -323,7 +321,6 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
                     <FiShoppingCart />{" "}
                     <span className="ml-2">5300+ SALE RECENTLY</span>
                   </li>
-
                 </ul>
               </div>
             ) : null}
@@ -350,13 +347,13 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
 
                 <span className="ml-1 text-[10px] sm:text-3xl font-bold sm:font-extrabold">
                   {product.sale_price &&
-                    String(product.sale_price).split(".")[1]
+                  String(product.sale_price).split(".")[1]
                     ? String(product.sale_price).split(".")[1]
                     : "00"}
                 </span>
               </span>
               {!product.sale_price ||
-                product.sale_price === product.original_price ? null : (
+              product.sale_price === product.original_price ? null : (
                 <span className="text-gray-700 text-sm line-through ml-2 mt-2">
                   <span>
                     {product.currency_title ? product.currency_title : "SAR"}
@@ -368,7 +365,6 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
                       ? String(product.price).split(".")[1]
                       : "00"}
                   </span>
-
                 </span>
               )}
             </div>
@@ -405,40 +401,52 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
               />
             </div>
             <div onClick={removeItem && (() => removeFromSaved(productId))}>
-
-         
-            <CartButton
-              icon={true}
-              quantity={count}
-              product_id={productId}
-              name={product.name}
-              setQuantity={setCount}
-              image={product.image}
-              store_id={product.store_id}
-              delivery_days={product.delivery_days}
-              original_price={product.sale_price ? product.sale_price : product.original_price}
-              front_sale_price={product.price}
-              maximum_order_quantity={product.maximum_order_quantity}
-              minimum_order_quantity={product.minimum_order_quantity}
-              currency_title={product.currency_title ? product.currency_title : "SAR"}
-              images={product.images}
-              video_path={product.video_path}
-             
-            >
-              <MdOutlineAddShoppingCart className="text-primary group-hover:text-white transition-all duration-500" />
-              {window.innerWidth < 640 ? (
-                <span className="ml-0 w-[10px] sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
-                  Add
-                </span>
-              ) : (
-                <span className="ml-0 sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
-                  Add To Cart
-                </span>
-              )}
-            </CartButton>
+              <CartButton
+                icon={true}
+                quantity={count}
+                product_id={productId}
+                name={product.name}
+                setQuantity={setCount}
+                image={product.image}
+                store_id={product.store_id}
+                delivery_days={product.delivery_days}
+                original_price={
+                  product.sale_price
+                    ? product.sale_price
+                    : product.original_price
+                }
+                front_sale_price={product.price}
+                maximum_order_quantity={product.maximum_order_quantity}
+                minimum_order_quantity={product.minimum_order_quantity}
+                currency_title={
+                  product.currency_title ? product.currency_title : "SAR"
+                }
+                images={product.images}
+                video_path={product.video_path}
+              >
+                <MdOutlineAddShoppingCart className="text-primary group-hover:text-white transition-all duration-500" />
+                {window.innerWidth < 640 ? (
+                  <span className="ml-0 w-[10px] sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
+                    Add
+                  </span>
+                ) : (
+                  <span className="ml-0 sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
+                    Add To Cart
+                  </span>
+                )}
+              </CartButton>
             </div>
           </div>
-          {removeItem ? <button className="text-primary text-xs cursor-pointer" onClick={() => removeFromSaved(productId)}>Remove From Saved</button> : ''}
+          {removeItem ? (
+            <button
+              className="text-primary text-xs cursor-pointer"
+              onClick={() => removeFromSaved(productId)}
+            >
+              Remove From Saved
+            </button>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </React.Fragment>

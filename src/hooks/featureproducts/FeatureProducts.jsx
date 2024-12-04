@@ -11,7 +11,7 @@ export const FeatureProduct = ({
   featureCatLoader,
   setSelectedCat,
 
-  setFeaturedProducts
+  setFeaturedProducts,
 }) => {
   const [products, setProducts] = useState([]);
   const [count, setCount] = useState(1);
@@ -21,10 +21,15 @@ export const FeatureProduct = ({
       .filter((product) => selectedCat === product.category_name)
       .map((product) => product.featured_products);
     setProducts(showFeatureProduct[0]);
-
   }, [selectedCat, featureCat]);
 
+  const [innerWidth, setInnerWidth] = useState("");
+  useEffect(() => {
+    setInnerWidth(window.innerWidth);
+  }, [window.innerWidth]);
 
+  const bigScreenCss =
+    "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5"
 
   return (
     <Wrapper>
@@ -46,7 +51,7 @@ export const FeatureProduct = ({
               }
             : {}
         }
-        className="flex grid-cols-5 gap-2 sm:gap-5 sm:grid overflow-x-scroll sm:overflow-hidden sm:space-x-5"
+        className={bigScreenCss}
       >
         {featureCatLoader ? (
           Array.from({ length: 10 }).map((_, index) => (
@@ -55,7 +60,6 @@ export const FeatureProduct = ({
         ) : (
           <React.Fragment>
             {products && products.length > 0 ? (
-                  
               products.map((product, index) =>
                 index < 10 ? (
                   <ProductCard
