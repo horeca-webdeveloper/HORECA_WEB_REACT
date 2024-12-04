@@ -6,15 +6,17 @@ import { Wrapper } from "../../shared/Wrapper";
 import { FaLongArrowAltRight, FaCheck } from "react-icons/fa";
 import { apiClient } from "../../utils/apiWrapper.js";
 
-export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader, tempCartItems,listOfStore }) => {
-    
+export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader, tempCartItems, listOfStore, confirmAndPayFn }) => {
+
+
+
     const [isVisible, setIsVisible] = useState(false);
     const navigate = useNavigate();
     const [summary, setSummary] = useState({});
-    const [couponCodeValue, setCouponCodeValue] = useState();
+    const [couponCodeValue, setCouponCodeValue] = useState(JSON.parse(localStorage.getItem('couponCodeValue')));
     const [cardSummaryLoader, setCartSummaryLoader] = useState(false);
     const [totalOrderPrice, setTotalOrderPrice] = useState(0);
-    const [discountPercent, setDiscountPercent] = useState(0);
+    const [discountPercent, setDiscountPercent] = useState(localStorage.getItem('discountPercetage') ? JSON.parse(localStorage.getItem('discountPercetage')) : 0);
     const [couponError, setCouponError] = useState("");
     const [couponCodeLoader, setCouponCodeLoader] = useState(false);
     const [tempSubTotal, setSubTotal] = useState(0);
@@ -24,6 +26,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
     const [tempTax, setTempTax] = useState(0);
     const [tempDiscountPercent, setTempDiscountPercent] = useState(10);
     const [tempTotalAmount, setTempTotalAmount] = useState(0);
+    const [totalAmount, setTotalAmount] = useState(0);
     useEffect(() => {
         handlerCartSummary();
     }, [cartSummaryFlag])
@@ -53,6 +56,8 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
             setDiscountPercent(0);
             setCouponCodeLoader(false);
             setCouponCodeValue("");
+            localStorage.removeItem('couponCodeValue');
+            localStorage.removeItem('discountPercetage');
         }
         else {
             try {
@@ -61,6 +66,8 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                     "total_order_price": totalOrderPrice
                 });
                 setDiscountPercent(response.data.discount_amount);
+                localStorage.setItem('discountPercetage', JSON.stringify(response.data.discount_amount));
+                localStorage.setItem('couponCodeValue', JSON.stringify(couponCodeValue));
                 notify("Coupon Code Added.", "")
 
             }
@@ -82,7 +89,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
 
         return () => clearInterval(interval);
     }, []);
-    
+
     useEffect(() => {
         if (Object.keys(summary).length === 0) {
             let tempSubtotal = 0;
@@ -99,12 +106,21 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
             setTempTax(tempTax);
             setTempTotalAmount(tempSubTotal + tempTax + tempShippingRate);
 
+        }else{
+            if(discountPercent){
+                setTotalAmount(((summary.total_with_shipping) * ((100 - discountPercent) / 100)));
+            }else{
+                setTotalAmount((summary.total_with_shipping));
+            }
+            
         }
     }, [summary, tempCartItems]);
 
     const navigation = (data) => {
         navigate('/review-checkout', data);
     }
+
+ 
 
     return (
         <React.Fragment>
@@ -181,9 +197,14 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                                         <span className="">{summary.currency_title} {(summary.total_with_shipping).toFixed(2)} </span>
                                     </div>}
 
-                                    <button onClick={() => navigate("/review-checkout")} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                    {confirmAndPayFn && confirmAndPayFn ? <button onClick={confirmAndPayFn} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                            <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
+                                        </button> : 
+                                    <button onClick={() => navigation({ state: { totalAmount,currencyTitle:summary.currency_title } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                         <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
-                                    </button>
+                                    </button>}
+
+
 
                                     <div className="text-[#64748B] text-xs flex items-center justify-center text-center flex-col mt-4">
                                         <p>By placing your order, you agree to Horeca store</p>
@@ -245,10 +266,13 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                                             <span className="">Total Amount</span>
                                             <span className="">{tempCurrencyTitle} {(tempTotalAmount).toFixed(2)} </span>
                                         </div>
-
-                                        <button onClick={() => navigation({ state: { totalAmount: tempTotalAmount, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle,tempCartItems,listOfStore } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                        {confirmAndPayFn && confirmAndPayFn ? <button onClick={confirmAndPayFn} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                             <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
-                                        </button>
+                                        </button> : <button onClick={() => navigation({ state: { totalAmount: tempTotalAmount, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle, tempCartItems, listOfStore } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                            <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
+                                        </button>}
+
+
 
                                         <div className="text-[#64748B] text-xs flex items-center justify-center text-center flex-col mt-4">
                                             <p>By placing your order, you agree to Horeca store</p>

@@ -14,6 +14,7 @@ export const FeatureProduct = ({
   setFeaturedProducts,
 }) => {
   const [products, setProducts] = useState([]);
+ 
   const [count, setCount] = useState(1);
 
   useEffect(() => {

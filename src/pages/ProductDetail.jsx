@@ -1162,80 +1162,80 @@ export const ProductDetail = () => {
                   )}
                   {/* Price Section  */}
 
-                  {/* Sub Price Section  */}
-                  {!productLoader && product ? (
-                    <React.Fragment>
-                      <div className="flex items-center mt-3">
-                        <span className="text-black-100 font-semibold text-xl">
-                          {product.currency_title}{" "}
-                          <span className="text-3xl font-bold">
-                            {product.sale_price
-                              ? String(product.sale_price).split(".")[0]
-                              : ""}
-                            .
-                          </span>
-                          <span className="text-black-100 font-semibold text-xl">
-                            {String(product.sale_price).split(".")[1]
-                              ? String(product.sale_price).split(".")[1]
-                              : "00"}
-                          </span>
-                        </span>
-                        <div className="flex items-center ml-3 mt-2 ">
-                          <img
-                            src={process.env.PUBLIC_URL + "/icons/delivery.png"}
-                            alt=""
-                          />
-                          <span className="ml-2 uppercase text-xs text-[#BF2536] font-semibold">
-                            Free Delivery
-                          </span>
-                        </div>
-                      </div>
-                      <div className="text-base text-gray-700 mt-2">
-                        <span className="">{product.currency_title}</span>
-                        <span className="line-through ml-2">
-                          {product.original_price
-                            ? String(product.original_price).split(".")[0]
+                {/* Sub Price Section  */}
+                {!productLoader && product ? (
+                  <React.Fragment>
+                    <div className="flex items-center mt-3">
+                      <span className="text-black-100 font-semibold text-xl">
+                        {product.currency_title}{" "}
+                        <span className="text-3xl font-bold">
+                          {product.sale_price
+                            ? String(product.sale_price).split(".")[0]
                             : ""}
                           .
-                          {String(product.original_price).split(".")[1]
-                            ? String(product.original_price).split(".")[1]
+                        </span>
+                        <span className="text-black-100 font-semibold text-xl">
+                          {String(product.sale_price).split(".")[1]
+                            ? String(product.sale_price).split(".")[1]
                             : "00"}
                         </span>
-                        <span className="ml-2 text-[#FF311C]">
-                          Save {product.currency_title}{" "}
-                          {product.original_price && product.sale_price
-                            ? (
-                                product.original_price - product.sale_price
-                              ).toFixed(2)
-                            : ""}
-                        </span>
-                      </div>
-                      <div className="text-base text-gray-700 mt-2 flex items-center">
-                        <span className="text-sm">As low as </span>
-                        <span className="text-black-100 text-xs font-semibold ml-1">
-                          SAR
-                        </span>
-                        <span className="text-black-100 text-base font-bold ml-1">
-                          {" "}
-                          3125/
-                        </span>
-                        <span className="text-[#64748B] text-xs ml-1">
-                          Monthly with
-                        </span>
+                      </span>
+                      <div className="flex items-center ml-3 mt-2 ">
                         <img
-                          src={process.env.PUBLIC_URL + "/icons/tamara.png"}
-                          className="ml-2"
+                          src={process.env.PUBLIC_URL + "/icons/delivery.png"}
                           alt=""
                         />
+                        <span className="ml-2 uppercase text-xs text-[#BF2536] font-semibold">
+                          Free Delivery
+                        </span>
                       </div>
-                    </React.Fragment>
-                  ) : (
-                    <div>
-                      <Skeleton className="mt-4" count={1} height={"50px"} />
-                      <Skeleton className="my-1" count={1} width={"50%"} />
-                      <Skeleton count={1} />
                     </div>
-                  )}
+                    <div className="text-base text-gray-700 mt-2">
+                      <span className="">{product.currency_title}</span>
+                      <span className="line-through ml-2">
+                        {product.original_price
+                          ? String(product.original_price).split(".")[0]
+                          : ""}
+                        .
+                        {String(product.original_price).split(".")[1]
+                          ? String(product.original_price).split(".")[1]
+                          : "00"}
+                      </span>
+                      <span className="ml-2 text-[#FF311C]">
+                        Save {product.currency_title}{" "}
+                        {product.original_price && product.sale_price
+                          ? (
+                              product.original_price - product.sale_price
+                            ).toFixed(2)
+                          : ""}
+                      </span>
+                    </div>
+                    <div className="text-base text-gray-700 mt-2 flex items-center">
+                      <span className="text-sm">As low as </span>
+                      <span className="text-black-100 text-xs font-semibold ml-1">
+                        USD
+                      </span>
+                      <span className="text-black-100 text-base font-bold ml-1">
+                        {" "}
+                        3125/
+                      </span>
+                      <span className="text-[#64748B] text-xs ml-1">
+                        Monthly with
+                      </span>
+                      <img
+                        src={process.env.PUBLIC_URL + "/icons/tamara.png"}
+                        className="ml-2"
+                        alt=""
+                      />
+                    </div>
+                  </React.Fragment>
+                ) : (
+                  <div>
+                    <Skeleton className="mt-4" count={1} height={"50px"} />
+                    <Skeleton className="my-1" count={1} width={"50%"} />
+                    <Skeleton count={1} />
+                  </div>
+                )}
 
                   <div className="w-full h-[1px] border border-[#E2E8F0] my-5"></div>
                   {/* Buy more save more  */}
@@ -1560,7 +1560,7 @@ export const BuyMoreSaveMore = ({
           images={product.images}
           video_path={product.video_path}
           currency_title={
-            product.currency_title ? product.currency_title : "SAR"
+            product.currency_title ? product.currency_title : "USD"
           }
         >
           <MdOutlineAddShoppingCart className="text-white group-hover:text-white transition-all duration-500" />

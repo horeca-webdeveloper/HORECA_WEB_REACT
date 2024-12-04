@@ -1,6 +1,66 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { apiClient } from "../../../../utils/apiWrapper";
+import { InfinitySpin } from 'react-loader-spinner';
+const Popup = ({ setShowPopup, popupHeading, guestUser, amount, currency }) => {
+  const [loader, setLoader] = useState(false);
+  const [getData,setData]=useState([]);
+  const handlePayments = async (data) => {
 
-const Popup = ({ setShowPopup, popupHeading }) => {
+
+    const datas = {
+      "amount": data.amount,
+      // "currency": data.currency.toUpperCase(),
+         "currency": "AED",
+      "description": data.address,
+      "customer_name": data.name,
+      "customer_email": data.email
+    };
+    localStorage.setItem('guestUser',JSON.stringify(datas));
+    try {
+      setLoader(true);
+      const response = await apiClient.post(`/create-payment`, datas);
+      setData(response.data);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoader(false);
+    }
+  }
+
+  const schema = yup
+    .object({
+      name: yup.string().required(),
+      phone: yup.number().positive().integer().required(),
+      email: yup.string().required(),
+      country: yup.string().required(),
+      state: yup.string().required(),
+      city: yup.string().required(),
+      address: yup.string().required(),
+    })
+    .required();
+
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+    Object.assign(data, {amount: amount,currency:currency});
+    handlePayments(data);
+  }
+
+  useEffect(()=>{
+      if(getData.status=="success" && getData.redirect_url){
+        window.location.href = getData.redirect_url;
+      }
+  },[getData]);
   return (
     <div>
       <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm">
@@ -8,60 +68,86 @@ const Popup = ({ setShowPopup, popupHeading }) => {
         <div className="modal relative bg-white w-[650px] flex flex-col rounded-lg shadow-lg">
           <div className="flex items-center justify-between bg-[#DEF9EC] rounded-t-lg p-2">
             <p className="font-sans p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-              {popupHeading} a Shipping Address
+              {popupHeading}
             </p>
             <button onClick={() => setShowPopup(false)}>X</button>
           </div>
-          <div className="p-[5px]">
-            <div className="mt-[10px]">
-              <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                Name :
-              </p>
-              <input
-                className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
-                placeholder="Name"
-              />
-            </div>
-            <div className="mt-[10px]">
-              <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                Phone :
-              </p>
-              <input
-                className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
-                placeholder="Phone No."
-              />
-            </div>
-            <div className="mt-[10px]">
-              <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                Address :
-              </p>
-              <input
-                type="text"
-                className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
-                placeholder="Address"
-              />
-            </div>
-            <div className="mt-[10px]">
-              <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                City :
-              </p>
-              <input
-                type="text"
-                className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
-                placeholder="Address"
-              />
-            </div>
-            <div className="mt-[10px]">
-              <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                State :
-              </p>
-              <input
-                type="text"
-                className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
-                placeholder="Address"
-              />
-            </div>
-            <div className="mt-[10px]">
+        
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="p-[5px]">
+              <div className="mt-[10px]">
+                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                  Full Name :
+                </p>
+                <input
+                  className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
+                  placeholder="Enter your full name"
+                  {...register("name")}
+                />
+                <span>{errors.name?.message}</span>
+              </div>
+              <div className="mt-[10px]">
+                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                  Email :
+                </p>
+                <input
+                  className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
+                  placeholder="Enter your email id"
+                  {...register("email")}
+                />
+                <span>{errors.email?.message}</span>
+              </div>
+              <div className="mt-[10px]">
+                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                  Phone :
+                </p>
+                <input
+                  className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
+                  placeholder="Enter your phone."
+                  {...register("phone", {
+                    minLength: 1,
+                    maxLength: 12
+                  })}
+                />
+                <span>{errors.phone?.message}</span>
+              </div>
+              <div className="mt-[10px]">
+                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                  Country :
+                </p>
+                <input
+                  className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
+                  placeholder="Enter your country."
+                  {...register("country")}
+                />
+                <span>{errors.country?.message}</span>
+              </div>
+
+              <div className="mt-[10px]">
+                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                  City :
+                </p>
+                <input
+                  type="text"
+                  className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
+                  placeholder="Enter your city"
+                  {...register("city")}
+                />
+                <span>{errors.city?.message}</span>
+              </div>
+              <div className="mt-[10px]">
+                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                  State :
+                </p>
+                <input
+                  type="text"
+                  className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
+                  placeholder="Enter your state"
+                  {...register("state")}
+                />
+                <span>{errors.state?.message}</span>
+              </div>
+              {/* <div className="mt-[10px]">
               <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
                 ZIP Code :
               </p>
@@ -70,19 +156,40 @@ const Popup = ({ setShowPopup, popupHeading }) => {
                 className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
                 placeholder="Address"
               />
+            </div> */}
+
+              <div className="mt-[10px]">
+                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                  Address :
+                </p>
+                <input
+                  type="text"
+                  className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
+                  placeholder="Enter your address"
+                  {...register("address")}
+                />
+                <span>{errors.address?.message}</span>
+              </div>
+              <div className="flex items-center justify-end p-[15px]">
+                <button
+                  onClick={() => setShowPopup(false)}
+                  className="flex m-[10px] items-center justify-center rounded-md font-sans w-[180px] h-[40px] border border-[#666666] text-[16px] text-[#666666] font-medium leading-[16px] text-left underline-offset-auto decoration-slice"
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="flex mb-[5px] bg-[#DEF9EC] items-center justify-center rounded-md font-sans w-[180px] h-[40px] text-[#186737] text-[16px] font-medium leading-[16px] text-left underline-offset-auto decoration-slice">
+                  Submit
+                </button>
+               {loader?<InfinitySpin
+                                            visible={true}
+                                            height="120"
+                                            width="120"
+                                            color="#186737"
+                                            ariaLabel="infinity-spin-loading"
+                                        />:''} 
+              </div>
             </div>
-            <div className="flex items-center justify-end p-[15px]">
-              <button
-                onClick={() => setShowPopup(false)}
-                className="flex m-[10px] items-center justify-center rounded-md font-sans w-[180px] h-[40px] border border-[#666666] text-[16px] text-[#666666] font-medium leading-[16px] text-left underline-offset-auto decoration-slice"
-              >
-                Cancel
-              </button>
-              <button className="flex mb-[5px] bg-[#DEF9EC] items-center justify-center rounded-md font-sans w-[180px] h-[40px] text-[#186737] text-[16px] font-medium leading-[16px] text-left underline-offset-auto decoration-slice">
-                {popupHeading}
-              </button>
-            </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

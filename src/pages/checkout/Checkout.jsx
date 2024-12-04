@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import { Breadcrumb } from "../../shared/Breadcrumb";
 import { Link } from "react-router-dom";
 import { notify } from "../../utils/notify.js";
@@ -31,42 +31,28 @@ export const Checkout = () => {
     const [couponError, setCouponError] = useState("");
 
     const getDeliveryDate = (days) => {
-        // Ensure the input is a valid number. If invalid, default to 5.
         days = isNaN(Number(days)) ? 5 : Number(days);
-    
-        // Calculate the future date by adding the number of days to today
         const futureDate = new Date();
         futureDate.setDate(futureDate.getDate() + days);
-    
-        // Get the full day of the week (e.g., "Sunday")
-        const dayOfWeek = futureDate.toLocaleString('en-US', { weekday: 'long' });
-    
-        // Get the day of the month and the month name
-        const day = futureDate.getDate();
-        const month = futureDate.toLocaleString('en-US', { month: 'long' });
-    
-        // Return the formatted date as "DayOfWeek, Day Month"
-        return `${dayOfWeek}, ${day} ${month}`;
+        return futureDate.toLocaleString('en-US', { weekday: 'long' }) + `, ${futureDate.getDate()} ${futureDate.toLocaleString('en-US', { month: 'long' })}`;
     };
-    const fetchingCart = async () => {
-        setLoader(true)
-        try {
-            const response = await apiClient.get('/cart');
-            setCartItems(response.data.data);
-            let temp = [];
-            response.data.data.forEach((prod) => {
-                if (!temp.includes(prod.product.store_id)) {
-                    temp.push(prod.product.store_id)
-                }
-            })
-            setListOfStore(temp)
-        } catch (error) {
-            console.error('Error:', error);
-        }
-        finally {
-            setLoader(false)
-        }
+
+  // Fetch cart data and process stores
+  const fetchingCart = useCallback(async () => {
+    setLoader(true);
+    try {
+        const response = await apiClient.get('/cart');
+        setCartItems(response.data.data);
+        const storeIds = [...new Set(response.data.data.map((prod) => prod.product.store_id))];
+        setListOfStore(storeIds);
+        setCartSummaryFlag((prev) => !prev);  // Toggling the flag to trigger UI updates
+    } catch (error) {
+        console.error('Error fetching cart:', error);
+    } finally {
+        setLoader(false);
     }
+}, [fetchCall]);
+
 
 
 
@@ -83,7 +69,6 @@ export const Checkout = () => {
                     maxDeliveryDates = maxDeliveryDate > Number(item.delivery_days) ? maxDeliveryDate : Number(item.delivery_days)
                 })
             }
-
 
         }
         else {
@@ -123,19 +108,12 @@ export const Checkout = () => {
         setRemoveItemsLoader(false)
 
     }
-    // const buyItAgain=async()=>{
-    //     let savedItems= JSON.parse(localStorage.getItem('SaveForLater'))|| [];
-    //     let cartItems= JSON.parse(localStorage.getItem('CartItems')) || [];
-    //     cartItems = cartItems.concat(savedItems);
-    //     localStorage.setItem('CartItems', JSON.stringify(cartItems));
-    //     localStorage.removeItem('SaveForLater');
-    //     incrementCartItems(savedItems.length);
-    //     triggerUpdateCart();
-    // }
+    
 
     useEffect(() => {
         fetchingCart();
-    }, [fetchCall]);
+
+    }, [fetchCall,saveForLaterTemp]);
 
     useEffect(() => {
         if (cartItems.length == 0) {
@@ -166,7 +144,6 @@ export const Checkout = () => {
         setTempCartItems(JSON.parse(localStorage.getItem('CartItems')));
         setTempSaveForLater(JSON.parse(localStorage.getItem('SaveForLater')));
     }, [triggerUpdateCart])
-
 
  
     return (
@@ -335,11 +312,12 @@ export const Checkout = () => {
                        
                         {
                             saveForLaterTemp && saveForLaterTemp.map((items, index) => {
+                               
                                 return (
                                     <ProductCard
                                         key={index}
                                         classes="col-span-1 mt-1 "
-                                        product={items}
+                                        product={items?.product?items.product:items}
                                         removeItem={true}
                                         setTempSaveForLater={setTempSaveForLater}
                                     />

@@ -1,5 +1,4 @@
-const collectionBreadCrumb = [
-    {
+const collectionBreadCrumb = [{
         url: "/",
         title: "Home",
         active: false,
@@ -19,8 +18,7 @@ const collectionBreadCrumb = [
         active: true,
     }
 ]
-const megaDeals = [
-    {
+const megaDeals = [{
         img: "/images/collections/mega/mega-1.png",
         redirectLink: "#"
     },
@@ -46,8 +44,7 @@ const megaDeals = [
     }
 ]
 
-const ListofProducts = [
-    {
+const ListofProducts = [{
         url: "#",
         isOnSale: true,
         images: [
@@ -59,7 +56,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -77,7 +74,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -95,7 +92,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -113,7 +110,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -130,7 +127,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -148,7 +145,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -166,7 +163,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -184,7 +181,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -202,7 +199,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -219,7 +216,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -237,7 +234,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -255,7 +252,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -273,7 +270,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -291,7 +288,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -308,7 +305,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -326,7 +323,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -344,7 +341,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -362,7 +359,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -380,7 +377,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -397,7 +394,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -415,7 +412,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -433,7 +430,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -451,7 +448,7 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -469,15 +466,14 @@ const ListofProducts = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
         lowerOffer: "169.17"
     }
 ]
-const collectionCategories = [
-    {
+const collectionCategories = [{
         url: "#",
         title: "Pasta Cooker",
         imgSrc: "/images/collections/categories/cat-1.png"
@@ -540,13 +536,11 @@ const collectionCategories = [
 ]
 
 
-const categoryListing = [
-    {
+const categoryListing = [{
         imgSource: "/images/collections/cat-banner.png",
         title: "Cooking Equipment",
         length: "22",
-        items: [
-            {
+        items: [{
                 link: "#",
                 title: "Commercial Gas & Electric Cooker"
             },
@@ -664,8 +658,7 @@ const categoryListing = [
         imgSource: "/images/collections/cat-banner.png",
         title: "Commercial Ovens",
         length: "22",
-        items: [
-            {
+        items: [{
                 link: "#",
                 title: "Commercial Gas & Electric Cooker"
             },
@@ -783,8 +776,7 @@ const categoryListing = [
         imgSource: "/images/collections/cat-banner.png",
         title: "Food Equipment",
         length: "22",
-        items: [
-            {
+        items: [{
                 link: "#",
                 title: "Commercial Gas & Electric Cooker"
             },
@@ -902,8 +894,7 @@ const categoryListing = [
         imgSource: "/images/collections/cat-banner.png",
         title: "Preparation Tables",
         length: "22",
-        items: [
-            {
+        items: [{
                 link: "#",
                 title: "Commercial Gas & Electric Cooker"
             },
@@ -1021,8 +1012,7 @@ const categoryListing = [
         imgSource: "/images/collections/cat-banner.png",
         title: "Beverage Equipment",
         length: "22",
-        items: [
-            {
+        items: [{
                 link: "#",
                 title: "Commercial Gas & Electric Cooker"
             },
@@ -1140,8 +1130,7 @@ const categoryListing = [
         imgSource: "/images/collections/cat-banner.png",
         title: "Bakery Equipment",
         length: "22",
-        items: [
-            {
+        items: [{
                 link: "#",
                 title: "Commercial Gas & Electric Cooker"
             },
@@ -1257,8 +1246,7 @@ const categoryListing = [
     }
 ]
 
-const BrandPicks = [
-    {
+const BrandPicks = [{
         url: "#",
         isOnSale: true,
         images: [
@@ -1270,7 +1258,7 @@ const BrandPicks = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -1288,7 +1276,7 @@ const BrandPicks = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -1306,7 +1294,7 @@ const BrandPicks = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -1324,7 +1312,7 @@ const BrandPicks = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -1341,7 +1329,7 @@ const BrandPicks = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -1359,7 +1347,7 @@ const BrandPicks = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -1377,7 +1365,7 @@ const BrandPicks = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -1395,7 +1383,7 @@ const BrandPicks = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -1413,7 +1401,7 @@ const BrandPicks = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,
@@ -1431,7 +1419,7 @@ const BrandPicks = [
         productName: "Millac Gold Whipping Cream12 x 1 Liter",
         ratting: 5000,
         deliveryStatus: "Free DELIVERY Get it as soon as Sunday, 8 Sep",
-        currency: "SAR",
+        currency: "USD",
         currentPrice: "245.45",
         previousPrice: "300.58",
         leftStock: 4,

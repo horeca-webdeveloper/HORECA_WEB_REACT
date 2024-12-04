@@ -28,6 +28,9 @@ export const ProductCard = ({
   removeItem,
   setTempSaveForLater,
 }) => {
+  const [deleteCartLoader, setDeleteCartLoader] = useState(false);
+  const authToken = localStorage.getItem("authToken");
+
   const productId = product.id ? product.id : product.product_id;
   let wishListItems = localStorage.getItem("wishListItems");
   const [autoplay, setAutoplay] = useState(false);
@@ -72,7 +75,6 @@ export const ProductCard = ({
   };
 
   const handlerRemoveFavouriteItem = async (product) => {
-    const authToken = localStorage.getItem("authToken");
     if (authToken) {
       try {
         const response = await apiClient.delete(`/wishlist/remove`, {
@@ -110,7 +112,6 @@ export const ProductCard = ({
   //add wishlist
 
   const handlerAddFavouriteItem = async (product) => {
-    const authToken = localStorage.getItem("authToken");
     if (authToken) {
       try {
         const response = await apiClient.post(`/wishlist/add`, {
@@ -180,11 +181,26 @@ export const ProductCard = ({
     }
   };
 
-  const removeFromSaved = async (id) => {
+  const handleRemoveFromSaveForlater = async (id, name) => {
+    try {
+      const response = apiClient.post("remove-from-save-for-later", {
+        product_id: id,
+      });
+      notify(name, " has been removed from cart.");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  const removeFromSaved = async (id, name) => {
+    if (authToken) {
+      handleRemoveFromSaveForlater(id, name);
+    }
+
     const products = await JSON.parse(localStorage.getItem("SaveForLater"));
     const updateProduct = products.filter((item) => item.product_id != id);
     setTempSaveForLater(updateProduct);
     localStorage.setItem("SaveForLater", JSON.stringify(updateProduct));
+    notify(name, " has been removed from cart.");
   };
   return (
     <React.Fragment>
@@ -333,7 +349,7 @@ export const ProductCard = ({
             <div className="flex sm:flex-row items-center">
               <span className="flex items-center sm:flex-none text-primary font-semibold ">
                 <span className="ml-0 sm:ml-1 text-[10px] sm:text-xl font-normal sm:font-bold">
-                  {product.currency_title ? product.currency_title : "SAR "}
+                  {product.currency_title ? product.currency_title : "USD "}
                 </span>
                 {product.sale_price ? (
                   <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">
@@ -356,7 +372,7 @@ export const ProductCard = ({
               product.sale_price === product.original_price ? null : (
                 <span className="text-gray-700 text-sm line-through ml-2 mt-2">
                   <span>
-                    {product.currency_title ? product.currency_title : "SAR"}
+                    {product.currency_title ? product.currency_title : "USD"}
                     &nbsp;
                   </span>
                   <span>{product.original_price}.</span>
@@ -400,7 +416,11 @@ export const ProductCard = ({
                 onClick={(e) => handlerIncrement(e)}
               />
             </div>
-            <div onClick={removeItem && (() => removeFromSaved(productId))}>
+            <div
+              onClick={
+                removeItem && (() => removeFromSaved(productId, product.name))
+              }
+            >
               <CartButton
                 icon={true}
                 quantity={count}
@@ -419,7 +439,7 @@ export const ProductCard = ({
                 maximum_order_quantity={product.maximum_order_quantity}
                 minimum_order_quantity={product.minimum_order_quantity}
                 currency_title={
-                  product.currency_title ? product.currency_title : "SAR"
+                  product.currency_title ? product.currency_title : "USD"
                 }
                 images={product.images}
                 video_path={product.video_path}
@@ -440,7 +460,7 @@ export const ProductCard = ({
           {removeItem ? (
             <button
               className="text-primary text-xs cursor-pointer"
-              onClick={() => removeFromSaved(productId)}
+              onClick={() => removeFromSaved(productId, product.name)}
             >
               Remove From Saved
             </button>

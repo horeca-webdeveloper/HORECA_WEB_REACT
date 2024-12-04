@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Link,useLocation } from "react-router-dom";
+import { Link, useLocation,useNavigate } from "react-router-dom";
 import { notify } from "../../utils/notify.js";
 import { useLocalCartCount } from "../../context/LocalCartCount";
 import { DeleteCartButton } from "../../shared/CheckoutPage/DeleteCartButton";
@@ -9,13 +9,17 @@ import { useCart } from "../../context/CartContext";
 import { apiClient } from "../../utils/apiWrapper.js";
 import { Layout } from "./Layout.jsx";
 import { FaArrowRightLong } from "react-icons/fa6";
-
+import Popup from "../ProfileRegistration/Addresses/Components/Popup.jsx";
 
 export const ReviewCheckout = () => {
+    const authToken = localStorage.getItem("authToken");
     const { triggerUpdateCart, updateTempCart } = useCart();
     const location = useLocation();
-    const { currencyTitle, savings, shippingRate,tax,totalAmount} = location.state || {};
+    const navigate=useNavigate();
+    const { currencyTitle, savings, shippingRate, tax, totalAmount } = location.state || {};
  
+    const [popupHeading, setPopupHeading] = useState("Shipping Information");
+    const [showPopup, setShowPopup] = useState(false);
     const { incrementCartItems } = useLocalCartCount();
     const [loader, setLoader] = useState(false)
     const [activeTab, setActiveTab] = useState('saved');
@@ -31,7 +35,7 @@ export const ReviewCheckout = () => {
     const [discountPercent, setDiscountPercent] = useState(0)
     const [couponCodeValue, setCouponCodeValue] = useState("");
     const [couponError, setCouponError] = useState("");
-
+    const [getData, setData] = useState('');
     const getDeliveryDate = (days) => {
         // Ensure the input is a valid number. If invalid, default to 5.
         days = isNaN(Number(days)) ? 5 : Number(days);
@@ -49,6 +53,8 @@ export const ReviewCheckout = () => {
         // Return the formatted date as "DayOfWeek, Day Month"
         return `${dayOfWeek}, ${day} ${month}`;
     };
+
+
     const fetchingCart = async () => {
         setLoader(true)
         try {
@@ -157,10 +163,55 @@ export const ReviewCheckout = () => {
         setTempSaveForLater(JSON.parse(localStorage.getItem('SaveForLater')));
     }, [triggerUpdateCart])
 
+    const handlePayments = async (data) => {
+     const userInfo=   JSON.parse(localStorage.getItem('userProfile'));
 
+        const datas = {
+          "amount": data.amount,
+          // "currency": data.currency.toUpperCase(),
+             "currency": "AED",
+          "description": userInfo.name,
+          "customer_name": userInfo.name,
+          "customer_email": userInfo.email
+        };
+
+        try {
+          setLoader(true);
+          const response = await apiClient.post(`/create-payment`, datas);
+          setData(response.data);
+        } catch (error) {
+          console.error('Error:', error);
+        } finally {
+          setLoader(false);
+        }
+      }
+
+    const confirmAndPay=()=>{
+        const data={
+            "amount":totalAmount,
+            "currency":currencyTitle,
+        }
+        if(authToken){
+             handlePayments(data);
+        }else{
+            navigate('/login',{ state: { totalAmount,currencyTitle}});
+        }
+            
+    }
+
+    const handleClick = () => {
+        // Navigate to another route
+        navigate('/checkout');
+      };
+      
+      useEffect(()=>{
+        if(getData.status=="success" && getData.redirect_url){
+          window.location.href = getData.redirect_url;
+        }
+    },[getData]);
     return (
         <React.Fragment>
-            <Layout cartItems={cartItems} tempCartItems={tempCartItems} cartSummaryFlag={cartSummaryFlag} removeItemsLoader={removeItemsLoader} listOfStore={listOfStore}  >
+            <Layout cartItems={cartItems} tempCartItems={tempCartItems} cartSummaryFlag={cartSummaryFlag} removeItemsLoader={removeItemsLoader} listOfStore={listOfStore} confirmAndPayFn={confirmAndPay} >
                 <div className="border-2 rounded-[10px] border-[#E2E8F0] mt-[80px]">
                     <div className="flex items-center justify-between bg-[#E2E8F0] px-8 py-3">
                         <h2 className="text-[#424242] text-[28px] font-semibold">Your Address</h2>
@@ -175,7 +226,7 @@ export const ReviewCheckout = () => {
 
                         <div className="flex items-center justify-start py-4 border border-primary rounded-[4px] bg-[#DEF9EC] px-4">
                             <input id="default-radio-1" type="radio" value="" name="default-radio" className="w-4 h-4" />
-                            <span className="ml-3 text-[#212121] text-sm"><span className="font-semibold">Mr. Noman Peer</span> Showroom 01 - Building No 9-1 19 Street - Al Quoz - Al Quoz Industrial Area 3 - Dubai - United Arab Emirates <span className="underline text-primary text-base">Edit</span></span>
+                            <span className="ml-3 text-[#212121] text-sm"><span className="font-semibold">Mr. Noman Peer</span> Showroom 01 - Building No 9-1 19 Street - Al Quoz - Al Quoz Industrial Area 3 - Dubai - United Arab Emirates <span className="underline text-primary text-base" >Edit</span></span>
                         </div>
                         <span className="mt-3 block text-[#64748B] text-base">+ Add a new Address</span>
 
@@ -252,13 +303,8 @@ export const ReviewCheckout = () => {
                             <span className="text-primary text-lg font-semibold">{!!tempCartItems && tempCartItems.length} items</span>
                         </div>
 
-
-
-
-
                         {listOfStore && listOfStore.length && tempCartItems.length > 0 ? listOfStore.map((store, index) => {
                             const filteredItems = tempCartItems && tempCartItems.filter(item => item.store_id === listOfStore[index]);
-
                             return (
                                 <>
                                     {filteredItems.length > 0 ?
@@ -266,7 +312,7 @@ export const ReviewCheckout = () => {
                                             <div className="bg-[#E2E8F04D] rounded-[10px] px-4 pt-2 pb-4 mt-5">
                                                 <div className="flex items-center justify-between  my-2">
                                                     <span className="text-[#424242] text-lg font-semibold">Shipment {index + 1}</span>
-                                                    <span className="text-primary text-lg font-semibold">Edit</span>
+                                                    <span className="text-primary text-lg font-semibold cursor-pointer" onClick={handleClick}>Edit</span>
                                                 </div>
 
 
@@ -290,41 +336,31 @@ export const ReviewCheckout = () => {
                                                                 </div>
                                                             </div>
 
-
-
-
-
-
-
                                                         </React.Fragment>
                                                     )
                                                 })}
-                                            </div> 
-                                            </div> 
-                                            
-                                            
-                                            : null}
-
+                                            </div>
+                                        </div>
+                                        : null}
                                 </>
                             )
                         }) : <div className="w-full  h-[300px] text-gray-400 flex items-center justify-center font-semibold mb-10">No Product Items Available</div>}
-                   
-                   <div className="mx-8 my-5 px-8 border-2 border-[#E2E8F0] rounded-[10px] flex items-center justify-between py-5">
-                        <div className="flex justify-between flex-col">
-                            <h4 className="text-[#B12704] text-xl font-bold">Order Total : {currencyTitle} {totalAmount.toFixed(2)}</h4>
-                            <p className="text-[#64748B] text-xs">By placing your order, you agree to Horeca store <span className="font-semibold">Privacy Notice</span>  and <span className="font-semibold">Conditions Of Use.</span></p>
-                        </div>
-                        <button className="bg-primary text-white flex items-center justify-center py-2 px-3 font-semibold text-base min-w-[300px] rounded-[4px] "><span className="mr-2">Confirm & Pay</span> <FaArrowRightLong /></button>
+                        
+                        
+                       
                     </div>
-                    </div>
-
-
                 }
-
-
+                 <div className="mx-8 my-5 px-8 border-2 border-[#E2E8F0] rounded-[10px] flex items-center justify-between py-5">
+                            <div className="flex justify-between flex-col">
+                                <h4 className="text-[#B12704] text-xl font-bold">Order Total : {currencyTitle && currencyTitle} {totalAmount && totalAmount.toFixed(2)}</h4>
+                                <p className="text-[#64748B] text-xs">By placing your order, you agree to Horeca store <span className="font-semibold">Privacy Notice</span>  and <span className="font-semibold">Conditions Of Use.</span></p>
+                            </div>
+                            <button className="bg-primary text-white flex items-center justify-center py-2 px-3 font-semibold text-base min-w-[300px] rounded-[4px] " onClick={confirmAndPay}><span className="mr-2">Confirm & Pay</span> <FaArrowRightLong /></button>
+                        </div>
                 <div>
+                {showPopup?<Popup setShowPopup={setShowPopup} popupHeading={popupHeading} guestUser={true} amount={totalAmount} currency={currencyTitle}/>:''}
                 </div>
-                
+
 
             </Layout>
         </React.Fragment>
