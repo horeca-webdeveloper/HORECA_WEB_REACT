@@ -21,8 +21,13 @@ import { FaPlay } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import { useWishlist } from "../context/WishListContext";
 
-
-export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSaveForLater }) => {
+export const ProductCard = ({
+  classes,
+  product,
+  flashSale,
+  removeItem,
+  setTempSaveForLater,
+}) => {
   const [deleteCartLoader, setDeleteCartLoader] = useState(false);
   const authToken = localStorage.getItem("authToken");
 
@@ -85,19 +90,17 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
     } else {
       if (wishListItems) {
         let itemsArray = JSON.parse(wishListItems);
-        let itemExists = itemsArray.findIndex(item => item.id === product.id);
+        let itemExists = itemsArray.findIndex((item) => item.id === product.id);
         if (itemExists != -1) {
           // If the item exists, delete from  wishlist
           itemsArray.splice(itemExists, 1);
           localStorage.setItem("wishListItems", JSON.stringify(itemsArray));
         }
-
       }
       product.in_wishlist = false;
-      incrementWishListItems(-1)
+      incrementWishListItems(-1);
       triggerUpdateWishList();
       notify(product.name, "Product removed from wishlist");
-
     }
   };
 
@@ -109,7 +112,6 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
   //add wishlist
 
   const handlerAddFavouriteItem = async (product) => {
-
     if (authToken) {
       try {
         const response = await apiClient.post(`/wishlist/add`, {
@@ -127,25 +129,22 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
     } else {
       if (wishListItems) {
         let itemsArray = JSON.parse(wishListItems);
-        let itemExists = itemsArray.findIndex(item => item.id === product.id);
+        let itemExists = itemsArray.findIndex((item) => item.id === product.id);
 
         if (itemExists == -1) {
           itemsArray.push(product);
           localStorage.setItem("wishListItems", JSON.stringify(itemsArray));
-          incrementWishListItems(1)
+          incrementWishListItems(1);
         }
-
       } else {
         localStorage.setItem("wishListItems", JSON.stringify([product]));
-        incrementWishListItems(1)
-
+        incrementWishListItems(1);
       }
 
       product.in_wishlist = true;
 
       triggerUpdateWishList();
       notify(product.name, "Product added to wishlist");
-
     }
   };
 
@@ -158,7 +157,7 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
           .then((_) => {
             videoRef.current.pause();
           })
-          .catch((error) => { });
+          .catch((error) => {});
       }
     } else {
       sliderRef.current.slickPause();
@@ -174,7 +173,7 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
             .then((_) => {
               videoRef.current.play();
             })
-            .catch((error) => { });
+            .catch((error) => {});
         }
       }, 300);
     } else {
@@ -184,26 +183,25 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
 
   const handleRemoveFromSaveForlater = async (id, name) => {
     try {
-      const response = apiClient.post('remove-from-save-for-later', {
-        "product_id": id
+      const response = apiClient.post("remove-from-save-for-later", {
+        product_id: id,
       });
-      notify(name, " has been removed from cart.")
+      notify(name, " has been removed from cart.");
     } catch (error) {
       console.log("error", error);
     }
-
-  }
+  };
   const removeFromSaved = async (id, name) => {
     if (authToken) {
-      handleRemoveFromSaveForlater(id, name)
+      handleRemoveFromSaveForlater(id, name);
     }
 
-    const products = await JSON.parse(localStorage.getItem('SaveForLater'));
+    const products = await JSON.parse(localStorage.getItem("SaveForLater"));
     const updateProduct = products.filter((item) => item.product_id != id);
-    setTempSaveForLater(updateProduct)
-    localStorage.setItem('SaveForLater', JSON.stringify(updateProduct));
-    notify(name, " has been removed from cart.")
-  }
+    setTempSaveForLater(updateProduct);
+    localStorage.setItem("SaveForLater", JSON.stringify(updateProduct));
+    notify(name, " has been removed from cart.");
+  };
   return (
     <React.Fragment>
       <div
@@ -240,8 +238,9 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
                       className="w-full h-[110px] sm:h-[250px] sm:w-[100] object-cover"
                     >
                       <source
-                        src={`https://testhssite.com/storage/${JSON.parse(product.video_path)[0]
-                          }`}
+                        src={`https://testhssite.com/storage/${
+                          JSON.parse(product.video_path)[0]
+                        }`}
                         type="video/mp4"
                       />
                       Your browser does not support the video tag.
@@ -318,7 +317,6 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
               <span className="text-gray-700 text-[8px] sm:text-sm ml-2">
                 {product.total_reviews ? product.total_reviews : "1000"}+ Sold
               </span>
-
             </div>
             {!flashSale ? (
               <p className="text-gray-700 text-xs mt-1">
@@ -339,7 +337,6 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
                     <FiShoppingCart />{" "}
                     <span className="ml-2">5300+ SALE RECENTLY</span>
                   </li>
-
                 </ul>
               </div>
             ) : null}
@@ -366,13 +363,13 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
 
                 <span className="ml-1 text-[10px] sm:text-3xl font-bold sm:font-extrabold">
                   {product.sale_price &&
-                    String(product.sale_price).split(".")[1]
+                  String(product.sale_price).split(".")[1]
                     ? String(product.sale_price).split(".")[1]
                     : "00"}
                 </span>
               </span>
               {!product.sale_price ||
-                product.sale_price === product.original_price ? null : (
+              product.sale_price === product.original_price ? null : (
                 <span className="text-gray-700 text-sm line-through ml-2 mt-2">
                   <span>
                     {product.currency_title ? product.currency_title : "USD"}
@@ -384,7 +381,6 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
                       ? String(product.price).split(".")[1]
                       : "00"}
                   </span>
-
                 </span>
               )}
             </div>
@@ -420,9 +416,11 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
                 onClick={(e) => handlerIncrement(e)}
               />
             </div>
-            <div onClick={removeItem && (() => removeFromSaved(productId, product.name))}>
-
-
+            <div
+              onClick={
+                removeItem && (() => removeFromSaved(productId, product.name))
+              }
+            >
               <CartButton
                 icon={true}
                 quantity={count}
@@ -432,14 +430,19 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
                 image={product.image}
                 store_id={product.store_id}
                 delivery_days={product.delivery_days}
-                original_price={product.sale_price ? product.sale_price : product.original_price}
+                original_price={
+                  product.sale_price
+                    ? product.sale_price
+                    : product.original_price
+                }
                 front_sale_price={product.price}
                 maximum_order_quantity={product.maximum_order_quantity}
                 minimum_order_quantity={product.minimum_order_quantity}
-                currency_title={product.currency_title ? product.currency_title : "USD"}
+                currency_title={
+                  product.currency_title ? product.currency_title : "USD"
+                }
                 images={product.images}
                 video_path={product.video_path}
-
               >
                 <MdOutlineAddShoppingCart className="text-primary group-hover:text-white transition-all duration-500" />
                 {window.innerWidth < 640 ? (
@@ -454,7 +457,16 @@ export const ProductCard = ({ classes, product, flashSale, removeItem, setTempSa
               </CartButton>
             </div>
           </div>
-          {removeItem ? <button className="text-primary text-xs cursor-pointer" onClick={() => removeFromSaved(productId,product.name)}>Remove From Saved</button> : ''}
+          {removeItem ? (
+            <button
+              className="text-primary text-xs cursor-pointer"
+              onClick={() => removeFromSaved(productId, product.name)}
+            >
+              Remove From Saved
+            </button>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </React.Fragment>

@@ -11,6 +11,7 @@ export const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loader, setLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
   const navigate = useNavigate();
   // const history = useHistory();
 
@@ -42,8 +43,9 @@ export const ForgotPassword = () => {
         }
       );
       console.log(response);
-      const token = response?.data?.token;
-      navigate("/password-reset", { state: token });
+      setEmailSent(true);
+      // const token = response?.data?.token;
+      // navigate("/password-reset", { state: token });
       setLoading(false);
     } catch (error) {
       setError("Verification Failed. Please check your Email.");
@@ -63,7 +65,7 @@ export const ForgotPassword = () => {
               <h3 className="text-2xl text-[#030303] font-semibold">
                 Forgot Password
               </h3>
-              <p className="text-[#000000] text-sm">
+              <p className="text-[#000000] text-sm ">
                 Please type your email for password reset
               </p>
             </div>
@@ -78,6 +80,11 @@ export const ForgotPassword = () => {
                   : "border-[#66666666]"
               } rounded-[4px]`}
             />
+            {emailSent && (
+              <p className="text-red-500 text-sm mt-[10px]">
+                Successfully email sent please check your mailbox
+              </p>
+            )}
             {error.includes("Email") && (
               <p className="text-red-500 text-sm">{error}</p>
             )}

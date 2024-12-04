@@ -36,6 +36,7 @@ import { MdOutlineAddShoppingCart } from "react-icons/md";
 import { useLocalCartCount } from "../context/LocalCartCount";
 import { ToastContainer, toast } from "react-toastify";
 import Documents from "../components/Documents";
+import { usePDF } from "react-to-pdf";
 function Model({ url, onLoaded }) {
   const { scene, isLoading } = useGLTF(url);
   useEffect(() => {
@@ -65,7 +66,6 @@ export const ProductDetail = () => {
   const [selectedDesc, setSelectedDesc] = useState(1);
   const [threeDView, setThreeDView] = useState(false);
   const [autoRotate, setAutoRotate] = useState(false);
-
   const [loader, setLoader] = useState(true);
   const [cameraPosition, setCameraPosition] = useState([0, 0, 500]); // Set a better initial camera position
   const [apiLoader, setApiLoader] = useState(true);
@@ -126,7 +126,6 @@ export const ProductDetail = () => {
 
   const fetchProductDiscounts = async (r) => {
     setProductLoader(true);
-
     try {
       const response = await apiClient.get("/product-discounts", {
         params: { product_id: id },
@@ -329,7 +328,7 @@ export const ProductDetail = () => {
           ) : (
             <Skeleton className="mt-7" width="30%" height="30px" count={1} />
           )}
-          <div className="grid grid-cols-12 gap-x-8">
+          <div className="grid grid-cols-12 gap-x-8 ">
             <div className="col-span-12 md:col-span-9 lg:col-span-9">
               <div className="grid grid-cols-12 md:grid-cols-12 lg:grid-cols-12 gap-6">
                 {/* 
@@ -371,7 +370,7 @@ export const ProductDetail = () => {
                                   <Slider
                                     {...mainSliderSettings}
                                     ref={(slider1) => setNav1(slider1)}
-                                    className="product__slide"
+                                    className="product__slide h-[392px] sm:h-[100%]"
                                   >
                                     {mediaArray
                                       ? mediaArray.map((item, index) => (
@@ -390,7 +389,7 @@ export const ProductDetail = () => {
                                                   <img
                                                     src={`${`https://testhssite.com/storage/${item}`}`}
                                                     alt={`Slide ${index}`}
-                                                    className="w-full h-auto object-contain rounded-lg"
+                                                    className="w-full h-[392px] sm:h-[100%] h-auto object-contain rounded-lg"
                                                   />
                                                 </>
                                               ) : (
@@ -401,8 +400,12 @@ export const ProductDetail = () => {
                                                   autoPlay={false}
                                                   muted={true}
                                                   loop={true}
-                                                  className="w-full object-contain rounded-lg"
-                                                  style={{ height: "565px" }}
+                                                  className="w-full  object-contain rounded-lg"
+                                                  style={
+                                                    window.innerWidth < 630
+                                                      ? { height: "350px" }
+                                                      : { height: "565px" }
+                                                  }
                                                 >
                                                   <source
                                                     src={`https://testhssite.com/storage/${item}`}
@@ -412,7 +415,6 @@ export const ProductDetail = () => {
                                                   the video tag.
                                                 </video>
                                               )}
-                                              }
                                             </div>
                                           </React.Fragment>
                                         ))
@@ -497,7 +499,7 @@ export const ProductDetail = () => {
                             )}
                           </div>
 
-                          <div className="w-full mt-4">
+                          <div className="hidden sm:block w-full mt-4">
                             {!productLoader ? (
                               <Slider
                                 {...thumbnailSliderSettings}
@@ -550,9 +552,8 @@ export const ProductDetail = () => {
                       </div>
                     </div>
                   </div>
-
                   <div className="w-full h-[1px] border border-[#E2E8F0] my-3"></div>
-                  <div className="flex items-center justify-end mt-3">
+                  <div className="flex hidden sm:flex  items-center justify-end mt-3">
                     <h2 className="text-[#262626] font-semibold text-base">
                       Share this product
                     </h2>
@@ -570,12 +571,9 @@ export const ProductDetail = () => {
                     </div>
                   </div>
                 </div>
-
                 {/* product details content  */}
-
                 <div className="col-span-12 md:col-span-12 lg:col-span-6 mt-4">
                   {/* Tag Wrapper  */}
-
                   {!productLoader ? (
                     <div className="flex items-center text-xs text-gray-700">
                       <div className=" rounded-[4px] border border-[#E2E8F0] py-1 px-3 mr-3">
@@ -600,10 +598,10 @@ export const ProductDetail = () => {
                         }
                         alt=""
                       />
-                      <h4 className="uppercase text-lg font-semibold text-black ml-3">
+                      <h4 className="uppercase text-[16px] sm:text-[1.25rem] text-lg font-semibold text-black ml-3">
                         Menumaster
                       </h4>
-                      <div className="relative">
+                      <div className="relative text-[16px] sm:text-[1.25rem]">
                         <ul className="relative  h-3 overflow-hidden pt-[1px]">
                           <li className="animate-slide-sequence-store text-primary delay-2000  font-semibold text-base flex items-center">
                             <span className="ml-3">Visit The Store</span>
@@ -625,7 +623,7 @@ export const ProductDetail = () => {
 
                   {/* Product Title  */}
                   <div className="">
-                    <h2 className="mt-1 font-semibold text-black-100 text-xl">
+                    <h2 className="mt-1 text-[16px] sm:text-[1.25rem] font-semibold text-black-100 text-xl">
                       {!productLoader ? (
                         product.name
                       ) : (
@@ -633,7 +631,7 @@ export const ProductDetail = () => {
                       )}
                     </h2>
                     {!productLoader ? (
-                      <p className="mt-2 text-gray-700 text-sm flex items-center">
+                      <p className="mt-2 text-gray-700 text-[14px] sm:text-[0.875rem] text-sm flex items-center">
                         {product.sku}
                         <img
                           className="ml-2"
@@ -710,7 +708,7 @@ export const ProductDetail = () => {
                       <h4 className="text-base font-semibold text-black-100 mb-2">
                         At a Glance
                       </h4>
-                      <div className="flex items-center flex-wrap ">
+                      <div className="flex items-center justify-center flex-wrap ">
                         {product.specifications
                           ? product.specifications.map((spec, index) => {
                               return (
@@ -754,9 +752,226 @@ export const ProductDetail = () => {
                     </div>
                   )}
 
-                  {/* About Items  */}
+                  {window?.innerWidth < 640 && (
+                    <div className="col-span-12 md:col-span-3 lg:col-span-3 mt-4">
+                      <div className="bg-gray-100 rounded-md  p-5 border-2 border-[#E2E8F0]">
+                        {/* Badge Section  */}
+                        {!productLoader ? (
+                          <span className="text-primary bg-[#DEF9EC] px-4 py-2 rounded-[4px] text-xs font-semibold">
+                            15 days easy refund
+                          </span>
+                        ) : (
+                          <Skeleton count={1} width={"40%"} height={"25px"} />
+                        )}
+                        {/* Price Section  */}
 
-                  <div className="">
+                        {/* Sub Price Section  */}
+                        {!productLoader && product ? (
+                          <React.Fragment>
+                            <div className="flex items-center mt-3">
+                              <span className="text-black-100 font-semibold text-xl">
+                                {product.currency_title}{" "}
+                                <span className="text-3xl font-bold">
+                                  {product.sale_price
+                                    ? String(product.sale_price).split(".")[0]
+                                    : ""}
+                                  .
+                                </span>
+                                <span className="text-black-100 font-semibold text-xl">
+                                  {String(product.sale_price).split(".")[1]
+                                    ? String(product.sale_price).split(".")[1]
+                                    : "00"}
+                                </span>
+                              </span>
+                              <div className="flex items-center ml-3 mt-2 ">
+                                <img
+                                  src={
+                                    process.env.PUBLIC_URL +
+                                    "/icons/delivery.png"
+                                  }
+                                  alt=""
+                                />
+                                <span className="ml-2 uppercase text-xs text-[#BF2536] font-semibold">
+                                  Free Delivery
+                                </span>
+                              </div>
+                            </div>
+                            <div className="text-base text-gray-700 mt-2">
+                              <span className="">{product.currency_title}</span>
+                              <span className="line-through ml-2">
+                                {product.original_price
+                                  ? String(product.original_price).split(".")[0]
+                                  : ""}
+                                .
+                                {String(product.original_price).split(".")[1]
+                                  ? String(product.original_price).split(".")[1]
+                                  : "00"}
+                              </span>
+                              <span className="ml-2 text-[#FF311C]">
+                                Save {product.currency_title}{" "}
+                                {product.original_price && product.sale_price
+                                  ? (
+                                      product.original_price -
+                                      product.sale_price
+                                    ).toFixed(2)
+                                  : ""}
+                              </span>
+                            </div>
+                            <div className="text-base text-gray-700 mt-2 flex items-center">
+                              <span className="text-sm">As low as </span>
+                              <span className="text-black-100 text-xs font-semibold ml-1">
+                                SAR
+                              </span>
+                              <span className="text-black-100 text-base font-bold ml-1">
+                                {" "}
+                                3125/
+                              </span>
+                              <span className="text-[#64748B] text-xs ml-1">
+                                Monthly with
+                              </span>
+                              <img
+                                src={
+                                  process.env.PUBLIC_URL + "/icons/tamara.png"
+                                }
+                                className="ml-2"
+                                alt=""
+                              />
+                            </div>
+                          </React.Fragment>
+                        ) : (
+                          <div>
+                            <Skeleton
+                              className="mt-4"
+                              count={1}
+                              height={"50px"}
+                            />
+                            <Skeleton
+                              className="my-1"
+                              count={1}
+                              width={"50%"}
+                            />
+                            <Skeleton count={1} />
+                          </div>
+                        )}
+
+                        <div className="w-full h-[1px] border border-[#E2E8F0] my-5"></div>
+                        {/* Buy more save more  */}
+                        <BuyMoreSaveMore
+                          setMaxBuyMoreSaveMore={setMaxBuyMoreSaveMore}
+                          maxBuyMoreSaveMore={maxBuyMoreSaveMore}
+                          selectedBuyMore={selectedBuyMore}
+                          setSelectedBuyMore={setSelectedBuyMore}
+                          buyMore={buyMore}
+                          productLoader={productLoader}
+                          product={product}
+                        />
+
+                        <p className=" text-[#64748B] my-3 text-end text-xs">
+                          Buying in bulk made easy with Horeca{" "}
+                          <Link
+                            className="text-primary font-semibold underline"
+                            to="/"
+                          >
+                            Made a Quote
+                          </Link>
+                        </p>
+                        {/* Protection Plan  */}
+
+                        <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
+
+                        <div>
+                          {!productLoader && product.same_sku_product_ids ? (
+                            <React.Fragment>
+                              <h3 className="font-semibold text-black-100 text-base">
+                                {product.same_sku_product_ids
+                                  ? product.same_sku_product_ids.length
+                                  : ""}{" "}
+                                Other Offers Available for the same products
+                              </h3>
+                              {!productLoader && product.same_sku_product_ids
+                                ? product.same_sku_product_ids.map(
+                                    (prod, index) => {
+                                      return <SameProducts product={prod} />;
+                                    }
+                                  )
+                                : null}
+                              <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
+                            </React.Fragment>
+                          ) : null}
+                        </div>
+                        {/* Specialist  */}
+                        <div className="flex items-center justify-between">
+                          <p
+                            className={`font-bold text-[#BF2536] text-base transition-opacity duration-1000 ${
+                              isVisible ? "opacity-100" : "opacity-0"
+                            }`}
+                          >
+                            Available 24/7
+                          </p>{" "}
+                          <p className="text-[#4A4A4A] text-sm relative">
+                            {" "}
+                            <span className="absolute  size-[8px] rounded-full bg-primary left-[-12px] top-1/2 translate-y-[-50%]"></span>{" "}
+                            Online Now
+                          </p>
+                        </div>
+
+                        <div className="rounded-[4px] bg-[#DEF9EC] flex items-center justify-between px-4 py-2 mt-4">
+                          <p className="text-[#4A4A4A] text-sm">
+                            Our Product Specialists are here for you.
+                          </p>
+                          <img
+                            className="size-[40px]"
+                            src={
+                              process.env.PUBLIC_URL +
+                              "/images/productDetails/specialist.png"
+                            }
+                            alt=""
+                          />
+                        </div>
+
+                        <div className="flex items-center justify-between mt-5">
+                          <img
+                            onClick={() => handlerSendWhatsapp()}
+                            src={process.env.PUBLIC_URL + "/icons/chat.png"}
+                            className="mr-1"
+                            alt=""
+                          />{" "}
+                          Chat Now
+                          <img
+                            src={process.env.PUBLIC_URL + "/icons/phone-2.png"}
+                            className="mr-1"
+                            alt=""
+                          />{" "}
+                          800 HORECA (467322)
+                          <img
+                            src={process.env.PUBLIC_URL + "/icons/email.png"}
+                            className="mr-1"
+                            alt=""
+                          />{" "}
+                          Email Us
+                        </div>
+                        <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
+                        <div className="flex items-center justify-between my-2">
+                          <div className="flex items-center">
+                            <img
+                              src={
+                                process.env.PUBLIC_URL +
+                                "/images/productDetails/logo.png"
+                              }
+                              alt=""
+                            />
+                            <p className="ml-4 text-primary text-xs font-semibold ">
+                              Empero Group Refrigeration Reach-In Freezers
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <Documents docs={!!product && product.documents} />
+                    </div>
+                  )}
+
+                  {/* About Items  */}
+                  <div className="p-[10px]">
                     {!productLoader ? (
                       <React.Fragment>
                         <h2 className="text-base font-semibold text-black-100">
@@ -812,7 +1027,7 @@ export const ProductDetail = () => {
                 />
 
                 {!productLoader ? (
-                  <div className="col-span-10 mt-10">
+                  <div className=" col-span-10 mt-10">
                     {PRODUCT_DETAIL
                       ? PRODUCT_DETAIL.map((product, index) => {
                           const isSelected = selectedDetail === product.id;
@@ -820,10 +1035,12 @@ export const ProductDetail = () => {
                             <React.Fragment key={index}>
                               <button
                                 onClick={() => setSelectedDetail(product.id)}
-                                className={`text-[#64748B] rounded-md border-gray-200 mr-2 border 
-                         bg-[#F9FAFC] py-2 px-5 text-base transition-all hover:text-primary hover:bg-[#DEF9EC] ${
-                           isSelected ? "!bg-[#DEF9EC]  text-primary" : ""
-                         }`}
+                                className={`text-[#64748B] w-[90vw] sm:w-[100%] rounded-md border-gray-200 mr-2 border 
+                                  bg-[#F9FAFC] py-2 px-5 text-base transition-all hover:text-primary hover:bg-[#DEF9EC] ${
+                                    isSelected
+                                      ? "!bg-[#DEF9EC] m-[10px] text-primary"
+                                      : ""
+                                  }`}
                               >
                                 {product.title}
                               </button>
@@ -838,13 +1055,13 @@ export const ProductDetail = () => {
                         {product.description && product.content ? (
                           <React.Fragment>
                             <div
-                              className="description__content mt-6"
+                              className="description__content w-[90vw] sm:w-[100%] mt-6 ml-[10px]"
                               dangerouslySetInnerHTML={{
                                 __html: product.description,
                               }}
                             ></div>
                             <div
-                              className="description__content"
+                              className="description__content w-[90vw] sm:w-[100%] ml-[10px]"
                               dangerouslySetInnerHTML={{
                                 __html: product.content,
                               }}
@@ -897,7 +1114,7 @@ export const ProductDetail = () => {
 
                     {/* Selected ID 3 */}
                     {selectedDetail === 3 ? (
-                      <div className="mt-6">
+                      <div className="mt-6 ml-[10px]">
                         <p
                           className="description__content"
                           dangerouslySetInnerHTML={{
@@ -932,17 +1149,18 @@ export const ProductDetail = () => {
               </div>
             </div>
 
-            <div className="col-span-12 md:col-span-3 lg:col-span-3 mt-4">
-              <div className="bg-gray-100 rounded-md  p-5 border-2 border-[#E2E8F0]">
-                {/* Badge Section  */}
-                {!productLoader ? (
-                  <span className="text-primary bg-[#DEF9EC] px-4 py-2 rounded-[4px] text-xs font-semibold">
-                    15 days easy refund
-                  </span>
-                ) : (
-                  <Skeleton count={1} width={"40%"} height={"25px"} />
-                )}
-                {/* Price Section  */}
+            {window?.innerWidth > 640 && (
+              <div className="col-span-12 md:col-span-3 lg:col-span-3 mt-4">
+                <div className="bg-gray-100 rounded-md  p-5 border-2 border-[#E2E8F0]">
+                  {/* Badge Section  */}
+                  {!productLoader ? (
+                    <span className="text-primary bg-[#DEF9EC] px-4 py-2 rounded-[4px] text-xs font-semibold">
+                      15 days easy refund
+                    </span>
+                  ) : (
+                    <Skeleton count={1} width={"40%"} height={"25px"} />
+                  )}
+                  {/* Price Section  */}
 
                 {/* Sub Price Section  */}
                 {!productLoader && product ? (
@@ -1019,132 +1237,145 @@ export const ProductDetail = () => {
                   </div>
                 )}
 
-                <div className="w-full h-[1px] border border-[#E2E8F0] my-5"></div>
-                {/* Buy more save more  */}
-                <BuyMoreSaveMore
-                  setMaxBuyMoreSaveMore={setMaxBuyMoreSaveMore}
-                  maxBuyMoreSaveMore={maxBuyMoreSaveMore}
-                  selectedBuyMore={selectedBuyMore}
-                  setSelectedBuyMore={setSelectedBuyMore}
-                  buyMore={buyMore}
-                  productLoader={productLoader}
-                  product={product}
-                />
-
-                <p className=" text-[#64748B] my-3 text-end text-xs">
-                  Buying in bulk made easy with Horeca{" "}
-                  <Link className="text-primary font-semibold underline" to="/">
-                    Made a Quote
-                  </Link>
-                </p>
-                {/* Protection Plan  */}
-
-                <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
-
-                <div>
-                  {!productLoader && product.same_sku_product_ids ? (
-                    <React.Fragment>
-                      <h3 className="font-semibold text-black-100 text-base">
-                        {product.same_sku_product_ids
-                          ? product.same_sku_product_ids.length
-                          : ""}{" "}
-                        Other Offers Available for the same products
-                      </h3>
-                      {!productLoader && product.same_sku_product_ids
-                        ? product.same_sku_product_ids.map((prod, index) => {
-                            return <SameProducts product={prod} />;
-                          })
-                        : null}
-                      <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
-                    </React.Fragment>
-                  ) : null}
-                </div>
-                {/* Specialist  */}
-                <div className="flex items-center justify-between">
-                  <p
-                    className={`font-bold text-[#BF2536] text-base transition-opacity duration-1000 ${
-                      isVisible ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    Available 24/7
-                  </p>{" "}
-                  <p className="text-[#4A4A4A] text-sm relative">
-                    {" "}
-                    <span className="absolute  size-[8px] rounded-full bg-primary left-[-12px] top-1/2 translate-y-[-50%]"></span>{" "}
-                    Online Now
-                  </p>
-                </div>
-
-                <div className="rounded-[4px] bg-[#DEF9EC] flex items-center justify-between px-4 py-2 mt-4">
-                  <p className="text-[#4A4A4A] text-sm">
-                    Our Product Specialists are here for you.
-                  </p>
-                  <img
-                    className="size-[40px]"
-                    src={
-                      process.env.PUBLIC_URL +
-                      "/images/productDetails/specialist.png"
-                    }
-                    alt=""
+                  <div className="w-full h-[1px] border border-[#E2E8F0] my-5"></div>
+                  {/* Buy more save more  */}
+                  <BuyMoreSaveMore
+                    setMaxBuyMoreSaveMore={setMaxBuyMoreSaveMore}
+                    maxBuyMoreSaveMore={maxBuyMoreSaveMore}
+                    selectedBuyMore={selectedBuyMore}
+                    setSelectedBuyMore={setSelectedBuyMore}
+                    buyMore={buyMore}
+                    productLoader={productLoader}
+                    product={product}
                   />
-                </div>
 
-                <div className="flex items-center justify-between mt-5">
-                  <Link
-                    className="text-[10px] text-primary font-semibold flex items-center mx-2"
-                    to="/"
-                  >
-                    <img
-                      src={process.env.PUBLIC_URL + "/icons/chat.png"}
-                      className="mr-1"
-                      alt=""
-                    />{" "}
-                    Chat Now
-                  </Link>
-                  <Link
-                    className="text-[10px] text-primary font-semibold flex items-center mx-2"
-                    to="/"
-                  >
-                    <img
-                      src={process.env.PUBLIC_URL + "/icons/phone-2.png"}
-                      className="mr-1"
-                      alt=""
-                    />{" "}
-                    800 HORECA (467322)
-                  </Link>
-                  <Link
-                    className="text-[10px] text-primary font-semibold flex items-center mx-2"
-                    to="/"
-                  >
-                    <img
-                      src={process.env.PUBLIC_URL + "/icons/email.png"}
-                      className="mr-1"
-                      alt=""
-                    />{" "}
-                    Email Us
-                  </Link>
-                </div>
+                  <p className=" text-[#64748B] my-3 text-end text-xs">
+                    Buying in bulk made easy with Horeca{" "}
+                    <Link
+                      className="text-primary font-semibold underline"
+                      to="/"
+                    >
+                      Made a Quote
+                    </Link>
+                  </p>
+                  {/* Protection Plan  */}
 
-                <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
+                  <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
 
-                <div className="flex items-center justify-between my-2">
-                  <div className="flex items-center">
+                  <div>
+                    {!productLoader && product.same_sku_product_ids ? (
+                      <React.Fragment>
+                        <h3 className="font-semibold text-black-100 text-base">
+                          {product.same_sku_product_ids
+                            ? product.same_sku_product_ids.length
+                            : ""}{" "}
+                          Other Offers Available for the same products
+                        </h3>
+                        {!productLoader && product.same_sku_product_ids
+                          ? product.same_sku_product_ids.map((prod, index) => {
+                              return <SameProducts product={prod} />;
+                            })
+                          : null}
+                        <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
+                      </React.Fragment>
+                    ) : null}
+                  </div>
+                  {/* Specialist  */}
+                  <div className="flex items-center justify-between">
+                    <p
+                      className={`font-bold text-[#BF2536] text-base transition-opacity duration-1000 ${
+                        isVisible ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      Available 24/7
+                    </p>{" "}
+                    <p className="text-[#4A4A4A] text-sm relative">
+                      {" "}
+                      <span className="absolute  size-[8px] rounded-full bg-primary left-[-12px] top-1/2 translate-y-[-50%]"></span>{" "}
+                      Online Now
+                    </p>
+                  </div>
+
+                  <div className="rounded-[4px] bg-[#DEF9EC] flex items-center justify-between px-4 py-2 mt-4">
+                    <p className="text-[#4A4A4A] text-sm">
+                      Our Product Specialists are here for you.
+                    </p>
                     <img
+                      className="size-[40px]"
                       src={
                         process.env.PUBLIC_URL +
-                        "/images/productDetails/logo.png"
+                        "/images/productDetails/specialist.png"
                       }
                       alt=""
                     />
-                    <p className="ml-4 text-primary text-xs font-semibold ">
-                      Empero Group Refrigeration Reach-In Freezers
-                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between mt-5">
+                    <div
+                      className="flex items-center justify-center cursor-pointer"
+                      onClick={() => handlerSendWhatsapp()}
+                    >
+                      <img
+                        src={process.env.PUBLIC_URL + "/icons/chat.png"}
+                        className=""
+                        alt=""
+                      />{" "}
+                      <p className="text-[10px] text-primary font-semibold flex items-center mx-2">
+                        Chat Now
+                      </p>
+                    </div>
+                    <Link
+                      className="text-[10px] text-primary font-semibold flex items-center mx-2"
+                      to="/"
+                    >
+                      <img
+                        src={process.env.PUBLIC_URL + "/icons/phone-2.png"}
+                        className="mr-1"
+                        alt=""
+                      />{" "}
+                      800 HORECA (467322)
+                    </Link>
+                    <Link
+                      className="text-[10px] text-primary font-semibold flex items-center mx-2"
+                      to="/"
+                    >
+                      <div
+                        className="flex items-center justify-center cursor-pointer"
+                        onClick={() => handlerSendEmail()}
+                      >
+                        <img
+                          src={process.env.PUBLIC_URL + "/icons/email.png"}
+                          className="mr-1"
+                          alt=""
+                        />{" "}
+                        <p className="text-[10px] text-primary font-semibold flex items-center mx-2">
+                          Email Us
+                        </p>
+                      </div>
+                    </Link>
+                  </div>
+
+                  <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
+
+                  <div className="flex items-center justify-between my-2">
+                    <div className="flex items-center">
+                      <img
+                        src={
+                          process.env.PUBLIC_URL +
+                          "/images/productDetails/logo.png"
+                        }
+                        alt=""
+                      />
+                      <p className="ml-4 text-primary text-xs font-semibold ">
+                        Empero Group Refrigeration Reach-In Freezers
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <Documents docs={!!product && product.documents} />
-            </div>
+                <Documents docs={!!product && product.documents} />
+              </div>
+            )}
 
             <CompareProducts
               productLoader={productLoader}
