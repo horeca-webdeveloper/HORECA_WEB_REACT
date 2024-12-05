@@ -46,7 +46,7 @@ export const RelatedSearch = ({ relatedSearch }) => {
               })}
             </div>
           </div>
-          <div className="w-full h-[1px] bg-[#E2E8F0] my-5"> </div>
+          <div className="w-full h-[1px] bg-[#E2E8F0] my-[5px] sm:my-5"> </div>
         </React.Fragment>
       ) : null}
     </React.Fragment>

@@ -111,24 +111,28 @@ export const CollectionPage = () => {
       </div>
       {/* Main Page  */}
       <Wrapper>
-        <div className=" grid grid-cols-9 gap-4">
+        <div className="grid grid-cols-9 gap-4">
           <div className="col-span-9 mt-8">
             {/* Collection Header  */}
             <div className="flex items-center justify-center text-center flex-col">
               <h2 className="text-black-100 text-[16px] sm:text-[22px] font-medium sm:font-semibold">
                 {categoryName}{" "}
               </h2>
-              <p className="hidden sm:block text-base w-[100vw] text-gray-700 px-16 mt-2">
-                Find top-notch commercial kitchen equipment for restaurants. We
-                offer a wide range of products from trusted brands
-                like Beckers, Rational, Cambro, Empero, Coupe, Lacor, and Roller
-                Grill. Whether you're outfitting a new kitchen or upgrading your
-                current setup.
-              </p>
-              <p className="block sm:hidden text-[14px] font-normal w-[100vw] text-gray-700 px-[10px] mt-2">
-                Find top-notch commercial kitchen equipment for restaurants We
-                offer a wide range of products.
-              </p>
+              {window?.innerWidth > 640 && (
+                <p className="hidden sm:block text-base w-[100vw] text-gray-700 px-16 mt-2">
+                  Find top-notch commercial kitchen equipment for restaurants.
+                  We offer a wide range of products from trusted brands
+                  like Beckers, Rational, Cambro, Empero, Coupe, Lacor,
+                  and Roller Grill. Whether you're outfitting a new kitchen or
+                  upgrading your current setup.
+                </p>
+              )}
+              {window?.innerWidth < 640 && (
+                <p className="block sm:hidden text-[14px] font-normal w-[100vw] text-gray-700 px-[5px] mt-2">
+                  Find top-notch commercial kitchen equipment restaurants We
+                  offer a wide range products.
+                </p>
+              )}
             </div>
 
             {/* Collection Category  */}
@@ -279,7 +283,7 @@ export const CollectionPage = () => {
           )}
         </div>
         <div className="mb-10">
-          <div className="flex items-center justify-between mx-2 my-8">
+          <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
             <h2 className="font-medium sm:font-semibold text-[16px] sm:text-2xl leading-[18.77px] text-black-100 ">
               Top Picks in Santos
             </h2>
@@ -344,15 +348,29 @@ export const CollectionPage = () => {
         </div>
 
         <div className="w-full my-8">
-          <img
-            className="h-[160px] sm:h-[100%] w-[100vw] border"
-            src={process.env.PUBLIC_URL + "/images/collectonBanners/image.png"}
-            alt=""
-          />
+          {window?.innerWidth < 640 && (
+            <img
+              className="h-[160px] sm:h-[100%] w-[100vw] border"
+              src={
+                process.env.PUBLIC_URL + "/images/collectonBanners/image.png"
+              }
+              alt=""
+            />
+          )}
+          {window?.innerWidth > 640 && (
+            <img
+              className="h-[160px] sm:h-[100%] w-[100vw] border"
+              src={
+                process.env.PUBLIC_URL +
+                "/images/collections/perfect-design.png"
+              }
+              alt=""
+            />
+          )}
         </div>
 
         <div className="mb-10">
-          <div className="flex items-center justify-between mx-2 my-8">
+          <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Top deals from our sellers
             </h2>
@@ -419,17 +437,29 @@ export const CollectionPage = () => {
         </div>
 
         <div className="w-full my-8">
-          <img
-            className="h-[160px] sm:h-[100%] w-[100vw] border"
-            src={
-              process.env.PUBLIC_URL + "/images/collectonBanners/image-1.png"
-            }
-            alt=""
-          />
+          {window?.innerWidth < 640 && (
+            <img
+              className="h-[160px] sm:h-[100%] w-[100vw] border"
+              src={
+                process.env.PUBLIC_URL + "/images/collectonBanners/image-1.png"
+              }
+              alt=""
+            />
+          )}
+          {window?.innerWidth > 640 && (
+            <img
+              className="h-[160px] sm:h-[100%] w-[100vw] border"
+              src={
+                process.env.PUBLIC_URL +
+                "/images/collections/perfect-served.png"
+              }
+              alt=""
+            />
+          )}
         </div>
 
         <div className="mb-10">
-          <div className="flex items-center justify-between mx-2 my-8">
+          <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Explore top picks
             </h2>
@@ -494,17 +524,26 @@ export const CollectionPage = () => {
         </div>
 
         <div className="w-full my-8">
-          <img
-            className="h-[160px] sm:h-[100%] w-[100vw] border"
-            src={
-              process.env.PUBLIC_URL + "/images/collectonBanners/image-2.png"
-            }
-            alt=""
-          />
+          {window?.innerWidth < 640 && (
+            <img
+              className="h-[160px] sm:h-[100%] w-[100vw] border"
+              src={
+                process.env.PUBLIC_URL + "/images/collectonBanners/image-2.png"
+              }
+              alt=""
+            />
+          )}
+          {window?.innerWidth > 640 && (
+            <img
+              className="h-[160px] sm:h-[100%] w-[100vw] border"
+              src={process.env.PUBLIC_URL + "/images/collections/dine-in.png"}
+              alt=""
+            />
+          )}
         </div>
 
         <div className="mb-10">
-          <div className="flex items-center justify-between mx-2 my-8">
+          <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Hot new releases
             </h2>
@@ -735,7 +774,7 @@ export const CollectionPage = () => {
         </div>
 
         <div className="mb-10">
-          <div className="flex items-center justify-between mx-2 my-8">
+          <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Products you may also like
             </h2>
@@ -802,7 +841,7 @@ export const CollectionPage = () => {
         </div>
 
         <div className="mb-10">
-          <div className="flex items-center justify-between mx-2 my-8">
+          <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Inspired by your browsing history
             </h2>

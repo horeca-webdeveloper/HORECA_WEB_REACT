@@ -46,6 +46,7 @@ export const ProductsByCategory = () => {
   const [selectedDelivery, setSelectedDelivery] = useState();
   const [selectedMinPrice, setSelectedMinPrice] = useState();
   const [selectedMaxPrice, setSelectedMaxPrice] = useState();
+  const [openFilterPopup, setOpenFilterPopup] = useState(false);
 
   const breadcrumb = [
     {
@@ -166,37 +167,136 @@ export const ProductsByCategory = () => {
     }
   }, [type]);
 
+  const bigScreenCss =
+    "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
+
   return (
     <div>
+      <div
+        style={{ zIndex: 999 }}
+        className={`block sm:hidden w-[80vw] h-[100vh] p-5 bg-[white] border absolute z-999 mt-[-215px] 
+          ${openFilterPopup ? "translate-x-[0%]" : "translate-x-[-100%]"} 
+          transition-transform duration-300 ease-in-out`}
+      >
+        <div className="flex p-3 items-center justify-between border-b border-gray">
+          <p className="text-[16px] leading-[18px] font-bold">Filters</p>
+          <p onClick={() => setOpenFilterPopup(false)}>x</p>
+        </div>
+        <div className="flex p-[12px] flex-row items-center justify-between">
+          <span className="text-sm text-gray-700 mr-6">
+            Sort:
+            <span className="text-black-100 ml-1 relative">
+              <Menu
+                arrow={true}
+                className={"top-0"}
+                menuButton={<button type="button">{sortByText}</button>}
+              >
+                {sortByText !== "Default" ? (
+                  <MenuItem
+                    onClick={() => {
+                      setSortBy("");
+                      setSortByText("Default");
+                    }}
+                  >
+                    Default
+                  </MenuItem>
+                ) : null}
+                <MenuItem
+                  onClick={() => {
+                    setSortBy("desc");
+                    setSortByText("Highest Price");
+                  }}
+                >
+                  Highest Price
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setSortBy("asc");
+                    setSortByText("Lowest Price");
+                  }}
+                >
+                  Lowest Price
+                </MenuItem>
+              </Menu>
+            </span>
+          </span>
+          <span className="text-sm text-gray-700 ">
+            Show:
+            <span className="text-black-100 ml-1 relative">
+              <Menu
+                className={"top-0"}
+                arrow={true}
+                align="center"
+                top="0px"
+                menuButton={<button type="button">{perPage} Items</button>}
+              >
+                <MenuItem onClick={() => setPerPage(20)}>20 Items</MenuItem>
+                <MenuItem onClick={() => setPerPage(30)}>30 Items</MenuItem>
+                <MenuItem onClick={() => setPerPage(50)}>50 Items</MenuItem>
+              </Menu>
+            </span>
+          </span>
+          {/* <div className="flex flex-row items-center">
+                                    <CiGrid41 className="bg-gray-300 cursor-pointer" size={26} />
+                                    <GoTasklist className="ml-2 cursor-pointer" size={26} />
+                                </div> */}
+        </div>
+        <FilterSection
+          minDelivery={minDelivery}
+          maxDelivery={maxDelivery}
+          priceRangeBool={priceRangeBool}
+          setPriceRangeBool={setPriceRangeBool}
+          brands={brands}
+          selectedBrands={selectedBrands}
+          setSelectedBrands={setSelectedBrands}
+          categories={categories}
+          priceMin={priceMin}
+          priceMax={priceMax}
+          lengthMin={lengthMin}
+          lengthMax={lengthMax}
+          widthMin={widthMin}
+          widthMax={widthMax}
+          heightMin={heightMin}
+          heightMax={heightMax}
+          selectedReview={selectedReview}
+          setSelectedReview={setSelectedReview}
+          products={products}
+          setSelectedDelivery={setSelectedDelivery}
+          selectedDelivery={selectedDelivery}
+          setSelectedMinPrice={setSelectedMinPrice}
+          setSelectedMaxPrice={setSelectedMaxPrice}
+        />
+      </div>
       <Wrapper>
         <Breadcrumb items={breadcrumb} classes={"mt-7 mb-7"} />
-
-        <div className="grid grid-cols-9 gap-4">
-          <FilterSection
-            minDelivery={minDelivery}
-            maxDelivery={maxDelivery}
-            priceRangeBool={priceRangeBool}
-            setPriceRangeBool={setPriceRangeBool}
-            brands={brands}
-            selectedBrands={selectedBrands}
-            setSelectedBrands={setSelectedBrands}
-            categories={categories}
-            priceMin={priceMin}
-            priceMax={priceMax}
-            lengthMin={lengthMin}
-            lengthMax={lengthMax}
-            widthMin={widthMin}
-            widthMax={widthMax}
-            heightMin={heightMin}
-            heightMax={heightMax}
-            selectedReview={selectedReview}
-            setSelectedReview={setSelectedReview}
-            products={!!products && products}
-            setSelectedDelivery={setSelectedDelivery}
-            selectedDelivery={selectedDelivery}
-            setSelectedMinPrice={setSelectedMinPrice}
-            setSelectedMaxPrice={setSelectedMaxPrice}
-          />
+        <div className="grid grid-cols-4 sm:grid-cols-9 gap-4">
+          {window?.innerWidth > 640 && (
+            <FilterSection
+              minDelivery={minDelivery}
+              maxDelivery={maxDelivery}
+              priceRangeBool={priceRangeBool}
+              setPriceRangeBool={setPriceRangeBool}
+              brands={brands}
+              selectedBrands={selectedBrands}
+              setSelectedBrands={setSelectedBrands}
+              categories={categories}
+              priceMin={priceMin}
+              priceMax={priceMax}
+              lengthMin={lengthMin}
+              lengthMax={lengthMax}
+              widthMin={widthMin}
+              widthMax={widthMax}
+              heightMin={heightMin}
+              heightMax={heightMax}
+              selectedReview={selectedReview}
+              setSelectedReview={setSelectedReview}
+              products={!!products && products}
+              setSelectedDelivery={setSelectedDelivery}
+              selectedDelivery={selectedDelivery}
+              setSelectedMinPrice={setSelectedMinPrice}
+              setSelectedMaxPrice={setSelectedMaxPrice}
+            />
+          )}
           <div className="col-span-7">
             <span className="title">{subcategory.split("-").join(" ")}</span>
             <div className="w-full h-[1px] bg-[#E2E8F0] my-4"></div>
@@ -204,7 +304,13 @@ export const ProductsByCategory = () => {
               <span className="text-sm text-gray-700">
                 Showing all {paginationData ? paginationData : "0"} results
               </span>
-              <div className="flex flex-row items-center ">
+              <div
+                onClick={() => setOpenFilterPopup(true)}
+                className="block sm:hidden bg-[#E2E8F0] p-[10px] rounded"
+              >
+                <img src={process.env.PUBLIC_URL + "icons/FilterIcon.png"} />
+              </div>
+              <div className="hidden sm:flex flex-row items-center ">
                 <span className="text-sm text-gray-700 mr-6">
                   Sort:
                   <span className="text-black-100 ml-1 relative">
@@ -303,13 +409,13 @@ export const ProductsByCategory = () => {
 
             {/* Categories Display Here  */}
             {type == null ? (
-              <div className="grid grid-cols-6 gap-6 mt-8">
+              <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 sm:gap-6 mt-8">
                 {!!categories &&
                   categories.map((cat, index) => {
                     return (
                       <div
                         key={cat.id}
-                        className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md  border-primary"}`}
+                        className={`bg-[#F5F5F5] m-[10px] border-[#186737] sm:border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border hover:border-primary p-[5px] sm:p-4 rounded-md  border-primary"}`}
                       >
                         <Link
                           key={cat.id}
@@ -321,7 +427,7 @@ export const ProductsByCategory = () => {
                             src={`https://testhssite.com/storage/${cat.image}`}
                             alt={cat.name}
                           />
-                          <h4 className="mt-2 text-base font-semibold text-primary text-center">
+                          <h4 className="hidden sm:block mt-2 text-base font-semibold text-primary text-center">
                             {cat.name}
                           </h4>
                         </Link>
@@ -333,7 +439,7 @@ export const ProductsByCategory = () => {
 
             <br />
             {/* Products  Display Here  */}
-            <div className="grid grid-cols-4 gap-4 mt-4 mb-10">
+            <div className="hidden sm:grid grid-cols-4 gap-4 mt-4 mb-10">
               {loader ? (
                 Array.from({ length: 12 }).map((_, index) => (
                   <div key={index} className="col-span-1">
@@ -373,14 +479,107 @@ export const ProductsByCategory = () => {
             ) : null}
           </div>
         </div>
-        <SuggestionSlider
-          title={"Products you may also like"}
-          productList={products}
-        />
-        <SuggestionSlider
-          title={"Inspired by your browsing history"}
-          productList={products}
-        />
+        {window?.innerWidth > 640 && (
+          <SuggestionSlider
+            title={"Products you may also like"}
+            productList={products}
+          />
+        )}
+        {window?.innerWidth < 640 && (
+          <>
+            <img src="" />
+            <h1 className="mt-[20px]">Products you may also like</h1>
+            <div
+              style={
+                window.innerWidth < 640
+                  ? {
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
+                  : {}
+              }
+              className={bigScreenCss}
+            >
+              {false ? (
+                Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="col-span-1 mt-1 min-h-[400px]"
+                  />
+                ))
+              ) : (
+                <React.Fragment>
+                  {products && products.length > 0 ? (
+                    products.map((product, index) =>
+                      index < 10 ? (
+                        <ProductCard
+                          key={index}
+                          classes="col-span-1 mt-1"
+                          product={product}
+                        />
+                      ) : null
+                    )
+                  ) : (
+                    <p className="col-span-5 font-semibold text-center text-base">
+                      No Product Found
+                    </p>
+                  )}
+                </React.Fragment>
+              )}
+            </div>
+          </>
+        )}
+        {window?.innerWidth > 640 && (
+          <SuggestionSlider
+            title={"Inspired by your browsing history"}
+            productList={products}
+          />
+        )}
+        {window?.innerWidth < 640 && (
+          <>
+            <h1 className="mt-[40px]">Inspired by your browsing history</h1>
+            <div
+              style={
+                window.innerWidth < 640
+                  ? {
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
+                  : {}
+              }
+              className={bigScreenCss}
+            >
+              {false ? (
+                Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="col-span-1 mt-1 min-h-[400px]"
+                  />
+                ))
+              ) : (
+                <React.Fragment>
+                  {products && products.length > 0 ? (
+                    products.map((product, index) =>
+                      index < 10 ? (
+                        <ProductCard
+                          key={index}
+                          classes="col-span-1 mt-1"
+                          product={product}
+                        />
+                      ) : null
+                    )
+                  ) : (
+                    <p className="col-span-5 font-semibold text-center text-base">
+                      No Product Found
+                    </p>
+                  )}
+                </React.Fragment>
+              )}
+            </div>
+          </>
+        )}
       </Wrapper>
     </div>
   );
@@ -553,7 +752,7 @@ const FilterSection = ({
 
   return (
     <React.Fragment>
-      <div className="col-span-2 h-[100vh] overflow-auto px-3">
+      <div className=" col-span-2 h-[100vh] overflow-auto px-3">
         {/* Price Section  */}
         <React.Fragment>
           {location.search && location.search !== "?search=" ? (
@@ -665,7 +864,6 @@ const FilterSection = ({
           </div>
           <div className="w-full h-[1px] bg-[#E2E8F0] my-5"></div>
         </React.Fragment>
-
         <React.Fragment>
           <div className="flex items-center justify-between">
             <FilterTitle title="Fulfillment Speed" />

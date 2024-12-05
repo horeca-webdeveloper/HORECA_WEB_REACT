@@ -396,7 +396,7 @@ export const ProductCard = ({
                   </p>
                 ) : null}
                 {product.leftStock <= 0 ? (
-                  <p className="text-[#A6131D] text-sm mt-2">
+                  <p className="text-[#A6131D] text-[10px] sm:text-sm mt-2">
                     Only available for pre-orders
                   </p>
                 ) : null}

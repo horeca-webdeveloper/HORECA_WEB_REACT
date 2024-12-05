@@ -158,7 +158,7 @@ export const ProductListing = () => {
           <p className="text-[16px] leading-[18px] font-bold">Filters</p>
           <p onClick={() => setOpenFilterPopup(false)}>x</p>
         </div>
-        <div className="hidden sm:block flex flex-row items-center ">
+        <div className="flex p-[12px] flex-row items-center justify-between">
           <span className="text-sm text-gray-700 mr-6">
             Sort:
             <span className="text-black-100 ml-1 relative">
@@ -354,7 +354,7 @@ export const ProductListing = () => {
                                 </div> */}
               </div>
             </div>
-            <div className="w-full h-[1px] bg-[#E2E8F0] my-4"></div>
+            <div className="w-full h-[1px] bg-[#E2E8F0] my-[5px] sm:my-4"></div>
 
             {/* Product Display Here  */}
 
@@ -398,7 +398,7 @@ export const ProductListing = () => {
             ) : null}
           </div>
         </div>
-        {window?.innerWidth > 40 && (
+        {window?.innerWidth > 640 && (
           <SuggestionSlider
             title={"Products you may also like"}
             productList={products}
