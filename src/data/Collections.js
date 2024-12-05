@@ -18,6 +18,8 @@ const collectionBreadCrumb = [{
         active: true,
     }
 ]
+
+
 const megaDeals = [{
         img: "/images/collections/mega/mega-1.png",
         redirectLink: "#"
@@ -43,6 +45,57 @@ const megaDeals = [{
         redirectLink: "#"
     }
 ]
+
+const ExploreBrandImages = [{
+    img: "/images/collections/brands/brand-1.png",
+    redirectLink: "#"
+},
+{
+    img: "/images/collections/brands/brand-2.png",
+    redirectLink: "#"
+},
+{
+    img: "/images/collections/brands/brand-3.png",
+    redirectLink: "#"
+},
+{
+    img: "/images/collections/brands/brand-4.png",
+    redirectLink: "#"
+},
+{
+    img: "/images/collections/brands/brand-5.png",
+    redirectLink: "#"
+},
+{
+    img: "/images/collections/brands/brand-6.png",
+    redirectLink: "#"
+},
+{
+    img: "/images/collections/brands/brand-7.png",
+    redirectLink: "#"
+},
+{
+    img: "/images/collections/brands/brand-8.png",
+    redirectLink: "#"
+},
+{
+    img: "/images/collections/brands/brand-9.png",
+    redirectLink: "#"
+},
+{
+    img: "/images/collections/brands/brand-10.png",
+    redirectLink: "#"
+},
+{
+    img: "/images/collections/brands/brand-11.png",
+    redirectLink: "#"
+},
+{
+    img: "/images/collections/brands/brand-12.png",
+    redirectLink: "#"
+}
+]
+
 
 const ListofProducts = [{
         url: "#",
@@ -1426,4 +1479,4 @@ const BrandPicks = [{
         lowerOffer: "169.17"
     },
 ]
-export { megaDeals, collectionBreadCrumb, collectionCategories, categoryListing, BrandPicks, ListofProducts }
+export { megaDeals, collectionBreadCrumb,ExploreBrandImages, collectionCategories, categoryListing, BrandPicks, ListofProducts }

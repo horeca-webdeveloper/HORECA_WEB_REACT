@@ -223,11 +223,11 @@ export const ProductCard = ({
             ) : null}
           </React.Fragment>
         )}
-        <div className="overflow-hidden relative z-50">
+        <div className="overflow-hidden relative z-50 h-[110px] sm:h-[288px]">
           <Link to={`/product/${productId}`}>
             {product.video_path && JSON.parse(product.video_path)[0] ? (
               <React.Fragment>
-                <div className="relative">
+                <div className="flex items-center justify-center  relative">
                   {isHovered ? (
                     <video
                       ref={videoRef}
@@ -235,7 +235,7 @@ export const ProductCard = ({
                       autoPlay={false}
                       muted={true}
                       loop={true}
-                      className="w-full h-[110px] sm:h-[250px] sm:w-[100] object-cover"
+                      className="hidden sm:block w-full h-[110px] sm:h-[250px] sm:w-[100] object-contain"
                     >
                       <source
                         src={`https://testhssite.com/storage/${
@@ -249,7 +249,7 @@ export const ProductCard = ({
                     <img
                       src={`https://testhssite.com/storage/${product.images[0]}`}
                       alt={product.altText}
-                      className="w-[100px] h-[110px] sm:h-[250px] sm:w-full object-cover"
+                      className="w-[100px] h-[110px] sm:h-[250px] sm:w-full object-contain"
                     />
                   )}
                 </div>
@@ -268,11 +268,14 @@ export const ProductCard = ({
               <React.Fragment>
                 <Slider {...settings} ref={sliderRef}>
                   {product.images.map((image, index) => (
-                    <div key={index}>
+                    <div
+                      key={index}
+                      className="flex items-center justify-center"
+                    >
                       <img
                         src={`https://testhssite.com/storage/${image}`}
                         alt={product.altText}
-                        className="w-full h-[250px]"
+                        className="w-full w-[100px] h-[110px] sm:h-[250px] flex items-center justify-center object-contain"
                       />
                     </div>
                   ))}
@@ -346,7 +349,7 @@ export const ProductCard = ({
               soon as&nbsp;{product.best_delivery_date}
             </p>
 
-            <div className="flex sm:flex-row items-center">
+            <div className="flex overflow-hidden  sm:flex-row items-center">
               <span className="flex items-center sm:flex-none text-primary font-semibold ">
                 <span className="ml-0 sm:ml-1 text-[10px] sm:text-xl font-normal sm:font-bold">
                   {product.currency_title ? product.currency_title : "USD "}

@@ -4,6 +4,8 @@ import {
   collectionCategories,
   BrandPicks,
 } from "../data/Collections";
+
+import { ExploreBrandImages } from "../data/Collections";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Wrapper } from "../shared/Wrapper";
 import { Breadcrumb } from "../shared/Breadcrumb";
@@ -27,6 +29,7 @@ export const CollectionPage = () => {
   const [categories, setCategories] = useState([]);
   const [categoryName, setCategoryName] = useState("");
   const [filterCategories, setFilterCategories] = useState([]);
+  const [products, setProducts] = useState([]);
   const location = useLocation();
 
   const handleInput = (e) => {
@@ -62,8 +65,18 @@ export const CollectionPage = () => {
     }
   };
 
+  const fetchProducts = async () => {
+    const authToken = localStorage.getItem("authToken");
+    const response = await apiClient.get(
+      `${authToken ? "/products" : "/products-guest"}`
+    );
+    setProducts(response.data.data.data);
+    console.log("--->>>>", response);
+  };
+
   useEffect(() => {
     fetchCategories();
+    fetchProducts();
   }, [location]);
 
   const collectionBreadCrumb = [
@@ -80,13 +93,16 @@ export const CollectionPage = () => {
     },
   ];
 
+  const bigScreenCss =
+    "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
+
   return (
     <div>
       <Wrapper>
         <Breadcrumb items={collectionBreadCrumb} classes={"mt-7"} />
       </Wrapper>
       {/* TopHeaderImage  */}
-      <div className="w-full  mt-5">
+      <div className="hidden sm:block w-full  mt-5">
         <img
           className="w-full"
           src={process.env.PUBLIC_URL + "/images/categoryBanner.png"}
@@ -95,19 +111,23 @@ export const CollectionPage = () => {
       </div>
       {/* Main Page  */}
       <Wrapper>
-        <div className="grid grid-cols-9 gap-4">
+        <div className=" grid grid-cols-9 gap-4">
           <div className="col-span-9 mt-8">
             {/* Collection Header  */}
             <div className="flex items-center justify-center text-center flex-col">
-              <h2 className="text-black-100 text-[22px] font-semibold">
+              <h2 className="text-black-100 text-[16px] sm:text-[22px] font-medium sm:font-semibold">
                 {categoryName}{" "}
               </h2>
-              <p className="text-base text-gray-700 px-16 mt-2">
+              <p className="hidden sm:block text-base w-[100vw] text-gray-700 px-16 mt-2">
                 Find top-notch commercial kitchen equipment for restaurants. We
                 offer a wide range of products from trusted brands
-                like Beckers, Rational, Cambro, Empero, Robot Coupe, Lacor,
-                and Roller Grill. Whether you're outfitting a new kitchen or
-                upgrading your current setup.
+                like Beckers, Rational, Cambro, Empero, Coupe, Lacor, and Roller
+                Grill. Whether you're outfitting a new kitchen or upgrading your
+                current setup.
+              </p>
+              <p className="block sm:hidden text-[14px] font-normal w-[100vw] text-gray-700 px-[10px] mt-2">
+                Find top-notch commercial kitchen equipment for restaurants We
+                offer a wide range of products.
               </p>
             </div>
 
@@ -116,7 +136,7 @@ export const CollectionPage = () => {
               {filterCategories && filterCategories.length > 0
                 ? filterCategories.map((cat, index) => (
                     <React.Fragment key={index}>
-                      {index < 14 ? (
+                      {(window?.innerWidth < 640 ? index < 8 : index < 14) ? (
                         <div
                           className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md ${
                             cat?.id === selectedCat?.id
@@ -143,8 +163,7 @@ export const CollectionPage = () => {
                     </div>
                   ))}
             </div>
-
-            <div className="grid grid-cols-4 gap-8 mt-8 ">
+            <div className="hidden sm:grid grid-cols-4 gap-8 mt-8 ">
               {selectedCat && selectedCat.children
                 ? selectedCat.children.map((cat, index) => {
                     return (
@@ -203,85 +222,207 @@ export const CollectionPage = () => {
         </div>
         <div className="py-10 px-6 bg-[#E2E8F033] mt-10 rounded-[20px]">
           <div className="flex items-center justify-center text-center flex-col">
-            <h3 className="text-black-100 text-[22px] font-semibold">
+            <h3 className="text-black-100 text-[16px] sm:text-[22px] font-semibold">
               Horeca Mega Deals
             </h3>
-            <p className="max-w-[850px] text-gray-700 mt-2 text-base">
-              Find top-notch commercial kitchen equipment for restaurants. We
-              offer a wide range of products from trusted brands
-              like Beckers, Rational, Cambro, Empero, Robot Coupe, Lacor,
-              and Roller Grill. Whether you're outfitting a new kitchen or
-              upgrading your current setup.
-            </p>
+            {window?.innerWidth < 640 && (
+              <p className="max-w-[850px] text-gray-700 mt-2 font-normal mb-[20px] text-[14px]">
+                Find top-notch commercial kitchen equipment for restaurants We
+                offer a wide range.
+              </p>
+            )}
+            {window?.innerWidth > 640 && (
+              <p className="max-w-[850px] text-gray-700 mt-2 text-base">
+                Find top-notch commercial kitchen equipment for restaurants. We
+                offer a wide range of products from trusted brands
+                like Beckers, Rational, Cambro, Empero, Robot Coupe, Lacor,
+                and Roller Grill. Whether you're outfitting a new kitchen or
+                upgrading your current setup.
+              </p>
+            )}
           </div>
-          <div className="grid grid-cols-3 mt-5 gap-6">
-            {megaDeals
-              ? megaDeals.map((items, index) => {
-                  return (
-                    <Link key={index} to={items.redirectLink} className="mt-2">
-                      <img src={items.img} alt="" />
+          {window?.innerWidth > 640 && (
+            <div className="grid grid-cols-3 mt-5 gap-6">
+              {megaDeals
+                ? megaDeals.map((items, index) => {
+                    return (
+                      <Link
+                        key={index}
+                        to={items.redirectLink}
+                        className="mt-2 mr-[10px]"
+                      >
+                        <img src={items.img} alt="" />
+                      </Link>
+                    );
+                  })
+                : null}
+            </div>
+          )}
+          {window?.innerWidth < 640 && (
+            <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+              {megaDeals
+                ? megaDeals.map((items, index) => (
+                    <Link
+                      key={index}
+                      to={items.redirectLink}
+                      className="snap-center flex-shrink-0 w-full"
+                    >
+                      <img
+                        className="w-full h-auto object-cover"
+                        src={items.img}
+                        alt=""
+                      />
                     </Link>
-                  );
-                })
-              : null}
-          </div>
+                  ))
+                : null}
+            </div>
+          )}
         </div>
-
         <div className="mb-10">
           <div className="flex items-center justify-between mx-2 my-8">
-            <h2 className="font-semibold text-black-100 text-2xl">
+            <h2 className="font-medium sm:font-semibold text-[16px] sm:text-2xl leading-[18.77px] text-black-100 ">
               Top Picks in Santos
             </h2>
-            <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            {window?.innerWidth > 640 && (
+              <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            )}
           </div>
-          <Slider {...fiveSlider} className="arrow__wrapper">
-            {BrandPicks.map((product, index) => {
-              return (
-                <ProductCard
-                  classes="min-h-[600px] mr-[10px]  mx-2"
-                  key={index}
-                  product={product}
-                />
-              );
-            })}
-          </Slider>
+          {window?.innerWidth > 640 && (
+            <Slider {...fiveSlider} className="arrow__wrapper">
+              {BrandPicks.map((product, index) => {
+                return (
+                  <ProductCard
+                    classes="min-h-[600px] mr-[10px]  mx-2"
+                    key={index}
+                    product={product}
+                  />
+                );
+              })}
+            </Slider>
+          )}
+          {window?.innerWidth < 640 && (
+            <div
+              style={
+                window.innerWidth < 640
+                  ? {
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
+                  : {}
+              }
+              className={bigScreenCss}
+            >
+              {false ? (
+                Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="col-span-1 mt-1 min-h-[400px]"
+                  />
+                ))
+              ) : (
+                <React.Fragment>
+                  {products && products.length > 0 ? (
+                    products.map((product, index) =>
+                      index < 10 ? (
+                        <ProductCard
+                          key={index}
+                          classes="col-span-1 mt-1"
+                          product={product}
+                        />
+                      ) : null
+                    )
+                  ) : (
+                    <p className="col-span-5 font-semibold text-center text-base">
+                      No Product Found
+                    </p>
+                  )}
+                </React.Fragment>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="w-full my-8">
           <img
-            src={
-              process.env.PUBLIC_URL + "/images/collections/perfect-design.png"
-            }
+            className="h-[160px] sm:h-[100%] w-[100vw] border"
+            src={process.env.PUBLIC_URL + "/images/collectonBanners/image.png"}
             alt=""
           />
         </div>
 
         <div className="mb-10">
           <div className="flex items-center justify-between mx-2 my-8">
-            <h2 className="font-semibold text-black-100 text-2xl">
+            <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Top deals from our sellers
             </h2>
-            <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            {window?.innerWidth > 640 && (
+              <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            )}
           </div>
-          <Slider {...fiveSlider} className="arrow__wrapper">
-            {BrandPicks
-              ? BrandPicks.map((product, index) => {
-                  return (
-                    <ProductCard
-                      classes="min-h-[600px] mx-2"
-                      key={index}
-                      product={product}
-                    />
-                  );
-                })
-              : null}
-          </Slider>
+          {window?.innerWidth > 640 && (
+            <Slider {...fiveSlider} className="arrow__wrapper">
+              {BrandPicks
+                ? BrandPicks.map((product, index) => {
+                    return (
+                      <ProductCard
+                        classes="min-h-[600px] mx-2"
+                        key={index}
+                        product={product}
+                      />
+                    );
+                  })
+                : null}
+            </Slider>
+          )}
+          {window?.innerWidth < 640 && (
+            <div
+              style={
+                window.innerWidth < 640
+                  ? {
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
+                  : {}
+              }
+              className={bigScreenCss}
+            >
+              {false ? (
+                Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="col-span-1 mt-1 min-h-[400px]"
+                  />
+                ))
+              ) : (
+                <React.Fragment>
+                  {products && products.length > 0 ? (
+                    products.map((product, index) =>
+                      index < 10 ? (
+                        <ProductCard
+                          key={index}
+                          classes="col-span-1 mt-1"
+                          product={product}
+                        />
+                      ) : null
+                    )
+                  ) : (
+                    <p className="col-span-5 font-semibold text-center text-base">
+                      No Product Found
+                    </p>
+                  )}
+                </React.Fragment>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="w-full my-8">
           <img
+            className="h-[160px] sm:h-[100%] w-[100vw] border"
             src={
-              process.env.PUBLIC_URL + "/images/collections/perfect-served.png"
+              process.env.PUBLIC_URL + "/images/collectonBanners/image-1.png"
             }
             alt=""
           />
@@ -289,68 +430,199 @@ export const CollectionPage = () => {
 
         <div className="mb-10">
           <div className="flex items-center justify-between mx-2 my-8">
-            <h2 className="font-semibold text-black-100 text-2xl">
+            <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Explore top picks
             </h2>
-            <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            {window?.innerWidth > 640 && (
+              <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            )}
           </div>
-          <Slider {...fiveSlider} className="arrow__wrapper">
-            {BrandPicks.map((product, index) => {
-              return (
-                <ProductCard
-                  classes="min-h-[600px] mx-2"
-                  key={index}
-                  product={product}
-                />
-              );
-            })}
-          </Slider>
+          {window?.innerWidth > 640 && (
+            <Slider {...fiveSlider} className="arrow__wrapper">
+              {BrandPicks.map((product, index) => {
+                return (
+                  <ProductCard
+                    classes="min-h-[600px] mx-2"
+                    key={index}
+                    product={product}
+                  />
+                );
+              })}
+            </Slider>
+          )}
+          {window?.innerWidth < 640 && (
+            <div
+              style={
+                window.innerWidth < 640
+                  ? {
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
+                  : {}
+              }
+              className={bigScreenCss}
+            >
+              {false ? (
+                Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="col-span-1 mt-1 min-h-[400px]"
+                  />
+                ))
+              ) : (
+                <React.Fragment>
+                  {products && products.length > 0 ? (
+                    products.map((product, index) =>
+                      index < 10 ? (
+                        <ProductCard
+                          key={index}
+                          classes="col-span-1 mt-1"
+                          product={product}
+                        />
+                      ) : null
+                    )
+                  ) : (
+                    <p className="col-span-5 font-semibold text-center text-base">
+                      No Product Found
+                    </p>
+                  )}
+                </React.Fragment>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="w-full my-8">
           <img
-            src={process.env.PUBLIC_URL + "/images/collections/dine-in.png"}
+            className="h-[160px] sm:h-[100%] w-[100vw] border"
+            src={
+              process.env.PUBLIC_URL + "/images/collectonBanners/image-2.png"
+            }
             alt=""
           />
         </div>
 
         <div className="mb-10">
           <div className="flex items-center justify-between mx-2 my-8">
-            <h2 className="font-semibold text-black-100 text-2xl">
+            <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Hot new releases
             </h2>
-            <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            {window?.innerWidth > 640 && (
+              <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            )}
           </div>
-          <Slider {...fiveSlider} className="arrow__wrapper">
-            {BrandPicks
-              ? BrandPicks.map((product, index) => {
-                  return (
-                    <ProductCard
-                      classes="min-h-[600px] mx-2"
-                      key={index}
-                      product={product}
-                    />
-                  );
-                })
-              : null}
-          </Slider>
+          {window?.innerWidth > 640 && (
+            <Slider {...fiveSlider} className="arrow__wrapper">
+              {products
+                ? products?.map((product, index) => {
+                    return (
+                      <ProductCard
+                        classes="min-h-[600px] mx-2"
+                        key={index}
+                        product={product}
+                      />
+                    );
+                  })
+                : null}
+            </Slider>
+          )}
+          {window?.innerWidth < 640 && (
+            <div
+              style={
+                window.innerWidth < 640
+                  ? {
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
+                  : {}
+              }
+              className={bigScreenCss}
+            >
+              {false ? (
+                Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="col-span-1 mt-1 min-h-[400px]"
+                  />
+                ))
+              ) : (
+                <React.Fragment>
+                  {products && products.length > 0 ? (
+                    products.map((product, index) =>
+                      index < 10 ? (
+                        <ProductCard
+                          key={index}
+                          classes="col-span-1 mt-1"
+                          product={product}
+                        />
+                      ) : null
+                    )
+                  ) : (
+                    <p className="col-span-5 font-semibold text-center text-base">
+                      No Product Found
+                    </p>
+                  )}
+                </React.Fragment>
+              )}
+            </div>
+          )}
         </div>
 
-        <div className="py-10 pb-20 px-6 bg-[#E2E8F033] mt-10 rounded-[20px]">
+        <div className="py-10 pb-20 px-1 sm:px-6 bg-[#E2E8F033] mt-10 rounded-[20px]">
           <div className="flex items-center justify-center text-center flex-col">
-            <h3 className="text-black-100 text-[22px] font-semibold">
+            <h3 className=" font-medium sm:font-semibold text-[16px] sm:text-[22px] text-black-100 ">
               Explore official brand stores
             </h3>
-            <p className="max-w-[850px] text-gray-700 mt-2 text-base">
-              Find top-notch commercial kitchen equipment for restaurants. We
-              offer a wide range of products from trusted brands
-              like Beckers, Rational, Cambro, Empero, Robot Coupe, Lacor,
-              and Roller Grill. Whether you're outfitting a new kitchen or
-              upgrading your current setup.
-            </p>
+            {window?.innerWidth < 640 && (
+              <p className="max-w-[850px] mb-[20px] text-gray-700 mt-2 text-[14px]  sm:text-base">
+                Find top-notch commercial kitchen equipment for restaurants We
+                offer a wide range.
+              </p>
+            )}
+            {window?.innerWidth > 640 && (
+              <p className="max-w-[850px] text-gray-700 mt-2 text-[14px]  sm:text-base">
+                Find top-notch commercial kitchen equipment for restaurants. We
+                offer a wide range of products from trusted brands
+                like Beckers, Rational, Cambro, Empero, Robot Coupe, Lacor,
+                and Roller Grill. Whether you're outfitting a new kitchen or
+                upgrading your current setup.
+              </p>
+            )}
           </div>
+          {window?.innerWidth < 640 && (
+            <div
+              style={
+                window.innerWidth < 640
+                  ? {
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
+                  : {}
+              }
+              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide scroll-smooth"
+            >
+              {ExploreBrandImages
+                ? ExploreBrandImages.map((items, index) => (
+                    <Link
+                      key={index}
+                      to={items.redirectLink}
+                      className="snap-center flex-shrink-0 mr-[10px] w-[50vw]"
+                    >
+                      <img
+                        className="w-full mx-[10px] h-auto object-cover rounded-lg"
+                        src={items.img}
+                        alt=""
+                      />
+                    </Link>
+                  ))
+                : null}
+            </div>
+          )}
 
-          <div className="grid grid-cols-4 gap-4 mt-5">
+          <div className="hidden sm:grid grid-cols-4 gap-4 mt-5">
             <div className="col-span-1">
               <img
                 src={
@@ -464,46 +736,136 @@ export const CollectionPage = () => {
 
         <div className="mb-10">
           <div className="flex items-center justify-between mx-2 my-8">
-            <h2 className="font-semibold text-black-100 text-2xl">
+            <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Products you may also like
             </h2>
-            <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            {window?.innerWidth > 640 && (
+              <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            )}
           </div>
-          <Slider {...fiveSlider} className="arrow__wrapper">
-            {BrandPicks
-              ? BrandPicks.map((product, index) => {
-                  return (
-                    <ProductCard
-                      classes="min-h-[600px] mx-2"
-                      key={index}
-                      product={product}
-                    />
-                  );
-                })
-              : null}
-          </Slider>
+          {window?.innerWidth > 640 && (
+            <Slider {...fiveSlider} className="arrow__wrapper">
+              {BrandPicks
+                ? BrandPicks.map((product, index) => {
+                    return (
+                      <ProductCard
+                        classes="min-h-[600px] mx-2"
+                        key={index}
+                        product={product}
+                      />
+                    );
+                  })
+                : null}
+            </Slider>
+          )}
+          {window?.innerWidth < 640 && (
+            <div
+              style={
+                window.innerWidth < 640
+                  ? {
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
+                  : {}
+              }
+              className={bigScreenCss}
+            >
+              {false ? (
+                Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="col-span-1 mt-1 min-h-[400px]"
+                  />
+                ))
+              ) : (
+                <React.Fragment>
+                  {products && products.length > 0 ? (
+                    products?.map((product, index) =>
+                      index < 10 ? (
+                        <ProductCard
+                          key={index}
+                          classes="col-span-1 mt-1"
+                          product={product}
+                        />
+                      ) : null
+                    )
+                  ) : (
+                    <p className="col-span-5 font-semibold text-center text-base">
+                      No Product Found
+                    </p>
+                  )}
+                </React.Fragment>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="mb-10">
           <div className="flex items-center justify-between mx-2 my-8">
-            <h2 className="font-semibold text-black-100 text-2xl">
+            <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Inspired by your browsing history
             </h2>
-            <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            {window?.innerWidth > 640 && (
+              <span className="text-gray-700 text-sm">Page 1 of 5</span>
+            )}
           </div>
-          <Slider {...fiveSlider} className="arrow__wrapper">
-            {BrandPicks
-              ? BrandPicks.map((product, index) => {
-                  return (
-                    <ProductCard
-                      classes="min-h-[600px] mx-2"
-                      key={index}
-                      product={product}
-                    />
-                  );
-                })
-              : null}
-          </Slider>
+          {window?.innerWidth > 640 && (
+            <Slider {...fiveSlider} className="arrow__wrapper">
+              {BrandPicks
+                ? BrandPicks.map((product, index) => {
+                    return (
+                      <ProductCard
+                        classes="min-h-[600px] mx-2"
+                        key={index}
+                        product={product}
+                      />
+                    );
+                  })
+                : null}
+            </Slider>
+          )}
+          {window?.innerWidth < 640 && (
+            <div
+              style={
+                window.innerWidth < 640
+                  ? {
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
+                  : {}
+              }
+              className={bigScreenCss}
+            >
+              {false ? (
+                Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="col-span-1 mt-1 min-h-[400px]"
+                  />
+                ))
+              ) : (
+                <React.Fragment>
+                  {products && products.length > 0 ? (
+                    products.map((product, index) =>
+                      index < 10 ? (
+                        <ProductCard
+                          key={index}
+                          classes="col-span-1 mt-1"
+                          product={product}
+                        />
+                      ) : null
+                    )
+                  ) : (
+                    <p className="col-span-5 font-semibold text-center text-base">
+                      No Product Found
+                    </p>
+                  )}
+                </React.Fragment>
+              )}
+            </div>
+          )}
         </div>
       </Wrapper>
     </div>
