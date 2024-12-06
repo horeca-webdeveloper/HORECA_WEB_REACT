@@ -8,6 +8,7 @@ import { useCart } from "../../context/CartContext";
 export const DeleteCartButton = ({ product, setFetchCall, fetchCall, setCartSummaryFlag, cartSummaryFlag, temp, setTempCartItems }) => {
 
     const [deleteCartLoader, setDeleteCartLoader] = useState(false);
+    const [saveForLaterLoader, setSaveForLaterLoader] = useState(false);
     const { triggerUpdateCart, updateTempCart } = useCart();
     let saveForLaterItems = localStorage.getItem("SaveForLater");
     let saveForLaterItemsTemp = localStorage.getItem("SaveForLaterTemp");
@@ -42,56 +43,51 @@ export const DeleteCartButton = ({ product, setFetchCall, fetchCall, setCartSumm
  
 
     const saveForLater = async (prod) => {
-   
+        setSaveForLaterLoader(true);
+    
         if(authToken){
             try{
-                const response=apiClient.post('save-for-later',{
-                    "product_id":prod.product_id
+                const response = await apiClient.post('save-for-later', {
+                    "product_id": prod.product_id
                 });
+    
                 triggerUpdateCart();
                 setFetchCall(!fetchCall);
-                // setCartSummaryFlag(!cartSummaryFlag);
-                // handlerRemoveItemsFromCart(prod)
-             
+    
                 let tempObj = prod;
-                if (saveForLaterItems) {
-                    let itemsArray = JSON.parse(saveForLaterItems);
-                    let itemExists = itemsArray.findIndex(item => item.product_id === prod.product.product_id);
-                    if (itemExists == -1) {
-                        itemsArray.push(tempObj);
-                    }
-                    localStorage.setItem("SaveForLater", JSON.stringify(itemsArray));
-                } else {
-                    localStorage.setItem("SaveForLater", JSON.stringify([tempObj]));
-        
-                }
-               
-            }catch(error){
-                console.log("error",error);
-            }
-        }else{
-            handlerRemoveItemsFromCartTemp(prod.product_id);
-            let tempObj = prod;
-            if (saveForLaterItemsTemp) {
-                let itemsArray = JSON.parse(saveForLaterItemsTemp);
-                let itemExists = itemsArray.findIndex(item => item.product_id === prod.product_id);
-                if (itemExists == -1) {
+                let itemsArray = saveForLaterItems ? JSON.parse(saveForLaterItems) : [];
+                let itemExists = itemsArray.findIndex(item => item.product_id === prod.product.product_id);
+    
+                if (itemExists === -1) {
                     itemsArray.push(tempObj);
                 }
-                localStorage.setItem("SaveForLater", JSON.stringify(itemsArray));
-            } else {
-                localStorage.setItem("SaveForLater", JSON.stringify([tempObj]));
     
+                localStorage.setItem("SaveForLater", JSON.stringify(itemsArray));
+            } catch (error) {
+                console.log("error", error);
+            } finally {
+                setSaveForLaterLoader(false);  // Ensure loader is set to false here.
             }
+        } else {
+            handlerRemoveItemsFromCartTemp(prod.product_id);
+            
+            let tempObj = prod;
+            let itemsArray = saveForLaterItemsTemp ? JSON.parse(saveForLaterItemsTemp) : [];
+            let itemExists = itemsArray.findIndex(item => item.product_id === prod.product_id);
+    
+            if (itemExists === -1) {
+                itemsArray.push(tempObj);
+            }
+    
+            localStorage.setItem("SaveForLater", JSON.stringify(itemsArray));
+            setSaveForLaterLoader(false);  // Ensure loader is set to false here as well.
         }
-
-
+       
     }
-
-
+ 
     return (
         <>
-            <button className="text-primary text-xs cursor-pointer" onClick={() => saveForLater(product)}>Save For Later</button>
+            <button disabled={saveForLaterLoader} className={`text-primary text-xs  ${saveForLaterLoader ? "" : "cursor-pointer"}`} onClick={() => saveForLater(product)}>{saveForLaterLoader?"Saving...":"Save For Later"}</button>
             <span className="mx-3 text-[#E2E8F0]">|</span>
             {temp ? <button disabled={deleteCartLoader} className={`text-primary text-xs  ${deleteCartLoader ? "" : "cursor-pointer"}`} onClick={() => handlerRemoveItemsFromCartTemp(product.product_id)}>{deleteCartLoader ? "Deleting" : "Delete"}</button> : <button disabled={deleteCartLoader} className={`text-primary text-xs  ${deleteCartLoader ? "" : "cursor-pointer"}`} onClick={() => handlerRemoveItemsFromCart(product)}>{deleteCartLoader ? "Deleting" : "Delete"}</button>}
         </>

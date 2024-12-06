@@ -13,8 +13,8 @@ import { Layout } from "./Layout.jsx";
 
 
 export const Checkout = () => {
+    const authToken=localStorage.getItem('authToken');
     const { triggerUpdateCart, updateTempCart } = useCart();
-    const { incrementCartItems } = useLocalCartCount();
     const [loader, setLoader] = useState(false)
     const [activeTab, setActiveTab] = useState('saved');
     const [cartItems, setCartItems] = useState([]);
@@ -45,15 +45,13 @@ export const Checkout = () => {
         setCartItems(response.data.data);
         const storeIds = [...new Set(response.data.data.map((prod) => prod.product.store_id))];
         setListOfStore(storeIds);
-        setCartSummaryFlag((prev) => !prev);  // Toggling the flag to trigger UI updates
+        // setCartSummaryFlag((prev) => !prev);  // Toggling the flag to trigger UI updates
     } catch (error) {
         console.error('Error fetching cart:', error);
     } finally {
         setLoader(false);
     }
-}, [fetchCall]);
-
-
+}, [fetchCall,tempCartItems,saveForLaterTemp]);
 
 
     const handlerSameDeliveryDate = (e) => {
@@ -112,11 +110,10 @@ export const Checkout = () => {
 
     useEffect(() => {
         fetchingCart();
-
     }, [fetchCall,saveForLaterTemp]);
 
     useEffect(() => {
-        if (cartItems.length == 0) {
+        if (authToken==null) {
             let temp = [];
             if (tempCartItems && tempCartItems.length > 0) {
                 tempCartItems.forEach((prod) => {
@@ -129,7 +126,7 @@ export const Checkout = () => {
                 setListOfStore(temp)
             }
         }
-    }, [cartItems, fetchCall]);
+    }, [fetchCall,cartItems]);
 
     useEffect(() => {
         if (sameDeliveryTime) {
@@ -150,8 +147,9 @@ export const Checkout = () => {
         <React.Fragment>
             <Layout cartItems={cartItems} tempCartItems={tempCartItems} cartSummaryFlag={cartSummaryFlag} removeItemsLoader={removeItemsLoader} listOfStore={listOfStore}  >
                 <Breadcrumb items={firstBreadCrumb} classes={"mt-7"} />
+
                 {/* show cart item */}
-                {!!cartItems && cartItems.length > 0 ? <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
+                {!!cartItems && cartItems.length > 0 && authToken != null ? <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
                     <div className="flex items-center mt-5">
                         <h3 className="font-semibold text-[28px] text-[#424242]">Shopping Cart</h3>
                         {cartItems ? <p className="text-[#64748B] text-base ml-2">({cartItems.length} Items)</p> : null}
@@ -216,9 +214,9 @@ export const Checkout = () => {
                     <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
                         <div className="flex items-center mt-5">
                             <h3 className="font-semibold text-[28px] text-[#424242]">Shopping Cart</h3>
-                            {tempCartItems && tempCartItems.length > 0 ? <p className="text-[#64748B] text-base ml-2">({tempCartItems.length} Items)</p> : null}
+                            {tempCartItems && tempCartItems.length && authToken == null > 0 ? <p className="text-[#64748B] text-base ml-2">({tempCartItems.length} Items)</p> : null}
                         </div>
-                        {listOfStore && listOfStore.length && tempCartItems.length > 0 ? (
+                        {listOfStore && listOfStore.length && tempCartItems.length && authToken == null > 0 ? (
                             <div className="my-3 flex items-center justify-between">
                                 <div className="flex items-center justify-between text-gray-700 mt-1">
                                     <div className="flex items-center">

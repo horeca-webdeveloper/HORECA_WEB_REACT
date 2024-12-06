@@ -33,12 +33,13 @@ export const Login = () => {
     const datas = {
       "amount": data.amount,
       // "currency": data.currency.toUpperCase(),
-         "currency": "AED",
+         "currency": "USD",
       "description": data.address,
       "customer_name": data.name,
       "customer_email": data.email
     };
-    localStorage.setItem('guestUser',JSON.stringify(datas));
+
+
     try {
       setLoading(true);
       const response = await apiClient.post(`/create-payment`, datas);
@@ -99,14 +100,17 @@ export const Login = () => {
     resolver: yupResolver(schemaForAddress),
   });
 
-  const onSubmit2 = (data) => {
+  const onSubmit2 = async(data) => {
    
-  const guestInfo= JSON.parse(localStorage.getItem('guestUser'));
-    Object.assign(guestInfo, {amount: totalAmount,currency:currencyTitle});
-       Object.assign(guestInfo, {...data});
-      localStorage.setItem("guestUser",JSON.stringify('guestInfo'));
-    
-    handlePayments(guestInfo);
+ const guestInfo = JSON.parse(localStorage.getItem('guestUser')) || {}; // Ensure it doesn't throw an error if no guestUser exists
+await Object.assign(guestInfo, { amount: totalAmount, currency: currencyTitle });
+await Object.assign(guestInfo, data);
+
+
+handlePayments(guestInfo);
+// Correctly store the object in localStorage
+localStorage.setItem("guestUser", JSON.stringify(guestInfo));
+
   }
 
 
@@ -281,6 +285,7 @@ export const Login = () => {
             </form>
 
           </div>
+          
           <div className="col-span-2 text-center">
             <h1 className="relative text-[#000000] text-[22px]
                 after:absolute after:bottom-[60px] after:w-[2px] after:h-[200px] after:bg-[#E2E8F0] after:left-1/2

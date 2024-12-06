@@ -19,6 +19,8 @@ import { useLocation } from "react-router-dom";
 import { useWishlist } from "../context/WishListContext";
 
 export const Navigation = ({ categories, userProfile, currentLocation }) => {
+
+
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [currency, setCurrency] = useState(["USD", "AED", "PKR"]);
 
@@ -502,7 +504,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           />
           {currentLocation ? (
             <span className="text-[#64748B] text-sm ml-3">
-              {currentLocation.city}, {currentLocation.country}
+              {currentLocation.city} {currentLocation.regionName}, {currentLocation.country} 
             </span>
           ) : (
             <span className="text-[#64748B] text-sm ml-3">

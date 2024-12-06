@@ -91,7 +91,7 @@ const App = () => {
       setLoader(false);
     }
   };
-
+ 
   return (
     <>
       <Navigation
@@ -125,7 +125,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />{" "}
         <Route path="/forgot-password" element={<ForgotPassword />} />{" "}
         <Route path="/sign-up" element={<SignUp />} />{" "}
-        <Route path="/review-checkout" element={<ReviewCheckout />} />{" "}
+        <Route path="/review-checkout"  element={<ReviewCheckout  currentLocation={currentLocation} />} />{" "}
         <Route path="/all-orders" element={<AllOrders />} />{" "}
         <Route path="/reviews" element={<Reviews />} />{" "}
         <Route path="/browsing-history" element={<BrowsingHistory />} />{" "}
