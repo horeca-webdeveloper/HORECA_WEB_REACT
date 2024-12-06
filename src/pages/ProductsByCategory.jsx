@@ -84,7 +84,6 @@ export const ProductsByCategory = () => {
         ...(selectedBrands.length > 0 && { brand_id: String(selectedBrands) }),
         ...(search && { search: search }),
       };
-
       if (sortBy === "asc" || sortBy === "desc") {
         params.sort_direction = sortBy;
         params.sort_by = "sale_price";
@@ -391,7 +390,7 @@ export const ProductsByCategory = () => {
                       return (
                         <div
                           key={item.id}
-                          className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md  border-primary"}`}
+                          className={`bg-[#F5F5F5] h-[67.2px] w-[67.2px] sm:h-[100%] sm:w-[100%] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-1 sm:p-4 rounded-md  border-primary"}`}
                         >
                           <img
                             className="w-28"
@@ -439,11 +438,11 @@ export const ProductsByCategory = () => {
 
             <br />
             {/* Products  Display Here  */}
-            <div className="hidden sm:grid grid-cols-4 gap-4 mt-4 mb-10">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 mb-10">
               {loader ? (
                 Array.from({ length: 12 }).map((_, index) => (
                   <div key={index} className="col-span-1">
-                    <Skeleton count={1} height="500px" />
+                    <Skeleton count={1} height="320px" />
                   </div>
                 ))
               ) : (
@@ -453,7 +452,7 @@ export const ProductsByCategory = () => {
                       return (
                         <React.Fragment key={index}>
                           <ProductCard
-                            classes="col-span-1 mt-1  min-h-[550px]"
+                            classes="col-span-1 mt-1 w-[46vw] sm:w-[100%]"
                             key={index}
                             product={product}
                           />
@@ -487,7 +486,10 @@ export const ProductsByCategory = () => {
         )}
         {window?.innerWidth < 640 && (
           <>
-            <img src="" />
+            <img
+              className="w-[100vw] h-[162px] rounded"
+              src={"http://localhost:3000/images/categoryBanner.png"}
+            />
             <h1 className="mt-[20px]">Products you may also like</h1>
             <div
               style={
@@ -505,7 +507,7 @@ export const ProductsByCategory = () => {
                 Array.from({ length: 10 }).map((_, index) => (
                   <Skeleton
                     key={index}
-                    className="col-span-1 mt-1 min-h-[400px]"
+                    className="col-span-1 mt-1 min-h-[320px]"
                   />
                 ))
               ) : (
@@ -555,7 +557,7 @@ export const ProductsByCategory = () => {
                 Array.from({ length: 10 }).map((_, index) => (
                   <Skeleton
                     key={index}
-                    className="col-span-1 mt-1 min-h-[400px]"
+                    className="col-span-1 mt-1 min-h-[320px]"
                   />
                 ))
               ) : (

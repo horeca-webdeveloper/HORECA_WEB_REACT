@@ -47,10 +47,12 @@ export const CollectionPage = () => {
       !!matchedCategory &&
         matchedCategory.children.forEach((cat) => {
           cat.children.forEach((cat2, index) => {
+            console.log("category2", cat2);
             if (index < 2) {
               let tempObj = {
                 name: cat2.name,
                 image: cat2.image,
+                count: cat2.productCount,
               };
               filteredObject.push(tempObj);
             }
@@ -96,6 +98,7 @@ export const CollectionPage = () => {
   const bigScreenCss =
     "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
 
+  console.log("filtercateogries", filterCategories);
   return (
     <div>
       <Wrapper>
@@ -138,9 +141,13 @@ export const CollectionPage = () => {
             {/* Collection Category  */}
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-5 mt-8">
               {filterCategories && filterCategories.length > 0
-                ? filterCategories.map((cat, index) => (
-                    <React.Fragment key={index}>
-                      {(window?.innerWidth < 640 ? index < 8 : index < 14) ? (
+                ? filterCategories.map((cat, index) => {
+                    console.log(cat);
+                    const isVisible =
+                      window?.innerWidth < 640 ? index < 8 : index < 14;
+
+                    return isVisible ? (
+                      <React.Fragment key={index}>
                         <div
                           className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md ${
                             cat?.id === selectedCat?.id
@@ -153,19 +160,24 @@ export const CollectionPage = () => {
                             src={`https://testhssite.com/storage/${cat.image}`}
                             alt={cat.name}
                           />
-                          <h4 className="mt-2 text-base font-semibold text-primary text-center">
+                          <h4 className="mt-2 text-base text-black font-semibold sm:text-primary text-center">
                             {cat.name}
                           </h4>
+                          <h4 className="block sm:hidden mt-2 text-base font-semibold text-primary text-center">
+                            {cat.count} Products
+                          </h4>
                         </div>
-                      ) : null}
-                    </React.Fragment>
-                  ))
+                      </React.Fragment>
+                    ) : null;
+                  })
                 : // Render skeletons when `categories` is `null` or empty
-                  Array.from({ length: 14 }).map((_, index) => (
-                    <div key={index} className="col-span-1">
-                      <Skeleton count={1} height="150px" />
-                    </div>
-                  ))}
+                  Array.from({ length: window?.innerWidth < 640 ? 8 : 14 }).map(
+                    (_, index) => (
+                      <div key={index} className="col-span-1">
+                        <Skeleton count={1} height="150px" />
+                      </div>
+                    )
+                  )}
             </div>
             <div className="hidden sm:grid grid-cols-4 gap-8 mt-8 ">
               {selectedCat && selectedCat.children
