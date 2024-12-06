@@ -15,7 +15,7 @@ export const ReviewSection = ({ id }) => {
   const [starValue, setStarValue] = useState();
   const [TopReviews, setTopReviews] = useState("Top Reviews");
   const [topReviewsValue, setTopReviewsValue] = useState("");
-  const [token, setToken] = useState("")
+  const [token, setToken] = useState("");
 
   const convertTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -23,21 +23,20 @@ export const ReviewSection = ({ id }) => {
     return date.toLocaleDateString("en-US", options);
   };
 
-
   const fetchProductReviews = async () => {
     setReviewsLoader(true);
     try {
-      const response = await apiClient.get('/reviews', {
+      const response = await apiClient.get("/reviews", {
         params: {
           product_id: id,
           ...(starValue && { star: starValue }),
-          ...(topReviewsValue && { sort: topReviewsValue })
-        }
+          ...(topReviewsValue && { sort: topReviewsValue }),
+        },
       });
 
       setReviewsData(response.data.data);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     } finally {
       setReviewsLoader(false);
     }
@@ -46,7 +45,7 @@ export const ReviewSection = ({ id }) => {
   useEffect(() => {
     let authToken = localStorage.getItem("authToken");
     setToken(authToken);
-  }, [])
+  }, []);
 
   useEffect(() => {
     setReviewsLoader(true);
@@ -68,12 +67,17 @@ export const ReviewSection = ({ id }) => {
               </h3>
               <p className="text-[#64748B] text-sm mt-3 min-h-[100px]">
                 Share your thoughts by posting a detailed review, and in return,
-                receive valuable promotional credit as a token of appreciation for
-                your feedback.
+                receive valuable promotional credit as a token of appreciation
+                for your feedback.
               </p>
-              {!token ? <Link to="/login" className="block mx-auto text-center bg-primary text-white text-base font-semibold rounded-sm p-2 w-full mt-3 py-3">
-                Login OR Register
-              </Link> : null}
+              {!token ? (
+                <Link
+                  to="/login"
+                  className="block mx-auto text-center bg-primary text-white text-base font-semibold rounded-sm p-2 w-full mt-3 py-3"
+                >
+                  Login OR Register
+                </Link>
+              ) : null}
             </div>
             <div className="p-5 mt-4 border border-[#E2E8F0] rounded-[4px]">
               <h3 className="text-[#262626] font-semibold text-lg">
@@ -84,28 +88,55 @@ export const ReviewSection = ({ id }) => {
               </h2>
               <div className="flex items-center mt-1">
                 {[...Array(5)].map((_, index) => (
-                  <Star key={index} color={index + 1 < reviewsData.average_rating ? "#ffd700" : "#d7d7d7"} size="24px" className="mr-1" />
+                  <Star
+                    key={index}
+                    color={
+                      index + 1 < reviewsData.average_rating
+                        ? "#ffd700"
+                        : "#d7d7d7"
+                    }
+                    size="24px"
+                    className="mr-1"
+                  />
                 ))}
               </div>
 
-              <p className="text-[#7E859B] text-xs mt-2"> Based on {reviewsData.reviews && reviewsData.reviews.total ? reviewsData.reviews.total : ""}{" "} ratings</p>
+              <p className="text-[#7E859B] text-xs mt-2">
+                {" "}
+                Based on{" "}
+                {reviewsData.reviews && reviewsData.reviews.total
+                  ? reviewsData.reviews.total
+                  : ""}{" "}
+                ratings
+              </p>
 
               <div className="flex items-center mt-2">
                 <span className="text-xs font-semibold">5</span>
                 <Star color="#737373" size="16px" className="mx-1" />
-                <ProgressBar color="#38AE04" width={reviewsData.star_counts && reviewsData.reviews && reviewsData.total_reviews ? (reviewsData.star_counts["5_star"] / reviewsData.total_reviews) * 100 : ""} />
+                <ProgressBar
+                  color="#38AE04"
+                  width={
+                    reviewsData.star_counts &&
+                    reviewsData.reviews &&
+                    reviewsData.total_reviews
+                      ? (reviewsData.star_counts["5_star"] /
+                          reviewsData.total_reviews) *
+                        100
+                      : ""
+                  }
+                />
                 <span className="ml-2 text-xs font-semibold">
                   {reviewsData.star_counts
                     ? (() => {
-                      const percentage =
-                        (reviewsData.star_counts["5_star"] /
-                          reviewsData.total_reviews) *
-                        100;
-                      if (isNaN(percentage) || percentage === Infinity) {
-                        return "0%";
-                      }
-                      return `${percentage.toFixed(0)}%`;
-                    })()
+                        const percentage =
+                          (reviewsData.star_counts["5_star"] /
+                            reviewsData.total_reviews) *
+                          100;
+                        if (isNaN(percentage) || percentage === Infinity) {
+                          return "0%";
+                        }
+                        return `${percentage.toFixed(0)}%`;
+                      })()
                     : ""}
                 </span>{" "}
               </div>
@@ -113,19 +144,30 @@ export const ReviewSection = ({ id }) => {
               <div className="flex items-center mt-2">
                 <span className="text-xs font-semibold">4</span>
                 <Star color="#737373" size="16px" className="mx-1" />
-                <ProgressBar color="#82AE04" width={reviewsData.star_counts && reviewsData.reviews && reviewsData.total_reviews ? (reviewsData.star_counts["4_star"] / reviewsData.total_reviews) * 100 : ""} />
+                <ProgressBar
+                  color="#82AE04"
+                  width={
+                    reviewsData.star_counts &&
+                    reviewsData.reviews &&
+                    reviewsData.total_reviews
+                      ? (reviewsData.star_counts["4_star"] /
+                          reviewsData.total_reviews) *
+                        100
+                      : ""
+                  }
+                />
                 <span className="ml-2 text-xs font-semibold">
                   {reviewsData.star_counts
                     ? (() => {
-                      const percentage =
-                        (reviewsData.star_counts["4_star"] /
-                          reviewsData.total_reviews) *
-                        100;
-                      if (isNaN(percentage) || percentage === Infinity) {
-                        return "0%";
-                      }
-                      return `${percentage.toFixed(0)}%`;
-                    })()
+                        const percentage =
+                          (reviewsData.star_counts["4_star"] /
+                            reviewsData.total_reviews) *
+                          100;
+                        if (isNaN(percentage) || percentage === Infinity) {
+                          return "0%";
+                        }
+                        return `${percentage.toFixed(0)}%`;
+                      })()
                     : ""}
                 </span>{" "}
               </div>
@@ -133,19 +175,30 @@ export const ReviewSection = ({ id }) => {
               <div className="flex items-center mt-2">
                 <span className="text-xs font-semibold">3</span>
                 <Star color="#737373" size="16px" className="mx-1" />
-                <ProgressBar color="#F3AC30" width={reviewsData.star_counts && reviewsData.reviews && reviewsData.total_reviews ? (reviewsData.star_counts["3_star"] / reviewsData.total_reviews) * 100 : ""} />
+                <ProgressBar
+                  color="#F3AC30"
+                  width={
+                    reviewsData.star_counts &&
+                    reviewsData.reviews &&
+                    reviewsData.total_reviews
+                      ? (reviewsData.star_counts["3_star"] /
+                          reviewsData.total_reviews) *
+                        100
+                      : ""
+                  }
+                />
                 <span className="ml-2 text-xs font-semibold">
                   {reviewsData.star_counts
                     ? (() => {
-                      const percentage =
-                        (reviewsData.star_counts["3_star"] /
-                          reviewsData.total_reviews) *
-                        100;
-                      if (isNaN(percentage) || percentage === Infinity) {
-                        return "0%";
-                      }
-                      return `${percentage.toFixed(0)}%`;
-                    })()
+                        const percentage =
+                          (reviewsData.star_counts["3_star"] /
+                            reviewsData.total_reviews) *
+                          100;
+                        if (isNaN(percentage) || percentage === Infinity) {
+                          return "0%";
+                        }
+                        return `${percentage.toFixed(0)}%`;
+                      })()
                     : ""}
                 </span>{" "}
               </div>
@@ -153,19 +206,30 @@ export const ReviewSection = ({ id }) => {
               <div className="flex items-center mt-2">
                 <span className="text-xs font-semibold">2</span>
                 <Star color="#737373" size="16px" className="mx-1" />
-                <ProgressBar color="#F36C32" width={reviewsData.star_counts && reviewsData.reviews && reviewsData.total_reviews ? (reviewsData.star_counts["2_star"] / reviewsData.total_reviews) * 100 : ""} />
+                <ProgressBar
+                  color="#F36C32"
+                  width={
+                    reviewsData.star_counts &&
+                    reviewsData.reviews &&
+                    reviewsData.total_reviews
+                      ? (reviewsData.star_counts["2_star"] /
+                          reviewsData.total_reviews) *
+                        100
+                      : ""
+                  }
+                />
                 <span className="ml-2 text-xs font-semibold">
                   {reviewsData.star_counts
                     ? (() => {
-                      const percentage =
-                        (reviewsData.star_counts["2_star"] /
-                          reviewsData.total_reviews) *
-                        100;
-                      if (isNaN(percentage) || percentage === Infinity) {
-                        return "0%";
-                      }
-                      return `${percentage.toFixed(0)}%`;
-                    })()
+                        const percentage =
+                          (reviewsData.star_counts["2_star"] /
+                            reviewsData.total_reviews) *
+                          100;
+                        if (isNaN(percentage) || percentage === Infinity) {
+                          return "0%";
+                        }
+                        return `${percentage.toFixed(0)}%`;
+                      })()
                     : ""}
                 </span>{" "}
               </div>
@@ -173,19 +237,30 @@ export const ReviewSection = ({ id }) => {
               <div className="flex items-center mt-2">
                 <span className="text-xs font-semibold">1</span>
                 <Star color="#737373" size="16px" className="mx-1" />
-                <ProgressBar color="#F36C32" width={reviewsData.star_counts && reviewsData.reviews && reviewsData.total_reviews ? (reviewsData.star_counts["1_star"] / reviewsData.total_reviews) * 100 : ""} />
+                <ProgressBar
+                  color="#F36C32"
+                  width={
+                    reviewsData.star_counts &&
+                    reviewsData.reviews &&
+                    reviewsData.total_reviews
+                      ? (reviewsData.star_counts["1_star"] /
+                          reviewsData.total_reviews) *
+                        100
+                      : ""
+                  }
+                />
                 <span className="ml-2 text-xs font-semibold">
                   {reviewsData.star_counts
                     ? (() => {
-                      const percentage =
-                        (reviewsData.star_counts["1_star"] /
-                          reviewsData.total_reviews) *
-                        100;
-                      if (isNaN(percentage) || percentage === Infinity) {
-                        return "0%";
-                      }
-                      return `${percentage.toFixed(0)}%`;
-                    })()
+                        const percentage =
+                          (reviewsData.star_counts["1_star"] /
+                            reviewsData.total_reviews) *
+                          100;
+                        if (isNaN(percentage) || percentage === Infinity) {
+                          return "0%";
+                        }
+                        return `${percentage.toFixed(0)}%`;
+                      })()
                     : ""}
                 </span>{" "}
               </div>
@@ -200,8 +275,9 @@ export const ReviewSection = ({ id }) => {
                   How do I review this product?
                 </p>
                 <p className="text-[#404553] text-sm mt-2">
-                  If you recently purchased this product from horecastore, you can
-                  go to your Orders page and click on the Submit Review button
+                  If you recently purchased this product from horecastore, you
+                  can go to your Orders page and click on the Submit Review
+                  button
                 </p>
               </div>
               <div className="">
@@ -214,52 +290,116 @@ export const ReviewSection = ({ id }) => {
                   How do I review this product?
                 </p>
                 <p className="text-[#404553] text-sm mt-2">
-                  If you recently purchased this product from horecastore, you can
-                  go to your Orders page and click on the Submit Review button
+                  If you recently purchased this product from horecastore, you
+                  can go to your Orders page and click on the Submit Review
+                  button
                 </p>
               </div>
             </div>
           </div>
           <div className="col-span-12 md:col-span-8 lg:col-span-8 p-5 mt-4 border border-[#E2E8F0] rounded-[4px]">
-          <div className="flex items-center justify-between flex-wrap">
-  <p className="text-black-100 font-semibold text-base mr-4">
-    {reviewsData.reviews ? reviewsData.total_reviews : ""} Reviews
-  </p>
-  <div className="flex items-center space-x-4 flex-wrap">
-    
-    {/* All Star Dropdown */}
-    <Menu
-      menuButton={
-        <MenuButton className="border border-[#E2E8F0] px-6 py-2 text-[#030303] font-semibold min-w-[150px] sm:min-w-[170px]">
-          {AllStar}
-        </MenuButton>
-      }
-      transition
-    >
-      <MenuItem onClick={() => { setAllStar("All Star"); setStarValue(""); }} className="min-w-[150px] sm:min-w-[170px]">All Star</MenuItem>
-      <MenuItem onClick={() => { setAllStar("Five Star"); setStarValue(5); }}>Five Star</MenuItem>
-      <MenuItem onClick={() => { setAllStar("Four Star"); setStarValue(4); }}>Four Star</MenuItem>
-      <MenuItem onClick={() => { setAllStar("Three Star"); setStarValue(3); }}>Three Star</MenuItem>
-      <MenuItem onClick={() => { setAllStar("Two Star"); setStarValue(2); }}>Two Star</MenuItem>
-      <MenuItem onClick={() => { setAllStar("One Star"); setStarValue(1); }}>One Star</MenuItem>
-    </Menu>
+            <div className="flex items-center justify-center sm:justify-between flex-wrap">
+              <p className="text-black-100 font-semibold text-base mr-4">
+                {reviewsData.reviews ? reviewsData.total_reviews : ""} Reviews
+              </p>
+              <div className="flex items-center space-x-4 flex-wrap">
+                {/* All Star Dropdown */}
+                <Menu
+                  menuButton={
+                    <MenuButton className="border border-[#E2E8F0] px-6 py-2 text-[#030303] font-semibold min-w-[150px] sm:min-w-[170px]">
+                      {AllStar}
+                    </MenuButton>
+                  }
+                  transition
+                >
+                  <MenuItem
+                    onClick={() => {
+                      setAllStar("All Star");
+                      setStarValue("");
+                    }}
+                    className="min-w-[150px] sm:min-w-[170px]"
+                  >
+                    All Star
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setAllStar("Five Star");
+                      setStarValue(5);
+                    }}
+                  >
+                    Five Star
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setAllStar("Four Star");
+                      setStarValue(4);
+                    }}
+                  >
+                    Four Star
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setAllStar("Three Star");
+                      setStarValue(3);
+                    }}
+                  >
+                    Three Star
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setAllStar("Two Star");
+                      setStarValue(2);
+                    }}
+                  >
+                    Two Star
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setAllStar("One Star");
+                      setStarValue(1);
+                    }}
+                  >
+                    One Star
+                  </MenuItem>
+                </Menu>
 
-    {/* Top Reviews Dropdown */}
-    <Menu
-      menuButton={
-        <MenuButton className="border border-[#E2E8F0] px-6 py-2 text-[#030303] font-semibold min-w-[150px] sm:min-w-[200px]">
-          {TopReviews}
-        </MenuButton>
-      }
-      transition
-    >
-      <MenuItem className={"min-w-[150px] sm:min-w-[200px]"} onClick={() => { setTopReviews("Top Reviews"); setTopReviewsValue(""); }}>Top Reviews</MenuItem>
-      <MenuItem onClick={() => { setTopReviews("Highest"); setTopReviewsValue("highest"); }}>Highest</MenuItem>
-      <MenuItem onClick={() => { setTopReviews("Lowest"); setTopReviewsValue("lowest"); }}>Lowest </MenuItem>
-    </Menu>
-  </div>
-</div>
-      
+                {/* Top Reviews Dropdown */}
+                <Menu
+                  menuButton={
+                    <MenuButton className="border border-[#E2E8F0] px-6 py-2 text-[#030303] font-semibold min-w-[150px] sm:min-w-[200px]">
+                      {TopReviews}
+                    </MenuButton>
+                  }
+                  transition
+                >
+                  <MenuItem
+                    className={"min-w-[150px] sm:min-w-[200px]"}
+                    onClick={() => {
+                      setTopReviews("Top Reviews");
+                      setTopReviewsValue("");
+                    }}
+                  >
+                    Top Reviews
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setTopReviews("Highest");
+                      setTopReviewsValue("highest");
+                    }}
+                  >
+                    Highest
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setTopReviews("Lowest");
+                      setTopReviewsValue("lowest");
+                    }}
+                  >
+                    Lowest{" "}
+                  </MenuItem>
+                </Menu>
+              </div>
+            </div>
 
             <div className="w-full bg-[#E2E8F0] h-[1px] my-5"></div>
             <div className="overflow-auto max-h-[500px] mt-10">
@@ -270,7 +410,11 @@ export const ReviewSection = ({ id }) => {
                     return (
                       <React.Fragment key={index}>
                         <div className="flex items-center">
-                          <img className="mr-3" src={process.env.PUBLIC_URL + "/icons/F-Review.png"} alt={"Customer Review"} />
+                          <img
+                            className="mr-3"
+                            src={process.env.PUBLIC_URL + "/icons/F-Review.png"}
+                            alt={"Customer Review"}
+                          />
                           <div className="flex justify-center flex-col">
                             <p className="text-black-100 font-bold text-base flex items-center ">
                               {review.customer_name}
@@ -283,34 +427,49 @@ export const ReviewSection = ({ id }) => {
                                 Verified Purchase
                               </span>
                             </p>
-                            <p className="text-gray-700 text-sm"> {review.updated_at ? convertTimestamp(review.updated_at) : ""} </p>
+                            <p className="text-gray-700 text-sm">
+                              {" "}
+                              {review.updated_at
+                                ? convertTimestamp(review.updated_at)
+                                : ""}{" "}
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center my-2">
                           {Array.from({ length: review.star }, (_, index) => (
-                            <Star key={index} color="#666" size="14px" className="mr-1 my-2" />
+                            <Star
+                              key={index}
+                              color="#666"
+                              size="14px"
+                              className="mr-1 my-2"
+                            />
                           ))}
                         </div>
                         <div className="mt-2 flex items-center ">
-                          {
-                            review.images ? <img
+                          {review.images ? (
+                            <img
                               className="mr-2 w-[60px]"
                               src={
-                                "https://testhssite.com/storage/" + review.images[1]
+                                "https://testhssite.com/storage/" +
+                                review.images[1]
                               }
                               alt=""
-                            /> : null
-                          }
+                            />
+                          ) : null}
                         </div>
                         <p className="mt-3 text-gray-700 text-sm">
                           {review.comment}
                         </p>
-                        {(length - 1) !== index ? <div className="w-full bg-[#E2E8F0] h-[1px] my-5"></div> : null}
+                        {length - 1 !== index ? (
+                          <div className="w-full bg-[#E2E8F0] h-[1px] my-5"></div>
+                        ) : null}
                       </React.Fragment>
                     );
                   })
                 ) : (
-                  <p className="font-semibold text-lg text-center">No Review Found</p>
+                  <p className="font-semibold text-lg text-center">
+                    No Review Found
+                  </p>
                 )}
               </React.Fragment>
             </div>
@@ -344,7 +503,6 @@ const Star = ({ color, size, className }) => {
 };
 
 const ProgressBar = ({ width, color }) => {
-
   return (
     <div className={`w-full bg-[#f3f3f3] rounded-full h-1.5 `}>
       <div

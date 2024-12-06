@@ -20,10 +20,8 @@ export const FeatureBrand = ({
     setProducts(showFeatureProduct[0]);
   }, [selectedBrand, brandCat]);
 
-  const smallScreenCss =
-    "flex grid-cols-5 gap-2 sm:gap-5 sm:grid overflow-x-scroll sm:overflow-hidden sm:space-x-5";
-
-  const bigScreenCss = "flex grid-cols-5 gap-2 sm:gap-5 sm:grid sm:space-x-5";
+  const bigScreenCss =
+    "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
 
   return (
     <Wrapper>
@@ -45,7 +43,7 @@ export const FeatureBrand = ({
               }
             : {}
         }
-        className={window.innerWidth < 640 ? smallScreenCss : bigScreenCss}
+        className={bigScreenCss}
       >
         {brandCatLoader ? (
           Array.from({ length: 10 }).map((_, index) => (
