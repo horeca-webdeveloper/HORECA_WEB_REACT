@@ -29,7 +29,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
     const [totalAmount, setTotalAmount] = useState(0);
 
     useEffect(() => {
-       handlerCartSummary();
+        handlerCartSummary();
     }, [cartSummaryFlag])
 
 
@@ -37,9 +37,9 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
 
         setCartSummaryLoader(true)
         try {
-           const response = await apiClient.get(`/cart-summary`);
-           setSummary(response.data)
-           setTotalOrderPrice(response.data.total_with_tax)
+            const response = await apiClient.get(`/cart-summary`);
+            setSummary(response.data)
+            setTotalOrderPrice(response.data.total_with_tax)
         } catch (error) {
             console.error('Error:', error);
         } finally {
@@ -126,7 +126,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
             setTempTax(tempTax);
             setTempTotalAmount(tempSubTotal + tempTax + tempShippingRate);
             if (discountPercent) {
-               
+
                 setTotalAmount(((tempSubTotal + tempTax + tempShippingRate) * ((100 - discountPercent) / 100)));
             } else {
                 setTotalAmount((tempSubTotal + tempTax + tempShippingRate));
@@ -140,12 +140,13 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
         navigate('/review-checkout', data);
     }
 
- 
+
 
     return (
         <React.Fragment>
             <Wrapper>
-                <div className="grid grid-cols-12 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-12 items-center gap-2 mb-20">
+
                     <div className="col-span-9  mb-5">
                         {children}
                     </div>
@@ -219,7 +220,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                                     {confirmAndPayFn && confirmAndPayFn ? <button onClick={confirmAndPayFn} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                         <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
                                     </button> :
-                                        <button onClick={() => navigation({ state: { totalAmount: totalAmount,sub_total:tempSubTotal, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                        <button onClick={() => navigation({ state: { totalAmount: totalAmount, sub_total: tempSubTotal, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                             <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
                                         </button>}
 
@@ -287,7 +288,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                                         </div>
                                         {confirmAndPayFn && confirmAndPayFn ? <button onClick={confirmAndPayFn} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                             <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
-                                        </button> : <button onClick={() => navigation({ state: { totalAmount: tempTotalAmount,subTotal:tempSubTotal, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                        </button> : <button onClick={() => navigation({ state: { totalAmount: tempTotalAmount, subTotal: tempSubTotal, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                             <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
                                         </button>}
 
