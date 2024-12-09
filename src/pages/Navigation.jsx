@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Wrapper } from "../shared/Wrapper";
 import { Link, useParams } from "react-router-dom";
 import {
@@ -17,13 +17,10 @@ import { useNavigate } from "react-router-dom";
 import { apiClient } from "../utils/apiWrapper";
 import { useLocation } from "react-router-dom";
 import { useWishlist } from "../context/WishListContext";
-
+import { debounce } from 'lodash';
 export const Navigation = ({ categories, userProfile, currentLocation }) => {
-
-
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [currency, setCurrency] = useState(["USD", "AED", "PKR"]);
-
   const [selectedLang, setSelectedLang] = useState("English");
   const [lang, setLang] = useState(["English", "العربية"]);
   const navigate = useNavigate();
@@ -124,7 +121,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
   ];
 
   const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
+
   useEffect(() => {
     let search = location.search ? location.search.split("=")[1] : "";
     let filterName = search.replaceAll("-", " ");
@@ -195,11 +192,39 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     fetchProducts();
   }, [searchValue]);
 
-  const handlerSearchValue = (value) => {
-    setSearchValue(value);
-  };
 
-  console.log("searchValue",searchValue);
+
+  const handlerSearchValue = useCallback(debounce((value) => {
+    setSearchValue(value);
+  }, 300), []);
+
+
+  const navigateToProduct = (id, name) => {
+    setSearchValue(name);
+    setIsFocused(false);
+    navigate(`product/${id}`);
+
+  }
+
+
+// Function to highlight the matched text
+const highlightText = (text, search) => {
+  if (!search) return text; // If no search term, return the text as is
+
+  // Split the text into parts, keeping the search term intact
+  const parts = text.split(new RegExp(`(${search})`, 'gi'));
+
+  return parts.map((part, index) => 
+    part.toLowerCase() === search.toLowerCase() ? (
+      <span key={index} className="highlight">
+        {part}
+      </span>
+    ) : (
+      part // Non-highlighted part
+    )
+  );
+};
+
   return (
     <React.Fragment>
       {openModel && !token ? (
@@ -310,15 +335,15 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           <ul className="flex items-center">
             {currencyMenu
               ? currencyMenu.map((currency, index) => {
-                  return (
-                    <li
-                      key={index}
-                      className="after:content-['|'] after:mx-2 after:text-gray-700"
-                    >
-                      <Link to={currency.redirectUrl}>{currency.title}</Link>
-                    </li>
-                  );
-                })
+                return (
+                  <li
+                    key={index}
+                    className="after:content-['|'] after:mx-2 after:text-gray-700"
+                  >
+                    <Link to={currency.redirectUrl}>{currency.title}</Link>
+                  </li>
+                );
+              })
               : null}
 
             {/* Currency Selector  */}
@@ -401,9 +426,8 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
         <div>
           {/* Main Drawer */}
           <div
-            className={`fixed inset-y-0 left-0 w-[80vw] bg-white z-[1000] text-black transform ${
-              isOpen ? "translate-x-0" : "-translate-x-full"
-            } transition-transform duration-300 ease-in-out lg:hidden`}
+            className={`fixed inset-y-0 left-0 w-[80vw] bg-white z-[1000] text-black transform ${isOpen ? "translate-x-0" : "-translate-x-full"
+              } transition-transform duration-300 ease-in-out lg:hidden`}
           >
             {activeCategory == null ? (
               // Main Categories
@@ -467,7 +491,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                 <ul className="">
                   {childCategory?.map((item, index) => {
                     // console.log("subcategories", item);
-                    console.log(activeCategory);
+                    
                     return (
                       <li
                         onClick={() => {
@@ -581,7 +605,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           />
           {currentLocation ? (
             <span className="text-[#64748B] text-sm ml-3">
-              {currentLocation.city} {currentLocation.regionName}, {currentLocation.country} 
+              {currentLocation.city} {currentLocation.regionName}, {currentLocation.country}
             </span>
           ) : (
             <span className="text-[#64748B] text-sm ml-3">
@@ -606,10 +630,10 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
               type="text"
               className="h-full w-full border-l border-r-gray-300 px-3 text-base text-[#64748B] outline-none"
               placeholder="I'm shopping for..."
-              value={searchValue}
+              // value={searchValue}
               onChange={(e) => handlerSearchValue(e.target.value)}
               onFocus={handleFocus}
-              onBlur={handleBlur}
+
             />
             <button type="submit" className="bg-primary p-2 rounded-full mr-2">
               <CiSearch color="white" size={26} />
@@ -625,14 +649,14 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   </div>
                   <div className="basis-3/4 py-4 px-3 bg-white">
                     {products.slice(0, 7).map((prod, index) => (
-                      <Link
-                        to={`product/${prod.id}`}
+                      <div
+
+                        onClick={() => navigateToProduct(prod.id, prod.name)}
                         key={prod.id}
-                        className={`flex p-2 ${
-                          selectedIndex === index
-                            ? "bg-[#def9ec]"
-                            : "hover:bg-[#def9ec]"
-                        }`}
+                        className={`flex p-2 ${selectedIndex === index
+                          ? "bg-[#def9ec]"
+                          : "hover:bg-[#def9ec]"
+                          }`}
                       >
                         <div>
                           <img
@@ -643,13 +667,14 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                         </div>
                         <div className="ml-3">
                           <span className="line-clamp-1 text-[#2E2F32] font-semibold text-[14px]">
-                            {prod.name}
+                           {highlightText(prod.name, searchValue)}
+                       
                           </span>
                           <span className="text-[#64748B] text-sm">
                             SAR {prod.sale_price}
                           </span>
                         </div>
-                      </Link>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -665,11 +690,10 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                       <Link
                         to={`/collections/${cat.slug}`}
                         key={cat.id}
-                        className={`flex p-2 ${
-                          selectedIndex === index + products.length
-                            ? "bg-[#def9ec]"
-                            : "hover:bg-[#def9ec]"
-                        }`}
+                        className={`flex p-2 ${selectedIndex === index + products.length
+                          ? "bg-[#def9ec]"
+                          : "hover:bg-[#def9ec]"
+                          }`}
                       >
                         <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
                           {cat.name}
@@ -690,12 +714,11 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                       <Link
                         to={`/collections/${brand.id}`}
                         key={brand.id}
-                        className={`flex p-2 ${
-                          selectedIndex ===
+                        className={`flex p-2 ${selectedIndex ===
                           index + products.length + categoryList.length
-                            ? "bg-[#def9ec]"
-                            : "hover:bg-[#def9ec]"
-                        }`}
+                          ? "bg-[#def9ec]"
+                          : "hover:bg-[#def9ec]"
+                          }`}
                       >
                         <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
                           {brand.name}
@@ -1035,29 +1058,29 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             <div className="w-[80%] flex flex-row items-center justify-between">
               {categories
                 ? categories.map((cat, index) => {
-                    return (
+                  return (
+                    <React.Fragment key={index}>
+                      {index <= 5 ? (
+                        <Link
+                          className={`text-base text-primary mx-2 `}
+                          to={"/collections/" + cat.slug}
+                        >
+                          {cat.name}
+                        </Link>
+                      ) : null}
                       <React.Fragment key={index}>
-                        {index <= 5 ? (
+                        {index === 7 ? (
                           <Link
-                            className={`text-base text-primary mx-2 `}
-                            to={"/collections/" + cat.slug}
+                            className="text-base text-primary mx-2 font-bold"
+                            to={"collections/deal-of-a-days"}
                           >
-                            {cat.name}
+                            Deal of the day
                           </Link>
                         ) : null}
-                        <React.Fragment key={index}>
-                          {index === 7 ? (
-                            <Link
-                              className="text-base text-primary mx-2 font-bold"
-                              to={"collections/deal-of-a-days"}
-                            >
-                              Deal of the day
-                            </Link>
-                          ) : null}
-                        </React.Fragment>
                       </React.Fragment>
-                    );
-                  })
+                    </React.Fragment>
+                  );
+                })
                 : null}
             </div>
             <ControlledMenu
@@ -1162,7 +1185,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             value={searchValue}
             onChange={(e) => handlerSearchValue(e.target.value)}
             onFocus={handleFocus}
-            onBlur={handleBlur}
+          // onBlur={handleBlur}
           />
           <button
             type="submit"
@@ -1184,11 +1207,10 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                     <Link
                       to={`product/${prod.id}`}
                       key={prod.id}
-                      className={`flex p-2 ${
-                        selectedIndex === index
-                          ? "bg-[#def9ec]"
-                          : "hover:bg-[#def9ec]"
-                      }`}
+                      className={`flex p-2 ${selectedIndex === index
+                        ? "bg-[#def9ec]"
+                        : "hover:bg-[#def9ec]"
+                        }`}
                     >
                       <div>
                         <img
@@ -1221,11 +1243,10 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                     <Link
                       to={`/collections/${cat.slug}`}
                       key={cat.id}
-                      className={`flex p-2 ${
-                        selectedIndex === index + products.length
-                          ? "bg-[#def9ec]"
-                          : "hover:bg-[#def9ec]"
-                      }`}
+                      className={`flex p-2 ${selectedIndex === index + products.length
+                        ? "bg-[#def9ec]"
+                        : "hover:bg-[#def9ec]"
+                        }`}
                     >
                       <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
                         {cat.name}
@@ -1246,12 +1267,11 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                     <Link
                       to={`/collections/${brand.id}`}
                       key={brand.id}
-                      className={`flex p-2 ${
-                        selectedIndex ===
+                      className={`flex p-2 ${selectedIndex ===
                         index + products.length + categoryList.length
-                          ? "bg-[#def9ec]"
-                          : "hover:bg-[#def9ec]"
-                      }`}
+                        ? "bg-[#def9ec]"
+                        : "hover:bg-[#def9ec]"
+                        }`}
                     >
                       <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
                         {brand.name}

@@ -31,7 +31,7 @@ const Documents = ({ docs }) => {
         {/* Ensure documentArray is an array before using .map */}
         {documentArray.length > 0 ? (
           documentArray.map((item, index) => {
-            console.log(item);
+            
             return (
               <div
                 className="flex flex-col relative p-1 flex justify-center items-center"
