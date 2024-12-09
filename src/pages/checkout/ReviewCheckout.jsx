@@ -10,6 +10,8 @@ import { Layout } from "./Layout.jsx";
 import { FaArrowRightLong } from "react-icons/fa6";
 import Popup from "../ProfileRegistration/Addresses/Components/Popup.jsx";
 import Skeleton from 'react-loading-skeleton';
+import { reviewCheckout } from "../../data/checkoutConfig";
+import { Breadcrumb } from "../../shared/Breadcrumb";
 export const ReviewCheckout = ({ currentLocation }) => {
     const authToken = localStorage.getItem("authToken");
     const userProfile = JSON.parse(localStorage.getItem('userProfile'));
@@ -207,10 +209,10 @@ export const ReviewCheckout = ({ currentLocation }) => {
                 <Skeleton className='w-full h-[500px]' />
             </div> :
                 <Layout cartItems={cartItems} tempCartItems={tempCartItems} cartSummaryFlag={cartSummaryFlag} removeItemsLoader={removeItemsLoader} listOfStore={listOfStore} confirmAndPayFn={confirmAndPay} >
+                <Breadcrumb items={reviewCheckout} classes={"mt-7"} />
 
 
-
-                    {authToken ? <div className="border-2 rounded-[10px] border-[#E2E8F0] mt-[80px]">
+                    {authToken ? <div className="border-2 rounded-[10px] border-[#E2E8F0] mt-[18px]">
                         <div className="flex items-center justify-between bg-[#E2E8F0] px-8 py-3">
                             <h2 className="text-[#424242] text-[28px] font-semibold">Your Address</h2>
                             <span className="text-primary text-lg font-semibold">Edit</span>
@@ -281,7 +283,7 @@ export const ReviewCheckout = ({ currentLocation }) => {
                         </div> :
 
                         //show temp cart items
-                        <div className="border-2 rounded-[10px] border-[#E2E8F0] mt-6">
+                        <div className="border-2 rounded-[10px] border-[#E2E8F0] mt-5">
 
                             <div className="flex items-center justify-between bg-[#E2E8F0] px-8 py-3">
                                 <h2 className="text-[#424242] text-[28px] font-semibold">Review products and shipping</h2>
@@ -331,13 +333,29 @@ export const ReviewCheckout = ({ currentLocation }) => {
 
                         </div>
                     }
-                    <div className="mx-8 my-5 px-8 border-2 border-[#E2E8F0] rounded-[10px] flex items-center justify-between py-5">
-                        <div className="flex justify-between flex-col">
-                            <h4 className="text-[#B12704] text-xl font-bold">Order Total : {currencyTitle && currencyTitle} {totalAmount && totalAmount.toFixed(2)}</h4>
-                            <p className="text-[#64748B] text-xs">By placing your order, you agree to Horeca store <span className="font-semibold">Privacy Notice</span>  and <span className="font-semibold">Conditions Of Use.</span></p>
+                    <div className="my-5 px-8 flex items-center justify-between py-5 border-2 rounded-[10px] border-[#E2E8F0] mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-5">
+                        <div className="flex justify-between flex-col col-span-12 sm:col-span-2 lg:col-span-8">
+                            <h4 className="text-[#B12704] text-xl font-bold">
+                                Order Total : {currencyTitle && currencyTitle} {totalAmount && totalAmount.toFixed(2)}
+                            </h4>
+                            <p className="text-[#64748B] text-xs">
+                                By placing your order, you agree to Horeca store{" "}
+                                <span className="font-semibold">Privacy Notice</span> and{" "}
+                                <span className="font-semibold">Conditions Of Use.</span>
+                            </p>
                         </div>
-                        <button className="bg-primary text-white flex items-center justify-center py-2 px-3 font-semibold text-base min-w-[300px] rounded-[4px] " onClick={confirmAndPay}><span className="mr-2">Confirm & Pay</span> <FaArrowRightLong /></button>
+
+                        <div className="col-span-12 sm:col-span-2 lg:col-span-4">
+                            <button
+                                className="bg-primary text-white flex items-center justify-center py-2 px-3 font-semibold text-base min-w-[300px] rounded-[4px]"
+                                onClick={confirmAndPay}
+                            >
+                                <span className="mr-2">Confirm & Pay</span>
+                                <FaArrowRightLong />
+                            </button>
+                        </div>
                     </div>
+
                     <div>
                         {showPopup ? <Popup setShowPopup={setShowPopup} popupHeading={popupHeading} /> : ''}
                     </div>

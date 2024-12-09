@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Breadcrumb } from "../../shared/Breadcrumb";
+
 import { Link } from "react-router-dom";
 import { notify } from "../../utils/notify.js";
 import { useLocalCartCount } from "../../context/LocalCartCount";
@@ -7,9 +7,11 @@ import { DeleteCartButton } from "../../shared/CheckoutPage/DeleteCartButton";
 import { Counter } from "../../shared/CheckoutPage/Counter.jsx";
 import { ProductCard } from "../../shared/ProductCard";
 import { firstBreadCrumb } from "../../data/checkoutConfig";
+import { Breadcrumb } from "../../shared/Breadcrumb";
 import { useCart } from "../../context/CartContext";
 import { apiClient } from "../../utils/apiWrapper.js";
 import { Layout } from "./Layout.jsx";
+ 
 
 
 export const Checkout = () => {
@@ -172,34 +174,88 @@ export const Checkout = () => {
                                 {cartItems.filter(item => item.product.store_id === listOfStore[index]).map((prod, index) => {
                                     return (
                                         <React.Fragment>
-                                            <div className={`flex flex-row items-center mb-8 relative "}`} key={index}>
-                                                <Link to={`/product/${prod.product_id}`}>
-                                                    <img className="max-w-[130px]" src={"https://testhssite.com/storage/" + prod?.product?.images[0]} alt={prod.product.name} />
-                                                </Link>
-                                                <div className="basis-1/2 ml-3" >
-                                                    <Link to={`/product/${prod.product_id}`}>
-                                                        <h3 className="text-[#030303] text-lg leading-5 ">{prod.product.name}</h3>
-                                                        <p className="my-2 text-base font-semibold text-[#030303]"><span>{prod.product.currency.title}</span><span className="text-xl font-bold ml-2">{prod.product.sale_price ? prod.product.sale_price.toFixed(2) : prod.product.original_price.toFixed(2)}</span><span className="text-[#B12704] ml-3">/ Each</span></p>
-                                                    </Link>
-                                                    <div>
-                                                        <Counter product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} />
-                                                        <span className="mx-3 text-[#E2E8F0]">|</span>
-                                                        {/* <WishListButton product={prod} /> */}
-                                                        <span className="mx-3 text-[#E2E8F0]">|</span>
-                                                        <DeleteCartButton fetchCall={fetchCall} setFetchCall={setFetchCall} product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} />
+
+
+                                            {/* 
+for mobile */}
+
+                                            <div
+                                                key={index}
+                                                className="flex flex-col gap-4 border-b pb-4 mb-4 last:border-b-0 last:pb-0 lg:hidden"
+                                            >
+                                                {/* Product Image and Product Details */}
+                                                <div className="flex items-start gap-4">
+                                                    {/* Product Image */}
+                                                    <img className="max-w-[130px]" src={"https://testhssite.com/storage/" + prod.product.image} alt={prod.product.name} />
+
+                                                    {/* Product Details */}
+                                                    <div className="flex-1">
+                                                        <h3 className="text-sm font-medium text-gray-900 ellipsis-text">
+                                                            {prod.product.name}
+                                                        </h3>
+                                                        <p className="my-2 text-base font-semibold text-[#030303]">
+                                                            <span>{prod.product.currency_title}</span>
+                                                            <span className="text-xl font-bold ml-2">{prod.product.original_price.toFixed(2)}</span>
+                                                            <span className="text-[#B12704] ml-3">/ Each</span>
+                                                        </p>
+
+
+
+                                                        <p class="text-base text-primary flex items-center">
+                                                            <img className="h-4 w-4" src={process.env.PUBLIC_URL + "/icons/checkedRound.png"} alt="" /> &nbsp;
+                                                            <span className="text-[12px] font-semibold">   {maxDeliveryDate ? getDeliveryDate(maxDeliveryDate) : getDeliveryDate(prod.delivery_days)}</span>
+                                                        </p>
+
+
+                                                        <p className="my-2 text-base font-semibold text-[#030303] mt-2">
+                                                            <span>{prod.product.currency_title}</span>
+                                                            <span className="text-xl font-bold ml-2">{prod.product.original_price.toFixed(2)}</span>
+                                                            <span className="text-[#B12704] ml-3"></span>
+                                                        </p>
                                                     </div>
                                                 </div>
-                                                <div className="basis-1/4 max-w-[250px] px-5">
-                                                    <div className="flex  flex-col items-center mb-4">
-                                                        <div className="flex items-start mt-4">
-                                                            <div className="flex flex-col ml-3" >
-                                                                <label className="text-base text-primary font-semibold">{maxDeliveryDate ? getDeliveryDate(maxDeliveryDate) : getDeliveryDate(prod.product.delivery_days)}</label>
+
+                                                {/* Action Buttons */}
+                                                <div className="flex items-center gap-2">
+
+                                                    <DeleteCartButton fetchCall={fetchCall} setFetchCall={setFetchCall} product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} forMobile={true} />
+
+                                                    <div className="flex items-center gap-2">
+                                                        <Counter product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} forMobile={true} />
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/* end for mobile */}
+                                            <div className="hidden sm:hidden md:hidden lg:block">
+                                                <div className={`flex flex-row items-center mb-8 relative "}`} key={index}>
+                                                    <Link to={`/product/${prod.product_id}`}>
+                                                        <img className="max-w-[130px]" src={"https://testhssite.com/storage/" + prod?.product?.images[0]} alt={prod.product.name} />
+                                                    </Link>
+                                                    <div className="basis-1/2 ml-3" >
+                                                        <Link to={`/product/${prod.product_id}`}>
+                                                            <h3 className="text-[#030303] text-lg leading-5 ">{prod.product.name}</h3>
+                                                            <p className="my-2 text-base font-semibold text-[#030303]"><span>{prod.product.currency.title}</span><span className="text-xl font-bold ml-2">{prod.product.sale_price ? prod.product.sale_price.toFixed(2) : prod.product.original_price.toFixed(2)}</span><span className="text-[#B12704] ml-3">/ Each</span></p>
+                                                        </Link>
+                                                        <div>
+                                                            <Counter product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} />
+                                                            <span className="mx-3 text-[#E2E8F0]">|</span>
+                                                            <DeleteCartButton fetchCall={fetchCall} setFetchCall={setFetchCall} product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} />
+                                                        </div>
+                                                    </div>
+                                                    <div className="basis-1/4 max-w-[250px] px-5">
+                                                        <div className="flex  flex-col items-center mb-4">
+                                                            <div className="flex items-start mt-4">
+                                                                <div className="flex flex-col ml-3" >
+                                                                    <label className="text-base text-primary font-semibold">{maxDeliveryDate ? getDeliveryDate(maxDeliveryDate) : getDeliveryDate(prod.product.delivery_days)}</label>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div className=" text-[#030303] text-lg font-semibold">
-                                                    {prod.product.currency.title} {prod.product.sale_price ? (prod.product.sale_price * prod.quantity).toFixed(2) : (prod.product.original_price * prod.quantity).toFixed(2)}
+                                                    <div className=" text-[#030303] text-lg font-semibold">
+                                                        {prod.product.currency.title} {prod.product.sale_price ? (prod.product.sale_price * prod.quantity).toFixed(2) : (prod.product.original_price * prod.quantity).toFixed(2)}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </React.Fragment>
@@ -238,38 +294,96 @@ export const Checkout = () => {
                                         {tempCartItems && tempCartItems.filter(item => item.store_id === listOfStore[index]).map((prod, index) => {
                                             return (
                                                 <React.Fragment>
-                                                    <div className={`flex flex-row items-center mb-8 relative "}`} key={index}>
-                                                        <Link to={`/product/${prod.product_id}`}>
-                                                            <img className="max-w-[130px]" src={"https://testhssite.com/storage/" + prod.image} alt={prod.name} />
-                                                        </Link>
-                                                        <div className="basis-1/2 ml-3" >
-                                                            <Link to={`/product/${prod.product_id}`}>
-                                                                <h3 className="text-[#030303] text-lg leading-5 ">{prod.name}</h3>
-                                                                <p className="my-2 text-base font-semibold text-[#030303]"><span>{prod.currency_title}</span><span className="text-xl font-bold ml-2">{prod.original_price.toFixed(2)}</span><span className="text-[#B12704] ml-3">/ Each</span></p>
-                                                            </Link>
-                                                            <div>
-                                                                <Counter product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} />
-                                                                <span className="mx-3 text-[#E2E8F0]">|</span>
-                                                                {/* <WishListButton product={prod} temp={true} /> */}
 
-                                                                <DeleteCartButton product={prod} setTempCartItems={setTempCartItems} temp={true} />
+                                                    {/* 
+for mobile */}
+
+                                                    <div
+                                                        key={index}
+                                                        className="flex flex-col gap-4 border-b pb-4 mb-4 last:border-b-0 last:pb-0 lg:hidden"
+                                                    >
+                                                        {/* Product Image and Product Details */}
+                                                        <div className="flex items-start gap-4">
+                                                            {/* Product Image */}
+                                                            <img className="max-w-[130px]" src={"https://testhssite.com/storage/" + prod.image} alt={prod.name} />
+
+                                                            {/* Product Details */}
+                                                            <div className="flex-1">
+                                                                <h3 className="text-sm font-medium text-gray-900 ellipsis-text">
+                                                                    {prod.name}
+                                                                </h3>
+                                                                <p className="my-2 text-base font-semibold text-[#030303]">
+                                                                    <span>{prod.currency_title}</span>
+                                                                    <span className="text-xl font-bold ml-2">{prod.original_price.toFixed(2)}</span>
+                                                                    <span className="text-[#B12704] ml-3">/ Each</span>
+                                                                </p>
+
+
+                                                                <p class="text-base text-primary flex items-center">
+                                                                    <img className="h-4 w-4" src={process.env.PUBLIC_URL + "/icons/checkedRound.png"} alt="" /> &nbsp;
+                                                                    <span className="text-[12px] font-semibold">   {maxDeliveryDate ? getDeliveryDate(maxDeliveryDate) : getDeliveryDate(prod.delivery_days)}</span>
+                                                                </p>
+
+
+
+                                                                <p className="my-2 text-base font-semibold text-[#030303] mt-2">
+                                                                    <span>{prod.currency_title}</span>
+                                                                    <span className="text-xl font-bold ml-2">{prod.original_price.toFixed(2)}</span>
+                                                                    <span className="text-[#B12704] ml-3"></span>
+                                                                </p>
                                                             </div>
                                                         </div>
-                                                        <div className="basis-1/4 max-w-[250px] px-5">
-                                                            <div className="flex  flex-col items-center mb-4">
-                                                                <div className="flex items-start mt-4">
-                                                                    <div className="flex flex-col ml-3" >
-                                                                        <label className="text-base text-primary font-semibold">{maxDeliveryDate ? getDeliveryDate(maxDeliveryDate) : getDeliveryDate(prod.delivery_days)}
+
+                                                        {/* Action Buttons */}
+                                                        <div className="flex items-center gap-2">
+
+                                                            <DeleteCartButton product={prod} setTempCartItems={setTempCartItems} temp={true} forMobile={true} />
 
 
-                                                                        </label>
-                                                                        <span className="text-base text-primary"> Estimated Delivery</span>
+
+                                                            <div className="flex items-center gap-2">
+                                                                <Counter product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} forMobile={true} />
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {/* end for mobile */}
+
+                                                    <div className="hidden sm:hidden md:hidden lg:block">
+                                                        <div className={`flex flex-row items-center mb-8 relative  "}`} key={index}>
+                                                            <Link to={`/product/${prod.product_id}`}>
+                                                                <img className="max-w-[130px]" src={"https://testhssite.com/storage/" + prod.image} alt={prod.name} />
+                                                            </Link>
+                                                            <div className="basis-1/2 ml-3" >
+                                                                <Link to={`/product/${prod.product_id}`}>
+                                                                    <h3 className="text-[#030303] text-lg leading-5 ">{prod.name}</h3>
+                                                                    <p className="my-2 text-base font-semibold text-[#030303]"><span>{prod.currency_title}</span><span className="text-xl font-bold ml-2">{prod.original_price.toFixed(2)}</span><span className="text-[#B12704] ml-3">/ Each</span></p>
+                                                                </Link>
+                                                                <div>
+                                                                    <Counter product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} />
+                                                                    <span className="mx-3 text-[#E2E8F0]">|</span>
+                                                                    {/* <WishListButton product={prod} temp={true} /> */}
+
+                                                                    <DeleteCartButton product={prod} setTempCartItems={setTempCartItems} temp={true} />
+                                                                </div>
+                                                            </div>
+                                                            <div className="basis-1/4 max-w-[250px] px-5">
+                                                                <div className="flex  flex-col items-center mb-4">
+                                                                    <div className="flex items-start mt-4">
+                                                                        <div className="flex flex-col ml-3" >
+                                                                            <label className="text-base text-primary font-semibold">{maxDeliveryDate ? getDeliveryDate(maxDeliveryDate) : getDeliveryDate(prod.delivery_days)}
+
+
+                                                                            </label>
+                                                                            <span className="text-base text-primary"> Estimated Delivery</span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div className=" text-[#030303] text-lg font-semibold">
-                                                            {prod.currency_title} {prod.original_price ? (prod.original_price * prod.quantity).toFixed(2) : (prod.original_price * prod.quantity).toFixed(2)}
+                                                            <div className=" text-[#030303] text-lg font-semibold">
+                                                                {prod.currency_title} {prod.original_price ? (prod.original_price * prod.quantity).toFixed(2) : (prod.original_price * prod.quantity).toFixed(2)}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </React.Fragment>
@@ -306,7 +420,7 @@ export const Checkout = () => {
                     {saveForLaterTemp && saveForLaterTemp.length <= 0 ?
                         <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
                             <div className="w-full  h-[300px] text-gray-400 flex items-center justify-center font-semibold mb-10">No Product Items Available</div></div> : ''}
-                    <div className={`grid sm:grid-cols-3 grid-cols-3 gap-5`}>
+                    <div className={`grid sm:grid-cols-3 grid-cols-2 gap-5`}>
 
                         {
                             saveForLaterTemp && saveForLaterTemp.map((items, index) => {

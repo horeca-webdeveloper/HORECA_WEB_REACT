@@ -414,3 +414,13 @@
     text-overflow: ellipsis;
     white-space: normal;
 }
+
+.ellipsis-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5; /* Adjust line-height according to your design */
+    max-height: 3em; /* max height based on line-height (line-height * 2 for 2 lines) */
+  }
