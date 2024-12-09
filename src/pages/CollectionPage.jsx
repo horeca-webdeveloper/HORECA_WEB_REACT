@@ -47,7 +47,6 @@ export const CollectionPage = () => {
       !!matchedCategory &&
         matchedCategory.children.forEach((cat) => {
           cat.children.forEach((cat2, index) => {
-            console.log("category2", cat2);
             if (index < 2) {
               let tempObj = {
                 name: cat2.name,
@@ -73,7 +72,6 @@ export const CollectionPage = () => {
       `${authToken ? "/products" : "/products-guest"}`
     );
     setProducts(response.data.data.data);
-    console.log("--->>>>", response);
   };
 
   useEffect(() => {
@@ -98,7 +96,6 @@ export const CollectionPage = () => {
   const bigScreenCss =
     "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
 
-  console.log("filtercateogries", filterCategories);
   return (
     <div>
       <Wrapper>
@@ -142,7 +139,6 @@ export const CollectionPage = () => {
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-5 mt-8">
               {filterCategories && filterCategories.length > 0
                 ? filterCategories.map((cat, index) => {
-                    console.log(cat);
                     const isVisible =
                       window?.innerWidth < 640 ? index < 8 : index < 14;
 
@@ -179,7 +175,7 @@ export const CollectionPage = () => {
                     )
                   )}
             </div>
-            <div className="hidden sm:grid grid-cols-4 gap-8 mt-8 ">
+            <div className="hidden sm:grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8 ">
               {selectedCat && selectedCat.children
                 ? selectedCat.children.map((cat, index) => {
                     return (

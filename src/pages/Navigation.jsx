@@ -879,7 +879,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           </div>
           <div className="flex p-5 flex-col w-[40%] border-r-2 mr-[20px]">
             <h1 className="text-[16px] leading-[16px] font-semibold">
-              Reorder In One Click
+              Track Your Order
             </h1>
             <h2 className="text-[14px] mb-[10px] text-[#186737] mt-[5px] leading-[16px] font-normal">
               View All & Manage
