@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Wrapper } from "../shared/Wrapper";
 import { Link, useParams } from "react-router-dom";
 import {
@@ -17,11 +17,10 @@ import { useNavigate } from "react-router-dom";
 import { apiClient } from "../utils/apiWrapper";
 import { useLocation } from "react-router-dom";
 import { useWishlist } from "../context/WishListContext";
-
+import { debounce } from "lodash";
 export const Navigation = ({ categories, userProfile, currentLocation }) => {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [currency, setCurrency] = useState(["USD", "AED", "PKR"]);
-
   const [selectedLang, setSelectedLang] = useState("English");
   const [lang, setLang] = useState(["English", "العربية"]);
   const navigate = useNavigate();
@@ -122,7 +121,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
   ];
 
   const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
+
   useEffect(() => {
     let search = location.search ? location.search.split("=")[1] : "";
     let filterName = search.replaceAll("-", " ");
@@ -193,11 +192,37 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     fetchProducts();
   }, [searchValue]);
 
-  const handlerSearchValue = (value) => {
-    setSearchValue(value);
+  const handlerSearchValue = useCallback(
+    debounce((value) => {
+      setSearchValue(value);
+    }, 300),
+    []
+  );
+
+  const navigateToProduct = (id, name) => {
+    setSearchValue(name);
+    setIsFocused(false);
+    navigate(`product/${id}`);
   };
 
-  console.log("searchValue", searchValue);
+  // Function to highlight the matched text
+  const highlightText = (text, search) => {
+    if (!search) return text; // If no search term, return the text as is
+
+    // Split the text into parts, keeping the search term intact
+    const parts = text.split(new RegExp(`(${search})`, "gi"));
+
+    return parts.map((part, index) =>
+      part.toLowerCase() === search.toLowerCase() ? (
+        <span key={index} className="highlight">
+          {part}
+        </span>
+      ) : (
+        part // Non-highlighted part
+      )
+    );
+  };
+
   return (
     <React.Fragment>
       {openModel && !token ? (
@@ -465,7 +490,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                 <ul className="">
                   {childCategory?.map((item, index) => {
                     // console.log("subcategories", item);
-                    console.log(activeCategory);
+
                     return (
                       <li
                         onClick={() => {
@@ -605,10 +630,9 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
               type="text"
               className="h-full w-full border-l border-r-gray-300 px-3 text-base text-[#64748B] outline-none"
               placeholder="I'm shopping for..."
-              value={searchValue}
+              // value={searchValue}
               onChange={(e) => handlerSearchValue(e.target.value)}
               onFocus={handleFocus}
-              onBlur={handleBlur}
             />
             <button type="submit" className="bg-primary p-2 rounded-full mr-2">
               <CiSearch color="white" size={26} />
@@ -624,8 +648,8 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   </div>
                   <div className="basis-3/4 py-4 px-3 bg-white">
                     {products.slice(0, 7).map((prod, index) => (
-                      <Link
-                        to={`product/${prod.id}`}
+                      <div
+                        onClick={() => navigateToProduct(prod.id, prod.name)}
                         key={prod.id}
                         className={`flex p-2 ${
                           selectedIndex === index
@@ -642,13 +666,13 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                         </div>
                         <div className="ml-3">
                           <span className="line-clamp-1 text-[#2E2F32] font-semibold text-[14px]">
-                            {prod.name}
+                            {highlightText(prod.name, searchValue)}
                           </span>
                           <span className="text-[#64748B] text-sm">
                             SAR {prod.sale_price}
                           </span>
                         </div>
-                      </Link>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -1161,7 +1185,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             value={searchValue}
             onChange={(e) => handlerSearchValue(e.target.value)}
             onFocus={handleFocus}
-            onBlur={handleBlur}
+            // onBlur={handleBlur}
           />
           <button
             type="submit"

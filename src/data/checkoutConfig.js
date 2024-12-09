@@ -9,6 +9,16 @@ const firstBreadCrumb = [{
     }
 ]
 
+const reviewCheckout = [{
+    url: "/",
+    title: "Home",
+    active: false,
+},
+{
+    title: "Review Checkout",
+    active: true,
+}
+]
 const shipmentOne = [{
         imgSource: "/images/checkout/product-1.png",
         name: "Roomwell Adjustable Height Prestige Anti-Theft Flame Retardant Metallic Cover Ironing Board, L 139 x W 40.5 cm",
@@ -402,4 +412,4 @@ const recomendProduct = [{
     },
 ]
 
-export { firstBreadCrumb, shipmentOne, shipmentTwo, saveProducts, buyProducts, recomendProduct }
+export { firstBreadCrumb, shipmentOne, shipmentTwo, saveProducts, buyProducts, recomendProduct,reviewCheckout }

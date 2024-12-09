@@ -145,12 +145,19 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
     return (
         <React.Fragment>
             <Wrapper>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-12 items-center gap-2 mb-20">
 
-                    <div className="col-span-9  mb-5">
-                        {children}
-                    </div>
-                    <div className="col-span-3 mt-[65px]">
+
+         
+
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-12 items-start gap-2 mb-20 w-full">
+    {/* Left panel */}
+    <div className="col-span-12 sm:col-span-12 lg:col-span-9 mb-5">
+        {children}
+    </div>
+
+    {/* Right panel */}
+    <div className={`col-span-12 sm:col-span-12 lg:col-span-3 border-[#E2E8F0] ${authToken ? "mt-[65px]" : "mt-[50px]"}`}>
                         {cartItems && cartItems.length ? (<SideWrapper>
                             <form onSubmit={(e) => handlerApplyCoupon(e)}>
                                 <h3 className="text-[#424242] text-xl font-semibold">Coupon Code</h3>
