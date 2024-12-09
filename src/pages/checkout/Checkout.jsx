@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Breadcrumb } from "../../shared/Breadcrumb";
 import { Link } from "react-router-dom";
 import { notify } from "../../utils/notify.js";
@@ -13,8 +13,8 @@ import { Layout } from "./Layout.jsx";
 
 
 export const Checkout = () => {
+    const authToken = localStorage.getItem('authToken');
     const { triggerUpdateCart, updateTempCart } = useCart();
-    const { incrementCartItems } = useLocalCartCount();
     const [loader, setLoader] = useState(false)
     const [activeTab, setActiveTab] = useState('saved');
     const [cartItems, setCartItems] = useState([]);
@@ -37,23 +37,21 @@ export const Checkout = () => {
         return futureDate.toLocaleString('en-US', { weekday: 'long' }) + `, ${futureDate.getDate()} ${futureDate.toLocaleString('en-US', { month: 'long' })}`;
     };
 
-  // Fetch cart data and process stores
-  const fetchingCart = useCallback(async () => {
-    setLoader(true);
-    try {
-        const response = await apiClient.get('/cart');
-        setCartItems(response.data.data);
-        const storeIds = [...new Set(response.data.data.map((prod) => prod.product.store_id))];
-        setListOfStore(storeIds);
-        setCartSummaryFlag((prev) => !prev);  // Toggling the flag to trigger UI updates
-    } catch (error) {
-        console.error('Error fetching cart:', error);
-    } finally {
-        setLoader(false);
-    }
-}, [fetchCall]);
-
-
+    // Fetch cart data and process stores
+    const fetchingCart = useCallback(async () => {
+        setLoader(true);
+        try {
+            const response = await apiClient.get('/cart');
+            setCartItems(response.data.data);
+            const storeIds = [...new Set(response.data.data.map((prod) => prod.product.store_id))];
+            setListOfStore(storeIds);
+            // setCartSummaryFlag((prev) => !prev);  // Toggling the flag to trigger UI updates
+        } catch (error) {
+            console.error('Error fetching cart:', error);
+        } finally {
+            setLoader(false);
+        }
+    }, [fetchCall, tempCartItems, saveForLaterTemp]);
 
 
     const handlerSameDeliveryDate = (e) => {
@@ -108,28 +106,27 @@ export const Checkout = () => {
         setRemoveItemsLoader(false)
 
     }
-    
+
 
     useEffect(() => {
         fetchingCart();
-
-    }, [fetchCall,saveForLaterTemp]);
+    }, [fetchCall, saveForLaterTemp]);
 
     useEffect(() => {
-        if (cartItems.length == 0) {
+        if (authToken == null) {
             let temp = [];
             if (tempCartItems && tempCartItems.length > 0) {
                 tempCartItems.forEach((prod) => {
-                    
+
                     if (!temp.includes(prod.store_id)) {
                         temp.push(prod.store_id)
                     }
                 })
-              
+
                 setListOfStore(temp)
             }
         }
-    }, [cartItems, fetchCall]);
+    }, [fetchCall, cartItems]);
 
     useEffect(() => {
         if (sameDeliveryTime) {
@@ -145,13 +142,14 @@ export const Checkout = () => {
         setTempSaveForLater(JSON.parse(localStorage.getItem('SaveForLater')));
     }, [triggerUpdateCart])
 
- 
+
     return (
         <React.Fragment>
             <Layout cartItems={cartItems} tempCartItems={tempCartItems} cartSummaryFlag={cartSummaryFlag} removeItemsLoader={removeItemsLoader} listOfStore={listOfStore}  >
                 <Breadcrumb items={firstBreadCrumb} classes={"mt-7"} />
+
                 {/* show cart item */}
-                {!!cartItems && cartItems.length > 0 ? <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
+                {!!cartItems && cartItems.length > 0 && authToken != null ? <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
                     <div className="flex items-center mt-5">
                         <h3 className="font-semibold text-[28px] text-[#424242]">Shopping Cart</h3>
                         {cartItems ? <p className="text-[#64748B] text-base ml-2">({cartItems.length} Items)</p> : null}
@@ -216,9 +214,9 @@ export const Checkout = () => {
                     <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
                         <div className="flex items-center mt-5">
                             <h3 className="font-semibold text-[28px] text-[#424242]">Shopping Cart</h3>
-                            {tempCartItems && tempCartItems.length > 0 ? <p className="text-[#64748B] text-base ml-2">({tempCartItems.length} Items)</p> : null}
+                            {tempCartItems && tempCartItems.length && authToken == null > 0 ? <p className="text-[#64748B] text-base ml-2">({tempCartItems.length} Items)</p> : null}
                         </div>
-                        {listOfStore && listOfStore.length && tempCartItems.length > 0 ? (
+                        {listOfStore && listOfStore.length && tempCartItems.length && authToken == null > 0 ? (
                             <div className="my-3 flex items-center justify-between">
                                 <div className="flex items-center justify-between text-gray-700 mt-1">
                                     <div className="flex items-center">
@@ -262,7 +260,7 @@ export const Checkout = () => {
                                                                 <div className="flex items-start mt-4">
                                                                     <div className="flex flex-col ml-3" >
                                                                         <label className="text-base text-primary font-semibold">{maxDeliveryDate ? getDeliveryDate(maxDeliveryDate) : getDeliveryDate(prod.delivery_days)}
-                                                                               
+
 
                                                                         </label>
                                                                         <span className="text-base text-primary"> Estimated Delivery</span>
@@ -293,7 +291,7 @@ export const Checkout = () => {
                             className={`text-[#64748B] font-semibold text-lg px-4 pl-0 py-2  transition-all border-b-2 border-b-transparent ${activeTab === 'saved' ? ' border-b-primary' : ''}`}
                             onClick={() => setActiveTab('saved')}
                         >
-                            Saved for Later ({saveForLaterTemp && saveForLaterTemp.length?saveForLaterTemp.length:0} Items )
+                            Saved for Later ({saveForLaterTemp && saveForLaterTemp.length ? saveForLaterTemp.length : 0} Items )
                         </button>
                         <button
                             className={`text-[#64748B] font-semibold text-lg px-4 py-2 transition-all border-b-2 border-b-transparent ${activeTab === 'buy' ? ' border-b-primary' : ''}`}
@@ -305,19 +303,19 @@ export const Checkout = () => {
 
                     </div>
 
-                    {saveForLaterTemp && saveForLaterTemp.length <= 0 ? 
-                         <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
-                    <div className="w-full  h-[300px] text-gray-400 flex items-center justify-center font-semibold mb-10">No Product Items Available</div></div>: ''}
+                    {saveForLaterTemp && saveForLaterTemp.length <= 0 ?
+                        <div className="border-[#E2E8F0] rounded-[10px] border-2 px-5 mt-5">
+                            <div className="w-full  h-[300px] text-gray-400 flex items-center justify-center font-semibold mb-10">No Product Items Available</div></div> : ''}
                     <div className={`grid sm:grid-cols-3 grid-cols-3 gap-5`}>
-                       
+
                         {
                             saveForLaterTemp && saveForLaterTemp.map((items, index) => {
-                               
+
                                 return (
                                     <ProductCard
                                         key={index}
                                         classes="col-span-1 mt-1 "
-                                        product={items?.product?items.product:items}
+                                        product={items?.product ? items.product : items}
                                         removeItem={true}
                                         setTempSaveForLater={setTempSaveForLater}
                                     />
@@ -325,7 +323,7 @@ export const Checkout = () => {
                             })
                         }
                     </div>
- 
+
 
                 </div>
                 <div>

@@ -27,7 +27,6 @@ import CouponsOffers from "./pages/ProfileRegistration/CouponeOffers/CouponsOffe
 import Addresses from "./pages/ProfileRegistration/Addresses/Addresses";
 import CreditBalance from "./pages/ProfileRegistration/CreditBalance/CreditBalance";
 import AccountSecurity from "./pages/ProfileRegistration/AccountSecurity/AccountSecurity";
-import Wishlist from "./pages/ProfileRegistration/Wishlist/Wishlist";
 import OrderDetails from "./pages/ProfileRegistration/OrderDetails/OrderDetails";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import ContactUs from "./pages/FooterPages/ContactUs/ContactUs";
@@ -38,6 +37,8 @@ import Career from "./pages/FooterPages/Career/Career";
 import PaymentSuccess from "./pages/payment/PaymentSuccess";
 import PaymentFailed from "./pages/payment/PaymentFailed";
 import { PasswordReset } from "./pages/PasswordReset";
+import ProfileWishlist from "./pages/ProfileRegistration/Wishlist/ProfileWishlist";
+import Wishlist from "./pages/Wishlist";
 const App = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
@@ -91,7 +92,7 @@ const App = () => {
       setLoader(false);
     }
   };
-
+ 
   return (
     <>
       <Navigation
@@ -125,15 +126,16 @@ const App = () => {
         <Route path="/login" element={<Login />} />{" "}
         <Route path="/forgot-password" element={<ForgotPassword />} />{" "}
         <Route path="/sign-up" element={<SignUp />} />{" "}
-        <Route path="/review-checkout" element={<ReviewCheckout />} />{" "}
-        <Route path="/all-orders" element={<AllOrders />} />{" "}
-        <Route path="/reviews" element={<Reviews />} />{" "}
-        <Route path="/browsing-history" element={<BrowsingHistory />} />{" "}
+        <Route path="/review-checkout"  element={<ReviewCheckout  currentLocation={currentLocation} />} />{" "}
+        <Route path="/registration/all-orders" element={<AllOrders />} />{" "}
+        <Route path="/registration/reviews" element={<Reviews />} />{" "}
+        <Route path="/registration/browsing-history" element={<BrowsingHistory />} />{" "}
+        <Route path="/registration/wishlist" element={<ProfileWishlist />} />{" "}
         <Route path="/wishlist" element={<Wishlist />} />{" "}
-        <Route path="/coupons-offers" element={<CouponsOffers />} />{" "}
-        <Route path="/addresses" element={<Addresses />} />{" "}
-        <Route path="/creditBalance" element={<CreditBalance />} />{" "}
-        <Route path="/AccountSecurity" element={<AccountSecurity />} />{" "}
+        <Route path="/registration/coupons-offers" element={<CouponsOffers />} />{" "}
+        <Route path="/registration/addresses" element={<Addresses />} />{" "}
+        <Route path="/registration/creditBalance" element={<CreditBalance />} />{" "}
+        <Route path="/registration/AccountSecurity" element={<AccountSecurity />} />{" "}
         <Route path="/order-details" element={<OrderDetails />} />{" "}
         <Route path="/contact-us" element={<ContactUs />} />{" "}
         <Route path="/faq" element={<FAQ />} />{" "}

@@ -7,7 +7,7 @@ import axios from "axios";
 import { apiClient } from "../utils/apiWrapper";
 import { InfinitySpin } from "react-loader-spinner";
 import { ButtonLoader } from "../shared/buttonLoader/ButtonLoader";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -23,9 +23,9 @@ export const Login = () => {
   const [guestUser, setGuestUser] = useState(false);
   const [showGuestAddress, setGuestAddress] = useState(false);
   const navigate = useNavigate();
-  const { currencyTitle,  totalAmount } = location.state || {};
- 
-  const [getData,setData]=useState([]);
+  const { currencyTitle, totalAmount } = location.state || {};
+
+  const [getData, setData] = useState([]);
 
   const handlePayments = async (data) => {
 
@@ -33,12 +33,13 @@ export const Login = () => {
     const datas = {
       "amount": data.amount,
       // "currency": data.currency.toUpperCase(),
-         "currency": "AED",
+      "currency": "USD",
       "description": data.address,
       "customer_name": data.name,
       "customer_email": data.email
     };
-    localStorage.setItem('guestUser',JSON.stringify(datas));
+
+
     try {
       setLoading(true);
       const response = await apiClient.post(`/create-payment`, datas);
@@ -91,22 +92,25 @@ export const Login = () => {
 
 
   const {
-    register:register2,
-    handleSubmit:handleSubmit2,
-    formState: { errors:error2 },
-    reset:reset2,
+    register: register2,
+    handleSubmit: handleSubmit2,
+    formState: { errors: error2 },
+    reset: reset2,
   } = useForm({
     resolver: yupResolver(schemaForAddress),
   });
 
-  const onSubmit2 = (data) => {
-   
-  const guestInfo= JSON.parse(localStorage.getItem('guestUser'));
-    Object.assign(guestInfo, {amount: totalAmount,currency:currencyTitle});
-       Object.assign(guestInfo, {...data});
-      localStorage.setItem("guestUser",JSON.stringify('guestInfo'));
-    
+  const onSubmit2 = async (data) => {
+
+    const guestInfo = JSON.parse(localStorage.getItem('guestUser')) || {}; // Ensure it doesn't throw an error if no guestUser exists
+    await Object.assign(guestInfo, { amount: totalAmount, currency: currencyTitle });
+    await Object.assign(guestInfo, data);
+
+
     handlePayments(guestInfo);
+    // Correctly store the object in localStorage
+    localStorage.setItem("guestUser", JSON.stringify(guestInfo));
+
   }
 
 
@@ -156,11 +160,11 @@ export const Login = () => {
     }
   };
 
-  useEffect(()=>{
-    if(getData.status=="success" && getData.redirect_url){
+  useEffect(() => {
+    if (getData.status == "success" && getData.redirect_url) {
       window.location.href = getData.redirect_url;
     }
-},[getData]);
+  }, [getData]);
 
   return (
     <React.Fragment>
@@ -168,7 +172,9 @@ export const Login = () => {
 
 
       <Wrapper>
-        <div className="grid grid-cols-12 items-center">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-12 items-center mb-20">
+
           <div className="col-span-1"></div>
           <div className="col-span-4 mt-16 ">
             <form
@@ -281,17 +287,28 @@ export const Login = () => {
             </form>
 
           </div>
-          <div className="col-span-2 text-center">
+          {/*           
+          show only in large screen */}
+          <div className="col-span-2 text-center hidden sm:hidden md:hidden lg:block">
             <h1 className="relative text-[#000000] text-[22px]
                 after:absolute after:bottom-[60px] after:w-[2px] after:h-[200px] after:bg-[#E2E8F0] after:left-1/2
                before:absolute before:top-[60px] before:w-[2px] before:h-[200px] before:bg-[#E2E8F0] before:left-1/2
                ">Or</h1>
           </div>
+          {/* 
+         show in small screens */}
+          <div className="col-span-4 mt-16 lg:hidden ">
+            <span className="relative block text-center text-[22px] text-black  after:absolute after:left-0 after:w-[40%] after:h-[1px] after:bg-[#E2E8F0] after:top-1/2 after:translate-y-[-50%] before:absolute before:right-0 before:w-[40%] before:h-[1px] before:bg-[#E2E8F0] before:top-1/2 before:translate-y-[-50%]">
+              Or
+            </span>
+          </div>
+
+
           <div className="col-span-4 mt-16">
 
 
-          {!showGuestAddress?<form
-              className="bg-[#E2E8F04D] border-[#E2E8F0] rounded-[10px] mt-5 ml-10 border px-6 py-10 max-w-[550px] min-h-[700px]"
+            {!showGuestAddress ? <form
+              className="bg-[#E2E8F04D] border-[#E2E8F0] rounded-[10px] mt-5 border px-6 py-10  max-w-[550px] min-h-[700px]"
               onSubmit={handleSubmit(onSubmit)}>
 
               {!guestUser ? <><div className="text-center mb-10">
@@ -372,103 +389,103 @@ export const Login = () => {
 
 
                 </>}
-            </form>:
+            </form> :
 
 
-            // for guest address
-            <form
-              className="bg-[#E2E8F04D] border-[#E2E8F0] rounded-[10px] mt-5 ml-10 border px-6 py-10 max-w-[550px] min-h-[700px]"
-              onSubmit={handleSubmit2(onSubmit2)}>
-        
-                  <div className="text-center mb-10">
-                    <h3 className="text-2xl text-[#030303] font-semibold">
-                      Enter Your delivery address
-                    </h3>
+              // for guest address
+              <form
+                className="bg-[#E2E8F04D] border-[#E2E8F0] rounded-[10px] mt-5 ml-10 border px-6 py-10 max-w-[550px] min-h-[700px]"
+                onSubmit={handleSubmit2(onSubmit2)}>
 
-                    <div class="relative">
-                      <input
-                        type="text"
-                        placeholder="Enter name"
-                        {...register2("name")}
-                        className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${error.includes("number")
-                          ? "border-red-500"
-                          : "border-[#66666666]"
-                          } rounded-[4px]`}
-                      />
-                  
-                        <p className="text-red-500 text-sm"> {errors.name?.message}</p>
-                    
-                    </div>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="Enter country"
-                        {...register2("country")}
-                        className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${error.includes("email")
-                          ? "border-red-500"
-                          : "border-[#66666666]"
-                          } rounded-[4px] pr-12`}
-                      />
-             
-                        <p className="text-red-500 text-sm">  {errors.country?.message}</p>
-                    
+                <div className="text-center mb-10">
+                  <h3 className="text-2xl text-[#030303] font-semibold">
+                    Enter Your delivery address
+                  </h3>
 
-                    </div>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="Enter state"
-                        {...register2("state")}
-                        className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${error.includes("state")
-                          ? "border-red-500"
-                          : "border-[#66666666]"
-                          } rounded-[4px] pr-12`}
-                      />
-             
-                        <p className="text-red-500 text-sm">  {errors.state?.message}</p>
-                    
+                  <div class="relative">
+                    <input
+                      type="text"
+                      placeholder="Enter name"
+                      {...register2("name")}
+                      className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${error.includes("number")
+                        ? "border-red-500"
+                        : "border-[#66666666]"
+                        } rounded-[4px]`}
+                    />
 
-                    </div>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="Enter city"
-                        {...register2("city")}
-                        className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${error.includes("city")
-                          ? "border-red-500"
-                          : "border-[#66666666]"
-                          } rounded-[4px] pr-12`}
-                      />
-             
-                        <p className="text-red-500 text-sm">  {errors.city?.message}</p>
-                    
+                    <p className="text-red-500 text-sm"> {errors.name?.message}</p>
 
-                    </div>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Enter country"
+                      {...register2("country")}
+                      className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${error.includes("email")
+                        ? "border-red-500"
+                        : "border-[#66666666]"
+                        } rounded-[4px] pr-12`}
+                    />
 
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="Enter address"
-                        {...register2("address")}
-                        className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${error.includes("address")
-                          ? "border-red-500"
-                          : "border-[#66666666]"
-                          } rounded-[4px] pr-12`}
-                      />
-             
-                        <p className="text-red-500 text-sm">  {errors.address?.message}</p>
-                    
+                    <p className="text-red-500 text-sm">  {errors.country?.message}</p>
 
-                    </div>
+
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Enter state"
+                      {...register2("state")}
+                      className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${error.includes("state")
+                        ? "border-red-500"
+                        : "border-[#66666666]"
+                        } rounded-[4px] pr-12`}
+                    />
+
+                    <p className="text-red-500 text-sm">  {errors.state?.message}</p>
+
+
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Enter city"
+                      {...register2("city")}
+                      className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${error.includes("city")
+                        ? "border-red-500"
+                        : "border-[#66666666]"
+                        } rounded-[4px] pr-12`}
+                    />
+
+                    <p className="text-red-500 text-sm">  {errors.city?.message}</p>
+
+
                   </div>
 
-                  {/*             
-                 //for guest user */}
-                  {/* <button type="submit" className=" w-full bg-primary text-white flex items-center justify-center py-4 px-3 font-semibold text-base min-w-[300px] rounded-[4px] "><span className="mr-2">Confirm & Pay</span> <FaArrowRightLong /></button> */}
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Enter address"
+                      {...register2("address")}
+                      className={`w-full block mt-5 px-3 py-3 bg-[#FFFFFF66] text-[#212121] border ${error.includes("address")
+                        ? "border-red-500"
+                        : "border-[#66666666]"
+                        } rounded-[4px] pr-12`}
+                    />
 
-                  <button
+                    <p className="text-red-500 text-sm">  {errors.address?.message}</p>
+
+
+                  </div>
+                </div>
+
+                {/*             
+                 //for guest user */}
+                {/* <button type="submit" className=" w-full bg-primary text-white flex items-center justify-center py-4 px-3 font-semibold text-base min-w-[300px] rounded-[4px] "><span className="mr-2">Confirm & Pay</span> <FaArrowRightLong /></button> */}
+
+                <button
                   type="submit"
-                
+
                   className="w-full bg-primary text-white flex items-center justify-center py-4 px-3 font-semibold text-base min-w-[300px] rounded-[4px] "
                   disabled={loader}
                   style={{ opacity: `${loader ? "0.5" : ""}` }}
@@ -479,15 +496,15 @@ export const Login = () => {
                     </span>
                   ) : (
                     <>
-                    <span className="mr-2">Confirm & Pay</span> <FaArrowRightLong />
+                      <span className="mr-2">Confirm & Pay</span> <FaArrowRightLong />
                     </>
                   )}
                 </button>
-                
-            </form>
+
+              </form>
             }
 
-            
+
           </div>
           <div className="col-span-1"></div>
         </div>

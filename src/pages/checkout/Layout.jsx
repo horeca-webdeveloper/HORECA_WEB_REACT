@@ -8,7 +8,7 @@ import { apiClient } from "../../utils/apiWrapper.js";
 
 export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader, tempCartItems, listOfStore, confirmAndPayFn }) => {
 
-
+    const authToken = localStorage.getItem('authToken');
 
     const [isVisible, setIsVisible] = useState(false);
     const navigate = useNavigate();
@@ -27,6 +27,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
     const [tempDiscountPercent, setTempDiscountPercent] = useState(10);
     const [tempTotalAmount, setTempTotalAmount] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
+
     useEffect(() => {
         handlerCartSummary();
     }, [cartSummaryFlag])
@@ -63,7 +64,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
             try {
                 const response = await apiClient.post(`/apply-coupon`, {
                     "coupon_code": couponCodeValue,
-                    "total_order_price": totalOrderPrice
+                    "total_order_price": tempTotalAmount
                 });
                 setDiscountPercent(response.data.discount_amount);
                 localStorage.setItem('discountPercetage', JSON.stringify(response.data.discount_amount));
@@ -91,7 +92,8 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
     }, []);
 
     useEffect(() => {
-        if (Object.keys(summary).length === 0) {
+
+        if (authToken == null) {
             let tempSubtotal = 0;
             let tempTempSaving = 0;
             let tempTax = 0;
@@ -100,32 +102,51 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                 tempSubtotal += item.original_price * item.quantity;
                 tempTempSaving += item.front_sale_price * item.quantity;
             });
+
             tempTax = tempSubtotal * (tempDiscountPercent / 100);
             setSubTotal(tempSubtotal);
             setTempSaving(tempTempSaving - tempSubTotal);
             setTempTax(tempTax);
             setTempTotalAmount(tempSubTotal + tempTax + tempShippingRate);
 
-        }else{
-            if(discountPercent){
-                setTotalAmount(((summary.total_with_shipping) * ((100 - discountPercent) / 100)));
-            }else{
-                setTotalAmount((summary.total_with_shipping));
+        } else {
+            let tempSubtotal = 0;
+            let tempTempSaving = 0;
+            let tempTax = 0;
+            let tempTotalAmount = 0;
+            !!cartItems && cartItems.forEach((item, index) => {
+                tempSubtotal += item.product.sale_price ? (item.product.sale_price * item.quantity) : (item.product.original_price * item.quantity);
+                tempTempSaving += item.product.price * item.quantity;
+            });
+
+
+            tempTax = tempSubtotal * (tempDiscountPercent / 100);
+            setSubTotal(tempSubtotal);
+            setTempSaving(tempTempSaving - tempSubTotal);
+            setTempTax(tempTax);
+            setTempTotalAmount(tempSubTotal + tempTax + tempShippingRate);
+            if (discountPercent) {
+
+                setTotalAmount(((tempSubTotal + tempTax + tempShippingRate) * ((100 - discountPercent) / 100)));
+            } else {
+                setTotalAmount((tempSubTotal + tempTax + tempShippingRate));
             }
-            
+
         }
-    }, [summary, tempCartItems]);
+
+    }, [tempCartItems, cartItems]);
 
     const navigation = (data) => {
         navigate('/review-checkout', data);
     }
 
- 
+
 
     return (
         <React.Fragment>
             <Wrapper>
-                <div className="grid grid-cols-12 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-12 items-center gap-2 mb-20">
+
                     <div className="col-span-9  mb-5">
                         {children}
                     </div>
@@ -143,66 +164,65 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
 
 
 
-                        {summary && summary.total_with_shipping ? (
+                        {tempSubTotal && cartItems.length > 0 && authToken != null ? (
                             <SideWrapper classes={"mt-4"}>
                                 {!cardSummaryLoader ? <React.Fragment>
 
                                     <h3 className="text-[#424242] text-[28px] font-semibold">Cart Summary</h3>
                                     <div className="w-full h-[1px] bg-gray-300 my-3"></div>
-                                    {summary.subtotal ? (
+                                    {tempSubTotal && tempSubTotal ? (
                                         <div className="flex items-center justify-between text-[#030303] text-base my-3 mt-5">
-                                            <span className="">Subtotal ({summary.item_count} items)</span>
-                                            <span className="">{summary.currency_title} {(summary.subtotal).toFixed(2)}</span>
+                                            <span className="">Subtotal ({cartItems.length} items)</span>
+                                            <span className="">{tempCurrencyTitle} {(tempSubTotal).toFixed(2)}</span>
                                         </div>
                                     ) : null}
 
-                                    {summary.savings ? (
+                                    {tempTempSaving ? (
                                         <div className="flex items-center justify-between text-primary font-bold text-base my-3">
                                             <span className="">Savings</span>
-                                            <span className="">{summary.currency_title} {(summary.savings).toFixed(2)}</span>
+                                            <span className="">{tempCurrencyTitle} {(tempTempSaving).toFixed(2)}</span>
                                         </div>
                                     ) : null}
 
-                                    {summary.shipping_rate ? (
+                                    {tempShippingRate ? (
                                         <div className="flex items-center justify-between text-[#030303] text-base my-3">
                                             <span className="">Shipping & Handling</span>
-                                            <span className="">{summary.currency_title} {(summary.shipping_rate)}</span>
+                                            <span className="">{tempCurrencyTitle} {(tempShippingRate)}</span>
                                         </div>
                                     ) : null}
-
-
-                                    {summary.tax ? (
+                                    {tempTax ? (
                                         <div className="flex items-center justify-between text-[#030303] text-base my-3">
                                             <span className="">Taxes</span>
-                                            <span className="">{summary.currency_title} {(summary.tax).toFixed(2)}</span>
+
+                                            <span className="">{tempCurrencyTitle} {(tempTax).toFixed(2)}</span>
                                         </div>
                                     ) : null}
 
                                     {discountPercent ? (
                                         <div className="flex items-center justify-between text-[#030303] text-base my-3">
                                             <span className="">Coupon Discount <span className="text-primary text-sm font-semibold">({discountPercent}%)</span></span>
-                                            <span className="">{summary.currency_title} -{(summary.total_with_shipping / discountPercent).toFixed(2)}</span>
+                                            <span className="">{tempCurrencyTitle} {(tempTotalAmount / discountPercent).toFixed(2)}</span>
                                         </div>
                                     ) : null}
 
                                     <div className="w-full h-[1px] bg-gray-300 my-3"></div>
 
-                                    {discountPercent && summary.total_with_shipping ? (
+                                    {discountPercent && tempTotalAmount ? (
                                         <div className="flex items-center justify-between text-[#030303] text-xl font-semibold my-3">
                                             <span className="">Total Amount</span>
-                                            <span className="">{summary.currency_title}  {((summary.total_with_shipping) * ((100 - discountPercent) / 100)).toFixed(2)}</span>
+                                            <span className="">{tempCurrencyTitle}  {((tempTotalAmount) * ((100 - discountPercent) / 100)).toFixed(2)}</span>
                                         </div>
                                     ) : <div className="flex items-center justify-between text-[#030303] text-xl font-semibold my-3">
                                         <span className="">Total Amount</span>
-                                        <span className="">{summary.currency_title} {(summary.total_with_shipping).toFixed(2)} </span>
+                                        <span className="">{tempCurrencyTitle} {(tempTotalAmount).toFixed(2)} </span>
                                     </div>}
 
                                     {confirmAndPayFn && confirmAndPayFn ? <button onClick={confirmAndPayFn} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
-                                            <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
-                                        </button> : 
-                                    <button onClick={() => navigation({ state: { totalAmount,currencyTitle:summary.currency_title } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                         <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
-                                    </button>}
+                                    </button> :
+                                        <button onClick={() => navigation({ state: { totalAmount: totalAmount, sub_total: tempSubTotal, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                            <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
+                                        </button>}
 
 
 
@@ -225,7 +245,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                         ) :
                             // for temporary cart items
                             <>
-                                {!!tempCartItems && tempCartItems ? <SideWrapper classes={"mt-4"}>
+                                {!!tempCartItems && tempCartItems && authToken == null ? <SideWrapper classes={"mt-4"}>
                                     <React.Fragment>
 
                                         <h3 className="text-[#424242] text-[28px] font-semibold">Cart Summary</h3>
@@ -268,7 +288,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                                         </div>
                                         {confirmAndPayFn && confirmAndPayFn ? <button onClick={confirmAndPayFn} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                             <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
-                                        </button> : <button onClick={() => navigation({ state: { totalAmount: tempTotalAmount, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle, tempCartItems, listOfStore } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                        </button> : <button onClick={() => navigation({ state: { totalAmount: tempTotalAmount, subTotal: tempSubTotal, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                             <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
                                         </button>}
 

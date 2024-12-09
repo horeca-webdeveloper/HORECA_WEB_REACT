@@ -11,13 +11,15 @@ import { useCart } from "../../../context/CartContext";
 import { useWishlist } from "../../../context/WishListContext";
 import { ToastContainer, toast } from "react-toastify";
 
-const Wishlist = () => {
+const ProfileWishlist = () => {
   const [wishListData, setWishListData] = useState([]);
   const notify = (text) => {
     toast.dismiss();
-    toast(<span className="line-clamp-2">{`${text} has been added to your cart`}</span>)
-};
-  const {incrementCartItems,incrementWishListItems } = useLocalCartCount();
+    toast(
+      <span className="line-clamp-2">{`${text} has been added to your cart`}</span>
+    );
+  };
+  const { incrementCartItems, incrementWishListItems } = useLocalCartCount();
   const { totalWishListCount, triggerUpdateWishList } = useWishlist();
   const { triggerUpdateCart } = useCart();
   const navigate = useNavigate();
@@ -25,7 +27,7 @@ const Wishlist = () => {
   const fetchAllReviews = async () => {
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
-      setWishListData(JSON.parse(localStorage.getItem('wishListItems')));
+      setWishListData(JSON.parse(localStorage.getItem("wishListItems")));
       setLoader(false);
     } else {
       try {
@@ -39,7 +41,6 @@ const Wishlist = () => {
         return;
       }
     }
-
   };
 
   const handlerRemoveWishlist = async (product) => {
@@ -57,24 +58,22 @@ const Wishlist = () => {
       } finally {
         return;
       }
-    }else{
-   
-      const wishListItems = JSON.parse(localStorage.getItem('wishListItems')) || [];  // Ensure it's an array, even if null
-      const updateWishList = wishListItems.filter((item) => item.id !== product.id);
+    } else {
+      const wishListItems =
+        JSON.parse(localStorage.getItem("wishListItems")) || []; // Ensure it's an array, even if null
+      const updateWishList = wishListItems.filter(
+        (item) => item.id !== product.id
+      );
       // Update the localStorage
       localStorage.setItem("wishListItems", JSON.stringify(updateWishList));
       // Update the state
-      setWishListData(updateWishList);  // Directly use the updated list
-      incrementWishListItems(-1)
+      setWishListData(updateWishList); // Directly use the updated list
+      incrementWishListItems(-1);
       triggerUpdateWishList();
-   
-      
-      
     }
   };
 
   const handleAddToCart = async (product) => {
-
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
       try {
@@ -103,26 +102,24 @@ const Wishlist = () => {
         front_sale_price: product.front_sale_price,
         currency_title: product.currency_title,
         maximum_order_quantity: product.maximum_order_quantity,
-        minimum_order_quantity:product.minimum_order_quantity,
+        minimum_order_quantity: product.minimum_order_quantity,
         images: product.images,
-        video_path: product.video_path
-      }
+        video_path: product.video_path,
+      };
       if (cartItems) {
         let itemsArray = JSON.parse(cartItems);
-        let itemExists = itemsArray.findIndex(item => item.id === product.id);
-      
-          itemsArray.push(tempObj);
-        
+        let itemExists = itemsArray.findIndex((item) => item.id === product.id);
+
+        itemsArray.push(tempObj);
+
         localStorage.setItem("CartItems", JSON.stringify(itemsArray));
       } else {
         localStorage.setItem("CartItems", JSON.stringify([tempObj]));
-
       }
-      incrementCartItems(1)
+      incrementCartItems(1);
       triggerUpdateCart();
-      notify(product.name)
-    handlerRemoveWishlist(product);
- 
+      notify(product.name);
+      handlerRemoveWishlist(product);
     }
   };
 
@@ -136,11 +133,9 @@ const Wishlist = () => {
       title: "Order",
     },
     {
-
       title: "Wishlist",
     },
   ];
-
 
   return (
     <>
@@ -149,7 +144,7 @@ const Wishlist = () => {
       </Wrapper>
       <Wrapper>
         <div className="flex">
-          {/* <SidebarProfile /> */}
+          <SidebarProfile />
           {/* WishList Section */}
           <div className="flex flex-col p-[10px] justify-between w-[100%] h-[100%]">
             <p className=" font-light font-sans text-[18px] font-normal leading-[24px] text-left decoration-slice">
@@ -164,23 +159,28 @@ const Wishlist = () => {
                 ))
               ) : (
                 <React.Fragment>
-                  {wishListData && wishListData.length > 0 ? <>  {wishListData?.map((item) => {
-
-                    return (
-                      <WishlistBox
-                        handlerRemoveWishlist={handlerRemoveWishlist}
-                        data={item.product ? item.product : item}
-                        handleAddToCart={handleAddToCart}
-                      />
-                    );
-                  })}</> : <>
-                    <div class="container mx-auto">
-                      <div class="grid grid-cols-1 md:grid-cols-6">
-                        <h1>Not found any products</h1>
+                  {wishListData && wishListData.length > 0 ? (
+                    <>
+                      {" "}
+                      {wishListData?.map((item) => {
+                        return (
+                          <WishlistBox
+                            handlerRemoveWishlist={handlerRemoveWishlist}
+                            data={item.product ? item.product : item}
+                            handleAddToCart={handleAddToCart}
+                          />
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <>
+                      <div class="container mx-auto">
+                        <div class="grid grid-cols-1 md:grid-cols-6">
+                          <h1>Not found any products</h1>
+                        </div>
                       </div>
-                    </div>
-                  </>}
-
+                    </>
+                  )}
                 </React.Fragment>
               )}
             </div>
@@ -191,4 +191,4 @@ const Wishlist = () => {
   );
 };
 
-export default Wishlist;
+export default ProfileWishlist;

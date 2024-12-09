@@ -4,21 +4,15 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { apiClient } from "../../../../utils/apiWrapper";
 import { InfinitySpin } from 'react-loader-spinner';
-const Popup = ({ setShowPopup, popupHeading, guestUser, amount, currency }) => {
+const Popup = ({ setShowPopup, popupHeading }) => {
   const [loader, setLoader] = useState(false);
   const [getData,setData]=useState([]);
-  const handlePayments = async (data) => {
-
+  const handleForm = async (data) => {
 
     const datas = {
-      "amount": data.amount,
-      // "currency": data.currency.toUpperCase(),
-         "currency": "AED",
-      "description": data.address,
-      "customer_name": data.name,
-      "customer_email": data.email
+      
     };
-    localStorage.setItem('guestUser',JSON.stringify(datas));
+
     try {
       setLoader(true);
       const response = await apiClient.post(`/create-payment`, datas);
@@ -52,8 +46,8 @@ const Popup = ({ setShowPopup, popupHeading, guestUser, amount, currency }) => {
   });
 
   const onSubmit = (data) => {
-    Object.assign(data, {amount: amount,currency:currency});
-    handlePayments(data);
+  
+    handleForm(data);
   }
 
   useEffect(()=>{
@@ -75,42 +69,7 @@ const Popup = ({ setShowPopup, popupHeading, guestUser, amount, currency }) => {
         
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="p-[5px]">
-              <div className="mt-[10px]">
-                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                  Full Name :
-                </p>
-                <input
-                  className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
-                  placeholder="Enter your full name"
-                  {...register("name")}
-                />
-                <span>{errors.name?.message}</span>
-              </div>
-              <div className="mt-[10px]">
-                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                  Email :
-                </p>
-                <input
-                  className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
-                  placeholder="Enter your email id"
-                  {...register("email")}
-                />
-                <span>{errors.email?.message}</span>
-              </div>
-              <div className="mt-[10px]">
-                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                  Phone :
-                </p>
-                <input
-                  className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
-                  placeholder="Enter your phone."
-                  {...register("phone", {
-                    minLength: 1,
-                    maxLength: 12
-                  })}
-                />
-                <span>{errors.phone?.message}</span>
-              </div>
+           
               <div className="mt-[10px]">
                 <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
                   Country :
