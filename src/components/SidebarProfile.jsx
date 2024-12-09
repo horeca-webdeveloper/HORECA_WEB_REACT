@@ -7,37 +7,37 @@ const SidebarProfile = () => {
     {
       id: "",
       name: "Your Orders",
-      link: "/all-orders",
+      link: "/registration/all-orders",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame.png`,
     },
     {
       id: "",
       name: "Browsing History",
-      link: "/browsing-history",
+      link: "/registration/browsing-history",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-1.png`,
     },
     {
       id: "",
       name: "Your Reviews",
-      link: "/reviews",
+      link: "/registration/reviews",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-2.png`,
     },
     {
       id: "",
       name: "Wishlist ",
-      link: "/wishlist",
+      link: "/registration/wishlist",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-3.png`,
     },
     {
       id: "",
       name: "Your Profiles",
-      link: "/AccountSecurity",
+      link: "/registration/AccountSecurity",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-4.png`,
     },
     {
       id: "",
       name: "Coupons & Offers",
-      link: "/coupons-offers",
+      link: "/registration/coupons-offers",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-5.png`,
     },
     // {
@@ -49,7 +49,7 @@ const SidebarProfile = () => {
     {
       id: "",
       name: "Addresses",
-      link: "/addresses",
+      link: "/registration/addresses",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-7.png`,
     },
     // {
@@ -67,7 +67,7 @@ const SidebarProfile = () => {
     {
       id: "",
       name: "Account Security",
-      link: "/AccountSecurity",
+      link: "/registration/AccountSecurity",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-10.png`,
     },
     // {

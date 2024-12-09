@@ -307,7 +307,7 @@ export const ProductsByCategory = () => {
                 onClick={() => setOpenFilterPopup(true)}
                 className="block sm:hidden bg-[#E2E8F0] p-[10px] rounded"
               >
-                <img src={process.env.PUBLIC_URL + "icons/FilterIcon.png"} />
+                <img src={"http://localhost:3001/icons/FilterIcon.png"} />
               </div>
               <div className="hidden sm:flex flex-row items-center ">
                 <span className="text-sm text-gray-700 mr-6">
@@ -408,7 +408,7 @@ export const ProductsByCategory = () => {
 
             {/* Categories Display Here  */}
             {type == null ? (
-              <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 sm:gap-6 mt-8">
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-6 mt-8">
                 {!!categories &&
                   categories.map((cat, index) => {
                     return (
@@ -488,7 +488,7 @@ export const ProductsByCategory = () => {
           <>
             <img
               className="w-[100vw] h-[162px] rounded"
-              src={"http://localhost:3000/images/categoryBanner.png"}
+              src={"http://localhost:3001/images/categoryBanner.png"}
             />
             <h1 className="mt-[20px]">Products you may also like</h1>
             <div
