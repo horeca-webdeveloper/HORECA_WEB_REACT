@@ -20,6 +20,7 @@ import { MdPlayCircle } from "react-icons/md";
 import { FaPlay } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import { useWishlist } from "../context/WishListContext";
+import { Counter } from "./CheckoutPage/Counter";
 
 export const ProductCard = ({
   classes,
@@ -40,6 +41,7 @@ export const ProductCard = ({
   const sliderRef = useRef();
   const { triggerUpdateCart } = useCart();
   const { totalWishListItems, incrementWishListItems } = useLocalCartCount();
+  const [cartSummaryFlag, setCartSummaryFlag] = useState(false);
 
   const videoRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);

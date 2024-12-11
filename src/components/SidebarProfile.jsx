@@ -28,12 +28,12 @@ const SidebarProfile = () => {
       link: "/registration/wishlist",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-3.png`,
     },
-    {
-      id: "",
-      name: "Your Profiles",
-      link: "/registration/AccountSecurity",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-4.png`,
-    },
+    // {
+    //   id: "",
+    //   name: "Your Profiles",
+    //   link: "/registration/AccountSecurity",
+    //   icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-4.png`,
+    // },
     {
       id: "",
       name: "Coupons & Offers",

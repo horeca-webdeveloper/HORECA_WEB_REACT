@@ -13,22 +13,33 @@ import WishlistBox from "./ProfileRegistration/Wishlist/Components/WishlistBox";
 
 const Wishlist = () => {
   const [wishListData, setWishListData] = useState([]);
+  const notify = (text) => {
+    toast.dismiss();
+    toast(
+      <span className="line-clamp-2">{`${text} has been added to your cart`}</span>
+    );
+  };
+  const { incrementCartItems, incrementWishListItems } = useLocalCartCount();
+  const { totalWishListCount, triggerUpdateWishList } = useWishlist();
+  const { triggerUpdateCart } = useCart();
   const navigate = useNavigate();
   const [loader, setLoader] = useState(true);
   const fetchAllReviews = async () => {
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
-      navigate("/login");
-    }
-    try {
-      const response = await apiClient.get("/wishlist");
-      setWishListData(response?.data?.wishlist);
+      setWishListData(JSON.parse(localStorage.getItem("wishListItems")));
       setLoader(false);
-      console.log(response?.data?.wishlist);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      return;
+    } else {
+      try {
+        const response = await apiClient.get("/wishlist");
+        setWishListData(response?.data?.wishlist);
+        setLoader(false);
+        console.log(response?.data?.wishlist);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        return;
+      }
     }
   };
 
@@ -40,7 +51,6 @@ const Wishlist = () => {
         const response = await apiClient.delete(`/wishlist/remove`, {
           params: { product_id: product.id },
         });
-        console.log(response);
         setLoader(false);
         fetchAllReviews();
       } catch (error) {
@@ -48,6 +58,18 @@ const Wishlist = () => {
       } finally {
         return;
       }
+    } else {
+      const wishListItems =
+        JSON.parse(localStorage.getItem("wishListItems")) || []; // Ensure it's an array, even if null
+      const updateWishList = wishListItems.filter(
+        (item) => item.id !== product.id
+      );
+      // Update the localStorage
+      localStorage.setItem("wishListItems", JSON.stringify(updateWishList));
+      // Update the state
+      setWishListData(updateWishList); // Directly use the updated list
+      incrementWishListItems(-1);
+      triggerUpdateWishList();
     }
   };
 
@@ -60,12 +82,44 @@ const Wishlist = () => {
           product_id: product.id,
           quantity: 1,
         });
+        handlerRemoveWishlist(product);
         setLoader(false);
       } catch (error) {
         console.error("Error:", error);
       } finally {
         setLoader(false);
       }
+    } else {
+      let cartItems = localStorage.getItem("CartItems");
+      let tempObj = {
+        product_id: product.id,
+        quantity: 1,
+        name: product.name,
+        image: product.image,
+        store_id: product.store_id,
+        delivery_days: product.delivery_days,
+        original_price: product.original_price,
+        front_sale_price: product.front_sale_price,
+        currency_title: product.currency_title,
+        maximum_order_quantity: product.maximum_order_quantity,
+        minimum_order_quantity: product.minimum_order_quantity,
+        images: product.images,
+        video_path: product.video_path,
+      };
+      if (cartItems) {
+        let itemsArray = JSON.parse(cartItems);
+        let itemExists = itemsArray.findIndex((item) => item.id === product.id);
+
+        itemsArray.push(tempObj);
+
+        localStorage.setItem("CartItems", JSON.stringify(itemsArray));
+      } else {
+        localStorage.setItem("CartItems", JSON.stringify([tempObj]));
+      }
+      incrementCartItems(1);
+      triggerUpdateCart();
+      notify(product.name);
+      handlerRemoveWishlist(product);
     }
   };
 
@@ -76,11 +130,10 @@ const Wishlist = () => {
   const collectionBreadCrumb = [
     {
       url: "/",
-      title: "Your Account",
+      title: "Order",
     },
     {
-      url: "/",
-      title: "Profile",
+      title: "Wishlist",
     },
   ];
 

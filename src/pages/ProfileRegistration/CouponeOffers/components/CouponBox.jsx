@@ -14,7 +14,7 @@ const CouponBox = ({ data }) => {
                 <p className="font-sans text-[#666666] text-xs mt-[10px] font-normal leading-6 text-left decoration-skip-ink-none">
                   Compatible with Horeca fulfilled Products | One Use Only
                 </p>
-                <p className="font-sans text-[#151515] mt-[0px] sm:mt-[20px] text-xs mt-[20px] font-medium leading-6 text-left decoration-skip-ink-none">
+                <p className="font-sans text-[#151515] text-xs mt-[0px] sm:mt-[20px] font-medium leading-6 text-left decoration-skip-ink-none">
                   Valid until:{" "}
                   {data?.end_date == null ? "Lifetime" : data?.end_date}
                 </p>
@@ -28,7 +28,7 @@ const CouponBox = ({ data }) => {
                     0 points{" "}
                   </p>
                 </div>
-                <p className="font-sans text-[#186737] text-sm font-medium leading-6 text-left decoration-skip-ink-none underline-offset-4">
+                <p className="font-sans text-center text-[#186737] text-sm font-medium leading-6 text-left decoration-skip-ink-none underline-offset-4">
                   Insufficient Points
                 </p>
               </div>
@@ -59,7 +59,7 @@ const CouponBox = ({ data }) => {
                   0 points{" "}
                 </p>
               </div>
-              <p className="font-sans text-[#782B51] text-sm font-medium leading-6 text-left decoration-skip-ink-none underline-offset-4">
+              <p className="font-sansb text-center text-[#782B51] text-sm font-medium leading-6 text-left decoration-skip-ink-none underline-offset-4">
                 Insufficient Points
               </p>
             </div>

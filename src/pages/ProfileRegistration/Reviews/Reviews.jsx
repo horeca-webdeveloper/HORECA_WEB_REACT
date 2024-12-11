@@ -60,12 +60,13 @@ const Reviews = () => {
       <Wrapper>
         <Breadcrumb items={collectionBreadCrumb} classes={"mt-4 mb-2"} />
       </Wrapper>
+      <h1 className="block sm:hidden text-center border-b-2 p-2">My Reviews</h1>
       <Wrapper>
         <div className="flex">
           <SidebarProfile />
           {/* Reviews Section */}
           <div className="flex flex-col p-[10px] justify-between w-[100%] h-[100%]">
-            My Reviews
+            <h1 className="hidden sm:block">My Reviews</h1>
             <div>
               {/*  */}
               {loader ? (
@@ -93,7 +94,7 @@ const Reviews = () => {
         </div>
         {window?.innerWidth < 640 && (
           <div>
-            <div className="mb-10 mt-[20px]">
+            <div className="mb-10 mt-[20px] p-[10px]">
               <img
                 className="h-[160px] w-[100vw] rounded-md"
                 src={process.env.PUBLIC_URL + "/images/RegistrationProfile.png"}
