@@ -11,7 +11,7 @@ import { Breadcrumb } from "../../shared/Breadcrumb";
 import { useCart } from "../../context/CartContext";
 import { apiClient } from "../../utils/apiWrapper.js";
 import { Layout } from "./Layout.jsx";
- 
+
 
 
 export const Checkout = () => {
@@ -217,13 +217,9 @@ for mobile */}
 
                                                 {/* Action Buttons */}
                                                 <div className="flex items-center gap-2">
-
                                                     <DeleteCartButton fetchCall={fetchCall} setFetchCall={setFetchCall} product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} forMobile={true} />
-
                                                     <div className="flex items-center gap-2">
                                                         <Counter product={prod} setCartSummaryFlag={setCartSummaryFlag} cartSummaryFlag={cartSummaryFlag} forMobile={true} />
-
-
                                                     </div>
                                                 </div>
                                             </div>

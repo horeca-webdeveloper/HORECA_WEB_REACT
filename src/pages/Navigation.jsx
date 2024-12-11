@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { apiClient } from "../utils/apiWrapper";
 import { useLocation } from "react-router-dom";
 import { useWishlist } from "../context/WishListContext";
-import { debounce } from 'lodash';
+import { debounce } from "lodash";
 export const Navigation = ({ categories, userProfile, currentLocation }) => {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [currency, setCurrency] = useState(["USD", "AED", "PKR"]);
@@ -73,49 +73,49 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     {
       id: "",
       name: "Your Orders",
-      link: "/all-orders",
+      link: "/registration/all-orders",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame.png`,
     },
     {
       id: "",
       name: "Browsing History",
-      link: "/browsing-history",
+      link: "registration/browsing-history",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-1.png`,
     },
     {
       id: "",
       name: "Your Reviews",
-      link: "/reviews",
+      link: "registration/reviews",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-2.png`,
     },
     {
       id: "",
       name: "Wishlist ",
-      link: "/wishlist",
+      link: "registration/wishlist",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-3.png`,
     },
     {
       id: "",
       name: "Your Profiles",
-      link: "/AccountSecurity",
+      link: "registration/AccountSecurity",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-4.png`,
     },
     {
       id: "",
       name: "Coupons & Offers",
-      link: "/coupons-offers",
+      link: "registration/coupons-offers",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-5.png`,
     },
     {
       id: "",
       name: "Addresses",
-      link: "/addresses",
+      link: "registration/addresses",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-7.png`,
     },
     {
       id: "",
       name: "Account Security",
-      link: "/AccountSecurity",
+      link: "registration/AccountSecurity",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-10.png`,
     },
   ];
@@ -192,38 +192,36 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     fetchProducts();
   }, [searchValue]);
 
-
-
-  const handlerSearchValue = useCallback(debounce((value) => {
-    setSearchValue(value);
-  }, 300), []);
-
+  const handlerSearchValue = useCallback(
+    debounce((value) => {
+      setSearchValue(value);
+    }, 300),
+    []
+  );
 
   const navigateToProduct = (id, name) => {
     setSearchValue(name);
     setIsFocused(false);
     navigate(`product/${id}`);
+  };
 
-  }
+  // Function to highlight the matched text
+  const highlightText = (text, search) => {
+    if (!search) return text; // If no search term, return the text as is
 
+    // Split the text into parts, keeping the search term intact
+    const parts = text.split(new RegExp(`(${search})`, "gi"));
 
-// Function to highlight the matched text
-const highlightText = (text, search) => {
-  if (!search) return text; // If no search term, return the text as is
-
-  // Split the text into parts, keeping the search term intact
-  const parts = text.split(new RegExp(`(${search})`, 'gi'));
-
-  return parts.map((part, index) => 
-    part.toLowerCase() === search.toLowerCase() ? (
-      <span key={index} className="highlight">
-        {part}
-      </span>
-    ) : (
-      part // Non-highlighted part
-    )
-  );
-};
+    return parts.map((part, index) =>
+      part.toLowerCase() === search.toLowerCase() ? (
+        <span key={index} className="highlight">
+          {part}
+        </span>
+      ) : (
+        part // Non-highlighted part
+      )
+    );
+  };
 
   return (
     <React.Fragment>
@@ -335,15 +333,15 @@ const highlightText = (text, search) => {
           <ul className="flex items-center">
             {currencyMenu
               ? currencyMenu.map((currency, index) => {
-                return (
-                  <li
-                    key={index}
-                    className="after:content-['|'] after:mx-2 after:text-gray-700"
-                  >
-                    <Link to={currency.redirectUrl}>{currency.title}</Link>
-                  </li>
-                );
-              })
+                  return (
+                    <li
+                      key={index}
+                      className="after:content-['|'] after:mx-2 after:text-gray-700"
+                    >
+                      <Link to={currency.redirectUrl}>{currency.title}</Link>
+                    </li>
+                  );
+                })
               : null}
 
             {/* Currency Selector  */}
@@ -426,8 +424,9 @@ const highlightText = (text, search) => {
         <div>
           {/* Main Drawer */}
           <div
-            className={`fixed inset-y-0 left-0 w-[80vw] bg-white z-[1000] text-black transform ${isOpen ? "translate-x-0" : "-translate-x-full"
-              } transition-transform duration-300 ease-in-out lg:hidden`}
+            className={`fixed inset-y-0 left-0 w-[80vw] bg-white z-[1000] text-black transform ${
+              isOpen ? "translate-x-0" : "-translate-x-full"
+            } transition-transform duration-300 ease-in-out lg:hidden`}
           >
             {activeCategory == null ? (
               // Main Categories
@@ -491,7 +490,7 @@ const highlightText = (text, search) => {
                 <ul className="">
                   {childCategory?.map((item, index) => {
                     // console.log("subcategories", item);
-                    
+
                     return (
                       <li
                         onClick={() => {
@@ -605,7 +604,8 @@ const highlightText = (text, search) => {
           />
           {currentLocation ? (
             <span className="text-[#64748B] text-sm ml-3">
-              {currentLocation.city} {currentLocation.regionName}, {currentLocation.country}
+              {currentLocation.city} {currentLocation.regionName},{" "}
+              {currentLocation.country}
             </span>
           ) : (
             <span className="text-[#64748B] text-sm ml-3">
@@ -633,7 +633,6 @@ const highlightText = (text, search) => {
               // value={searchValue}
               onChange={(e) => handlerSearchValue(e.target.value)}
               onFocus={handleFocus}
-
             />
             <button type="submit" className="bg-primary p-2 rounded-full mr-2">
               <CiSearch color="white" size={26} />
@@ -650,13 +649,13 @@ const highlightText = (text, search) => {
                   <div className="basis-3/4 py-4 px-3 bg-white">
                     {products.slice(0, 7).map((prod, index) => (
                       <div
-
                         onClick={() => navigateToProduct(prod.id, prod.name)}
                         key={prod.id}
-                        className={`flex p-2 ${selectedIndex === index
-                          ? "bg-[#def9ec]"
-                          : "hover:bg-[#def9ec]"
-                          }`}
+                        className={`flex p-2 ${
+                          selectedIndex === index
+                            ? "bg-[#def9ec]"
+                            : "hover:bg-[#def9ec]"
+                        }`}
                       >
                         <div>
                           <img
@@ -667,8 +666,7 @@ const highlightText = (text, search) => {
                         </div>
                         <div className="ml-3">
                           <span className="line-clamp-1 text-[#2E2F32] font-semibold text-[14px]">
-                           {highlightText(prod.name, searchValue)}
-                       
+                            {highlightText(prod.name, searchValue)}
                           </span>
                           <span className="text-[#64748B] text-sm">
                             SAR {prod.sale_price}
@@ -690,10 +688,11 @@ const highlightText = (text, search) => {
                       <Link
                         to={`/collections/${cat.slug}`}
                         key={cat.id}
-                        className={`flex p-2 ${selectedIndex === index + products.length
-                          ? "bg-[#def9ec]"
-                          : "hover:bg-[#def9ec]"
-                          }`}
+                        className={`flex p-2 ${
+                          selectedIndex === index + products.length
+                            ? "bg-[#def9ec]"
+                            : "hover:bg-[#def9ec]"
+                        }`}
                       >
                         <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
                           {cat.name}
@@ -714,11 +713,12 @@ const highlightText = (text, search) => {
                       <Link
                         to={`/collections/${brand.id}`}
                         key={brand.id}
-                        className={`flex p-2 ${selectedIndex ===
+                        className={`flex p-2 ${
+                          selectedIndex ===
                           index + products.length + categoryList.length
-                          ? "bg-[#def9ec]"
-                          : "hover:bg-[#def9ec]"
-                          }`}
+                            ? "bg-[#def9ec]"
+                            : "hover:bg-[#def9ec]"
+                        }`}
                       >
                         <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
                           {brand.name}
@@ -748,7 +748,7 @@ const highlightText = (text, search) => {
 
           <div
             className="relative mx-2 hidden sm:flex cursor-pointer"
-            onClick={() => navigate("/checkout")}
+            onClick={() => navigate("/wishlist")}
           >
             <img src={process.env.PUBLIC_URL + "/icons/heart.svg"} alt="" />
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
@@ -771,7 +771,7 @@ const highlightText = (text, search) => {
             src={process.env.PUBLIC_URL + "/icons/user.svg"}
             alt=""
             className="w-[35px] rounded-full cursor-pointer"
-            onClick={() => navigate("/all-orders")}
+            onClick={() => navigate("/registration/all-orders")}
           />
           <div className="flex hidden sm:flex flex-col ml-2 ">
             {isLoggedIn ? (
@@ -791,7 +791,7 @@ const highlightText = (text, search) => {
             {isLoggedIn ? (
               <span
                 to=""
-                onClick={() => navigate("/all-orders")}
+                onClick={() => navigate("registration/all-orders")}
                 className="text-black text-sm font-semibold capitalize cursor-pointer"
               >
                 {userName}
@@ -809,9 +809,9 @@ const highlightText = (text, search) => {
           onMouseEnter={() => setOnHoverProfile(true)}
           onMouseLeave={() => setOnHoverProfile(false)}
           style={{ zIndex: 1000 }}
-          className="flex bg-[white] absolute z-1000 overflow-hidden w-[80vw] border-2 shadow-md m-[10px] ml-[12%] mt-[-20px] rounded-[10px] h-[714px]"
+          className="hidden sm:grid  grid grid-cols-1 sm:grid-cols-12 md:grid-cols-12 lg:grid-cols-12 bg-[white] absolute z-1000 overflow-hidden w-[80vw] border-2 shadow-md m-[10px] ml-[12%] mt-[-20px] rounded-[10px] h-[714px] overflow-x-auto overflow-y-auto"
         >
-          <div className="flex p-5 flex-col w-[40%] border-r-2 mr-[20px]">
+          <div className="col-span-1 sm:col-span-2 md:col-span-6 lg:col-span-3 p-4  border-r-2 mr-[20px]">
             <h1 className="text-[16px] leading-[16px] font-semibold">
               Reorder In One Click
             </h1>
@@ -904,9 +904,9 @@ const highlightText = (text, search) => {
               </div>
             </div>
           </div>
-          <div className="flex p-5 flex-col w-[40%] border-r-2 mr-[20px]">
+          <div className="col-span-1 sm:col-span-2 md:col-span-6 lg:col-span-3 p-4 border-r-2 mr-[20px] ">
             <h1 className="text-[16px] leading-[16px] font-semibold">
-              Reorder In One Click
+              Track Your Order
             </h1>
             <h2 className="text-[14px] mb-[10px] text-[#186737] mt-[5px] leading-[16px] font-normal">
               View All & Manage
@@ -980,7 +980,7 @@ const highlightText = (text, search) => {
               </div>
             </div>
           </div>
-          <div className="flex-col w-[60%] p-5">
+          <div className="col-span-1 sm:col-span-2 md:col-span-12 lg:col-span-6     p-5">
             <div className="flex items-center p-5 border-b-2 justify-between">
               <p className="text-[16px] leading-[18.77px]">Account</p>
               <p className="text-[13px] leading-[15.75px]">
@@ -1058,29 +1058,29 @@ const highlightText = (text, search) => {
             <div className="w-[80%] flex flex-row items-center justify-between">
               {categories
                 ? categories.map((cat, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      {index <= 5 ? (
-                        <Link
-                          className={`text-base text-primary mx-2 `}
-                          to={"/collections/" + cat.slug}
-                        >
-                          {cat.name}
-                        </Link>
-                      ) : null}
+                    return (
                       <React.Fragment key={index}>
-                        {index === 7 ? (
+                        {index <= 5 ? (
                           <Link
-                            className="text-base text-primary mx-2 font-bold"
-                            to={"collections/deal-of-a-days"}
+                            className={`text-base text-primary mx-2 `}
+                            to={"/collections/" + cat.slug}
                           >
-                            Deal of the day
+                            {cat.name}
                           </Link>
                         ) : null}
+                        <React.Fragment key={index}>
+                          {index === 7 ? (
+                            <Link
+                              className="text-base text-primary mx-2 font-bold"
+                              to={"collections/deal-of-a-days"}
+                            >
+                              Deal of the day
+                            </Link>
+                          ) : null}
+                        </React.Fragment>
                       </React.Fragment>
-                    </React.Fragment>
-                  );
-                })
+                    );
+                  })
                 : null}
             </div>
             <ControlledMenu
@@ -1185,7 +1185,7 @@ const highlightText = (text, search) => {
             value={searchValue}
             onChange={(e) => handlerSearchValue(e.target.value)}
             onFocus={handleFocus}
-          // onBlur={handleBlur}
+            // onBlur={handleBlur}
           />
           <button
             type="submit"
@@ -1207,10 +1207,11 @@ const highlightText = (text, search) => {
                     <Link
                       to={`product/${prod.id}`}
                       key={prod.id}
-                      className={`flex p-2 ${selectedIndex === index
-                        ? "bg-[#def9ec]"
-                        : "hover:bg-[#def9ec]"
-                        }`}
+                      className={`flex p-2 ${
+                        selectedIndex === index
+                          ? "bg-[#def9ec]"
+                          : "hover:bg-[#def9ec]"
+                      }`}
                     >
                       <div>
                         <img
@@ -1243,10 +1244,11 @@ const highlightText = (text, search) => {
                     <Link
                       to={`/collections/${cat.slug}`}
                       key={cat.id}
-                      className={`flex p-2 ${selectedIndex === index + products.length
-                        ? "bg-[#def9ec]"
-                        : "hover:bg-[#def9ec]"
-                        }`}
+                      className={`flex p-2 ${
+                        selectedIndex === index + products.length
+                          ? "bg-[#def9ec]"
+                          : "hover:bg-[#def9ec]"
+                      }`}
                     >
                       <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
                         {cat.name}
@@ -1267,11 +1269,12 @@ const highlightText = (text, search) => {
                     <Link
                       to={`/collections/${brand.id}`}
                       key={brand.id}
-                      className={`flex p-2 ${selectedIndex ===
+                      className={`flex p-2 ${
+                        selectedIndex ===
                         index + products.length + categoryList.length
-                        ? "bg-[#def9ec]"
-                        : "hover:bg-[#def9ec]"
-                        }`}
+                          ? "bg-[#def9ec]"
+                          : "hover:bg-[#def9ec]"
+                      }`}
                     >
                       <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
                         {brand.name}

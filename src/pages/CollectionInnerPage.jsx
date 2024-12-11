@@ -8,7 +8,7 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { Rating } from "../shared/Rating";
 import Slider from "react-slick";
 import { ProductCard } from "../shared/ProductCard";
-import { fiveSlider } from "../utils/slicksettings";
+import { settings } from "../utils/slicksettings";
 import { collectionInnerBreadCrumb } from "../data/CollectionInner.js"
 import { Menu, MenuItem} from '@szhsin/react-menu';
 import { GoTasklist } from "react-icons/go";
@@ -277,7 +277,7 @@ export const CollectionInnerPage = () => {
                         <h2 className="font-semibold text-black-100 text-2xl">Products you may also like</h2>
                         <span className="text-gray-700 text-sm">Page 1 of 5</span>
                     </div>
-                    <Slider {...fiveSlider} className="arrow__wrapper">
+                    <Slider {...settings} className="arrow__wrapper">
                         {BrandPicks.map(((product, index) => {
                             return (
                                 <ProductCard classes="min-h-[600px] mx-2" key={index} product={product} />
@@ -292,7 +292,7 @@ export const CollectionInnerPage = () => {
                         <h2 className="font-semibold text-black-100 text-2xl">Inspired by your browsing history</h2>
                         <span className="text-gray-700 text-sm">Page 1 of 5</span>
                     </div>
-                    <Slider {...fiveSlider} className="arrow__wrapper">
+                    <Slider {...settings} className="arrow__wrapper">
                         {BrandPicks.map(((product, index) => {
                             return (
                                 <ProductCard classes="min-h-[600px] mx-2" key={index} product={product} />

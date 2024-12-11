@@ -14,7 +14,7 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { Rating } from "../shared/Rating";
 import Slider from "react-slick";
 import { ProductCard } from "../shared/ProductCard";
-import { fiveSlider } from "../utils/slicksettings";
+import { settings } from "../utils/slicksettings";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import { apiClient } from "../utils/apiWrapper";
@@ -32,6 +32,8 @@ export const CollectionPage = () => {
   const [products, setProducts] = useState([]);
   const location = useLocation();
 
+ 
+
   const handleInput = (e) => {
     set_minValue(e.minValue);
     set_maxValue(e.maxValue);
@@ -47,7 +49,6 @@ export const CollectionPage = () => {
       !!matchedCategory &&
         matchedCategory.children.forEach((cat) => {
           cat.children.forEach((cat2, index) => {
-            console.log("category2", cat2);
             if (index < 2) {
               let tempObj = {
                 name: cat2.name,
@@ -73,7 +74,6 @@ export const CollectionPage = () => {
       `${authToken ? "/products" : "/products-guest"}`
     );
     setProducts(response.data.data.data);
-    console.log("--->>>>", response);
   };
 
   useEffect(() => {
@@ -98,7 +98,6 @@ export const CollectionPage = () => {
   const bigScreenCss =
     "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
 
-  console.log("filtercateogries", filterCategories);
   return (
     <div>
       <Wrapper>
@@ -142,7 +141,6 @@ export const CollectionPage = () => {
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-5 mt-8">
               {filterCategories && filterCategories.length > 0
                 ? filterCategories.map((cat, index) => {
-                    console.log(cat);
                     const isVisible =
                       window?.innerWidth < 640 ? index < 8 : index < 14;
 
@@ -179,7 +177,8 @@ export const CollectionPage = () => {
                     )
                   )}
             </div>
-            <div className="hidden sm:grid grid-cols-4 gap-8 mt-8 ">
+            <div className="grid grid-cols-1 hidden sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 mt-8">
+             
               {selectedCat && selectedCat.children
                 ? selectedCat.children.map((cat, index) => {
                     return (
@@ -299,12 +298,16 @@ export const CollectionPage = () => {
             <h2 className="font-medium sm:font-semibold text-[16px] sm:text-2xl leading-[18.77px] text-black-100 ">
               Top Picks in Santos
             </h2>
-            {window?.innerWidth > 640 && (
+             
+            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+              <span className="text-gray-700 text-sm">Page 1 of 3</span>
+            )}
+             {window?.innerWidth>1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...fiveSlider} className="arrow__wrapper">
+            <Slider {...settings} className="arrow__wrapper">
               {BrandPicks.map((product, index) => {
                 return (
                   <ProductCard
@@ -386,12 +389,15 @@ export const CollectionPage = () => {
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Top deals from our sellers
             </h2>
-            {window?.innerWidth > 640 && (
+            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+              <span className="text-gray-700 text-sm">Page 1 of 3</span>
+            )}
+             {window?.innerWidth>1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...fiveSlider} className="arrow__wrapper">
+            <Slider {...settings} className="arrow__wrapper">
               {BrandPicks
                 ? BrandPicks.map((product, index) => {
                     return (
@@ -475,12 +481,15 @@ export const CollectionPage = () => {
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Explore top picks
             </h2>
-            {window?.innerWidth > 640 && (
+            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+              <span className="text-gray-700 text-sm">Page 1 of 3</span>
+            )}
+             {window?.innerWidth>1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...fiveSlider} className="arrow__wrapper">
+            <Slider {...settings} className="arrow__wrapper">
               {BrandPicks.map((product, index) => {
                 return (
                   <ProductCard
@@ -559,12 +568,15 @@ export const CollectionPage = () => {
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Hot new releases
             </h2>
-            {window?.innerWidth > 640 && (
+            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+              <span className="text-gray-700 text-sm">Page 1 of 3</span>
+            )}
+             {window?.innerWidth>1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...fiveSlider} className="arrow__wrapper">
+            <Slider {...settings} className="arrow__wrapper">
               {products
                 ? products?.map((product, index) => {
                     return (
@@ -790,12 +802,15 @@ export const CollectionPage = () => {
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Products you may also like
             </h2>
-            {window?.innerWidth > 640 && (
+            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+              <span className="text-gray-700 text-sm">Page 1 of 3</span>
+            )}
+             {window?.innerWidth>1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...fiveSlider} className="arrow__wrapper">
+            <Slider {...settings} className="arrow__wrapper">
               {BrandPicks
                 ? BrandPicks.map((product, index) => {
                     return (
@@ -857,12 +872,15 @@ export const CollectionPage = () => {
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Inspired by your browsing history
             </h2>
-            {window?.innerWidth > 640 && (
+            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+              <span className="text-gray-700 text-sm">Page 1 of 3</span>
+            )}
+             {window?.innerWidth>1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...fiveSlider} className="arrow__wrapper">
+            <Slider {...settings} className="arrow__wrapper">
               {BrandPicks
                 ? BrandPicks.map((product, index) => {
                     return (
