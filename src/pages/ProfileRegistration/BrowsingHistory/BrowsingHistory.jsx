@@ -86,39 +86,12 @@ const BrowsingHistory = () => {
               }
               className={bigScreenCss}
             >
-              {false ? (
+              {viewedLoader ? (
                 Array.from({ length: 10 }).map((_, index) => (
                   <Skeleton
                     key={index}
                     className="col-span-1 mt-1 min-h-[400px]"
                   />
-                ))
-              ) : (
-                <React.Fragment>
-                  {products && products.length > 0 ? (
-                    products.map((product, index) =>
-                      index < 10 ? (
-                        <ProductCard
-                          key={index}
-                          classes="col-span-1 mt-1"
-                          product={product}
-                        />
-                      ) : null
-                    )
-                  ) : (
-                    <p className="col-span-5 font-semibold text-center text-base">
-                      No Product Found
-                    </p>
-                  )}
-                </React.Fragment>
-              )}
-            </div>
-            <div className="hidden sm:grid grid-cols-4 gap-5">
-              {viewedLoader ? (
-                Array.from({ length: 4 }).map((_, index) => (
-                  <div key={index} className="col-span-1">
-                    <Skeleton count={1} height="500px" />
-                  </div>
                 ))
               ) : (
                 <React.Fragment>

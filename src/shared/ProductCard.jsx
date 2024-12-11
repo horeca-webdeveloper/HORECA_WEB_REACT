@@ -21,6 +21,7 @@ import { FaPlay } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import { useWishlist } from "../context/WishListContext";
 import { Counter } from "./CheckoutPage/Counter";
+import { ProductCardCounter } from "../components/ProductCardCounter";
 
 export const ProductCard = ({
   classes,
@@ -408,6 +409,14 @@ export const ProductCard = ({
           </Link>
 
           <div className="flex items-center">
+            {/* <ProductCardCounter
+              product={product}
+              count={count}
+              setCount={setCount}
+              setCartSummaryFlag={setCartSummaryFlag}
+              cartSummaryFlag={cartSummaryFlag}
+              forMobile={true}
+            /> */}
             <div className="mt-2 flex items-center justify-between p-[2px] sm:px-3 sm:py-2 w-[90px] border border-[#BCE3C9] rounded-[4px]">
               <FiMinus
                 className="cursor-pointer w-[10px] sm:w-[26px]"
