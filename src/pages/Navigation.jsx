@@ -18,6 +18,7 @@ import { apiClient } from "../utils/apiWrapper";
 import { useLocation } from "react-router-dom";
 import { useWishlist } from "../context/WishListContext";
 import { debounce } from "lodash";
+import ProfileDrawer from "./ProfileRegistration/ProfileDrawer/ProfileDrawer";
 export const Navigation = ({ categories, userProfile, currentLocation }) => {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [currency, setCurrency] = useState(["USD", "AED", "PKR"]);
@@ -49,6 +50,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     ...(brands ? brands.slice(0, 4) : []),
   ];
   const [onHoverProfile, setOnHoverProfile] = useState(false);
+  const [showProfileDrawer, setShowProfileDrawer] = useState(false);
 
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown") {
@@ -343,7 +345,6 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   );
                 })
               : null}
-
             {/* Currency Selector  */}
             <div className="cursor-pointer relative  group h-full w-16 ">
               <div className="flex after:content-['|'] after:mx-1 after:text-gray-700 ">
@@ -767,11 +768,19 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
         </div>
         <div className="flex flex-row">
           <img
-            onMouseEnter={() => setOnHoverProfile(true)}
+            onMouseEnter={() => {
+              window?.innerWidth > 640
+                ? setOnHoverProfile(true)
+                : setShowProfileDrawer(true);
+            }}
             src={process.env.PUBLIC_URL + "/icons/user.svg"}
             alt=""
             className="w-[35px] rounded-full cursor-pointer"
-            onClick={() => navigate("/registration/all-orders")}
+            onClick={() => {
+              window?.innerWidth > 640
+                ? navigate("/registration/all-orders")
+                : setShowProfileDrawer(!showProfileDrawer);
+            }}
           />
           <div className="flex hidden sm:flex flex-col ml-2 ">
             {isLoggedIn ? (
@@ -791,7 +800,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             {isLoggedIn ? (
               <span
                 to=""
-                onClick={() => navigate("/all-orders")}
+                onClick={() => navigate("registration/all-orders")}
                 className="text-black text-sm font-semibold capitalize cursor-pointer"
               >
                 {userName}
@@ -807,7 +816,11 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
       {onHoverProfile && (
         <div
           onMouseEnter={() => setOnHoverProfile(true)}
-          onMouseLeave={() => setOnHoverProfile(false)}
+          onMouseLeave={() => {
+            window?.innerWidth > 640
+              ? setOnHoverProfile(false)
+              : setShowProfileDrawer(false);
+          }}
           style={{ zIndex: 1000 }}
           className="flex bg-[white] absolute z-1000 overflow-hidden w-[80vw] border-2 shadow-md m-[10px] ml-[12%] mt-[-20px] rounded-[10px] h-[714px]"
         >
@@ -1293,6 +1306,11 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           )
         )}
       </div>
+      {showProfileDrawer && (
+        <div>
+          <ProfileDrawer />
+        </div>
+      )}
     </React.Fragment>
   );
 };

@@ -8,7 +8,7 @@ const AllOrdersBox = ({ data, id, setImageView, setShowPopup }) => {
     <div key={id} className="border-2 w-[100%] rounded p-[10px] mb-[20px]">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <div className=" hidden sm:block border-r-2 h-[55px] p-[10px] ml-[10px] mr-[10px]">
+          <div className="hidden sm:block border-r-2 h-[55px] p-[10px] ml-[10px] mr-[10px]">
             <span className="font-sans  text-center text-base font-normal leading-6 text-left text-[#666666] decoration-clone">
               Order Number
             </span>

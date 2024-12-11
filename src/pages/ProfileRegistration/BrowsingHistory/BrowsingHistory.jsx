@@ -58,8 +58,13 @@ const BrowsingHistory = () => {
       <Wrapper>
         <Breadcrumb items={collectionBreadCrumb} classes={"mt-4 mb-2"} />
       </Wrapper>
+      {/* for mobile */}
+      <h1 className="block sm:hidden mb-[10px] p-[10px] border-b-2 text-center font-medium text-[16px] leading-[24px]">
+        Browsing History
+      </h1>
+      {/*  */}
       <Wrapper>
-        <h1 className="block sm:hidden text-center font-medium text-[16px] leading-[24px]">
+        <h1 className="hidden sm:block text-center font-medium text-[16px] leading-[24px]">
           Browsing History
         </h1>
         <div className="flex">
@@ -142,10 +147,10 @@ const BrowsingHistory = () => {
         </div>
         {window?.innerWidth < 640 && (
           <div>
-            <div className="mb-10 mt-[20px]">
+            <div className="mb-10 mt-[20px] p-[10px]">
               <img
                 className="h-[160px] w-[100vw] object-cover rounded-md"
-                src="https://images.pexels.com/photos/28292874/pexels-photo-28292874/free-photo-of-cozy-bedroom-scene-with-book-and-tea.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"
+                src={process.env.PUBLIC_URL + "/images/RegistrationProfile.png"}
               />
               <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
                 <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
