@@ -1,7 +1,7 @@
 import React from "react";
 
 const WishlistBox = ({ data, handlerRemoveWishlist, handleAddToCart }) => {
-  console.log(data);
+ 
   return (
     <>
       <div className="flex overflow-hidden flex-col sm:flex-row items-start sm:items-between rounded-md border-2 w-[100%] mt-[20px]">

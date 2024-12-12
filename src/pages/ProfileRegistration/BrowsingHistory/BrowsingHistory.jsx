@@ -78,13 +78,12 @@ const BrowsingHistory = () => {
             </div>
             <div
               style={
-                window.innerWidth < 640
-                  ? {
+                  {
                       overflow: "auto",
                       scrollbarWidth: "none", // For Firefox
                       msOverflowStyle: "none", // For Internet Explorer and Edge
                     }
-                  : { display: "none" }
+                  
               }
               className={bigScreenCss}
             >
@@ -98,12 +97,12 @@ const BrowsingHistory = () => {
               ) : (
                 <React.Fragment>
                   {Array.isArray(viewedProducts) ? (
+                    
                     viewedProducts?.map((item, index) => {
-                      console.log(".....", item);
                       return (
                         <ProductCard
                           key={index}
-                          classes="col-span-1 mt-1"
+                          classes="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-1 lg:w-[280px] mt-1"
                           product={item.product}
                         />
                       );

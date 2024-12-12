@@ -73,11 +73,10 @@ const CouponsOffers = () => {
               <p
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`font-work-sans text-base font-normal leading-6 text-left cursor-pointer relative ${
-                  activeTab === tab
+                className={`font-work-sans text-base font-normal leading-6 text-left cursor-pointer relative ${activeTab === tab
                     ? "text-[#186737] after:content-[''] after:absolute after:bottom-[-2px] after:left-1/2 after:-translate-x-1/2 after:w-[50%] after:h-[2px] after:bg-[#186737] after:rounded-full"
                     : "text-[#666666]"
-                }`}
+                  }`}
               >
                 {tab}
               </p>
@@ -96,11 +95,13 @@ const CouponsOffers = () => {
         <div className="flex">
           <SidebarProfile />
           {/* Coupons Section */}
-          <div className="flex flex-col justify-between w-[100%] h-[100%]">
-            <div className="hidden sm:block">
+          <div className="flex flex-col  w-[100%]">
+         
               <h1 className="text-center mt-[15px]">Coupons & Offers</h1>
-              <div className="flex  p-[10px] justify-between m-[5px] w-[100%]">
-                <div className="flex  mb-[10px] flex-wrap w-[100%] sm:w-[45%] justify-between mt-[5px]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 w-full">
+              <div className="hidden sm:block">
+
+                <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-[5px]">
                   <p className="font-work-sans text-[#186737] text-base font-normal leading-6 text-left decoration-none">
                     All Coupons
                   </p>
@@ -113,16 +114,20 @@ const CouponsOffers = () => {
                   <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
                     Expired
                   </p>
+
                 </div>
-                <div className="hidden sm:block w[100%]">
+                </div>
+
+                <div className="w-full  mx-auto">
                   <input
-                    className="border rounded-[20px] border-2 w-[320px] p-[5px]"
-                    type="input"
+                    className="border rounded-[20px] border-2 w-full p-[5px]"
+                    type="text"
                     placeholder="Search Coupons or Vouchers"
                   />
                 </div>
+
               </div>
-            </div>
+            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {loader ? (
                 Array.from({ length: 2 }).map((_, index) => (
@@ -162,10 +167,10 @@ const CouponsOffers = () => {
                 style={
                   window.innerWidth < 640
                     ? {
-                        overflow: "auto",
-                        scrollbarWidth: "none", // For Firefox
-                        msOverflowStyle: "none", // For Internet Explorer and Edge
-                      }
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
                     : {}
                 }
                 className={bigScreenCss}
@@ -208,10 +213,10 @@ const CouponsOffers = () => {
                 style={
                   window.innerWidth < 640
                     ? {
-                        overflow: "auto",
-                        scrollbarWidth: "none", // For Firefox
-                        msOverflowStyle: "none", // For Internet Explorer and Edge
-                      }
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
                     : {}
                 }
                 className={bigScreenCss}
