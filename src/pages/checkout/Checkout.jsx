@@ -432,7 +432,6 @@ for mobile */}
                         }
                     </div>
 
-
                 </div>
                 <div>
                 </div>
