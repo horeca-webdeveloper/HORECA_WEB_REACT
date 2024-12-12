@@ -60,8 +60,13 @@ const BrowsingHistory = () => {
       <Wrapper>
         <Breadcrumb items={collectionBreadCrumb} classes={"mt-4 mb-2"} />
       </Wrapper>
+      {/* for mobile */}
+      <h1 className="block sm:hidden mb-[10px] p-[10px] border-b-2 text-center font-medium text-[16px] leading-[24px]">
+        Browsing History
+      </h1>
+      {/*  */}
       <Wrapper>
-        <h1 className="block sm:hidden text-center font-medium text-[16px] leading-[24px]">
+        <h1 className="hidden sm:block text-center font-medium text-[16px] leading-[24px]">
           Browsing History
         </h1>
         <div className="flex">
@@ -83,39 +88,12 @@ const BrowsingHistory = () => {
               }
               className={bigScreenCss}
             >
-              {false ? (
+              {viewedLoader ? (
                 Array.from({ length: 10 }).map((_, index) => (
                   <Skeleton
                     key={index}
                     className="col-span-1 mt-1 min-h-[400px]"
                   />
-                ))
-              ) : (
-                <React.Fragment>
-                  {products && products.length > 0 ? (
-                    products.map((product, index) =>
-                      index < 10 ? (
-                        <ProductCard
-                          key={index}
-                          classes="col-span-1 mt-1"
-                          product={product}
-                        />
-                      ) : null
-                    )
-                  ) : (
-                    <p className="col-span-5 font-semibold text-center text-base">
-                      No Product Found
-                    </p>
-                  )}
-                </React.Fragment>
-              )}
-            </div>
-            <div className="hidden sm:grid grid-cols-4 gap-5">
-              {viewedLoader ? (
-                Array.from({ length: 4 }).map((_, index) => (
-                  <div key={index} className="col-span-1">
-                    <Skeleton count={1} height="500px" />
-                  </div>
                 ))
               ) : (
                 <React.Fragment>
@@ -144,10 +122,10 @@ const BrowsingHistory = () => {
         </div>
         {window?.innerWidth < 640 && (
           <div>
-            <div className="mb-10 mt-[20px]">
+            <div className="mb-10 mt-[20px] p-[10px]">
               <img
                 className="h-[160px] w-[100vw] object-cover rounded-md"
-                src="https://images.pexels.com/photos/28292874/pexels-photo-28292874/free-photo-of-cozy-bedroom-scene-with-book-and-tea.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"
+                src={process.env.PUBLIC_URL + "/images/RegistrationProfile.png"}
               />
               <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
                 <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">

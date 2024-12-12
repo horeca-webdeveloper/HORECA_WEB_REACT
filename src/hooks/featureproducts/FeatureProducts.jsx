@@ -14,7 +14,7 @@ export const FeatureProduct = ({
   setFeaturedProducts,
 }) => {
   const [products, setProducts] = useState([]);
- 
+
   const [count, setCount] = useState(1);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export const FeatureProduct = ({
   }, [window.innerWidth]);
 
   const bigScreenCss =
-    "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5"
+    "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
 
   return (
     <Wrapper>

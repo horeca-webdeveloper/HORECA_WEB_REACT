@@ -3,26 +3,23 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { apiClient } from "../../../../utils/apiWrapper";
-import { InfinitySpin } from 'react-loader-spinner';
+import { InfinitySpin } from "react-loader-spinner";
 const Popup = ({ setShowPopup, popupHeading }) => {
   const [loader, setLoader] = useState(false);
-  const [getData,setData]=useState([]);
+  const [getData, setData] = useState([]);
   const handleForm = async (data) => {
-
-    const datas = {
-      
-    };
+    const datas = {};
 
     try {
       setLoader(true);
       const response = await apiClient.post(`/create-payment`, datas);
       setData(response.data);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     } finally {
       setLoader(false);
     }
-  }
+  };
 
   const schema = yup
     .object({
@@ -36,7 +33,6 @@ const Popup = ({ setShowPopup, popupHeading }) => {
     })
     .required();
 
-
   const {
     register,
     handleSubmit,
@@ -46,32 +42,30 @@ const Popup = ({ setShowPopup, popupHeading }) => {
   });
 
   const onSubmit = (data) => {
-  
     handleForm(data);
-  }
+  };
 
-  useEffect(()=>{
-      if(getData.status=="success" && getData.redirect_url){
-        window.location.href = getData.redirect_url;
-      }
-  },[getData]);
+  useEffect(() => {
+    if (getData.status == "success" && getData.redirect_url) {
+      window.location.href = getData.redirect_url;
+    }
+  }, [getData]);
   return (
     <div>
-      <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm">
+      <div className="fixed inset-0 p-[10px] flex items-center justify-center z-50 backdrop-blur-sm">
         <div className="modal-bg absolute inset-0 bg-gray-800 opacity-50"></div>
         <div className="modal relative bg-white w-[650px] flex flex-col rounded-lg shadow-lg">
           <div className="flex items-center justify-between bg-[#DEF9EC] rounded-t-lg p-2">
-            <p className="font-sans p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+            <p className="font-sans p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
               {popupHeading}
             </p>
             <button onClick={() => setShowPopup(false)}>X</button>
           </div>
-        
+
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="p-[5px]">
-           
               <div className="mt-[10px]">
-                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                <p className="font-sans ml-[10px] p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
                   Country :
                 </p>
                 <input
@@ -83,7 +77,7 @@ const Popup = ({ setShowPopup, popupHeading }) => {
               </div>
 
               <div className="mt-[10px]">
-                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                <p className="font-sans ml-[10px] p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
                   City :
                 </p>
                 <input
@@ -95,7 +89,7 @@ const Popup = ({ setShowPopup, popupHeading }) => {
                 <span>{errors.city?.message}</span>
               </div>
               <div className="mt-[10px]">
-                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                <p className="font-sans ml-[10px] p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
                   State :
                 </p>
                 <input
@@ -107,7 +101,7 @@ const Popup = ({ setShowPopup, popupHeading }) => {
                 <span>{errors.state?.message}</span>
               </div>
               {/* <div className="mt-[10px]">
-              <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+              <p className="font-sans ml-[10px] p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
                 ZIP Code :
               </p>
               <input
@@ -118,7 +112,7 @@ const Popup = ({ setShowPopup, popupHeading }) => {
             </div> */}
 
               <div className="mt-[10px]">
-                <p className="font-sans ml-[10px] p-[5px] text-lg text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                <p className="font-sans ml-[10px] p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
                   Address :
                 </p>
                 <input
@@ -136,16 +130,23 @@ const Popup = ({ setShowPopup, popupHeading }) => {
                 >
                   Cancel
                 </button>
-                <button type="submit" className="flex mb-[5px] bg-[#DEF9EC] items-center justify-center rounded-md font-sans w-[180px] h-[40px] text-[#186737] text-[16px] font-medium leading-[16px] text-left underline-offset-auto decoration-slice">
+                <button
+                  type="submit"
+                  className="flex mb-[5px] bg-[#DEF9EC] items-center justify-center rounded-md font-sans w-[180px] h-[40px] text-[#186737] text-[16px] font-medium leading-[16px] text-left underline-offset-auto decoration-slice"
+                >
                   Submit
                 </button>
-               {loader?<InfinitySpin
-                                            visible={true}
-                                            height="120"
-                                            width="120"
-                                            color="#186737"
-                                            ariaLabel="infinity-spin-loading"
-                                        />:''} 
+                {loader ? (
+                  <InfinitySpin
+                    visible={true}
+                    height="120"
+                    width="120"
+                    color="#186737"
+                    ariaLabel="infinity-spin-loading"
+                  />
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </form>
