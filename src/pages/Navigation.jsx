@@ -749,7 +749,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
 
           <div
             className="relative mx-2 hidden sm:flex cursor-pointer"
-            onClick={() => navigate("/checkout")}
+            onClick={() => navigate("/wishlist")}
           >
             <img src={process.env.PUBLIC_URL + "/icons/heart.svg"} alt="" />
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
@@ -822,9 +822,9 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
               : setShowProfileDrawer(false);
           }}
           style={{ zIndex: 1000 }}
-          className="flex bg-[white] absolute z-1000 overflow-hidden w-[80vw] border-2 shadow-md m-[10px] ml-[12%] mt-[-20px] rounded-[10px] h-[714px]"
+          className="hidden sm:grid  grid grid-cols-1 sm:grid-cols-12 md:grid-cols-12 lg:grid-cols-12 bg-[white] absolute z-1000 overflow-hidden w-[80vw] border-2 shadow-md m-[10px] ml-[12%] mt-[-20px] rounded-[10px] h-[714px] overflow-x-auto overflow-y-auto"
         >
-          <div className="flex p-5 flex-col w-[40%] border-r-2 mr-[20px]">
+          <div className="col-span-1 sm:col-span-2 md:col-span-6 lg:col-span-3 p-4  border-r-2 mr-[20px]">
             <h1 className="text-[16px] leading-[16px] font-semibold">
               Reorder In One Click
             </h1>
@@ -917,7 +917,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
               </div>
             </div>
           </div>
-          <div className="flex p-5 flex-col w-[40%] border-r-2 mr-[20px]">
+          <div className="col-span-1 sm:col-span-2 md:col-span-6 lg:col-span-3 p-4 border-r-2 mr-[20px] ">
             <h1 className="text-[16px] leading-[16px] font-semibold">
               Track Your Order
             </h1>
@@ -993,7 +993,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
               </div>
             </div>
           </div>
-          <div className="flex-col w-[60%] p-5">
+          <div className="col-span-1 sm:col-span-2 md:col-span-12 lg:col-span-6     p-5">
             <div className="flex items-center p-5 border-b-2 justify-between">
               <p className="text-[16px] leading-[18.77px]">Account</p>
               <p className="text-[13px] leading-[15.75px]">
