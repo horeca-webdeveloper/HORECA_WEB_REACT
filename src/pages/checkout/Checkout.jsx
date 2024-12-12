@@ -12,8 +12,6 @@ import { useCart } from "../../context/CartContext";
 import { apiClient } from "../../utils/apiWrapper.js";
 import { Layout } from "./Layout.jsx";
 
-
-
 export const Checkout = () => {
     const authToken = localStorage.getItem('authToken');
     const { triggerUpdateCart, updateTempCart } = useCart();
