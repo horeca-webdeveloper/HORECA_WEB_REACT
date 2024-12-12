@@ -18,19 +18,19 @@ const ContactUs = () => {
       <Wrapper>
         <Breadcrumb items={collectionBreadCrumb} classes={"mt-[10px]"} />
       </Wrapper>
-      <div className="flex items-center mt-[10px] justify-center text-[32px] font-bold text-white h-[450px] w-full bg-gray-400">
+      <div className="flex items-center mt-[20px] sm:mt-[10px] justify-center text-[32px] font-bold text-white h-[160px] sm:h-[450px] w-full bg-gray-400">
         <img
-          className="absolute h-[450px] w-full object-cover opacity-[0.5]"
+          className="absolute h-[160px] sm:h-[450px] w-full object-cover opacity-[0.5]"
           src="https://images.pexels.com/photos/7689734/pexels-photo-7689734.jpeg?auto=compress&cs=tinysrgb&w=800"
         />
-        <p className="relative">Contact Us</p>
+        <p className="relative text-[24px] sm:text-[54px]">Contact Us</p>
       </div>
       <Wrapper>
         <div className="flex flex-col sm:flex-row">
-          <div className="flex-1 text-[40px] sm:text-[0px] text-center sm:text-start p-5">
+          <div className="flex-1 text-[18px] sm:text-[60px] font-semibold text-start sm:text-center sm:text-start p-5">
             We’re the full package. reach out and we'll see how we can help.
           </div>
-          <div className="flex-1 p-10">
+          <div className="flex-1 p-5 sm:p-10">
             <form>
               <div className="flex-col mb-[20px]">
                 <p className="text-[#64748B] text-[16px]">Name*</p>
@@ -62,7 +62,7 @@ const ContactUs = () => {
                 <p className="text-[#64748B] text-[16px]">Message*</p>
                 <input placeholder="" className="border-b-2 w-[100%]" />
               </div>
-              <button className="flex items-center justify-center text-white rounded bg-[#186737] h-[40px] w-[198px] px-[40px] py-[10px]">
+              <button className="flex items-center justify-center text-white rounded bg-[#186737] h-[40px] w-[100%] sm:w-[198px] px-[40px] py-[10px]">
                 Send Message
               </button>
             </form>
@@ -72,7 +72,7 @@ const ContactUs = () => {
           <h1 className="font-bold leading-[35.19px] text-[30px]">
             Our Locations
           </h1>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-[100px]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-[100px] p-[15px]">
             <div className=" rounded">
               <div>
                 <img

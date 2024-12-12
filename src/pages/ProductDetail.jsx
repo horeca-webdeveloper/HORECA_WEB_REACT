@@ -121,7 +121,7 @@ export const ProductDetail = () => {
     setProductLoader(true);
     try {
       const response = await apiClient.get("/product-discounts", {
-        params: { product_id: id },
+        product_id: id,
       });
 
       setBuyMore(response.data.data);
@@ -131,7 +131,20 @@ export const ProductDetail = () => {
       setProductLoader(false);
     }
   };
+
+  const postRecentlyViewed = async () => {
+    try {
+      const response = await apiClient.post("/recently-viewed", {
+        product_id: id,
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setProductLoader(false);
+    }
+  };
   useEffect(() => {
+    postRecentlyViewed();
     setProductLoader(true);
     fetchProductById();
     fetchProductDiscounts();
@@ -281,10 +294,7 @@ export const ProductDetail = () => {
       setSameProductLoader(true);
       const response = await apiClient.post(
         `/cart${authToken ? "" : "/guest"}`,
-        {
-          product_id: id,
-          quantity: 1,
-        }
+        { product_id: id, quantity: 1 }
       );
       triggerUpdateCart();
     } catch (error) {

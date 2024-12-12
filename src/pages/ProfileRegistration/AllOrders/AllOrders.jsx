@@ -59,11 +59,43 @@ const AllOrders = () => {
   const bigScreenCss =
     "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
 
+  const [activeTab, setActiveTab] = useState("All Orders");
+
+  const tabs = ["All Orders", "Processing", "Shipped", "Delivered", "Returns"];
+
   return (
     <>
       <Wrapper>
         <Breadcrumb items={collectionBreadCrumb} classes={"mt-4 mb-2"} />
       </Wrapper>
+      <div className="block sm:hidden">
+        <h1 className="border-bottom-2 text-center mt-[15px]">Your Orders</h1>
+        <div className="flex py-[10px] justify-between w-[100%]">
+          <div className="flex flex-wrap w-full sm:w-[45%] p-[10px] mb-[10px] border-b border-gray-300 justify-between mt-[5px]">
+            {tabs.map((tab) => (
+              <p
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`font-work-sans text-base font-normal leading-6 text-left cursor-pointer relative ${
+                  activeTab === tab
+                    ? "text-[#186737] after:content-[''] after:absolute after:bottom-[-2px] after:left-1/2 after:-translate-x-1/2 after:w-[50%] after:h-[2px] after:bg-[#186737] after:rounded-full"
+                    : "text-[#666666]"
+                }`}
+              >
+                {tab}
+              </p>
+            ))}
+          </div>
+
+          <div className="hidden sm:block w[100%]">
+            <input
+              className="border rounded-[20px] border-2 w-[200px] sm:w-[350px] p-[5px]"
+              type="input"
+              placeholder="Item Name / Order ID / Tracking No."
+            />
+          </div>
+        </div>
+      </div>
       <Wrapper>
         <div className="flex">
           <SidebarProfile />
@@ -142,7 +174,7 @@ const AllOrders = () => {
         </div>
         {window?.innerWidth < 640 && (
           <div>
-            <div className="mb-10 mt-[20px]">
+            <div className="mb-10 mt-[20px] p-[10px]">
               <img
                 className="h-[160px] w-[100vw] object-cover rounded-md"
                 src={process.env.PUBLIC_URL + "/images/RegistrationProfile.png"}

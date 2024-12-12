@@ -39,6 +39,7 @@ import PaymentFailed from "./pages/payment/PaymentFailed";
 import { PasswordReset } from "./pages/PasswordReset";
 import ProfileWishlist from "./pages/ProfileRegistration/Wishlist/ProfileWishlist";
 import Wishlist from "./pages/Wishlist";
+import ProfileDrawer from "./pages/ProfileRegistration/ProfileDrawer/ProfileDrawer";
 const App = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
