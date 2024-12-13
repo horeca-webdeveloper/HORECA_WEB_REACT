@@ -11,6 +11,7 @@ import { Breadcrumb } from "../../shared/Breadcrumb";
 import { useCart } from "../../context/CartContext";
 import { apiClient } from "../../utils/apiWrapper.js";
 import { Layout } from "./Layout.jsx";
+import Skeleton from "react-loading-skeleton";
 
 export const Checkout = () => {
   const authToken = localStorage.getItem("authToken");
@@ -643,8 +644,21 @@ for mobile */}
                 );
               })
             ) : (
+              <div
+                className={`${
+                  loader ? "w-0 h-[0px]" : "w-full h-[300px]"
+                } text-gray-400 flex items-center justify-center font-semibold mb-10`}
+              >
+                {loader == false && "No Product Items Available"}
+              </div>
+            )}
+            {loader && (
               <div className="w-full  h-[300px] text-gray-400 flex items-center justify-center font-semibold mb-10">
-                No Product Items Available
+                {Array.from({ length: 1 }).map((_, index) => (
+                  <div key={index} className="col-span-1">
+                    <Skeleton height="250px" width={"60vw"} />
+                  </div>
+                ))}
               </div>
             )}
           </div>
