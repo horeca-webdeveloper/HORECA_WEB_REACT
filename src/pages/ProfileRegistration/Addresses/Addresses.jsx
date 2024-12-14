@@ -138,7 +138,7 @@ const Addresses = () => {
                         </div>
                         <div className="flex text-[14px] text-[#64748B]">
                           <p className="px-[10px] border-r cursor-pointer" onClick={() => deleteAddress(item.id)}>Delete</p>
-                          <p className="px-[10px] border-r">Copy</p>
+                          {/* <p className="px-[10px] border-r">Copy</p> */}
                           <p
                             onClick={()=>updateAddress(item.id)}
                             className="px-[10px] border-r cursor-pointer"

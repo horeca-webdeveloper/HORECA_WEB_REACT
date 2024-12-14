@@ -72,8 +72,9 @@ const Popup = ({ setShowPopup, popupHeading,uid,setStatus,updateStatus }) => {
   };
 
   useEffect(() => {
-    if (getData.status == "success") {
+    if (getData.success) {
       notify("Success",getData.message);
+      setStatus(!updateStatus)
       setShowPopup(false);
     }
   }, [getData]);
