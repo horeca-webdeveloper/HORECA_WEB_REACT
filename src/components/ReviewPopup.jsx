@@ -5,7 +5,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { apiClient } from "../utils/apiWrapper";
 import { InfinitySpin } from "react-loader-spinner";
 import { notify } from "../utils/notify";
-const ReviewPopup = ({ setShowPopup, popupHeading, id,setUpdateReview,updateReview,reviewId,reviewStatus,setReviewStatus }) => {
+const ReviewPopup = ({ setShowPopup, popupHeading, id,setUpdateReviews,updateReviews,reviewId}) => {
+  
   let url='add-customer-reviews';
    if(reviewId!=undefined){
       url=`customer-reviews-update/${reviewId}`;
@@ -82,7 +83,7 @@ const renderStars = () => {
             'Content-Type': 'multipart/form-data',
           },
         });
-        setReviewStatus(!reviewStatus);
+        setUpdateReviews(!updateReviews);
       }else{
          response = await apiClient.post(url, formData,{
           headers: {
@@ -132,12 +133,12 @@ const renderStars = () => {
     if(getData.success){
       notify("Success",getData.message);
       setShowPopup(false);
-      setReviewStatus (!updateReview);
+      setUpdateReviews(!updateReviews);
     } 
      
   },[getData]);
  
- console.log("getData",getData);
+ 
  
   return (
     <div>

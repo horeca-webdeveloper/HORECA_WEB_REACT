@@ -16,7 +16,7 @@ const Reviews = () => {
   const [products, setProducts] = useState([]);
   const [reviewId,setReviewId]=useState(0);
   const [productId,setProductId]=useState(0);
-  const [reviewStatus,setReviewStatus]=useState(false);
+  const [updateReviews,setUpdateReviews]=useState(false);
   const navigate = useNavigate();
   const authToken = localStorage.getItem("authToken");
  
@@ -47,7 +47,7 @@ const Reviews = () => {
     try{
       const response = await apiClient.delete(`customer-reviews-delete/${id}`);
         notify("Success", response.data.message);
-        setReviewStatus(!reviewStatus);
+        setUpdateReviews(!updateReviews);
     }
       catch(error){
         console.log(error);
@@ -68,7 +68,7 @@ const Reviews = () => {
   useEffect(()=>{
     fetchProducts();
     fetchAllReviews();
-  },[reviewStatus]);
+  },[updateReviews]);
 
   const collectionBreadCrumb = [
     {
@@ -221,7 +221,7 @@ const Reviews = () => {
       
           </div>
         )}
-               {showPopup? <ReviewPopup setShowPopup={setShowPopup} popupHeading="Update Review" reviewId={reviewId}  setReviewStatus={setReviewStatus} reviewStatus={reviewStatus} id={productId}/>:''}
+               {showPopup? <ReviewPopup setShowPopup={setShowPopup} popupHeading="Update Review" reviewId={reviewId}  setUpdateReviews={setUpdateReviews} updateReviews={updateReviews} id={productId}/>:''}
       </Wrapper>
     </>
   );

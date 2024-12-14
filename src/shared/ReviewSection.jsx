@@ -17,7 +17,7 @@ export const ReviewSection = ({ id }) => {
   const [topReviewsValue, setTopReviewsValue] = useState("");
   const [token, setToken] = useState("");
   const [showPopup,setShowPopup]=useState(false);
-  const [updateReview,setUpdateReview]=useState(false);
+  const [updateReviews,setUpdateReviews]=useState(false);
 
   const convertTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -60,7 +60,7 @@ export const ReviewSection = ({ id }) => {
   useEffect(() => {
     setReviewsLoader(true);
     fetchProductReviews();
-  }, [AllStar, TopReviews,updateReview]);
+  }, [AllStar, TopReviews,updateReviews]);
 
   
   return (
@@ -487,7 +487,7 @@ export const ReviewSection = ({ id }) => {
               </React.Fragment>
             </div>
           </div>
-          {showPopup? <ReviewPopup setShowPopup={setShowPopup} popupHeading="Add Review" setUpdateReview={setUpdateReview} updateReview={updateReview} id={id}/>:''}
+          {showPopup? <ReviewPopup setShowPopup={setShowPopup} popupHeading="Add Review" setUpdateReviews={setUpdateReviews} updateReviews={updateReviews} id={id}/>:''}
          
         </div>
       ) : null}
