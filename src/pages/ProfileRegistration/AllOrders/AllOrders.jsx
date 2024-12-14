@@ -8,6 +8,7 @@ import { Breadcrumb } from "../../../shared/Breadcrumb";
 import ImagePopup from "../../../components/ImagePopup";
 import { useNavigate } from "react-router";
 import { ProductCard } from "../../../shared/ProductCard";
+import CommonProducts from "../CommonProducts/CommonProducts";
 
 const AllOrders = () => {
   const [viewedLoader, setViewedLoader] = useState(true);
@@ -166,106 +167,7 @@ const AllOrders = () => {
             <ImagePopup setShowPopup={setShowPopup} imageView={imageView} />
           )}
         </div>
-        {window?.innerWidth < 640 && (
-          <div>
-            <div className="mb-10 mt-[20px] p-[10px]">
-              <img
-                className="h-[160px] w-[100vw] object-cover rounded-md"
-                src={process.env.PUBLIC_URL + "/images/RegistrationProfile.png"}
-              />
-              <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
-                <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
-                  Products you may also like
-                </h2>
-              </div>
-              <div
-                style={
-                  window.innerWidth < 640
-                    ? {
-                        overflow: "auto",
-                        scrollbarWidth: "none", // For Firefox
-                        msOverflowStyle: "none", // For Internet Explorer and Edge
-                      }
-                    : {}
-                }
-                className={bigScreenCss}
-              >
-                {false ? (
-                  Array.from({ length: 10 }).map((_, index) => (
-                    <Skeleton
-                      key={index}
-                      className="col-span-1 mt-1 min-h-[400px]"
-                    />
-                  ))
-                ) : (
-                  <React.Fragment>
-                    {products && products.length > 0 ? (
-                      products.map((product, index) =>
-                        index < 10 ? (
-                          <ProductCard
-                            key={index}
-                            classes="col-span-1 mt-1"
-                            product={product}
-                          />
-                        ) : null
-                      )
-                    ) : (
-                      <p className="col-span-5 font-semibold text-center text-base">
-                        No Product Found
-                      </p>
-                    )}
-                  </React.Fragment>
-                )}
-              </div>
-            </div>
-            <div className="mb-10">
-              <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
-                <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
-                  Inspired by your browsing history
-                </h2>
-              </div>
-              <div
-                style={
-                  window.innerWidth < 640
-                    ? {
-                        overflow: "auto",
-                        scrollbarWidth: "none", // For Firefox
-                        msOverflowStyle: "none", // For Internet Explorer and Edge
-                      }
-                    : {}
-                }
-                className={bigScreenCss}
-              >
-                {false ? (
-                  Array.from({ length: 10 }).map((_, index) => (
-                    <Skeleton
-                      key={index}
-                      className="col-span-1 mt-1 min-h-[400px]"
-                    />
-                  ))
-                ) : (
-                  <React.Fragment>
-                    {products && products.length > 0 ? (
-                      products.map((product, index) =>
-                        index < 10 ? (
-                          <ProductCard
-                            key={index}
-                            classes="col-span-1 mt-1"
-                            product={product}
-                          />
-                        ) : null
-                      )
-                    ) : (
-                      <p className="col-span-5 font-semibold text-center text-base">
-                        No Product Found
-                      </p>
-                    )}
-                  </React.Fragment>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+        <CommonProducts />
       </Wrapper>
     </>
   );

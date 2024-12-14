@@ -5,12 +5,12 @@ import { useNavigate } from "react-router";
 const ProfileDrawer = () => {
   const navigate = useNavigate();
   const navItems = [
-    {
-      id: "",
-      name: "Your Orders",
-      link: "/registration/all-orders",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame.png`,
-    },
+    // {
+    //   id: "",
+    //   name: "Your Orders",
+    //   link: "/registration/all-orders",
+    //   icon: `${process.env.PUBLIC_URL}/profileIcons/Frame.png`,
+    // },
     {
       id: "",
       name: "Browsing History",
@@ -23,24 +23,24 @@ const ProfileDrawer = () => {
       link: "/registration/reviews",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-2.png`,
     },
-    {
-      id: "",
-      name: "Wishlist ",
-      link: "/registration/wishlist",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-3.png`,
-    },
+    // {
+    //   id: "",
+    //   name: "Wishlist ",
+    //   link: "/registration/wishlist",
+    //   icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-3.png`,
+    // },
     // {
     //   id: "",
     //   name: "Your Profiles",
     //   link: "/registration/AccountSecurity",
     //   icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-4.png`,
     // },
-    {
-      id: "",
-      name: "Coupons & Offers",
-      link: "/registration/coupons-offers",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-5.png`,
-    },
+    // {
+    //   id: "",
+    //   name: "Coupons & Offers",
+    //   link: "/registration/coupons-offers",
+    //   icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-5.png`,
+    // },
     // {
     //   id: "",
     //   name: "Payment Methods",

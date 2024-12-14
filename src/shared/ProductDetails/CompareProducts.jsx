@@ -169,7 +169,7 @@ export const CompareProducts = ({
                           }
                           // src="http://localhost:3000/profileIcons/Frame-1.png"
                           // https://testhssite.com/storage/mmv700s-2.jpg
-                          // https://images.pexels.com/photos/13119652/pexels-photo-13119652.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load
+                          //
                           alt=""
                         />
                         <CartButton
@@ -186,10 +186,10 @@ export const CompareProducts = ({
                               {index < 3 ? (
                                 <th className="w-1/5 p-5  relative  border border-x-[1px] bg-white">
                                   <div className="flex flex-col mt-5">
-                                    <span className="flex  items-center  justify-center font-semibold text-base text-primary bg-[#DEF9EC] py-2 mb-[10px] absolute top-0 left-0 w-full">
-                                      Change Product
+                                    <span className=" flex  items-center h-[40px]  justify-center font-semibold text-base text-primary bg-[#DEF9EC] py-2 mb-[10px] absolute top-0 left-0 w-full">
+                                      {/* Change Product */}
                                       <img
-                                        className="ml-2"
+                                        className="hidden ml-2"
                                         src={
                                           process.env.PUBLIC_URL +
                                           "/icons/write.png"

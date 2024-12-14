@@ -39,7 +39,7 @@ import PaymentFailed from "./pages/payment/PaymentFailed";
 import { PasswordReset } from "./pages/PasswordReset";
 import ProfileWishlist from "./pages/ProfileRegistration/Wishlist/ProfileWishlist";
 import Wishlist from "./pages/Wishlist";
-import ProfileDrawer from "./pages/ProfileRegistration/ProfileDrawer/ProfileDrawer";
+import SellOnHoreca from "./pages/FooterPages/SellonHoreca/SellOnHoreca";
 const App = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
@@ -143,6 +143,7 @@ const App = () => {
         <Route path="/terms-condition" element={<TermsConsition />} />{" "}
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />{" "}
         <Route path="/career" element={<Career />} />{" "}
+        <Route path="/sell-on-horeca" element={<SellOnHoreca />} />{" "}
         <Route path="/forgot-password" element={<ForgotPassword />} />{" "}
         <Route path="/password-reset" element={<PasswordReset />} />{" "}
         <Route path="/payment/success" element={<PaymentSuccess />} />{" "}
