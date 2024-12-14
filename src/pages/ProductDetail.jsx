@@ -43,6 +43,8 @@ function Model({ url, onLoaded }) {
 
 export const ProductDetail = () => {
   const { id } = useParams(); // Access the id from the URL
+
+ 
   const [seeMore, setSeeMore] = useState(true);
   const videoRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -117,7 +119,8 @@ export const ProductDetail = () => {
     }
   };
 
-  const fetchProductDiscounts = async (r) => {
+  const fetchProductDiscounts = async () => {
+  
     setProductLoader(true);
     try {
       const response = await apiClient.get("/product-discounts", {
@@ -853,7 +856,7 @@ export const ProductDetail = () => {
                         maxBuyMoreSaveMore={maxBuyMoreSaveMore}
                         selectedBuyMore={selectedBuyMore}
                         setSelectedBuyMore={setSelectedBuyMore}
-                        buyMore={buyMore}
+                        buyMore={buyMore && buyMore}
                         productLoader={productLoader}
                         product={product}
                       />

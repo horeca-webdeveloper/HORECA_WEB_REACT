@@ -7,14 +7,20 @@ import { Breadcrumb } from "../../../shared/Breadcrumb";
 import Skeleton from "react-loading-skeleton";
 import { useNavigate } from "react-router";
 import { ProductCard } from "../../../shared/ProductCard";
-
+import { notify } from "../../../utils/notify";
+import ReviewPopup from "../../../components/ReviewPopup";
 const Reviews = () => {
   const [loader, setLoader] = useState(true);
+  const [showPopup,setShowPopup]=useState(false);
   const [reviewData, setReviewData] = useState([]);
   const [products, setProducts] = useState([]);
+  const [reviewId,setReviewId]=useState(0);
+  const [productId,setProductId]=useState(0);
+  const [reviewStatus,setReviewStatus]=useState(false);
   const navigate = useNavigate();
+  const authToken = localStorage.getItem("authToken");
+ 
   const fetchAllReviews = async () => {
-    const authToken = localStorage.getItem("authToken");
     if (!authToken) {
       navigate("/login");
     }
@@ -30,17 +36,40 @@ const Reviews = () => {
   };
 
   const fetchProducts = async () => {
-    const authToken = localStorage.getItem("authToken");
+
     const response = await apiClient.get(
       `${authToken ? "/products" : "/products-guest"}`
     );
     setProducts(response.data.data.data);
   };
 
+  const deleteReview=async(id)=>{
+    try{
+      const response = await apiClient.delete(`customer-reviews-delete/${id}`);
+        notify("Success", response.data.message);
+        setReviewStatus(!reviewStatus);
+    }
+      catch(error){
+        console.log(error);
+      }
+    }
+
+    const updateReview=(id,pid)=>{
+      setReviewId(id);
+      setProductId(pid);
+      setShowPopup(true);
+    }
+  
+  
   useEffect(() => {
     fetchProducts();
     fetchAllReviews();
   }, []);
+
+  useEffect(()=>{
+    fetchProducts();
+    fetchAllReviews();
+  },[reviewStatus]);
 
   const collectionBreadCrumb = [
     {
@@ -79,7 +108,7 @@ const Reviews = () => {
                 <React.Fragment>
                   {reviewData.length > 0 ? (
                     reviewData?.map((items) => {
-                      return <ReviewCard reviewData={items} />;
+                      return <ReviewCard reviewData={items}  deleteReview={deleteReview} updateReview={updateReview}/>;
                     })
                   ) : (
                     <div className="flex items-center h-[60vh] text-[26px] justify-center">
@@ -108,10 +137,10 @@ const Reviews = () => {
                 style={
                   window.innerWidth < 640
                     ? {
-                        overflow: "auto",
-                        scrollbarWidth: "none", // For Firefox
-                        msOverflowStyle: "none", // For Internet Explorer and Edge
-                      }
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
                     : {}
                 }
                 className={bigScreenCss}
@@ -154,10 +183,10 @@ const Reviews = () => {
                 style={
                   window.innerWidth < 640
                     ? {
-                        overflow: "auto",
-                        scrollbarWidth: "none", // For Firefox
-                        msOverflowStyle: "none", // For Internet Explorer and Edge
-                      }
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
                     : {}
                 }
                 className={bigScreenCss}
@@ -190,8 +219,10 @@ const Reviews = () => {
                 )}
               </div>
             </div>
+      
           </div>
         )}
+               {showPopup? <ReviewPopup setShowPopup={setShowPopup} popupHeading="Update Review" reviewId={reviewId}  setReviewStatus={setReviewStatus} reviewStatus={reviewStatus} id={productId}/>:''}
       </Wrapper>
     </>
   );

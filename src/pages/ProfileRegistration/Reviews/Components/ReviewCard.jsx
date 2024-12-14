@@ -1,7 +1,16 @@
 import React from "react";
 
-const ReviewCard = ({ reviewData }) => {
-  console.log(reviewData?.product);
+const ReviewCard = ({ reviewData,deleteReview,updateReview }) => {
+ 
+  const deleteReviews=(id)=>{
+    deleteReview(id)
+  }
+
+  const updateReviews=(id,pid)=>{
+ 
+    updateReview(id,pid);
+  }
+ 
   return (
     <div
       key={reviewData?.product?.id}
@@ -39,13 +48,22 @@ const ReviewCard = ({ reviewData }) => {
         <p className="font-work-sans text-[12px] font-normal leading-[16px] text-left decoration-skip-ink-none underline-from-font p-[2px]">
           Yes, I recommend this product
         </p>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between ">
           <p className="font-work-sans text-[12px] font-medium leading-[16px] text-left decoration-skip-ink-none underline-from-font text-[#818181] m-[5px]">
             {reviewData?.product?.updated_at.split("T")[0]}
           </p>
-          <button className="font-work-sans border-2 rounded-md p-[10px] text-[#808080] text-[14px] font-medium leading-[16px] text-left  decoration-skip-ink-none underline-from-font">
+          <div className="flex flex-row items-center justify-between">
+            <div>
+          <button onClick={()=>updateReviews(reviewData.id,reviewData?.product_id)} className="font-work-sans border-2 rounded-md p-[10px] text-[#808080] text-[14px] font-medium leading-[16px] text-left  decoration-skip-ink-none underline-from-font">
+            Update Review
+          </button>
+          </div>
+          <div>
+          <button onClick={()=>deleteReviews(reviewData.id)} className="font-work-sans border-2 rounded-md p-[10px] text-[#808080] text-[14px] font-medium leading-[16px] text-left  decoration-skip-ink-none underline-from-font">
             Delete Review
           </button>
+          </div>
+          </div>
         </div>
       </div>
     </div>
