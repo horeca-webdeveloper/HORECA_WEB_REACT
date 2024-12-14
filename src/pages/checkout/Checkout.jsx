@@ -290,7 +290,6 @@ for mobile */}
                                   cartSummaryFlag={cartSummaryFlag}
                                   forMobile={true}
                                 />
-
                                 <div className="flex items-center gap-2">
                                   <Counter
                                     product={prod}

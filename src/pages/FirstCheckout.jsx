@@ -8,7 +8,7 @@ import { FaLongArrowAltRight, FaCheck } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { ProductCard } from "../shared/ProductCard";
 import Slider from "react-slick"
-import { fiveSlider } from "../utils/slicksettings";
+import { settings } from "../utils/slicksettings";
 import { apiClient } from "../utils/apiWrapper";
 import { useCart } from "../context/CartContext";
 import { useLocalCartCount } from "../context/LocalCartCount";

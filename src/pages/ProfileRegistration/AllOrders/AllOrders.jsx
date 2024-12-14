@@ -17,6 +17,10 @@ const AllOrders = () => {
   const [imageView, setImageView] = useState("");
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+  const navigation = (data) => {
+    navigate("/order-details", data);
+  };
+
   const fetchAllOrders = async () => {
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
@@ -25,7 +29,6 @@ const AllOrders = () => {
     try {
       const response = await apiClient.get("/orders");
       setOrdersData(response?.data);
-      console.log(response);
       setViewedLoader(false);
     } catch (error) {
       console.error("Error:", error);
@@ -102,37 +105,37 @@ const AllOrders = () => {
           <SidebarProfile />
           <div className="flex flex-col  w-[100%]">
             {/* Sub-Navbar */}
-            <div className="hidden sm:block">
-              <h1 className="block sm:hidden  border-bottom-2 text-center mt-[15px]">
-                Your Orders
-              </h1>
-              <div className="flex p-[10px] justify-between w-[100%]">
-                <div className="flex flex-wrap w-[100%] sm:w-[45%] justify-between mt-[5px]">
-                  <p className="font-work-sans bg-red text-[#186737] text-base font-normal leading-6 text-left decoration-none">
-                    All Orders
-                  </p>
-                  <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
-                    Processing
-                  </p>
-                  <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
-                    Shipped
-                  </p>
-                  <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
-                    Delivered
-                  </p>
-                  <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
-                    Returns
-                  </p>
-                </div>
-                <div className="hidden sm:block w[100%]">
-                  <input
-                    className="border rounded-[20px] border-2 w-[200px] sm:w-[350px] p-[5px]"
-                    type="input"
-                    placeholder="Item Name / Order ID / Tracking No."
-                  />
-                </div>
+            <h1 className="block sm:hidden text-center mt-[15px]">
+              Your Orders
+            </h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 w-full">
+              <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-[5px]">
+                <p className="font-work-sans text-[#186737] text-base font-normal leading-6 text-left decoration-none">
+                  All Orders
+                </p>
+                <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
+                  Processing
+                </p>
+                <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
+                  Shipped
+                </p>
+                <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
+                  Delivered
+                </p>
+                <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
+                  Returns
+                </p>
+              </div>
+
+              <div className="w-full  mx-auto">
+                <input
+                  className="border rounded-[20px] border-2 w-full p-[5px]"
+                  type="text"
+                  placeholder="Item Name / Order ID / Tracking No."
+                />
               </div>
             </div>
+
             {viewedLoader ? (
               Array.from({ length: 10 }).map((_, index) => (
                 <Skeleton
@@ -150,6 +153,7 @@ const AllOrders = () => {
                         id={index}
                         setImageView={setImageView}
                         setShowPopup={setShowPopup}
+                        navigation={navigation}
                       />
                     );
                   })

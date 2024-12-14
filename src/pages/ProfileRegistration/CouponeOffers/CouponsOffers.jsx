@@ -97,11 +97,11 @@ const CouponsOffers = () => {
         <div className="flex">
           <SidebarProfile />
           {/* Coupons Section */}
-          <div className="flex flex-col justify-between w-[100%] h-[100%]">
-            <div className="hidden sm:block">
-              <h1 className="text-center mt-[15px]">Coupons & Offers</h1>
-              <div className="flex  p-[10px] justify-between m-[5px] w-[100%]">
-                <div className="flex  mb-[10px] flex-wrap w-[100%] sm:w-[45%] justify-between mt-[5px]">
+          <div className="flex flex-col  w-[100%]">
+            <h1 className="text-center mt-[15px]">Coupons & Offers</h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 w-full">
+              <div className="hidden sm:block">
+                <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-[5px]">
                   <p className="font-work-sans text-[#186737] text-base font-normal leading-6 text-left decoration-none">
                     All Coupons
                   </p>
@@ -115,15 +115,17 @@ const CouponsOffers = () => {
                     Expired
                   </p>
                 </div>
-                <div className="hidden sm:block w[100%]">
-                  <input
-                    className="border rounded-[20px] border-2 w-[320px] p-[5px]"
-                    type="input"
-                    placeholder="Search Coupons or Vouchers"
-                  />
-                </div>
+              </div>
+
+              <div className="w-full  mx-auto">
+                <input
+                  className="border rounded-[20px] border-2 w-full p-[5px]"
+                  type="text"
+                  placeholder="Search Coupons or Vouchers"
+                />
               </div>
             </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {loader ? (
                 Array.from({ length: 2 }).map((_, index) => (

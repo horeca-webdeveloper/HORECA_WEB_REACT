@@ -269,7 +269,8 @@ export const ProductsByCategory = () => {
       <Wrapper>
         <Breadcrumb items={breadcrumb} classes={"mt-7 mb-7"} />
         <div className="grid grid-cols-4 sm:grid-cols-9 gap-4">
-          {window?.innerWidth > 640 && (
+          
+          <div className="col-span-2 hidden sm:hidden md:hidden lg:block">
             <FilterSection
               minDelivery={minDelivery}
               maxDelivery={maxDelivery}
@@ -295,8 +296,8 @@ export const ProductsByCategory = () => {
               setSelectedMinPrice={setSelectedMinPrice}
               setSelectedMaxPrice={setSelectedMaxPrice}
             />
-          )}
-          <div className="col-span-7">
+        </div>
+          <div className="sm:col-span-12 lg:col-span-7 md-col-span-7 col-span-12">
             <span className="title">{subcategory.split("-").join(" ")}</span>
             <div className="w-full h-[1px] bg-[#E2E8F0] my-4"></div>
             <div className="flex flex-row items-center justify-between">
@@ -305,11 +306,11 @@ export const ProductsByCategory = () => {
               </span>
               <div
                 onClick={() => setOpenFilterPopup(true)}
-                className="block sm:hidden bg-[#E2E8F0] p-[10px] rounded"
+                className="lg:hidden bg-[#E2E8F0] p-[10px] rounded"
               >
-                <img src={"http://localhost:3001/icons/FilterIcon.png"} />
+                <img src={`${process.env.PUBLIC_URL}/icons/FilterIcon.png`} />
               </div>
-              <div className="hidden sm:flex flex-row items-center ">
+              <div className="hidden lg:flex flex-row items-center ">
                 <span className="text-sm text-gray-700 mr-6">
                   Sort:
                   <span className="text-black-100 ml-1 relative">
@@ -426,7 +427,7 @@ export const ProductsByCategory = () => {
                             src={`https://testhssite.com/storage/${cat.image}`}
                             alt={cat.name}
                           />
-                          <h4 className="hidden sm:block mt-2 text-base font-semibold text-primary text-center">
+                          <h4 className="lg:hidden mt-2 text-base font-semibold text-primary text-center">
                             {cat.name}
                           </h4>
                         </Link>
@@ -438,7 +439,7 @@ export const ProductsByCategory = () => {
 
             <br />
             {/* Products  Display Here  */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 mb-10">
+            <div className="grid grid-cols-2 lg:grid-cols-12 sm:grid-cols-4 gap-4  mt-4 mb-10">
               {loader ? (
                 Array.from({ length: 12 }).map((_, index) => (
                   <div key={index} className="col-span-1">
@@ -452,7 +453,7 @@ export const ProductsByCategory = () => {
                       return (
                         <React.Fragment key={index}>
                           <ProductCard
-                            classes="col-span-1 mt-1 w-[46vw] sm:w-[100%]"
+                           classes="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3    mt-1"
                             key={index}
                             product={product}
                           />
@@ -488,7 +489,7 @@ export const ProductsByCategory = () => {
           <>
             <img
               className="w-[100vw] h-[162px] rounded"
-              src={"http://localhost:3001/images/categoryBanner.png"}
+              src={`${process.env.PUBLIC_URL}/images/categoryBanner.png`}
             />
             <h1 className="mt-[20px]">Products you may also like</h1>
             <div
