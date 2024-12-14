@@ -43,6 +43,7 @@ export const ProductCard = ({
   const { triggerUpdateCart } = useCart();
   const { totalWishListItems, incrementWishListItems } = useLocalCartCount();
   const [cartSummaryFlag, setCartSummaryFlag] = useState(false);
+  const [showCountButton, setShowCountButton] = useState(false);
 
   const videoRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -407,17 +408,21 @@ export const ProductCard = ({
               </React.Fragment>
             ) : null}
           </Link>
-
+          <div className="block sm:hidden">
+            <div className={`${showCountButton === true ? "flex " : "hidden"}`}>
+              <ProductCardCounter
+                product={product}
+                count={count}
+                setShowCountButton={setShowCountButton}
+                setCount={setCount}
+                setCartSummaryFlag={setCartSummaryFlag}
+                cartSummaryFlag={cartSummaryFlag}
+                forMobile={true}
+              />
+            </div>
+          </div>
           <div className="flex items-center">
-            {/* <ProductCardCounter
-              product={product}
-              count={count}
-              setCount={setCount}
-              setCartSummaryFlag={setCartSummaryFlag}
-              cartSummaryFlag={cartSummaryFlag}
-              forMobile={true}
-            /> */}
-            <div className="mt-2 flex items-center justify-between p-[2px] sm:px-3 sm:py-2 w-[90px] border border-[#BCE3C9] rounded-[4px]">
+            <div className="hidden mt-2 sm:flex items-center justify-between p-[2px] sm:px-3 sm:py-2 w-[90px] border border-[#BCE3C9] rounded-[4px]">
               <FiMinus
                 className="cursor-pointer w-[10px] sm:w-[26px]"
                 onClick={(e) => handlerDecrement(e)}
@@ -431,6 +436,7 @@ export const ProductCard = ({
               />
             </div>
             <div
+              className="w-[100%]"
               onClick={
                 removeItem && (() => removeFromSaved(productId, product.name))
               }
@@ -438,6 +444,8 @@ export const ProductCard = ({
               <CartButton
                 icon={true}
                 quantity={count}
+                showCountButton={showCountButton}
+                setShowCountButton={setShowCountButton}
                 product_id={productId}
                 name={product.name}
                 setQuantity={setCount}
@@ -460,8 +468,8 @@ export const ProductCard = ({
               >
                 <MdOutlineAddShoppingCart className="text-primary group-hover:text-white transition-all duration-500" />
                 {window.innerWidth < 640 ? (
-                  <span className="ml-0 w-[10px] sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
-                    Add
+                  <span className="ml-[-10px] text-[14px] pl-[10px] w-[150px] sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">
+                    Add To Cart
                   </span>
                 ) : (
                   <span className="ml-0 sm:ml-2 p-[2px] sm:p-0 font-semibold text-primary text-[10px] sm:text-base group-hover:text-white transition-all duration-500">

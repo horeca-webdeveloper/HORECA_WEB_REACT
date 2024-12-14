@@ -1,8 +1,8 @@
 import React from "react";
-const AllOrdersBox = ({ data, id, setImageView, setShowPopup,navigation }) => {
-  const navigations=(data)=>{
-     navigation({state:{order_id:data}})
-  }
+const AllOrdersBox = ({ data, id, setImageView, setShowPopup, navigation }) => {
+  const navigations = (data) => {
+    navigation({ state: { order_id: data } });
+  };
   const ordersImages = data?.products?.map((item) => {
     return item?.images;
   });
@@ -116,14 +116,15 @@ const AllOrdersBox = ({ data, id, setImageView, setShowPopup,navigation }) => {
           </div>
         </div>
         <div className="p-4 sm:p-5 md:p-6">
-  <div className="p-1 sm:p-2 rounded px-4 sm:px-6 text-white bg-[#186737] mx-auto">
-   
-    <button onClick={()=>navigations(data?.code)} className="font-work-sans w-[100px] sm:w-[122px] h-[30px] text-[14px] sm:text-[16px] font-normal text-center underline-from-font no-underline-skip">
-      Order Details
-    </button>
-    
-  </div>
-</div>
+          <div className="p-1 sm:p-2 rounded px-4 sm:px-6 text-white bg-[#186737] mx-auto">
+            <button
+              onClick={() => navigations(data?.code)}
+              className="font-work-sans w-[100px] sm:w-[122px] h-[30px] text-[14px] sm:text-[16px] font-normal text-center underline-from-font no-underline-skip"
+            >
+              Order Details
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
