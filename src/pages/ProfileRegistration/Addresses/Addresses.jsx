@@ -6,6 +6,7 @@ import Popup from "./Components/Popup";
 import Skeleton from "react-loading-skeleton";
 import { ProductCard } from "../../../shared/ProductCard";
 import { apiClient } from "../../../utils/apiWrapper";
+import CommonProducts from "../CommonProducts/CommonProducts";
 
 const Addresses = () => {
   const [popupHeading, setPopupHeading] = useState("");

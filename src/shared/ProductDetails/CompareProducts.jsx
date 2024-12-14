@@ -5,14 +5,13 @@ import { apiClient } from "../../utils/apiWrapper";
 import { useCart } from "../../context/CartContext";
 import { IoPrintOutline } from "react-icons/io5";
 import { CartButton } from "../CartButton";
-import generatePDF, { usePDF } from "react-to-pdf";
+import generatePDF, { usePDF, Resolution, Margin } from "react-to-pdf";
 
 export const CompareProducts = ({
   productLoader,
   product,
   compareProductFields,
 }) => {
-  const [loader, setLoader] = useState(false);
   const { triggerUpdateCart } = useCart();
   const [firstRow, setFirstRow] = useState([]);
 
@@ -22,8 +21,37 @@ export const CompareProducts = ({
   const [forthLayer, setForthLayer] = useState([]);
   const [fifthLayer, setFifthLayer] = useState([]);
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+  const [loader, setLoader] = useState(false);
 
   const [priceLayer, setPriceLayer] = useState([]);
+
+  const options = {
+    method: "open",
+    resolution: Resolution.HIGH,
+    page: {
+      margin: Margin.SMALL,
+      format: "letter",
+      orientation: "landscape",
+    },
+    canvas: {
+      mimeType: "image/png",
+      qualityRatio: 1,
+    },
+    overrides: {
+      pdf: {
+        compress: true,
+      },
+      canvas: {
+        useCORS: false,
+      },
+    },
+  };
+
+  const hanldePrint = () => {
+    setLoader(true);
+    generatePDF(targetRef, { filename: "CompareTable.pdf" }, options);
+    setTimeout(() => {}, [1000]);
+  };
 
   useEffect(() => {
     if (product.compare_products) {
@@ -89,13 +117,27 @@ export const CompareProducts = ({
   return (
     <React.Fragment>
       {!productLoader ? (
-        <div ref={targetRef} className="col-span-12 my-8 mt-12">
+        <div ref={targetRef} className=" p-[10px] col-span-12 my-8 mt-12">
           {product &&
           product.compare_products &&
           product.compare_products.length &&
           product.specifications ? (
-            <div class="relative overflow-x-auto">
-              <table className="min-w-full table-auto border-collapse border-2 border-gray-300 rounded-md">
+            <div class="relative rounded-md overflow-x-auto">
+              <div className={`flex pb-[10px] items-center justify-between`}>
+                <img className="" src="	http://localhost:3000/images/logo.png" />
+                <h1 className="text-center text-[24px]">
+                  Compare with similar products <br />
+                  فاتورة ضريبية
+                </h1>
+                <div className="text-right p-3 text-[14px]">
+                  <p>Horeca Store UAE</p>
+                  <p>
+                    SO1, Building 9 AI Quoz <br />
+                    Ind.3 PO Box 122851Dubai, UAE
+                  </p>
+                </div>
+              </div>
+              <table className="min-w-full table-auto border-collapse border-4 border-gray-300 rounded-md">
                 <thead>
                   <tr className="bg-green-100">
                     <th className="w-1/5 p-5 text-start bg-white relative ">
@@ -103,7 +145,7 @@ export const CompareProducts = ({
                         <h2 className="text-black-100 text-2xl font-semibold py-2">
                           Compare with similar products
                         </h2>
-                        <p className="text-[#4A4A4A] text-sm font-normal py-2 truncated-text">
+                        <p className="text-[#4A4A4A] text-sm font-normal ">
                           Lorem ipsum dolor sit amet consectetur. Non nunc
                           tincidunt mattis ut. Lobortis donec eget enim euismod
                           quam molestie. Leo pellentesque ante amet felis
@@ -114,10 +156,10 @@ export const CompareProducts = ({
                     </th>
                     <th className="w-1/5 p-5  relative  border border-x-[1px] bg-[#DEF9EC80]">
                       <div className="flex flex-col mt-5">
-                        <span className="font-semibold text-base text-white bg-primary py-2 absolute top-0 left-0 w-full">
+                        <span className="font-semibold text-base text-white bg-primary py-2 mb-[10px] absolute top-0 left-0 w-full">
                           This Product
                         </span>
-                        <span className="mt-5 text-black-100 text-base font-semibold line-clamp-2">
+                        <span className="mt-5 text-black-100 text-base font-semibold m-[10px]">
                           {product.name}
                         </span>
                         <img
@@ -125,6 +167,9 @@ export const CompareProducts = ({
                           src={
                             "https://testhssite.com/storage/" + product.image
                           }
+                          // src="http://localhost:3000/profileIcons/Frame-1.png"
+                          // https://testhssite.com/storage/mmv700s-2.jpg
+                          //
                           alt=""
                         />
                         <CartButton
@@ -141,10 +186,10 @@ export const CompareProducts = ({
                               {index < 3 ? (
                                 <th className="w-1/5 p-5  relative  border border-x-[1px] bg-white">
                                   <div className="flex flex-col mt-5">
-                                    <span className="flex  items-center  justify-center font-semibold text-base text-primary bg-[#DEF9EC] py-2 absolute top-0 left-0 w-full">
-                                      Change Product
+                                    <span className=" flex  items-center h-[40px]  justify-center font-semibold text-base text-primary bg-[#DEF9EC] py-2 mb-[10px] absolute top-0 left-0 w-full">
+                                      {/* Change Product */}
                                       <img
-                                        className="ml-2"
+                                        className="hidden ml-2"
                                         src={
                                           process.env.PUBLIC_URL +
                                           "/icons/write.png"
@@ -152,7 +197,7 @@ export const CompareProducts = ({
                                         alt=""
                                       />
                                     </span>
-                                    <span className="mt-5 text-black-100 text-base font-semibold line-clamp-2 ">
+                                    <span className="mt-5 text-black-100 text-base font-semibold m-[10px]">
                                       {compare.name}
                                     </span>
                                     <img
@@ -205,11 +250,17 @@ export const CompareProducts = ({
                       })
                     : null}
                 </tbody>
-              </table>
+              </table>{" "}
             </div>
           ) : (
             <div></div>
           )}
+          <div className="flex items-center mt-[0px] py-[20px]">
+            <p>Order Online for Fast Shipping & Lower Prices at</p>
+            <p className="text-[#1B6738] font-medium ml-[10px]">
+              www.horecastore.ae
+            </p>
+          </div>
         </div>
       ) : (
         <div className="col-span-12 my-8">
@@ -222,16 +273,14 @@ export const CompareProducts = ({
           <div className="flex items-end justify-end">
             <button className="text-white bg-[#64748B] rounded-md py-2 px-5 text-base font-semibold flex items-center mr-4">
               <FaShareAlt className="mr-1" />
-              <span>Share</span>
+              <p>Share</p>
             </button>
             <button
-              onClick={() =>
-                generatePDF(targetRef, { filename: "CompareTable.pdf" })
-              }
+              onClick={() => hanldePrint()}
               className="text-white bg-primary rounded-md py-2 px-5 text-base font-semibold flex items-center"
             >
               <IoPrintOutline className="mr-1" />
-              <span>Print</span>
+              <p>Print</p>
             </button>
           </div>
         </div>

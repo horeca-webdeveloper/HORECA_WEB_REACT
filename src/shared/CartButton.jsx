@@ -12,8 +12,10 @@ export const CartButton = ({
   setQuantity,
   children,
   name,
+  setShowCountButton,
   image,
   store_id,
+  showCountButton,
   delivery_days,
   original_price,
   front_sale_price,
@@ -26,6 +28,7 @@ export const CartButton = ({
   const { triggerUpdateCart } = useCart();
   const { totalCartItems, incrementCartItems } = useLocalCartCount();
   const [loader, setLoader] = useState(false);
+  const [buttonShow, setButtonShow] = useState(false);
   const notify = (text) => {
     toast.dismiss();
     toast(
@@ -44,6 +47,8 @@ export const CartButton = ({
           quantity: quantity,
         });
         setLoader(false);
+        setShowCountButton(true);
+        setButtonShow(true);
         setQuantity ? setQuantity(1) : console.log();
         triggerUpdateCart();
         notify(name);
@@ -100,20 +105,24 @@ export const CartButton = ({
           className={`${
             classes
               ? classes
-              : "text-[#F9FAFC] bg-primary px-4 py-2   rounded-md w-full sm:max-w-32 mx-auto font-semibold"
+              : "text-[#F9FAFC] bg-primary px-4 py-2 pt-[20px]   rounded-md w-full sm:max-w-32 mx-auto font-semibold"
           }`}
           style={{ opacity: `${loader ? "0.5" : ""}` }}
           onClick={() => handlerSubmit()}
           disabled={loader}
         >
-          Add to Cart
+          <p className="mt-[-15px]">Buy Now</p>
         </button>
       ) : (
         <button
           className={`${
             classes
               ? classes
-              : "flex items-center justify-center bg-[#DEF9EC] p-[4px] w-full px-4 rounded-[4px] ml-2 mt-2 group-hover:bg-primary transition-all duration-500"
+              : `${
+                  showCountButton == true && window.innerWidth < 640
+                    ? "hidden "
+                    : "flex"
+                } items-center justify-center bg-[#DEF9EC] p-[4px] sm:p-[8px] w-full px-4 rounded-[4px] ml-0 sm:ml-2 mt-2 group-hover:bg-primary transition-all duration-500`
           }`}
           style={{ opacity: `${loader ? "0.5" : "1"}` }}
           disabled={loader}

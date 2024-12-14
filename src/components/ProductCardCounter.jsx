@@ -9,6 +9,7 @@ export const ProductCardCounter = ({
   cartSummaryFlag,
   setCartSummaryFlag,
   forMobile,
+  setShowCountButton,
   count,
   setCount,
 }) => {
@@ -16,17 +17,15 @@ export const ProductCardCounter = ({
   const authToken = localStorage.getItem("authToken");
   const { triggerUpdateCart } = useCart();
   const { incrementCartItems } = useLocalCartCount();
-
   const handlerIncrement = async () => {
-    console.log(product.id);
+    let cartItems = localStorage.getItem("CartItems");
     setLoader(true);
-    count++;
     if (authToken) {
-      setCount(count + 1);
+      setCount((prevCount) => prevCount + 1);
       try {
         const response = await apiClient.post(`/cart`, {
           product_id: product.id,
-          quantity: count,
+          quantity: 1,
         });
         setLoader(false);
         notify("", "Item has been added to your cart.");
@@ -43,7 +42,6 @@ export const ProductCardCounter = ({
         setLoader(false);
       }, 500);
       let cartItems = localStorage.getItem("CartItems");
-
       let tempObj = {
         product_id: product.id,
         quantity: count,
@@ -73,24 +71,35 @@ export const ProductCardCounter = ({
       } else {
         localStorage.setItem("CartItems", JSON.stringify([tempObj]));
       }
-
-      incrementCartItems(1);
-      triggerUpdateCart();
     }
   };
 
   const handlerDecrement = async () => {
     setLoader(true);
-    if (count <= 1) {
+    if (count === 1) {
+      setCount(1);
+      setShowCountButton(false);
       setLoader(false);
+      const response = await apiClient.put(`/cart/decrease`, {
+        product_id: product.id,
+        quantity: 1, // Use the updated value
+      });
+      setLoader(false);
+      setCartSummaryFlag(!cartSummaryFlag);
+      triggerUpdateCart();
+      notify("", "has been removed from your cart.");
       return;
     }
-    count--;
     if (authToken) {
       try {
+        if (count === 1) {
+          setShowCountButton(false);
+        }
+        const updatedCount = count - 1; // Calculate the new count value
+        setCount(updatedCount); // Update the state with the new value
         const response = await apiClient.put(`/cart/decrease`, {
           product_id: product.id,
-          quantity: count,
+          quantity: updatedCount, // Use the updated value
         });
         setLoader(false);
         setCartSummaryFlag(!cartSummaryFlag);
@@ -134,15 +143,13 @@ export const ProductCardCounter = ({
       } else {
         localStorage.setItem("CartItems", JSON.stringify([tempObj]));
       }
-      incrementCartItems(-1);
-      triggerUpdateCart();
     }
   };
   return (
     <>
       {forMobile ? (
         <div
-          className={`inline-flex bg-[#186737] text-white p-2  text-sm font-medium items-center rounded-[4px] border border-[#BCE3C9] relative z-[50] p-2 ${
+          className={`flex bg-[#186737] mt-[10px] w-[100%] text-white p-[4px] sm:p-[8px]  text-sm font-medium items-center justify-between rounded-[4px] border border-[#BCE3C9] relative z-[50] ${
             loader ? "" : "cursor-pointer "
           }`}
           style={{ opacity: `${loader ? "0.5" : "1"}` }}
@@ -154,8 +161,8 @@ export const ProductCardCounter = ({
           >
             <FiMinus size={16} className="text-white" />
           </button>
-          <span className="text-white font-semibold text-base mx-2">
-            {count} Added
+          <span className="text-white font-semibold text-base mx-1">
+            {count > 0 ? count + " Added" : count + " add"}
           </span>
           <button
             onClick={() => handlerIncrement(product)}
@@ -167,7 +174,7 @@ export const ProductCardCounter = ({
         </div>
       ) : (
         <div
-          className={`inline-flex  items-center rounded-[4px] border border-[#BCE3C9] relative z-[50] p-2 ${
+          className={`inline-flex w-[100%] items-center rounded-[4px] border border-[#BCE3C9] relative z-[50] p-1 ${
             loader ? "" : "cursor-pointer "
           }`}
           style={{ opacity: `${loader ? "0.5" : "1"}` }}
@@ -179,7 +186,7 @@ export const ProductCardCounter = ({
           >
             <FiMinus size={16} className="text-gray-700" />
           </button>
-          <span className="text-primary font-semibold text-base mx-2">
+          <span className="text-primary font-semibold text-base mx-1">
             {count}
           </span>
           <button
