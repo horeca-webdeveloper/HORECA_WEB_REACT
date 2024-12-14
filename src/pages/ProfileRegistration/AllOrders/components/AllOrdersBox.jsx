@@ -1,9 +1,12 @@
 import React from "react";
-
-const AllOrdersBox = ({ data, id, setImageView, setShowPopup }) => {
+const AllOrdersBox = ({ data, id, setImageView, setShowPopup,navigation }) => {
+  const navigations=(data)=>{
+     navigation({state:{order_id:data}})
+  }
   const ordersImages = data?.products?.map((item) => {
     return item?.images;
   });
+
   return (
     <div key={id} className="border-2 w-[100%] rounded p-[10px] mb-[20px]">
       <div className="flex items-center justify-between">
@@ -114,9 +117,11 @@ const AllOrdersBox = ({ data, id, setImageView, setShowPopup }) => {
         </div>
         <div className="p-4 sm:p-5 md:p-6">
   <div className="p-1 sm:p-2 rounded px-4 sm:px-6 text-white bg-[#186737] mx-auto">
-    <button className="font-work-sans w-[100px] sm:w-[122px] h-[30px] text-[14px] sm:text-[16px] font-normal text-center underline-from-font no-underline-skip">
+   
+    <button onClick={()=>navigations(data?.code)} className="font-work-sans w-[100px] sm:w-[122px] h-[30px] text-[14px] sm:text-[16px] font-normal text-center underline-from-font no-underline-skip">
       Order Details
     </button>
+    
   </div>
 </div>
       </div>

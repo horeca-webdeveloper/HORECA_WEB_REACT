@@ -16,6 +16,10 @@ const AllOrders = () => {
   const [imageView, setImageView] = useState("");
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+  const navigation = (data) => {
+    navigate('/order-details', data);
+}
+
   const fetchAllOrders = async () => {
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
@@ -24,7 +28,6 @@ const AllOrders = () => {
     try {
       const response = await apiClient.get("/orders");
       setOrdersData(response?.data);
-      console.log(response);
       setViewedLoader(false);
     } catch (error) {
       console.error("Error:", error);
@@ -154,6 +157,7 @@ const AllOrders = () => {
                         id={index}
                         setImageView={setImageView}
                         setShowPopup={setShowPopup}
+                        navigation={navigation}
                       />
                     );
                   })

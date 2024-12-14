@@ -844,7 +844,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   SAR : 550.0
                 </p>
                 <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
-                  Add to Cart
+                Re Order
                 </button>
               </div>
             </div>
@@ -861,7 +861,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   SAR : 550.0
                 </p>
                 <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
-                  Add to Cart
+                Re Order
                 </button>
               </div>
             </div>
@@ -878,7 +878,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   SAR : 550.0
                 </p>
                 <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
-                  Add to Cart
+                Re Order
                 </button>
               </div>
             </div>
@@ -895,7 +895,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   SAR : 550.0
                 </p>
                 <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
-                  Add to Cart
+                Re Order
                 </button>
               </div>
             </div>
@@ -912,7 +912,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   SAR : 550.0
                 </p>
                 <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
-                  Add to Cart
+                Re Order
                 </button>
               </div>
             </div>

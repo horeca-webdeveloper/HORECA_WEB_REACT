@@ -99,7 +99,7 @@ export const CollectionPage = () => {
     "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
 
   return (
-    <div>
+    <>
       <Wrapper>
         <Breadcrumb items={collectionBreadCrumb} classes={"mt-7"} />
       </Wrapper>
@@ -307,6 +307,7 @@ export const CollectionPage = () => {
             )}
           </div>
           {window?.innerWidth > 640 && (
+                <div className="slider-container">
             <Slider {...settings} className="arrow__wrapper">
               {BrandPicks.map((product, index) => {
                 return (
@@ -318,6 +319,7 @@ export const CollectionPage = () => {
                 );
               })}
             </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -397,6 +399,7 @@ export const CollectionPage = () => {
             )}
           </div>
           {window?.innerWidth > 640 && (
+             <div className="slider-container">
             <Slider {...settings} className="arrow__wrapper">
               {BrandPicks
                 ? BrandPicks.map((product, index) => {
@@ -410,6 +413,7 @@ export const CollectionPage = () => {
                   })
                 : null}
             </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -489,6 +493,7 @@ export const CollectionPage = () => {
             )}
           </div>
           {window?.innerWidth > 640 && (
+             <div className="slider-container">
             <Slider {...settings} className="arrow__wrapper">
               {BrandPicks.map((product, index) => {
                 return (
@@ -500,6 +505,7 @@ export const CollectionPage = () => {
                 );
               })}
             </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -576,6 +582,7 @@ export const CollectionPage = () => {
             )}
           </div>
           {window?.innerWidth > 640 && (
+             <div className="slider-container">
             <Slider {...settings} className="arrow__wrapper">
               {products
                 ? products?.map((product, index) => {
@@ -589,6 +596,7 @@ export const CollectionPage = () => {
                   })
                 : null}
             </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -810,6 +818,7 @@ export const CollectionPage = () => {
             )}
           </div>
           {window?.innerWidth > 640 && (
+             <div className="slider-container">
             <Slider {...settings} className="arrow__wrapper">
               {BrandPicks
                 ? BrandPicks.map((product, index) => {
@@ -823,6 +832,7 @@ export const CollectionPage = () => {
                   })
                 : null}
             </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -880,6 +890,7 @@ export const CollectionPage = () => {
             )}
           </div>
           {window?.innerWidth > 640 && (
+             <div className="slider-container">
             <Slider {...settings} className="arrow__wrapper">
               {BrandPicks
                 ? BrandPicks.map((product, index) => {
@@ -893,6 +904,7 @@ export const CollectionPage = () => {
                   })
                 : null}
             </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -937,7 +949,7 @@ export const CollectionPage = () => {
           )}
         </div>
       </Wrapper>
-    </div>
+    </>
   );
 };
 

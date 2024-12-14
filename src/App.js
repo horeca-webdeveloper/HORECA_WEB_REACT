@@ -137,7 +137,7 @@ const App = () => {
         <Route path="/registration/addresses" element={<Addresses />} />{" "}
         <Route path="/registration/creditBalance" element={<CreditBalance />} />{" "}
         <Route path="/registration/AccountSecurity" element={<AccountSecurity />} />{" "}
-        <Route path="/order-details" element={<OrderDetails />} />{" "}
+        <Route path="/order-details/" element={<OrderDetails />} />{" "}
         <Route path="/contact-us" element={<ContactUs />} />{" "}
         <Route path="/faq" element={<FAQ />} />{" "}
         <Route path="/terms-condition" element={<TermsConsition />} />{" "}

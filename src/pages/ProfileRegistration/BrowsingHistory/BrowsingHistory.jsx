@@ -51,7 +51,7 @@ const BrowsingHistory = () => {
     },
   ];
   const bigScreenCss =
-    "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
+    "grid grid-cols-2 lg:grid-cols-12 xl:grid-cols-12 sm:grid-cols-4 gap-4  mt-4 mb-10";
 
 
  
@@ -96,13 +96,14 @@ const BrowsingHistory = () => {
                 ))
               ) : (
                 <React.Fragment>
+                  
                   {Array.isArray(viewedProducts) ? (
                     
                     viewedProducts?.map((item, index) => {
                       return (
                         <ProductCard
                           key={index}
-                          classes="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-1 lg:w-[280px] mt-1"
+                          classes="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3    mt-1"
                           product={item.product}
                         />
                       );
