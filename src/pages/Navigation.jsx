@@ -441,6 +441,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   {categories?.map((item, index) => {
                     return (
                       <li
+                      key={item.id}
                         onClick={() => {
                           if (item?.children?.length > 0) {
                             setChildCategory(item?.children);

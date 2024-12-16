@@ -125,14 +125,10 @@ export const ProductDetail = () => {
       product_id: id,
     }
 
-<<<<<<< HEAD
-      setBuyMore(response?.data?.data);
-=======
     try {
       const response = await apiClient.get("/product-discounts", params);
 
-       setBuyMore(response.data.data);
->>>>>>> 8cd9558980724c8ebba2c939506895ac28c941b7
+       setBuyMore(response?.data?.data);
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -319,10 +315,6 @@ export const ProductDetail = () => {
   };
 
   useEffect(() => {
-<<<<<<< HEAD
-    if (!!product && product?.images) {
-      setMediaArray([...product.images, ...JSON?.parse(product?.video_path)]);
-=======
 
  
     if (!!product && product.images) {
@@ -333,7 +325,6 @@ export const ProductDetail = () => {
       }
 
    
->>>>>>> 8cd9558980724c8ebba2c939506895ac28c941b7
     }
   }, [product]);
 

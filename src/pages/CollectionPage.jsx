@@ -187,10 +187,6 @@ export const CollectionPage = () => {
                   )}
             </div>
             <div className="grid grid-cols-2  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 mt-8">
-<<<<<<< HEAD
-=======
-             
->>>>>>> 8cd9558980724c8ebba2c939506895ac28c941b7
               {selectedCat && selectedCat.children
                 ? selectedCat.children.map((cat, index) => {
                     return (
@@ -245,7 +241,6 @@ export const CollectionPage = () => {
                   })
                 : null}
             </div>
-           
           </div>
         </div>
         <div className="py-10 px-6 bg-[#E2E8F033] mt-10 rounded-[20px]">
