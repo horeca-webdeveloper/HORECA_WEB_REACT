@@ -120,14 +120,15 @@ export const ProductDetail = () => {
   };
 
   const fetchProductDiscounts = async () => {
-  
     setProductLoader(true);
-    try {
-      const response = await apiClient.get("/product-discounts", {
-        product_id: id,
-      });
+    const params={
+      product_id: id,
+    }
 
-      setBuyMore(response.data.data);
+    try {
+      const response = await apiClient.get("/product-discounts", params);
+
+       setBuyMore(response.data.data);
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -308,8 +309,16 @@ export const ProductDetail = () => {
   };
 
   useEffect(() => {
+
+ 
     if (!!product && product.images) {
-      setMediaArray([...product.images, ...JSON.parse(product.video_path)]);
+      if(product.video_path){
+        setMediaArray([...product.images, ...JSON.parse(product.video_path)]);
+      }else{
+        setMediaArray(product.images);
+      }
+
+   
     }
   }, [product]);
 
