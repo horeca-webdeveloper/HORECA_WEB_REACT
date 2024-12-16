@@ -31,7 +31,6 @@ const Documents = ({ docs }) => {
         {/* Ensure documentArray is an array before using .map */}
         {documentArray.length > 0 ? (
           documentArray.map((item, index) => {
-            
             return (
               <div
                 className="flex flex-col relative p-1 flex justify-center items-center"
@@ -42,7 +41,7 @@ const Documents = ({ docs }) => {
                   title={item.title}
                   className="w-full border h-full border-none"
                   width="500"
-                  style={{ border: "1px solid black" }}
+                  style={{ border: "1px solid black", height: "151px" }}
                 />
 
                 {/* Overlay div on top of iframe */}

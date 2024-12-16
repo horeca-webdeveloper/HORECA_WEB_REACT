@@ -104,12 +104,12 @@ export const ProductDetail = () => {
         }
       );
 
-      setProduct(response.data.data.data[0]);
+      setProduct(response?.data?.data?.data[0]);
       let temp = [];
-      response.data.data.data[0].specifications.map((item) => {
+      response?.data?.data?.data[0].specifications.map((item) => {
         temp.push(item.spec_name);
       });
-      setVariants(response.data.data.data[0].sameBrandSkuProducts);
+      setVariants(response?.data?.data?.data[0]?.sameBrandSkuProducts);
       temp.sort();
       setCompareProductsFields(temp);
     } catch (error) {
@@ -128,7 +128,7 @@ export const ProductDetail = () => {
     try {
       const response = await apiClient.get("/product-discounts", params);
 
-       setBuyMore(response.data.data);
+       setBuyMore(response?.data?.data);
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -173,10 +173,13 @@ export const ProductDetail = () => {
   }, []);
 
   const handlerSendWhatsapp = () => {
-    const message = `Check out this product: \n${product.name
-      }\nOriginal Price: ${product.original_price}\nSale Price: ${product.sale_price
-      }\nLink: ${"https://test-horeca.netlify.app/product/" + product.id
-      }\nImage: ${"https://testhssite.com/storage/" + product.images[0]}`;
+    const message = `Check out this product: \n${
+      product.name
+    }\nOriginal Price: ${product.original_price}\nSale Price: ${
+      product.sale_price
+    }\nLink: ${
+      "https://test-horeca.netlify.app/product/" + product.id
+    }\nImage: ${"https://testhssite.com/storage/" + product.images[0]}`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappURL = `https://api.whatsapp.com/send?text=${encodedMessage}`;
     window.open(whatsappURL, "_blank");
@@ -192,19 +195,22 @@ export const ProductDetail = () => {
 
     ${product.name}
     
-    You can check it out here: ${"https://test-horeca.netlify.app/product/" + product.id
-      }
+    You can check it out here: ${
+      "https://test-horeca.netlify.app/product/" + product.id
+    }
     
     ${product.sale_price ? `Sale Price: $${product.sale_price}` : ""}
-    ${product.original_price && !product.sale_price
+    ${
+      product.original_price && !product.sale_price
         ? `Original Price: $${product.original_price}`
         : ""
-      }
+    }
     
-    ${product.sale_price && product.original_price
+    ${
+      product.sale_price && product.original_price
         ? `Original Price: $${product.original_price} (Now: $${product.sale_price})`
         : ""
-      }
+    }
     
     Check out the product image here: ${product.images[0]}
     
@@ -325,7 +331,9 @@ export const ProductDetail = () => {
   // Function to check if an item is an image
   const isImage = (filename) => {
     const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"];
-    return imageExtensions.some((ext) => filename.toLowerCase().endsWith(ext));
+    return imageExtensions.some((ext) =>
+      filename?.toLowerCase()?.endsWith(ext)
+    );
   };
 
   return (
@@ -351,8 +359,8 @@ export const ProductDetail = () => {
                             {!threeDView ? (
                               <React.Fragment>
                                 {!productLoader &&
-                                  product.images &&
-                                  product.images.length > 2 ? (
+                                product.images &&
+                                product.images.length > 2 ? (
                                   <React.Fragment>
                                     <span
                                       onClick={handlePrev}
@@ -383,50 +391,50 @@ export const ProductDetail = () => {
                                   >
                                     {mediaArray
                                       ? mediaArray.map((item, index) => (
-                                        <React.Fragment key={index}>
-                                          <div className="flex justify-center relative">
-                                            {isImage(item) ? (
-                                              <>
-                                                <div
-                                                  className="absolute right-4 top-4 bg-primary text-white flex items-center justify-center rounded-full p-2 cursor-pointer"
-                                                  onClick={() =>
-                                                    setThreeDView(true)
+                                          <React.Fragment key={index}>
+                                            <div className="flex justify-center relative">
+                                              {isImage(item) ? (
+                                                <>
+                                                  <div
+                                                    className="absolute right-4 top-4 bg-primary text-white flex items-center justify-center rounded-full p-2 cursor-pointer"
+                                                    onClick={() =>
+                                                      setThreeDView(true)
+                                                    }
+                                                  >
+                                                    <Md3dRotation size={24} />
+                                                  </div>
+                                                  <img
+                                                    src={`${`https://testhssite.com/storage/${item}`}`}
+                                                    alt={`Slide ${index}`}
+                                                    className="w-full h-[392px] sm:h-[100%] h-auto object-contain rounded-lg"
+                                                  />
+                                                </>
+                                              ) : (
+                                                <video
+                                                  width="100%"
+                                                  controls
+                                                  ref={videoRef}
+                                                  autoPlay={false}
+                                                  muted={true}
+                                                  loop={true}
+                                                  className="w-full  object-contain rounded-lg"
+                                                  style={
+                                                    window.innerWidth < 630
+                                                      ? { height: "350px" }
+                                                      : { height: "565px" }
                                                   }
                                                 >
-                                                  <Md3dRotation size={24} />
-                                                </div>
-                                                <img
-                                                  src={`${`https://testhssite.com/storage/${item}`}`}
-                                                  alt={`Slide ${index}`}
-                                                  className="w-full h-[392px] sm:h-[100%] h-auto object-contain rounded-lg"
-                                                />
-                                              </>
-                                            ) : (
-                                              <video
-                                                width="100%"
-                                                controls
-                                                ref={videoRef}
-                                                autoPlay={false}
-                                                muted={true}
-                                                loop={true}
-                                                className="w-full  object-contain rounded-lg"
-                                                style={
-                                                  window.innerWidth < 630
-                                                    ? { height: "350px" }
-                                                    : { height: "565px" }
-                                                }
-                                              >
-                                                <source
-                                                  src={`https://testhssite.com/storage/${item}`}
-                                                  type="video/mp4"
-                                                />
-                                                Your browser does not support
-                                                the video tag.
-                                              </video>
-                                            )}
-                                          </div>
-                                        </React.Fragment>
-                                      ))
+                                                  <source
+                                                    src={`https://testhssite.com/storage/${item}`}
+                                                    type="video/mp4"
+                                                  />
+                                                  Your browser does not support
+                                                  the video tag.
+                                                </video>
+                                              )}
+                                            </div>
+                                          </React.Fragment>
+                                        ))
                                       : null}
                                   </Slider>
                                 ) : (
@@ -465,8 +473,9 @@ export const ProductDetail = () => {
                                         <AiOutlineProduct size={24} />
                                       </div>
                                       <div
-                                        className={`absolute top-16 right-4 p-2 z-[50] bg-primary text-white rounded-full cursor-pointer ${autoRotate ? "opacity-50" : ""
-                                          } `}
+                                        className={`absolute top-16 right-4 p-2 z-[50] bg-primary text-white rounded-full cursor-pointer ${
+                                          autoRotate ? "opacity-50" : ""
+                                        } `}
                                         onClick={() =>
                                           setAutoRotate(!autoRotate)
                                         }
@@ -515,37 +524,38 @@ export const ProductDetail = () => {
                               >
                                 {mediaArray && mediaArray.length > 1
                                   ? mediaArray.map((item, index) => (
-                                    <div
-                                      key={index}
-                                      className={`px-1 ${activeSlide === index
-                                        ? "border-2 border-primary rounded-md"
-                                        : ""
+                                      <div
+                                        key={index}
+                                        className={`px-1 ${
+                                          activeSlide === index
+                                            ? "border-2 border-primary rounded-md"
+                                            : ""
                                         }`}
-                                    >
-                                      {isImage(item) ? (
-                                        <img
-                                          src={`${`https://testhssite.com/storage/${item}`}`}
-                                          alt={`Thumbnail ${index}`}
-                                          className="w-full h-16 object-contain rounded-lg cursor-pointer "
-                                        />
-                                      ) : (
-                                        <video
-                                          ref={videoRef}
-                                          autoPlay={false}
-                                          muted={true}
-                                          loop={true}
-                                          className="w-full h-16 object-contain rounded-lg cursor-pointer "
-                                        >
-                                          <source
-                                            src={`https://testhssite.com/storage/${item}`}
-                                            type="video/mp4"
+                                      >
+                                        {isImage(item) ? (
+                                          <img
+                                            src={`${`https://testhssite.com/storage/${item}`}`}
+                                            alt={`Thumbnail ${index}`}
+                                            className="w-full h-16 object-contain rounded-lg cursor-pointer "
                                           />
-                                          Your browser does not support the
-                                          video tag.
-                                        </video>
-                                      )}
-                                    </div>
-                                  ))
+                                        ) : (
+                                          <video
+                                            ref={videoRef}
+                                            autoPlay={false}
+                                            muted={true}
+                                            loop={true}
+                                            className="w-full h-16 object-contain rounded-lg cursor-pointer "
+                                          >
+                                            <source
+                                              src={`https://testhssite.com/storage/${item}`}
+                                              type="video/mp4"
+                                            />
+                                            Your browser does not support the
+                                            video tag.
+                                          </video>
+                                        )}
+                                      </div>
+                                    ))
                                   : null}
                               </Slider>
                             ) : (
@@ -667,27 +677,30 @@ export const ProductDetail = () => {
                       <div className="flex items-center mt-2">
                         <img
                           className={`mr-2 transition-all rounded-[4px] border-2 max-w-[70px]  hover:border-primary cursor-pointer border-primary`}
-                          src={`${`https://testhssite.com/storage/${product.images ? product.images[0] : ""
-                            }`}`}
+                          src={`${`https://testhssite.com/storage/${
+                            product.images ? product.images[0] : ""
+                          }`}`}
                           alt={product.name}
                         />
 
                         {variants
                           ? variants.map((item, index) => {
-                            return (
-                              <Link to={`/product/${item.id}`} key={index}>
-                                <img
-                                  className={`mr-2 transition-all rounded-[4px] border-2 max-w-[70px] border-transparent hover:border-primary cursor-pointer ${product.id === item.id
-                                    ? "border-primary"
-                                    : ""
+                              return (
+                                <Link to={`/product/${item.id}`} key={index}>
+                                  <img
+                                    className={`mr-2 transition-all rounded-[4px] border-2 max-w-[70px] border-transparent hover:border-primary cursor-pointer ${
+                                      product.id === item.id
+                                        ? "border-primary"
+                                        : ""
                                     }`}
-                                  src={`${`https://testhssite.com/storage/${item.images ? item.images[0] : ""
+                                    src={`${`https://testhssite.com/storage/${
+                                      item.images ? item.images[0] : ""
                                     }`}`}
-                                  alt={item.name}
-                                />
-                              </Link>
-                            );
-                          })
+                                    alt={item.name}
+                                  />
+                                </Link>
+                              );
+                            })
                           : null}
                         {/* <img className='mr-2 transition-all rounded-[4px] border-2 border-transparent  hover:border-primary cursor-pointer' src={process.env.PUBLIC_URL + "/images/productDetails/color-variant.png"} alt="" />
                     <img className='mr-2 transition-all rounded-[4px] border-2 border-transparent hover:border-primary cursor-pointer' src={process.env.PUBLIC_URL + "/images/productDetails/color-variant.png"} alt="" /> */}
@@ -715,25 +728,25 @@ export const ProductDetail = () => {
                       <div className="flex items-center justify-center flex-wrap ">
                         {product.specifications
                           ? product.specifications.map((spec, index) => {
-                            return (
-                              <React.Fragment key={index}>
-                                {index < 6 ? (
-                                  <div className="bg-[#DEF9EC] rounded-[4px] p-2 flex items-center flex-col basis-[30%] my-2 mx-1">
-                                    <h2 className="text-sm font-semibold text-primary text-center">
-                                      {spec.spec_name}
-                                    </h2>
-                                    <div className="text-gray-700 text-xs text-center mt-1">
-                                      <p>
-                                        {spec.spec_value
-                                          ? spec.spec_value
-                                          : ""}
-                                      </p>
+                              return (
+                                <React.Fragment key={index}>
+                                  {index < 6 ? (
+                                    <div className="bg-[#DEF9EC] rounded-[4px] p-2 flex items-center flex-col basis-[30%] my-2 mx-1">
+                                      <h2 className="text-sm font-semibold text-primary text-center">
+                                        {spec.spec_name}
+                                      </h2>
+                                      <div className="text-gray-700 text-xs text-center mt-1">
+                                        <p>
+                                          {spec.spec_value
+                                            ? spec.spec_value
+                                            : ""}
+                                        </p>
+                                      </div>
                                     </div>
-                                  </div>
-                                ) : null}
-                              </React.Fragment>
-                            );
-                          })
+                                  ) : null}
+                                </React.Fragment>
+                              );
+                            })
                           : null}
                       </div>
                       <div className="w-full h-[1px] border border-[#E2E8F0] my-3"></div>
@@ -756,13 +769,12 @@ export const ProductDetail = () => {
                     </div>
                   )}
 
-
                   <div className="col-span-12 md:col-span-3 lg:col-span-3 mt-4 lg:hidden">
                     <div className="bg-gray-100 rounded-md  p-5 border-2 border-[#E2E8F0]">
                       {/* Badge Section  */}
                       {!productLoader ? (
                         <span className="text-primary bg-[#DEF9EC] px-4 py-2 rounded-[4px] text-xs font-semibold text-capitalize">
-                         {product.refund}
+                          {product.refund}
                         </span>
                       ) : (
                         <Skeleton count={1} width={"40%"} height={"25px"} />
@@ -790,8 +802,7 @@ export const ProductDetail = () => {
                             <div className="flex items-center ml-3 mt-2 ">
                               <img
                                 src={
-                                  process.env.PUBLIC_URL +
-                                  "/icons/delivery.png"
+                                  process.env.PUBLIC_URL + "/icons/delivery.png"
                                 }
                                 alt=""
                               />
@@ -815,9 +826,8 @@ export const ProductDetail = () => {
                               Save {product.currency_title}{" "}
                               {product.original_price && product.sale_price
                                 ? (
-                                  product.original_price -
-                                  product.sale_price
-                                ).toFixed(2)
+                                    product.original_price - product.sale_price
+                                  ).toFixed(2)
                                 : ""}
                             </span>
                           </div>
@@ -834,9 +844,7 @@ export const ProductDetail = () => {
                               Monthly with
                             </span>
                             <img
-                              src={
-                                process.env.PUBLIC_URL + "/icons/tamara.png"
-                              }
+                              src={process.env.PUBLIC_URL + "/icons/tamara.png"}
                               className="ml-2"
                               alt=""
                             />
@@ -849,11 +857,7 @@ export const ProductDetail = () => {
                             count={1}
                             height={"50px"}
                           />
-                          <Skeleton
-                            className="my-1"
-                            count={1}
-                            width={"50%"}
-                          />
+                          <Skeleton className="my-1" count={1} width={"50%"} />
                           <Skeleton count={1} />
                         </div>
                       )}
@@ -894,10 +898,10 @@ export const ProductDetail = () => {
                             </h3>
                             {!productLoader && product.same_sku_product_ids
                               ? product.same_sku_product_ids.map(
-                                (prod, index) => {
-                                  return <SameProducts product={prod} />;
-                                }
-                              )
+                                  (prod, index) => {
+                                    return <SameProducts product={prod} />;
+                                  }
+                                )
                               : null}
                             <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
                           </React.Fragment>
@@ -906,8 +910,9 @@ export const ProductDetail = () => {
                       {/* Specialist  */}
                       <div className="flex items-center justify-between">
                         <p
-                          className={`font-bold text-[#BF2536] text-base transition-opacity duration-1000 ${isVisible ? "opacity-100" : "opacity-0"
-                            }`}
+                          className={`font-bold text-[#BF2536] text-base transition-opacity duration-1000 ${
+                            isVisible ? "opacity-100" : "opacity-0"
+                          }`}
                         >
                           Available 24/7
                         </p>{" "}
@@ -972,7 +977,6 @@ export const ProductDetail = () => {
                     <Documents docs={!!product && product.documents} />
                   </div>
 
-
                   {/* About Items  */}
                   <div className="p-[10px]">
                     {!productLoader ? (
@@ -1033,12 +1037,12 @@ export const ProductDetail = () => {
                   <div className="col-span-12 mt-10">
                     {PRODUCT_DETAIL
                       ? PRODUCT_DETAIL.map((product, index) => {
-                        const isSelected = selectedDetail === product.id;
-                        return (
-                          <React.Fragment key={index}>
-                            <button
-                              onClick={() => setSelectedDetail(product.id)}
-                              className={`
+                          const isSelected = selectedDetail === product.id;
+                          return (
+                            <React.Fragment key={index}>
+                              <button
+                                onClick={() => setSelectedDetail(product.id)}
+                                className={`
     text-[#64748B] 
     w-[90vw] sm:w-[100%] 
     md:w-auto 
@@ -1055,12 +1059,12 @@ export const ProductDetail = () => {
     hover:bg-[#DEF9EC] 
     ${isSelected ? "!bg-[#DEF9EC] m-[10px] text-primary" : ""}
   `}
-                            >
-                              {product.title}
-                            </button>
-                          </React.Fragment>
-                        );
-                      })
+                              >
+                                {product.title}
+                              </button>
+                            </React.Fragment>
+                          );
+                        })
                       : null}
 
                     {/* Selected ID 1 */}
@@ -1094,33 +1098,33 @@ export const ProductDetail = () => {
                         <div className="grid grid-cols-10 ">
                           {product.specifications
                             ? product.specifications.map((spec, index) => {
-                              return (
-                                <React.Fragment key={index}>
-                                  <div className="col-span-2 text-[#4A4A4A] bg-[#F5F5F5]  py-4 px-5 ">
-                                    <p className="font-semibold capitalize text-lg">
-                                      {spec.spec_name}
-                                    </p>
-                                  </div>
-                                  <div className="col-span-3 text-[#4A4A4A] py-4 px-5">
-                                    <p className="capitalize text-lg">
-                                      {spec.spec_value ? spec.spec_value : ""}
-                                    </p>
-                                  </div>
-                                  {index % 2 !== 0 &&
+                                return (
+                                  <React.Fragment key={index}>
+                                    <div className="col-span-2 text-[#4A4A4A] bg-[#F5F5F5]  py-4 px-5 ">
+                                      <p className="font-semibold capitalize text-lg">
+                                        {spec.spec_name}
+                                      </p>
+                                    </div>
+                                    <div className="col-span-3 text-[#4A4A4A] py-4 px-5">
+                                      <p className="capitalize text-lg">
+                                        {spec.spec_value ? spec.spec_value : ""}
+                                      </p>
+                                    </div>
+                                    {index % 2 !== 0 &&
                                     product.specifications.length - 1 >
-                                    index ? (
-                                    <div className="border-b border-[#EAEAEA] col-span-10"></div>
-                                  ) : null}
-                                  {index % 2 === 0 &&
+                                      index ? (
+                                      <div className="border-b border-[#EAEAEA] col-span-10"></div>
+                                    ) : null}
+                                    {index % 2 === 0 &&
                                     index ===
-                                    product.specifications.length - 1 ? (
-                                    <div className="col-span-2 text-[#4A4A4A] bg-[#F5F5F5]  py-4 px-5 "></div>
-                                  ) : (
-                                    ""
-                                  )}
-                                </React.Fragment>
-                              );
-                            })
+                                      product.specifications.length - 1 ? (
+                                      <div className="col-span-2 text-[#4A4A4A] bg-[#F5F5F5]  py-4 px-5 "></div>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </React.Fragment>
+                                );
+                              })
                             : null}
                         </div>
                       </div>
@@ -1163,13 +1167,12 @@ export const ProductDetail = () => {
               </div>
             </div>
 
-
             <div className="col-span-12 md:col-span-12 lg:col-span-3 xl:col-span-3 mt-4 sm:hidden lg:block">
               <div className="bg-gray-100 rounded-md  p-5 border-2 border-[#E2E8F0]">
                 {/* Badge Section  */}
                 {!productLoader ? (
                   <span className="text-primary bg-[#DEF9EC] px-4 py-2 rounded-[4px] text-xs font-semibold text-capitalize">
-                 {product.refund}
+                    {product.refund}
                   </span>
                 ) : (
                   <Skeleton count={1} width={"40%"} height={"25px"} />
@@ -1219,8 +1222,8 @@ export const ProductDetail = () => {
                         Save {product.currency_title}{" "}
                         {product.original_price && product.sale_price
                           ? (
-                            product.original_price - product.sale_price
-                          ).toFixed(2)
+                              product.original_price - product.sale_price
+                            ).toFixed(2)
                           : ""}
                       </span>
                     </div>
@@ -1265,10 +1268,7 @@ export const ProductDetail = () => {
 
                 <p className=" text-[#64748B] my-3 text-end text-xs">
                   Buying in bulk made easy with Horeca{" "}
-                  <Link
-                    className="text-primary font-semibold underline"
-                    to="/"
-                  >
+                  <Link className="text-primary font-semibold underline" to="/">
                     Made a Quote
                   </Link>
                 </p>
@@ -1276,8 +1276,8 @@ export const ProductDetail = () => {
 
                 <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
 
-               {/* hidden for the second phase developement do not remove the components */}
-               <div className="hidden">
+                {/* hidden for the second phase developement do not remove the components */}
+                <div className="hidden">
                   {!productLoader && product.same_sku_product_ids ? (
                     <React.Fragment>
                       <h3 className="font-semibold text-black-100 text-base">
@@ -1288,8 +1288,8 @@ export const ProductDetail = () => {
                       </h3>
                       {!productLoader && product.same_sku_product_ids
                         ? product.same_sku_product_ids.map((prod, index) => {
-                          return <SameProducts product={prod} />;
-                        })
+                            return <SameProducts product={prod} />;
+                          })
                         : null}
                       <div className="w-full h-[1px] border border-[#E2E8F0]  my-4"></div>
                     </React.Fragment>
@@ -1298,8 +1298,9 @@ export const ProductDetail = () => {
                 {/* Specialist  */}
                 <div className="flex items-center justify-between">
                   <p
-                    className={`font-bold text-[#BF2536] text-base transition-opacity duration-1000 ${isVisible ? "opacity-100" : "opacity-0"
-                      }`}
+                    className={`font-bold text-[#BF2536] text-base transition-opacity duration-1000 ${
+                      isVisible ? "opacity-100" : "opacity-0"
+                    }`}
                   >
                     Available 24/7
                   </p>{" "}
@@ -1389,7 +1390,6 @@ export const ProductDetail = () => {
 
               <Documents docs={!!product && product.documents} />
             </div>
-
 
             <CompareProducts
               productLoader={productLoader}
@@ -1492,12 +1492,13 @@ export const BuyMoreSaveMore = ({
                       <div
                         className={`flex items-center justify-between rounded-[4px] border border-[#E2E8F0] p-3 transition-all hover:border-primary cursor-pointer`}
                         style={{
-                          border: `${buy.product_quantity === quantity ||
+                          border: `${
+                            buy.product_quantity === quantity ||
                             (buy.product_quantity <= quantity &&
                               buyMore.length - 1 === index)
-                            ? "1px solid #186737"
-                            : ""
-                            }`,
+                              ? "1px solid #186737"
+                              : ""
+                          }`,
                         }}
                         onClick={() =>
                           handlerBuyMoreSaveMore(buy.product_quantity)
@@ -1736,16 +1737,16 @@ const RenderingBought = ({
             <Slider {...settings} ref={sliderRef} class>
               {prod && prod.images
                 ? prod.images.map((image, index2) => {
-                  return (
-                    <div key={index2} className="">
-                      <img
-                        src={"https://testhssite.com/storage/" + image}
-                        alt="Product Title"
-                        className="w-full"
-                      />
-                    </div>
-                  );
-                })
+                    return (
+                      <div key={index2} className="">
+                        <img
+                          src={"https://testhssite.com/storage/" + image}
+                          alt="Product Title"
+                          className="w-full"
+                        />
+                      </div>
+                    );
+                  })
                 : null}
             </Slider>
           </Link>
@@ -1877,7 +1878,7 @@ const FrequentlyBought = ({ product, productLoader, settings }) => {
   return (
     <React.Fragment>
       {product.frequently_bought_together &&
-        product.frequently_bought_together.length === 3 ? (
+      product.frequently_bought_together.length === 3 ? (
         <div className="col-span-12 border border-[#E2E8F0] rounded-md py-5 px-4">
           {!productLoader ? (
             <h2 className="text-lg  text-black-100 font-bold">
