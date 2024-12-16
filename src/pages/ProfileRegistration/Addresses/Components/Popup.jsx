@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { apiClient } from "../../../../utils/apiWrapper";
 import { InfinitySpin } from "react-loader-spinner";
 import { notify } from "../../../../utils/notify";
-const Popup = ({ setShowPopup, popupHeading,uid,setStatus,updateStatus }) => {
+const Popup = ({ setShowPopup, popupHeading,items,setStatus,updateStatus }) => {
   const [loader, setLoader] = useState(false);
   const [getData, setData] = useState([]);
   const [countries, setCountries] = useState([]);
@@ -32,11 +32,10 @@ const Popup = ({ setShowPopup, popupHeading,uid,setStatus,updateStatus }) => {
     try {
       setLoader(true);
       let response;
-      if(uid){
-        
-        response = await apiClient.put(`/addresses/${uid}`, datas);
+      if(items){
+        response = await apiClient.put(`/addresses/${items.id}`, datas);
       }else{
-       
+        console.log('no');
         response = await apiClient.post(`/addresses`, datas);
       }
        
@@ -108,7 +107,8 @@ const Popup = ({ setShowPopup, popupHeading,uid,setStatus,updateStatus }) => {
                   className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
                   {...register("country", { required: "Country is required" })}
                 >
-                  <option value="">Select Country</option>
+                  {items?.country ?   <option value={items.country} selected>{items.country}</option>:   <option value="">Select Country</option>}
+               
                   {countries.map(option => (
                     <option key={option.name} value={option.name}>
                       {option.name}
@@ -124,6 +124,7 @@ const Popup = ({ setShowPopup, popupHeading,uid,setStatus,updateStatus }) => {
                 </p>
                 <input
                   type="text"
+                  defaultValue={items && items.city}
                   className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
                   placeholder="Enter your city"
                   {...register("city")}
@@ -136,6 +137,7 @@ const Popup = ({ setShowPopup, popupHeading,uid,setStatus,updateStatus }) => {
                 </p>
                 <input
                   type="text"
+                  defaultValue={items && items.state}
                   className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
                   placeholder="Enter your state"
                   {...register("state")}
@@ -149,6 +151,7 @@ const Popup = ({ setShowPopup, popupHeading,uid,setStatus,updateStatus }) => {
                 </p>
                 <input
                   type="number"
+                  defaultValue={items?.zip_code || ""}
                   className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
                   placeholder="Enter your zipcode"
                   {...register("zip_code")}
@@ -161,10 +164,11 @@ const Popup = ({ setShowPopup, popupHeading,uid,setStatus,updateStatus }) => {
                 </p>
                 <textarea
                   type="text"
+                  defaultValue={!!items && items.address}
                   className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
                   placeholder="Enter your address"
                   {...register("address")}
-                />
+                /> 
                 <span>{errors.address?.message}</span>
               </div>
               <div className="flex items-center justify-end p-[15px]">

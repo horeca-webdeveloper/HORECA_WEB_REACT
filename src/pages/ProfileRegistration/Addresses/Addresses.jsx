@@ -15,11 +15,8 @@ const Addresses = () => {
   const [products, setProducts] = useState([]);
   const [loader, setLoader] = useState(true);
   const [updateStatus, setStatus] = useState(false);
-  const [uid, setUid] = useState('');
-
+  const [items, setItems] = useState('');
   const authToken = localStorage.getItem("authToken");
-
-
   const fetchProducts = async () => {
     const response = await apiClient.get(
       `${authToken ? "/products" : "/products-guest"}`
@@ -55,14 +52,17 @@ const Addresses = () => {
     }
 
   };
-  const updateAddress = (id) => {
-    setUid(id);
+  const updateAddress = (items) => {
+    setItems(items);
     setShowPopup(true);
     setPopupHeading("Update Address");
   }
 
-
-
+  const AddAddress = () => {
+    setItems(null);
+    setShowPopup(true);
+    setPopupHeading("Add New Address");
+  }
   const collectionBreadCrumb = [
     {
       url: "/",
@@ -75,8 +75,6 @@ const Addresses = () => {
   ];
   const bigScreenCss =
     "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
-
-
   useEffect(() => {
     fetchProducts();
     fetchAddress();
@@ -115,7 +113,7 @@ const Addresses = () => {
                 </p>
               )}
               {!!getData && getData.data.map((item) => {
-                return (<div className="flex flex-col sm:flex-row rounded-none sm:rounded-md border-t-2 border-b-2 sm:border-2 w-[100%] mt-[10px]">
+                return (<div key={item.id} className="flex flex-col sm:flex-row rounded-none sm:rounded-md border-t-2 border-b-2 sm:border-2 w-[100%] mt-[10px]">
                   <div className="flex-col p-[15px] w-[100%]">
                     <div className="flex sm:flex-col items-center sm:items-start">
                       <p className="font-sans p-[5px] text-lg font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
@@ -154,7 +152,7 @@ const Addresses = () => {
                   </div>
                   <div className="hidden sm:flex items-center justify-center flex-col p-[15px]">
                     <button
-                       onClick={()=>updateAddress(item.id)}
+                       onClick={()=>updateAddress(item)}
                       className="flex m-[10px] items-center justify-center rounded-md font-sans w-[180px] h-[40px] border border-[#666666] text-[16px] text-[#666666] font-medium leading-[16px] text-left underline-offset-auto decoration-slice"
                     >
                       Edit
@@ -167,15 +165,10 @@ const Addresses = () => {
               })}
 
 
-
-
               <div>
                 <h1
                   className="mt-[20px] font-work-sans text-[16px] text-[#186737] cursor-pointer font-normal leading-[24px] text-left underline decoration-solid decoration-from-font decoration-skip-ink-none"
-                  onClick={() => {
-                    setShowPopup(true);
-                    setPopupHeading("Add new Address");
-                  }}
+                  onClick={AddAddress}
                 >
                   Add New Address
                 </h1>
@@ -283,7 +276,7 @@ const Addresses = () => {
             </div>
           )}
           {showPopup && (
-            <Popup setShowPopup={setShowPopup} popupHeading={popupHeading} uid={uid}  updateStatus={updateStatus} setStatus={setStatus}/>
+            <Popup setShowPopup={setShowPopup} popupHeading={popupHeading} items={items}  updateStatus={updateStatus} setStatus={setStatus}/>
           )}
         </Wrapper>
       )}
