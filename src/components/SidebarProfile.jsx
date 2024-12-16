@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 
 const SidebarProfile = () => {
+  const userData=JSON.parse(localStorage.getItem('userProfile'));
   const navigate = useNavigate();
   const navItems = [
     {
@@ -88,9 +89,9 @@ const SidebarProfile = () => {
       <div className="flex items-center w-[280px] h-[170px] bg-[#def9ec] mt-[10px] rounded-md">
         <div className="flex-col m-[10px]">
           <p className="font-work-sans text-[18px] font-normal">
-            Hello, Mohd Danish
+            Hello, {userData.name}
           </p>
-          <p className="font-work-sans text-[12px] ">danish@horecastore.com</p>
+          <p className="font-work-sans text-[12px] ">{userData.email}</p>
           <p className="font-work-sans text-lg font-bold mt-[5px] mb-[5px] leading-6 text-left underline-from-font decoration-none text-[#186737]">
             2000 SAR
           </p>

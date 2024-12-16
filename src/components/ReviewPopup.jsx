@@ -5,7 +5,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { apiClient } from "../utils/apiWrapper";
 import { InfinitySpin } from "react-loader-spinner";
 import { notify } from "../utils/notify";
-const ReviewPopup = ({ setShowPopup, popupHeading, id }) => {
+const ReviewPopup = ({ setShowPopup, popupHeading, id,setUpdateReviews,updateReviews,reviewId}) => {
+  let url='add-customer-reviews';
+   if(reviewId){
+      url=`customer-reviews-update/${reviewId}`;
+   }
+  
+
   const [loader, setLoader] = useState(false);
   const [getData, setData] = useState([]);
   const [rating, setRating] = useState(0);  
@@ -69,11 +75,23 @@ const renderStars = () => {
  
     try {
       setLoader(true);
-      const response = await apiClient.post(`/add-customer-reviews`, formData,{
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      let response;
+      if(reviewId){
+         response = await apiClient.put(url, formData,{
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        setUpdateReviews(!updateReviews);
+      }else{
+        console.log('no');
+         response = await apiClient.post(url, formData,{
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      }
+     
       setData(response.data);
     } catch (error) {
       console.error("Error:", error);
@@ -108,16 +126,18 @@ const renderStars = () => {
     reset();
     setRating(0);
     setHoveredRating(0);
-    setShowPopup(false);
+    // setShowPopup(false);
   };
 
   useEffect(()=>{
     if(getData.success){
       notify("Success",getData.message);
-     
+      setShowPopup(false);
+      setUpdateReviews(!updateReviews);
     } 
      
   },[getData]);
+ 
  
  
   return (

@@ -43,6 +43,8 @@ function Model({ url, onLoaded }) {
 
 export const ProductDetail = () => {
   const { id } = useParams(); // Access the id from the URL
+
+ 
   const [seeMore, setSeeMore] = useState(true);
   const videoRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -117,14 +119,20 @@ export const ProductDetail = () => {
     }
   };
 
-  const fetchProductDiscounts = async (r) => {
+  const fetchProductDiscounts = async () => {
     setProductLoader(true);
-    try {
-      const response = await apiClient.get("/product-discounts", {
-        product_id: id,
-      });
+    const params={
+      product_id: id,
+    }
 
+<<<<<<< HEAD
       setBuyMore(response?.data?.data);
+=======
+    try {
+      const response = await apiClient.get("/product-discounts", params);
+
+       setBuyMore(response.data.data);
+>>>>>>> 8cd9558980724c8ebba2c939506895ac28c941b7
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -311,8 +319,21 @@ export const ProductDetail = () => {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     if (!!product && product?.images) {
       setMediaArray([...product.images, ...JSON?.parse(product?.video_path)]);
+=======
+
+ 
+    if (!!product && product.images) {
+      if(product.video_path){
+        setMediaArray([...product.images, ...JSON.parse(product.video_path)]);
+      }else{
+        setMediaArray(product.images);
+      }
+
+   
+>>>>>>> 8cd9558980724c8ebba2c939506895ac28c941b7
     }
   }, [product]);
 
@@ -857,7 +878,7 @@ export const ProductDetail = () => {
                         maxBuyMoreSaveMore={maxBuyMoreSaveMore}
                         selectedBuyMore={selectedBuyMore}
                         setSelectedBuyMore={setSelectedBuyMore}
-                        buyMore={buyMore}
+                        buyMore={buyMore && buyMore}
                         productLoader={productLoader}
                         product={product}
                       />
