@@ -10,7 +10,6 @@ const Popup = ({ setShowPopup, popupHeading,uid,setStatus,updateStatus }) => {
   const [getData, setData] = useState([]);
   const [countries, setCountries] = useState([]);
   const userData = JSON.parse(localStorage.getItem('userProfile'));
- 
 
   const fetchCountry = async () => {
     try {
@@ -33,9 +32,11 @@ const Popup = ({ setShowPopup, popupHeading,uid,setStatus,updateStatus }) => {
     try {
       setLoader(true);
       let response;
-      if(uid!=undefined){
+      if(uid){
+        
         response = await apiClient.put(`/addresses/${uid}`, datas);
       }else{
+       
         response = await apiClient.post(`/addresses`, datas);
       }
        

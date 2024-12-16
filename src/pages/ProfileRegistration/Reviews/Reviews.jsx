@@ -62,11 +62,11 @@ const Reviews = () => {
   
   
   useEffect(() => {
+    fetchProducts();
     fetchAllReviews();
   }, []);
 
   useEffect(()=>{
-    fetchProducts();
     fetchAllReviews();
   },[updateReviews]);
 

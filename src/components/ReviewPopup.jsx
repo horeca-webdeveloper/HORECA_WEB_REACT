@@ -6,9 +6,8 @@ import { apiClient } from "../utils/apiWrapper";
 import { InfinitySpin } from "react-loader-spinner";
 import { notify } from "../utils/notify";
 const ReviewPopup = ({ setShowPopup, popupHeading, id,setUpdateReviews,updateReviews,reviewId}) => {
-  
   let url='add-customer-reviews';
-   if(reviewId!=undefined){
+   if(reviewId){
       url=`customer-reviews-update/${reviewId}`;
    }
   
@@ -77,7 +76,7 @@ const renderStars = () => {
     try {
       setLoader(true);
       let response;
-      if(reviewId!=undefined){
+      if(reviewId){
          response = await apiClient.put(url, formData,{
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -85,6 +84,7 @@ const renderStars = () => {
         });
         setUpdateReviews(!updateReviews);
       }else{
+        console.log('no');
          response = await apiClient.post(url, formData,{
           headers: {
             'Content-Type': 'multipart/form-data',
