@@ -94,14 +94,18 @@ export const Checkout = () => {
   const handlerRemoveAllItemsFromCart = async () => {
     setRemoveItemsLoader(true);
     try {
-      notify("All Cart Items Succesfully Deleted");
-      setFetchCall(!fetchCall);
-      triggerUpdateCart();
-      setCartSummaryFlag(!cartSummaryFlag);
-      setDiscountPercent(0);
-      setCouponCodeValue("");
-      setListOfStore([]);
-      setCouponError("");
+      const response = await apiClient.delete("/cart/clear");
+      if(response.data.success){
+        notify(response.data.messege);
+        setFetchCall(!fetchCall);
+        triggerUpdateCart();
+        setCartSummaryFlag(!cartSummaryFlag);
+        setDiscountPercent(0);
+        setCouponCodeValue("");
+        setListOfStore([]);
+        setCouponError("");
+      }
+     
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -211,7 +215,7 @@ export const Checkout = () => {
                     <h2 className="text-[#424242] font-semibold text-lg mb-4">
                       Shipment {index + 1}
                     </h2>
-                    {cartItems
+                    {!!cartItems && cartItems
                       .filter(
                         (item) => item.product.store_id === listOfStore[index]
                       )
@@ -322,7 +326,7 @@ for mobile */}
                                       {prod.product.name}
                                     </h3>
                                     <p className="my-2 text-base font-semibold text-[#030303]">
-                                      <span>{prod.product.currency.title}</span>
+                                      <span>{prod?.product?.currency_title}</span>
                                       <span className="text-xl font-bold ml-2">
                                         {prod.product.sale_price
                                           ? prod.product.sale_price.toFixed(2)
@@ -369,7 +373,7 @@ for mobile */}
                                   </div>
                                 </div>
                                 <div className=" text-[#030303] text-lg font-semibold">
-                                  {prod.product.currency.title}{" "}
+                                  {prod?.product?.currency_title}{" "}
                                   {prod.product.sale_price
                                     ? (
                                         prod.product.sale_price * prod.quantity

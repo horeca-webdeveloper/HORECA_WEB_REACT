@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Wrapper } from "../shared/Wrapper";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   ControlledMenu,
   useHover,
@@ -19,7 +19,8 @@ import { useLocation } from "react-router-dom";
 import { useWishlist } from "../context/WishListContext";
 import { debounce } from "lodash";
 import ProfileDrawer from "./ProfileRegistration/ProfileDrawer/ProfileDrawer";
-export const Navigation = ({ categories, userProfile, currentLocation }) => {
+
+export const Navigation = ({ categories, currentLocation }) => {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [currency, setCurrency] = useState(["USD", "AED", "PKR"]);
   const [selectedLang, setSelectedLang] = useState("English");
@@ -34,7 +35,6 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
   const [userName, setUserName] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { triggerUpdateCart } = useCart();
-  const { totalCartItems, incrementCartItems } = useLocalCartCount();
   const [loader, setLoader] = useState(false);
   const [products, setProducts] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -51,6 +51,12 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
   ];
   const [onHoverProfile, setOnHoverProfile] = useState(false);
   const [showProfileDrawer, setShowProfileDrawer] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [childCategory, setChildCategory] = useState([]);
+  const [grandChildCategory, setGrandChildCategory] = useState([]);
+  const [catChildTitle, setCatChildTitle] = useState("");
+  const [grandChildTitle, setGrandChildTitle] = useState("");
 
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown") {
@@ -61,94 +67,15 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
       );
     }
   };
-
-  useEffect(() => {
-    if (isFocused) {
-      window.addEventListener("keydown", handleKeyDown);
-      return () => {
-        window.removeEventListener("keydown", handleKeyDown);
-      };
-    }
-  }, [isFocused]);
-
-  const navItems = [
-    {
-      id: "",
-      name: "Your Orders",
-      link: "/registration/all-orders",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame.png`,
-    },
-    {
-      id: "",
-      name: "Browsing History",
-      link: "registration/browsing-history",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-1.png`,
-    },
-    {
-      id: "",
-      name: "Your Reviews",
-      link: "registration/reviews",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-2.png`,
-    },
-    {
-      id: "",
-      name: "Wishlist ",
-      link: "registration/wishlist",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-3.png`,
-    },
-    {
-      id: "",
-      name: "Your Profiles",
-      link: "registration/AccountSecurity",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-4.png`,
-    },
-    {
-      id: "",
-      name: "Coupons & Offers",
-      link: "registration/coupons-offers",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-5.png`,
-    },
-    {
-      id: "",
-      name: "Addresses",
-      link: "registration/addresses",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-7.png`,
-    },
-    {
-      id: "",
-      name: "Account Security",
-      link: "registration/AccountSecurity",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-10.png`,
-    },
-  ];
+  
 
   const handleFocus = () => setIsFocused(true);
-
-  useEffect(() => {
-    let search = location.search ? location.search.split("=")[1] : "";
-    let filterName = search.replaceAll("-", " ");
-    setSearchValue(filterName);
-  }, [location.search]);
-
   const handlerFormSubmit = (e) => {
     e.preventDefault();
     navigate(`products?search=${searchValue}`);
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    const name = localStorage.getItem("username");
-    if (token) {
-      setIsLoggedIn(true);
-      setUserName(name);
-    } else {
-      setIsLoggedIn(false);
-    }
-    triggerUpdateCart();
-    triggerUpdateWishList();
-    setOpenModel(false);
-  }, [location.pathname]);
-
+ 
   const handlerSignOut = () => {
     localStorage.clear();
     setUserName("");
@@ -156,12 +83,6 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     navigate("/login");
   };
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(null);
-  const [childCategory, setChildCategory] = useState([]);
-  const [grandChildCategory, setGrandChildCategory] = useState([]);
-  const [catChildTitle, setCatChildTitle] = useState("");
-  const [grandChildTitle, setGrandChildTitle] = useState("");
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
@@ -171,35 +92,34 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
   const goBackToMain = () => {
     setActiveCategory(null); // Reset to main drawer
   };
-  const fetchProducts = async () => {
+  const fetchProducts = async (search) => {
     setLoader(true);
     try {
-      let search = searchValue;
-      const params = {
-        ...(search && { query: search }),
-      };
+    
+      const params = search ? { query: search } : {};
       const response = await apiClient.get(`/search`, { params });
       setBrands(response.data.brands);
       setCategoryList(response.data.categories);
       setProducts(response.data.products);
       setLoader(false);
-      // console.log(response.data)
     } catch (error) {
       console.error("Error:", error);
     } finally {
       setLoader(false);
     }
   };
-  useEffect(() => {
-    fetchProducts();
-  }, [searchValue]);
+ 
 
-  const handlerSearchValue = useCallback(
-    debounce((value) => {
-      setSearchValue(value);
-    }, 300),
+  // Debounce the fetchProducts call
+  const debouncedFetchProducts = useCallback(
+    debounce((value) => fetchProducts(value), 300), 
     []
   );
+
+  const handlerSearchValue = (value)=>{
+    setSearchValue(value)
+  }
+ 
 
   const navigateToProduct = (id, name) => {
     setSearchValue(name);
@@ -225,6 +145,42 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     );
   };
 
+  useEffect(() => {
+    debouncedFetchProducts(searchValue); // Call debounced fetch when searchValue changes
+    return () => debouncedFetchProducts.cancel(); // Cancel debounce when component unmounts or searchValue changes
+  }, [searchValue, debouncedFetchProducts]);
+
+  useEffect(() => {
+    if (isFocused) {
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    const name = localStorage.getItem("username");
+    if (token) {
+      setIsLoggedIn(true);
+      setUserName(name);
+    } else {
+      setIsLoggedIn(false);
+    }
+    triggerUpdateCart();
+    triggerUpdateWishList();
+    setOpenModel(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    let search = location.search ? location.search.split("=")[1] : "";
+    let filterName = search.replaceAll("-", " ");
+    setSearchValue(filterName);
+  }, [location.search]);
+
+
+  console.log("products",products);
   return (
     <React.Fragment>
       {openModel && !token ? (
@@ -650,6 +606,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   </div>
                   <div className="basis-3/4 py-4 px-3 bg-white">
                     {products.slice(0, 7).map((prod, index) => (
+                   
                       <div
                         onClick={() => navigateToProduct(prod.id, prod.name)}
                         key={prod.id}
@@ -659,6 +616,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                             : "hover:bg-[#def9ec]"
                         }`}
                       >
+                    
                         <div>
                           <img
                             className="max-w-[40px]"

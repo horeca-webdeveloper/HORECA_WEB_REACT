@@ -5,7 +5,7 @@ const currencyMenu = [
   },
   {
     title: "Track your order",
-    redirectUrl: "/order-details"
+    redirectUrl: "/registration/all-orders"
   }
 ]
 
