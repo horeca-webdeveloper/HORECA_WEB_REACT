@@ -40,6 +40,7 @@ import { PasswordReset } from "./pages/PasswordReset";
 import ProfileWishlist from "./pages/ProfileRegistration/Wishlist/ProfileWishlist";
 import Wishlist from "./pages/Wishlist";
 import SellOnHoreca from "./pages/FooterPages/SellonHoreca/SellOnHoreca";
+import AboutUs from "./pages/AboutUs/AboutUs";
 const App = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
@@ -142,8 +143,10 @@ const App = () => {
         <Route path="/faq" element={<FAQ />} />{" "}
         <Route path="/terms-condition" element={<TermsConsition />} />{" "}
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />{" "}
-        <Route path="/career" element={<Career />} />{" "}
         <Route path="/sell-on-horeca" element={<SellOnHoreca />} />{" "}
+        <Route path="/career" element={<Career />} />{" "}
+        <Route path="/career" element={<Career />} />{" "}AboutUs
+        <Route path="/about-us" element={<AboutUs />} />{" "}
         <Route path="/forgot-password" element={<ForgotPassword />} />{" "}
         <Route path="/password-reset" element={<PasswordReset />} />{" "}
         <Route path="/payment/success" element={<PaymentSuccess />} />{" "}

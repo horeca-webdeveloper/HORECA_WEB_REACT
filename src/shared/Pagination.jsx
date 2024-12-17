@@ -55,8 +55,8 @@ export const Pagination = ({ paginationData, setPage, page }) => {
   };
 
   return (
-    <div className="block text-center w-[96vw] sm:w-[96vw] ">
-      <div className="mb-8 mx-auto w-[96vw] text-center inline-flex flex-row justify-center flex-wrap items-center border border-[#E2E8F0] rounded-[4px]">
+    <div className="block text-center w-[96vw] sm:w-[100%] ">
+      <div className="mb-8 w-[96vw] sm:w-[100%] text-center inline-flex flex-row justify-center flex-wrap items-center border border-[#E2E8F0] rounded-[4px]">
         {paginationData.links
           ? paginationData.links.map((link, index) => {
               return renderUI(index, paginationData.links.length - 1, link);

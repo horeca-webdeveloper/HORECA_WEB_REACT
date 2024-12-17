@@ -101,18 +101,18 @@ export const ProductsByCategory = () => {
       const response = await apiClient.get(`/categories/${id}/products`, {
         params,
       });
-      setProducts(response.data.products.data);
-      setPaginationData(response.data.products.total);
-      setProducttypes(response.data.producttypes);
-      setLengthMin(response.data.length_min);
-      setLengthMax(response.data.length_max);
-      setWidthMin(response.data.width_min);
-      setWidthMax(response.data.width_max);
-      setHeightMin(response.data.height_min);
-      setHeightMax(response.data.height_max);
-      setBrands(response.data.brands);
-      setMinDelivery(response.data.delivery_min);
-      setMaxDelivery(response.data.delivery_max);
+      setProducts(response?.data?.products.data);
+      setPaginationData(response?.data?.products?.total);
+      setProducttypes(response?.data?.producttypes);
+      setLengthMin(response?.data?.length_min);
+      setLengthMax(response?.data?.length_max);
+      setWidthMin(response?.data?.width_min);
+      setWidthMax(response?.data?.width_max);
+      setHeightMin(response?.data?.height_min);
+      setHeightMax(response?.data?.height_max);
+      setBrands(response?.data?.brands);
+      setMinDelivery(response?.data?.delivery_min);
+      setMaxDelivery(response?.data?.delivery_max);
       let related = [];
       response.data?.products?.data?.forEach((element) => {
         if (element) {
@@ -269,7 +269,6 @@ export const ProductsByCategory = () => {
       <Wrapper>
         <Breadcrumb items={breadcrumb} classes={"mt-7 mb-7"} />
         <div className="grid grid-cols-4 sm:grid-cols-9 gap-4">
-          
           <div className="col-span-2 hidden sm:hidden md:hidden lg:block">
             <FilterSection
               minDelivery={minDelivery}
@@ -296,7 +295,7 @@ export const ProductsByCategory = () => {
               setSelectedMinPrice={setSelectedMinPrice}
               setSelectedMaxPrice={setSelectedMaxPrice}
             />
-        </div>
+          </div>
           <div className="sm:col-span-12 lg:col-span-7 md-col-span-7 col-span-12">
             <span className="title">{subcategory.split("-").join(" ")}</span>
             <div className="w-full h-[1px] bg-[#E2E8F0] my-4"></div>
@@ -387,7 +386,7 @@ export const ProductsByCategory = () => {
 
                 <div className="grid grid-cols-6 gap-6 mt-8">
                   {!!producttypes &&
-                    producttypes.map((item) => {
+                    producttypes?.map((item) => {
                       return (
                         <div
                           key={item.id}
@@ -410,38 +409,47 @@ export const ProductsByCategory = () => {
             {/* Categories Display Here  */}
             {type == null ? (
               <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-6 mt-8">
-                {!!categories &&
-                  categories.map((cat, index) => {
-                    return (
-                      <div
-                        key={cat.id}
-                        className={`bg-[#F5F5F5] m-[10px] border-[#186737] sm:border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border hover:border-primary p-[5px] sm:p-4 rounded-md  border-primary"}`}
-                      >
-                        <Link
+                {!!categories
+                  ? categories.map((cat, index) => {
+                      return (
+                        <div
                           key={cat.id}
-                          className="mt-1 block text-[#666666] text-base underline"
-                          to={`/collections/${category}/${cat.slug}/${cat.id}?type=1`}
+                          className={`bg-[#F5F5F5] m-[10px] border-[#186737] sm:border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border hover:border-primary p-[5px] sm:p-4 rounded-md  border-primary"}`}
                         >
-                          <img
-                            className="w-28"
-                            src={`https://testhssite.com/storage/${cat.image}`}
-                            alt={cat.name}
-                          />
-                          <h4 className="lg:hidden mt-2 text-base font-semibold text-primary text-center">
-                            {cat.name}
-                          </h4>
-                        </Link>
+                          <Link
+                            key={cat.id}
+                            className="mt-1 block text-[#666666] text-base underline"
+                            to={`/collections/${category}/${cat.slug}/${cat.id}?type=1`}
+                          >
+                            <img
+                              className="w-28"
+                              src={`https://testhssite.com/storage/${cat.image}`}
+                              alt={cat.name}
+                            />
+                            <h4 className="lg:hidden mt-2 text-base font-semibold text-primary text-center">
+                              {cat.name}
+                            </h4>
+                          </Link>
+                        </div>
+                      );
+                    })
+                  : Array.from({ length: 4 }).map((_, index) => (
+                      <div key={index} className="col-span-1">
+                        <Skeleton count={1} height="100px" />
                       </div>
-                    );
-                  })}
+                    ))}
               </div>
             ) : null}
 
             <br />
             {/* Products  Display Here  */}
-            <div className="grid grid-cols-2 lg:grid-cols-12 sm:grid-cols-4 gap-4  mt-4 mb-10">
+            <div
+              className={`grid grid-cols-2 sm:grid-cols-4 ${
+                loader ? "lg:grid-cols-4" : "lg:grid-cols-12"
+              } gap-4  mt-4 mb-10`}
+            >
               {loader ? (
-                Array.from({ length: 12 }).map((_, index) => (
+                Array.from({ length: 4 }).map((_, index) => (
                   <div key={index} className="col-span-1">
                     <Skeleton count={1} height="320px" />
                   </div>
@@ -453,7 +461,7 @@ export const ProductsByCategory = () => {
                       return (
                         <React.Fragment key={index}>
                           <ProductCard
-                           classes="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3    mt-1"
+                            classes="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3    mt-1"
                             key={index}
                             product={product}
                           />
