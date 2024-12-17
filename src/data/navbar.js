@@ -20,6 +20,7 @@ const languageMenu = [
   }
 ]
 
+
 const recommendedCategories = [
   {
     title: "Kitchen Equipment",
