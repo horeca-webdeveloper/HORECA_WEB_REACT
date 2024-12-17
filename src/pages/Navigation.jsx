@@ -57,7 +57,7 @@ export const Navigation = ({ categories, currentLocation }) => {
   const [grandChildCategory, setGrandChildCategory] = useState([]);
   const [catChildTitle, setCatChildTitle] = useState("");
   const [grandChildTitle, setGrandChildTitle] = useState("");
-
+  const divRef = useRef(null);
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown") {
       setSelectedIndex((prev) => (prev + 1) % combinedItems.length);
@@ -70,6 +70,7 @@ export const Navigation = ({ categories, currentLocation }) => {
   
 
   const handleFocus = () => setIsFocused(true);
+ 
   const handlerFormSubmit = (e) => {
     e.preventDefault();
     navigate(`products?search=${searchValue}`);
@@ -179,8 +180,23 @@ export const Navigation = ({ categories, currentLocation }) => {
     setSearchValue(filterName);
   }, [location.search]);
 
+  // Handle clicks outside of the div to close the dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (divRef.current && !divRef.current.contains(event.target)) {
+        setIsFocused(false); // Set isFocused to false if click is outside
+      }
+    };
 
-  console.log("products",products);
+    // Add event listener to the document
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <React.Fragment>
       {openModel && !token ? (
@@ -591,6 +607,7 @@ export const Navigation = ({ categories, currentLocation }) => {
               // value={searchValue}
               onChange={(e) => handlerSearchValue(e.target.value)}
               onFocus={handleFocus}
+              
             />
             <button type="submit" className="bg-primary p-2 rounded-full mr-2">
               <CiSearch color="white" size={26} />
@@ -598,7 +615,7 @@ export const Navigation = ({ categories, currentLocation }) => {
           </form>
 
           {isFocused && (products || categoryList || brands) ? (
-            <div className="max-h-[700px] rounded-lg absolute w-full z-[999] mt-3">
+            <div ref={divRef} className="max-h-[700px] rounded-lg absolute w-full z-[999] mt-3">
               {products && products.length > 0 && (
                 <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
                   <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
@@ -1157,7 +1174,7 @@ export const Navigation = ({ categories, currentLocation }) => {
             value={searchValue}
             onChange={(e) => handlerSearchValue(e.target.value)}
             onFocus={handleFocus}
-            // onBlur={handleBlur}
+            //  onBlur={handleBlur}
           />
           <button
             type="submit"
