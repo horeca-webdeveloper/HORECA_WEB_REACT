@@ -69,6 +69,11 @@ const AccountSecurity = () => {
       url: "/",
       title: "Profile",
     },
+    {
+      
+      title: "Account & Security",
+    },
+
   ];
   return (
     <>

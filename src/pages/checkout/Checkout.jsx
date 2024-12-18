@@ -227,7 +227,7 @@ for mobile */}
 
                             <div
                               key={index}
-                              className="flex flex-col gap-4 border-b pb-4 mb-4 last:border-b-0 last:pb-0 lg:hidden"
+                              className="flex flex-col gap-4 border-b pb-4 mb-4 last:border-b-0 last:pb-0 lg:hidden xl:hidden"
                             >
                               {/* Product Image and Product Details */}
                               <div className="flex items-start gap-4">
@@ -469,7 +469,7 @@ for mobile */}
 
                                   <div
                                     key={index}
-                                    className="flex flex-col gap-4 border-b pb-4 mb-4 last:border-b-0 last:pb-0 lg:hidden"
+                                    className="flex flex-col gap-4 border-b pb-4 mb-4 last:border-b-0 last:pb-0 lg:hidden xl:hidden"
                                   >
                                     {/* Product Image and Product Details */}
                                     <div className="flex items-start gap-4">

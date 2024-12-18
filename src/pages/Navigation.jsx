@@ -197,6 +197,8 @@ export const Navigation = ({ categories, currentLocation }) => {
     };
   }, []);
 
+
+
   return (
     <React.Fragment>
       {openModel && !token ? (
@@ -399,7 +401,7 @@ export const Navigation = ({ categories, currentLocation }) => {
           <div
             className={`fixed inset-y-0 left-0 w-[80vw] bg-white z-[1000] text-black transform ${
               isOpen ? "translate-x-0" : "-translate-x-full"
-            } transition-transform duration-300 ease-in-out lg:hidden`}
+            } transition-transform duration-300 ease-in-out lg:hidden xl:hidden`}
           >
             {activeCategory == null ? (
               // Main Categories
@@ -544,7 +546,7 @@ export const Navigation = ({ categories, currentLocation }) => {
           {/* Backdrop */}
           {isOpen && (
             <div
-              className="fixed inset-0 bg-black z-[999] bg-opacity-50 lg:hidden"
+              className="fixed inset-0 bg-black z-[999] bg-opacity-50 lg:hidden xl:hidden"
               onClick={toggleDrawer}
             />
           )}
@@ -637,7 +639,7 @@ export const Navigation = ({ categories, currentLocation }) => {
                         <div>
                           <img
                             className="max-w-[40px]"
-                            src={`https://testhssite.com/storage/${prod.image}`}
+                            src={`${prod.image}`}
                             alt={prod.name}
                           />
                         </div>
@@ -1205,7 +1207,8 @@ export const Navigation = ({ categories, currentLocation }) => {
                       <div>
                         <img
                           className="max-w-[40px]"
-                          src={`https://testhssite.com/storage/${prod.image}`}
+                          src={`${prod.image}`}
+                          
                           alt={prod.name}
                         />
                       </div>

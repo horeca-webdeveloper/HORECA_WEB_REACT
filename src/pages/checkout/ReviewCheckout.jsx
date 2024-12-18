@@ -19,8 +19,9 @@ export const ReviewCheckout = ({ currentLocation }) => {
     const { triggerUpdateCart, updateTempCart } = useCart();
     const location = useLocation();
     const navigate = useNavigate();
-    const { currencyTitle, savings, shippingRate, tax, totalAmount, sub_total } = location.state || {};
-
+    const { currencyTitle, savings, shippingRate, tax, totalAmount, sub_total,discountAmount } = location.state || {};
+ 
+  
     const [popupHeading, setPopupHeading] = useState("Add New Address");
     const [showPopup, setShowPopup] = useState(false);
     const { incrementCartItems } = useLocalCartCount();
@@ -129,6 +130,7 @@ export const ReviewCheckout = ({ currentLocation }) => {
     }
 
     const placeOrder = async (data) => {
+        
         try {
             setLoader(true);
             const response = await apiClient.post(`/orders`, data);
@@ -143,42 +145,40 @@ export const ReviewCheckout = ({ currentLocation }) => {
     const confirmAndPay = () => {
 
         if (authToken) {
+ 
             const products = !!cartItems && cartItems.map((item) => ({
                 quantity: item.quantity,
-                product_id: item.product_id,
-                name: item.product.name,
-                price: item.product.sale_price ? item.product.sale_price : item.product.original_price,
+                id: item.product_id,
+              
             }));
 
             const data = {
-                "user_id": userProfile.id,
                 "shipping_method": "default",
                 "shipping_option": null,
-                "status": {
-                    "value": "pending",
-                    "label": "Pending"
-                },
-                "amount": totalAmount.toFixed(2),
-                "currency": currencyTitle,
-                "savings": savings,
                 "shipping_amount": shippingRate,
-                "tax_amount": tax,
-                "sub_total": sub_total,
-                "coupon_code": JSON.parse(localStorage.getItem("couponCodeValue")),
-                "discount_amount": JSON.parse(localStorage.getItem("discountPercetage")),
-                "is_confirmed": 0,
+                "discount_amount": discountAmount.toFixed(2),
                 "discount_description": null,
-                "is_finished": 0,
-                "cancellation_reason": null,
-                "cancellation_reason_description": null,
+                "discount_description": null,
+                "coupon_code": JSON.parse(localStorage.getItem("couponCodeValue")),
+                "customer_id": userProfile.id,
+                "note": null,
+                "sub_amount": sub_total,
+                "tax_amount": tax,
+                "amount": totalAmount.toFixed(2),
+                "discount_type": "amount",
+                "discount_custom_value": JSON.parse(localStorage.getItem("discountPercetage")),
+                "shipping_type": "free-shipping",
+                "payment_id": null,
+                "payment_status": "pending",
+                "payment_channel": "cod",
+                "payment_type": "confirm",
                 "completed_at": null,
                 "token": authToken,
-                "payment_id": null,
                 "store_id": 1,
                 "proof_file": null,
-                "products": products
+                "products": products,
             }
-
+ 
             placeOrder(data);
             handlePayments(data);
         } else {
@@ -201,6 +201,7 @@ export const ReviewCheckout = ({ currentLocation }) => {
         setShowPopup(true);
     }
 
+ 
 
     return (
         <React.Fragment>
@@ -247,7 +248,7 @@ export const ReviewCheckout = ({ currentLocation }) => {
                                 return (
                                     <>
                                         {filteredItems.length > 0 ?
-                                            <div className="px-8  ">
+                                            <div className="px-8" key={index}>
                                                 <div className="bg-[#E2E8F04D] rounded-[10px] px-4 pt-2 pb-4 mt-5">
                                                     <div className="flex items-center justify-between  my-2">
                                                         <span className="text-[#424242] text-lg font-semibold">Shipment {index + 1}</span>

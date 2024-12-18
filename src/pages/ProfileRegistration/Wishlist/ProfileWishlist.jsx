@@ -96,6 +96,10 @@ const ProfileWishlist = () => {
       url: "/",
       title: "Profile",
     },
+    {
+      
+      title: "Wishlist",
+    },
   ];
   return (
     <>

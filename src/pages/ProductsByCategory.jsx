@@ -173,7 +173,7 @@ export const ProductsByCategory = () => {
     <div>
       <div
         style={{ zIndex: 999 }}
-        className={`block sm:hidden w-[80vw] h-[100vh] p-5 bg-[white] border absolute z-999 mt-[-215px] 
+        className={`lg:hidden xl:hidden w-[80vw] h-[100vh] p-5 bg-[white] border absolute z-999 mt-[-215px] 
           ${openFilterPopup ? "translate-x-[0%]" : "translate-x-[-100%]"} 
           transition-transform duration-300 ease-in-out`}
       >
@@ -305,7 +305,7 @@ export const ProductsByCategory = () => {
               </span>
               <div
                 onClick={() => setOpenFilterPopup(true)}
-                className="lg:hidden bg-[#E2E8F0] p-[10px] rounded"
+                className="lg:hidden xl:hidden bg-[#E2E8F0] p-[10px] rounded"
               >
                 <img src={`${process.env.PUBLIC_URL}/icons/FilterIcon.png`} />
               </div>
@@ -408,7 +408,7 @@ export const ProductsByCategory = () => {
 
             {/* Categories Display Here  */}
             {type == null ? (
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-6 mt-8">
+              <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 md:grid-cols-4 gap-2 sm:gap-6 mt-8">
                 {!!categories
                   ? categories.map((cat, index) => {
                       return (
@@ -422,11 +422,11 @@ export const ProductsByCategory = () => {
                             to={`/collections/${category}/${cat.slug}/${cat.id}?type=1`}
                           >
                             <img
-                              className="w-28"
+                         className="sm:w-20 md:w-28 lg:w-36 xl:w-48 mx-auto" 
                               src={`https://testhssite.com/storage/${cat.image}`}
                               alt={cat.name}
                             />
-                            <h4 className="lg:hidden mt-2 text-base font-semibold text-primary text-center">
+                            <h4 className="lg:hidden xl:hidden mt-2 text-base font-semibold text-primary text-center">
                               {cat.name}
                             </h4>
                           </Link>

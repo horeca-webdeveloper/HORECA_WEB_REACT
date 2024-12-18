@@ -19,9 +19,13 @@ const PaymentSuccess = () => {
   const handlerRemoveAllItemsFromCart = async () => {
     setRemoveItemsLoader(true)
     try {
+      const response = await apiClient.delete("/cart/clear");
+      if(response.data.success){
+
+      triggerUpdateCart();
       localStorage.removeItem('couponCodeValue');
       localStorage.removeItem('discountPercetage');
-      triggerUpdateCart();
+      }
 
     } catch (error) {
       console.error('Error:', error);

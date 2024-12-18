@@ -10,7 +10,7 @@ const WishlistBox = ({ data, handlerRemoveWishlist, handleAddToCart }) => {
             className="p-[15px] h-[100px]  w-[100px] lg:h-[260px] lg:w-[260px] md:h-[100px] md:w-[100px]"
             src={"https://testhssite.com/storage/" + data.image}
           />
-          <div className="lg:hidden">
+          <div className="lg:hidden xl:hidden">
             <p className="font-sans p-[5px] text-[14px] font-normal leading-[24px] text-left decoration-slice">
               {data?.name}
             </p>

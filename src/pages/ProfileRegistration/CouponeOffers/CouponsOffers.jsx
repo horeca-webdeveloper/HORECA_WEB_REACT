@@ -57,6 +57,10 @@ const CouponsOffers = () => {
       url: "/",
       title: "Profile",
     },
+    {
+      
+      title: "Coupons & offers",
+    },
   ];
   const bigScreenCss =
     "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
@@ -99,9 +103,9 @@ const CouponsOffers = () => {
           {/* Coupons Section */}
           <div className="flex flex-col  w-[100%]">
             <h1 className="text-center mt-[15px]">Coupons & Offers</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 p-4 w-full">
               <div className="hidden sm:block">
-                <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-[5px]">
+                <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-[5px]">
                   <p className="font-work-sans text-[#186737] text-base font-normal leading-6 text-left decoration-none">
                     All Coupons
                   </p>

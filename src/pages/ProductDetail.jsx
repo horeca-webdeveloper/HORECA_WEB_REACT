@@ -75,6 +75,7 @@ export const ProductDetail = () => {
   const [maxBuyMoreSaveMore, setMaxBuyMoreSaveMore] = useState();
   const [variants, setVariants] = useState([]);
   const [mediaArray, setMediaArray] = useState([]);
+    const [showCountButton, setShowCountButton] = useState(false);
   const handleModelLoaded = () => {
     setLoader(false);
   };
@@ -769,7 +770,7 @@ export const ProductDetail = () => {
                     </div>
                   )}
 
-                  <div className="col-span-12 md:col-span-3 lg:col-span-3 mt-4 lg:hidden">
+                  <div className="col-span-12 md:col-span-3 lg:col-span-3 mt-4 lg:hidden xl:hidden">
                     <div className="bg-gray-100 rounded-md  p-5 border-2 border-[#E2E8F0]">
                       {/* Badge Section  */}
                       {!productLoader ? (
@@ -1423,6 +1424,7 @@ export const BuyMoreSaveMore = ({
   setMaxBuyMoreSaveMore,
 }) => {
   const [quantity, setQuantity] = useState(1);
+  const [showCountButton, setShowCountButton] = useState(false);
   const [loader, setLoader] = useState(false);
   const { triggerUpdateCart } = useCart();
 
@@ -1560,6 +1562,8 @@ export const BuyMoreSaveMore = ({
           icon={true}
           product_id={product.id}
           quantity={quantity}
+          showCountButton={showCountButton}
+          setShowCountButton={setShowCountButton}
           setQuantity={setQuantity}
           name={product.name}
           image={product.image}
