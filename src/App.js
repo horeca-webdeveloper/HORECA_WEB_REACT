@@ -40,6 +40,7 @@ import { PasswordReset } from "./pages/PasswordReset";
 import ProfileWishlist from "./pages/ProfileRegistration/Wishlist/ProfileWishlist";
 import Wishlist from "./pages/Wishlist";
 import SellOnHoreca from "./pages/FooterPages/SellonHoreca/SellOnHoreca";
+// comment
 import AboutUs from "./pages/AboutUs/AboutUs";
 const App = () => {
   const location = useLocation();
