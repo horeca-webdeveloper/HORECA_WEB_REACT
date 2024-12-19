@@ -111,7 +111,7 @@ export const ReviewCheckout = ({ currentLocation }) => {
         const datas = {
             "amount": data.amount,
             // "currency": data.currency.toUpperCase(),
-            "currency": "AED",
+            "currency": "USD",
             "description": userProfile.name,
             "customer_name": userProfile.name,
             "customer_email": userProfile.email
@@ -202,7 +202,7 @@ export const ReviewCheckout = ({ currentLocation }) => {
     }
 
  
-
+ 
     return (
         <React.Fragment>
 
