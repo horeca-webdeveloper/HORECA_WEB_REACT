@@ -33,8 +33,6 @@ export const CollectionPage = () => {
   const location = useLocation();
   const [productLoader, setProductLoader] = useState(false);
 
-  console.log(location);
-
   const handleInput = (e) => {
     set_minValue(e.minValue);
     set_maxValue(e.maxValue);
@@ -79,11 +77,6 @@ export const CollectionPage = () => {
     setProductLoader(false);
     setProducts(response.data.data.data);
   };
-
-  useEffect(() => {
-    fetchCategories();
-    fetchProducts();
-  }, [location]);
 
   useEffect(() => {
     fetchCategories();

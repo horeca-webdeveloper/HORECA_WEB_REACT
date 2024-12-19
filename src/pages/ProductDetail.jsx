@@ -73,20 +73,17 @@ export const ProductDetail = () => {
   const [maxBuyMoreSaveMore, setMaxBuyMoreSaveMore] = useState();
   const [variants, setVariants] = useState([]);
   const [mediaArray, setMediaArray] = useState([]);
-    const [showCountButton, setShowCountButton] = useState(false);
+  const [showCountButton, setShowCountButton] = useState(false);
   const handleModelLoaded = () => {
     setLoader(false);
   };
 
-
   const price = product.sale_price
-  ? parseFloat(product.sale_price).toFixed(2)
-  : parseFloat(product.front_sale_price).toFixed(2);
+    ? parseFloat(product.sale_price).toFixed(2)
+    : parseFloat(product.front_sale_price).toFixed(2);
 
   // Split the price into integer and decimal parts
   const [integerPart, decimalPart] = price.split(".");
-
-
 
   const productDetailsBreadCrumb = [
     {
@@ -130,14 +127,14 @@ export const ProductDetail = () => {
 
   const fetchProductDiscounts = async () => {
     setProductLoader(true);
-    const params={
+    const params = {
       product_id: id,
-    }
+    };
 
     try {
       const response = await apiClient.get("/product-discounts", params);
 
-       setBuyMore(response?.data?.data);
+      setBuyMore(response?.data?.data);
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -186,8 +183,9 @@ export const ProductDetail = () => {
       product.name
     }\nOriginal Price: ${product.original_price}\nSale Price: ${
       product.sale_price
-    }\nLink: ${process.env.PUBLIC_URL+"products/"+product.id
-    }\nImage: ${product.images[0]}`;
+    }\nLink: ${process.env.PUBLIC_URL + "products/" + product.id}\nImage: ${
+      product.images[0]
+    }`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappURL = `https://api.whatsapp.com/send?text=${encodedMessage}`;
     window.open(whatsappURL, "_blank");
@@ -204,7 +202,7 @@ export const ProductDetail = () => {
     ${product.name}
     
     You can check it out here: ${
-      process.env.PUBLIC_URL+"product/" + product.id
+      process.env.PUBLIC_URL + "product/" + product.id
     }
     
     ${product.sale_price ? `Sale Price: $${product.sale_price}` : ""}
@@ -323,16 +321,12 @@ export const ProductDetail = () => {
   };
 
   useEffect(() => {
-
- 
     if (!!product && product.images) {
-      if(product.video_path){
+      if (product.video_path) {
         setMediaArray([...product.images, ...JSON.parse(product.video_path)]);
-      }else{
+      } else {
         setMediaArray(product.images);
       }
-
-   
     }
   }, [product]);
 
@@ -343,7 +337,6 @@ export const ProductDetail = () => {
       filename?.toLowerCase()?.endsWith(ext)
     );
   };
-
 
   return (
     <Wrapper>
@@ -357,8 +350,7 @@ export const ProductDetail = () => {
           <div className="grid grid-cols-12 gap-x-8 ">
             <div className="col-span-12 sm:col-span-12 md:col-span-12 lg:col-span-9 xl:col-span-9">
               <div className="grid grid-cols-12 md:grid-cols-12 lg:grid-cols-12 gap-6">
-                {/* 
-            product images */}
+                {/*  product images */}
                 <div className="col-span-12 md:col-span-12  lg:col-span-6 mt-4">
                   <div className="mx-auto">
                     <div className="product-slider-container">
@@ -1195,11 +1187,10 @@ export const ProductDetail = () => {
                       <span className="text-black-100 font-semibold text-xl">
                         {product.currency_title}{" "}
                         <span className="text-3xl font-bold">
-                        {integerPart && integerPart}
-                          .
+                          {integerPart && integerPart}.
                         </span>
                         <span className="text-black-100 font-semibold text-xl">
-                        {decimalPart && decimalPart}
+                          {decimalPart && decimalPart}
                         </span>
                       </span>
                       <div className="flex items-center ml-3 mt-2 ">

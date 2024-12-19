@@ -124,7 +124,10 @@ export const CompareProducts = ({
           product.specifications ? (
             <div class="relative rounded-md overflow-x-auto">
               <div className={`flex pb-[10px] items-center justify-between`}>
-                <img className="" src={`${process.env.PUBLIC_URL}/images/logo.png`} />
+                <img
+                  className=""
+                  src={`${process.env.PUBLIC_URL}/images/logo.png`}
+                />
                 <h1 className="text-center text-[24px]">
                   Compare with similar products <br />
                   فاتورة ضريبية
