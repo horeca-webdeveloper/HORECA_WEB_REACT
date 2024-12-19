@@ -50,6 +50,10 @@ const BrowsingHistory = () => {
       url: "/",
       title: "Profile",
     },
+    {
+      
+      title: "Browsing History",
+    },
   ];
   const bigScreenCss =
     "grid grid-cols-2 lg:grid-cols-12 xl:grid-cols-12 sm:grid-cols-4 gap-4  mt-4 mb-10";

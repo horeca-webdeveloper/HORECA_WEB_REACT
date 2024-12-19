@@ -26,7 +26,7 @@ const AllOrdersBox = ({ data, id, setImageView, setShowPopup, navigation }) => {
             <p className="font-sans text-[12px] sm:mt-[0px] sm:text-base font-normal leading-6 text-left text[#030303] decoration-slice">
               {data?.updated_at.split("T")[0]}
             </p>
-            <p className="lg:hiddenfont-sans text-[12px] sm:text-base font-normal leading-6 text-left text[#030303] decoration-slice">
+            <p className="lg:hidden xl:hidden font-sans text-[12px] sm:text-base font-normal leading-6 text-left text[#030303] decoration-slice">
               {data?.code}
             </p>
           </div>
@@ -59,7 +59,7 @@ const AllOrdersBox = ({ data, id, setImageView, setShowPopup, navigation }) => {
           <p className="hidden md:hidden lg:block font-sans mb-[4px] text-base text-right font-light leading-[24px] text-left text-[#666666] decoration-0">
             Order Total
           </p>
-          <p className="lg:hidden font-sans text-[12px] bg-[#E2E8F0] px-[10px] rounded-full text-black text-right font-light leading-[24px] text-left text-[#666666] decoration-0">
+          <p className="lg:hidden xl:hidden font-sans text-[12px] bg-[#E2E8F0] px-[10px] rounded-full text-black text-right font-light leading-[24px] text-left text-[#666666] decoration-0">
             In Progress
           </p>
           <p className="flex font-sans text-[13px] sm:text-[14px] font-normal leading-[24px] text-left text-[#666666] decoration-0">
@@ -67,7 +67,7 @@ const AllOrdersBox = ({ data, id, setImageView, setShowPopup, navigation }) => {
             <span className="hidden md:hidden lg:block font-sans text-[22px] font-semibold leading-[24px] text-left text-[black] decoration-0">
               {data?.amount.split(".")[0]}
             </span>
-            <span className="lg:hidden ml-[5px] font-sans text-[13px] font-semibold leading-[24px] text-left text-[black] decoration-0">
+            <span className="lg:hidden xl:hidden ml-[5px] font-sans text-[13px] font-semibold leading-[24px] text-left text-[black] decoration-0">
               {data?.amount.split(".")[0]}
             </span>
             .{data?.amount.split(".")[1]}

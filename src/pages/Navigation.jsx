@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Wrapper } from "../shared/Wrapper";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   ControlledMenu,
   useHover,
@@ -19,7 +19,8 @@ import { useLocation } from "react-router-dom";
 import { useWishlist } from "../context/WishListContext";
 import { debounce } from "lodash";
 import ProfileDrawer from "./ProfileRegistration/ProfileDrawer/ProfileDrawer";
-export const Navigation = ({ categories, userProfile, currentLocation }) => {
+
+export const Navigation = ({ categories, currentLocation }) => {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [currency, setCurrency] = useState(["USD", "AED", "PKR"]);
   const [selectedLang, setSelectedLang] = useState("English");
@@ -34,7 +35,6 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
   const [userName, setUserName] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { triggerUpdateCart } = useCart();
-  const { totalCartItems, incrementCartItems } = useLocalCartCount();
   const [loader, setLoader] = useState(false);
   const [products, setProducts] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -51,7 +51,13 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
   ];
   const [onHoverProfile, setOnHoverProfile] = useState(false);
   const [showProfileDrawer, setShowProfileDrawer] = useState(false);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [childCategory, setChildCategory] = useState([]);
+  const [grandChildCategory, setGrandChildCategory] = useState([]);
+  const [catChildTitle, setCatChildTitle] = useState("");
+  const [grandChildTitle, setGrandChildTitle] = useState("");
+  const divRef = useRef(null);
   const handleKeyDown = (e) => {
     if (e.key === "ArrowDown") {
       setSelectedIndex((prev) => (prev + 1) % combinedItems.length);
@@ -62,92 +68,12 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     }
   };
 
-  useEffect(() => {
-    if (isFocused) {
-      window.addEventListener("keydown", handleKeyDown);
-      return () => {
-        window.removeEventListener("keydown", handleKeyDown);
-      };
-    }
-  }, [isFocused]);
-
-  const navItems = [
-    {
-      id: "",
-      name: "Your Orders",
-      link: "/registration/all-orders",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame.png`,
-    },
-    {
-      id: "",
-      name: "Browsing History",
-      link: "registration/browsing-history",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-1.png`,
-    },
-    {
-      id: "",
-      name: "Your Reviews",
-      link: "registration/reviews",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-2.png`,
-    },
-    {
-      id: "",
-      name: "Wishlist ",
-      link: "registration/wishlist",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-3.png`,
-    },
-    {
-      id: "",
-      name: "Your Profiles",
-      link: "registration/AccountSecurity",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-4.png`,
-    },
-    {
-      id: "",
-      name: "Coupons & Offers",
-      link: "registration/coupons-offers",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-5.png`,
-    },
-    {
-      id: "",
-      name: "Addresses",
-      link: "registration/addresses",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-7.png`,
-    },
-    {
-      id: "",
-      name: "Account Security",
-      link: "registration/AccountSecurity",
-      icon: `${process.env.PUBLIC_URL}/profileIcons/Frame-10.png`,
-    },
-  ];
-
   const handleFocus = () => setIsFocused(true);
-
-  useEffect(() => {
-    let search = location.search ? location.search.split("=")[1] : "";
-    let filterName = search.replaceAll("-", " ");
-    setSearchValue(filterName);
-  }, [location.search]);
 
   const handlerFormSubmit = (e) => {
     e.preventDefault();
     navigate(`products?search=${searchValue}`);
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    const name = localStorage.getItem("username");
-    if (token) {
-      setIsLoggedIn(true);
-      setUserName(name);
-    } else {
-      setIsLoggedIn(false);
-    }
-    triggerUpdateCart();
-    triggerUpdateWishList();
-    setOpenModel(false);
-  }, [location.pathname]);
 
   const handlerSignOut = () => {
     localStorage.clear();
@@ -155,13 +81,6 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     setIsLoggedIn(false);
     navigate("/login");
   };
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(null);
-  const [childCategory, setChildCategory] = useState([]);
-  const [grandChildCategory, setGrandChildCategory] = useState([]);
-  const [catChildTitle, setCatChildTitle] = useState("");
-  const [grandChildTitle, setGrandChildTitle] = useState("");
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
@@ -171,35 +90,31 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
   const goBackToMain = () => {
     setActiveCategory(null); // Reset to main drawer
   };
-  const fetchProducts = async () => {
+  const fetchProducts = async (search) => {
     setLoader(true);
     try {
-      let search = searchValue;
-      const params = {
-        ...(search && { query: search }),
-      };
+      const params = search ? { query: search } : {};
       const response = await apiClient.get(`/search`, { params });
       setBrands(response.data.brands);
       setCategoryList(response.data.categories);
       setProducts(response.data.products);
       setLoader(false);
-      // console.log(response.data)
     } catch (error) {
       console.error("Error:", error);
     } finally {
       setLoader(false);
     }
   };
-  useEffect(() => {
-    fetchProducts();
-  }, [searchValue]);
 
-  const handlerSearchValue = useCallback(
-    debounce((value) => {
-      setSearchValue(value);
-    }, 300),
+  // Debounce the fetchProducts call
+  const debouncedFetchProducts = useCallback(
+    debounce((value) => fetchProducts(value), 300),
     []
   );
+
+  const handlerSearchValue = (value) => {
+    setSearchValue(value);
+  };
 
   const navigateToProduct = (id, name) => {
     setSearchValue(name);
@@ -454,7 +369,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           <div
             className={`fixed inset-y-0 left-0 w-[80vw] bg-white z-[1000] text-black transform ${
               isOpen ? "translate-x-0" : "-translate-x-full"
-            } transition-transform duration-300 ease-in-out lg:hidden`}
+            } transition-transform duration-300 ease-in-out lg:hidden xl:hidden`}
           >
             {activeCategory == null ? (
               // Main Categories
@@ -599,7 +514,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           {/* Backdrop */}
           {isOpen && (
             <div
-              className="fixed inset-0 bg-black z-[999] bg-opacity-50 lg:hidden"
+              className="fixed inset-0 bg-black z-[999] bg-opacity-50 lg:hidden xl:hidden"
               onClick={toggleDrawer}
             />
           )}
@@ -669,7 +584,10 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           </form>
 
           {isFocused && (products || categoryList || brands) ? (
-            <div className="max-h-[700px] rounded-lg absolute w-full z-[999] mt-3">
+            <div
+              ref={divRef}
+              className="max-h-[700px] rounded-lg absolute w-full z-[999] mt-3"
+            >
               {products && products.length > 0 && (
                 <div className="flex border-b-2 border-b-[#e2e8f0] rounded-none sm:rounded-lg bg-[#f6f8fb]">
                   <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
@@ -689,7 +607,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                         <div>
                           <img
                             className="max-w-[40px]"
-                            src={`https://testhssite.com/storage/${prod.image}`}
+                            src={`${prod.image}`}
                             alt={prod.name}
                           />
                         </div>
@@ -1226,7 +1144,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             value={searchValue}
             onChange={(e) => handlerSearchValue(e.target.value)}
             onFocus={handleFocus}
-            // onBlur={handleBlur}
+            //  onBlur={handleBlur}
           />
           <button
             type="submit"
@@ -1257,7 +1175,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                       <div>
                         <img
                           className="max-w-[40px]"
-                          src={`https://testhssite.com/storage/${prod.image}`}
+                          src={`${prod.image}`}
                           alt={prod.name}
                         />
                       </div>

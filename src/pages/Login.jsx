@@ -297,7 +297,7 @@ export const Login = () => {
           </div>
           {/* 
          show in small screens */}
-          <div className="col-span-4 mt-16 lg:hidden ">
+          <div className="col-span-4 mt-16 lg:hidden xl:hidden">
             <span className="relative block text-center text-[22px] text-black  after:absolute after:left-0 after:w-[40%] after:h-[1px] after:bg-[#E2E8F0] after:top-1/2 after:translate-y-[-50%] before:absolute before:right-0 before:w-[40%] before:h-[1px] before:bg-[#E2E8F0] before:top-1/2 before:translate-y-[-50%]">
               Or
             </span>

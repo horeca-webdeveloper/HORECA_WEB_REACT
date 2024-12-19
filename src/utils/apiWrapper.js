@@ -7,7 +7,7 @@ if(hostUrl=='https://uaehorecastore.netlify.app'){
 
 // Create an Axios instance
 const apiClient = axios.create({
-    baseURL: 'https://testhssite.com/api',
+    baseURL: apiUrl,
 });
 
 // Interceptor to add Authorization header if authToken exists
