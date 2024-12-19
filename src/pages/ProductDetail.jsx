@@ -43,8 +43,6 @@ function Model({ url, onLoaded }) {
 
 export const ProductDetail = () => {
   const { id } = useParams(); // Access the id from the URL
-
- 
   const [seeMore, setSeeMore] = useState(true);
   const videoRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -75,9 +73,20 @@ export const ProductDetail = () => {
   const [maxBuyMoreSaveMore, setMaxBuyMoreSaveMore] = useState();
   const [variants, setVariants] = useState([]);
   const [mediaArray, setMediaArray] = useState([]);
+    const [showCountButton, setShowCountButton] = useState(false);
   const handleModelLoaded = () => {
     setLoader(false);
   };
+
+
+  const price = product.sale_price
+  ? parseFloat(product.sale_price).toFixed(2)
+  : parseFloat(product.front_sale_price).toFixed(2);
+
+  // Split the price into integer and decimal parts
+  const [integerPart, decimalPart] = price.split(".");
+
+
 
   const productDetailsBreadCrumb = [
     {
@@ -177,9 +186,8 @@ export const ProductDetail = () => {
       product.name
     }\nOriginal Price: ${product.original_price}\nSale Price: ${
       product.sale_price
-    }\nLink: ${
-      "https://test-horeca.netlify.app/product/" + product.id
-    }\nImage: ${"https://testhssite.com/storage/" + product.images[0]}`;
+    }\nLink: ${process.env.PUBLIC_URL+"products/"+product.id
+    }\nImage: ${product.images[0]}`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappURL = `https://api.whatsapp.com/send?text=${encodedMessage}`;
     window.open(whatsappURL, "_blank");
@@ -196,7 +204,7 @@ export const ProductDetail = () => {
     ${product.name}
     
     You can check it out here: ${
-      "https://test-horeca.netlify.app/product/" + product.id
+      process.env.PUBLIC_URL+"product/" + product.id
     }
     
     ${product.sale_price ? `Sale Price: $${product.sale_price}` : ""}
@@ -336,6 +344,7 @@ export const ProductDetail = () => {
     );
   };
 
+
   return (
     <Wrapper>
       {product ? (
@@ -404,7 +413,7 @@ export const ProductDetail = () => {
                                                     <Md3dRotation size={24} />
                                                   </div>
                                                   <img
-                                                    src={`${`https://testhssite.com/storage/${item}`}`}
+                                                    src={item}
                                                     alt={`Slide ${index}`}
                                                     className="w-full h-[392px] sm:h-[100%] h-auto object-contain rounded-lg"
                                                   />
@@ -425,7 +434,7 @@ export const ProductDetail = () => {
                                                   }
                                                 >
                                                   <source
-                                                    src={`https://testhssite.com/storage/${item}`}
+                                                    src={`${item}`}
                                                     type="video/mp4"
                                                   />
                                                   Your browser does not support
@@ -534,7 +543,7 @@ export const ProductDetail = () => {
                                       >
                                         {isImage(item) ? (
                                           <img
-                                            src={`${`https://testhssite.com/storage/${item}`}`}
+                                            src={`${`${item}`}`}
                                             alt={`Thumbnail ${index}`}
                                             className="w-full h-16 object-contain rounded-lg cursor-pointer "
                                           />
@@ -547,7 +556,7 @@ export const ProductDetail = () => {
                                             className="w-full h-16 object-contain rounded-lg cursor-pointer "
                                           >
                                             <source
-                                              src={`https://testhssite.com/storage/${item}`}
+                                              src={`${item}`}
                                               type="video/mp4"
                                             />
                                             Your browser does not support the
@@ -677,7 +686,7 @@ export const ProductDetail = () => {
                       <div className="flex items-center mt-2">
                         <img
                           className={`mr-2 transition-all rounded-[4px] border-2 max-w-[70px]  hover:border-primary cursor-pointer border-primary`}
-                          src={`${`https://testhssite.com/storage/${
+                          src={`${`${
                             product.images ? product.images[0] : ""
                           }`}`}
                           alt={product.name}
@@ -693,7 +702,7 @@ export const ProductDetail = () => {
                                         ? "border-primary"
                                         : ""
                                     }`}
-                                    src={`${`https://testhssite.com/storage/${
+                                    src={`${`${
                                       item.images ? item.images[0] : ""
                                     }`}`}
                                     alt={item.name}
@@ -769,7 +778,7 @@ export const ProductDetail = () => {
                     </div>
                   )}
 
-                  <div className="col-span-12 md:col-span-3 lg:col-span-3 mt-4 lg:hidden">
+                  <div className="col-span-12 md:col-span-3 lg:col-span-3 mt-4 lg:hidden xl:hidden">
                     <div className="bg-gray-100 rounded-md  p-5 border-2 border-[#E2E8F0]">
                       {/* Badge Section  */}
                       {!productLoader ? (
@@ -1186,15 +1195,11 @@ export const ProductDetail = () => {
                       <span className="text-black-100 font-semibold text-xl">
                         {product.currency_title}{" "}
                         <span className="text-3xl font-bold">
-                          {product.sale_price
-                            ? String(product.sale_price).split(".")[0]
-                            : ""}
+                        {integerPart && integerPart}
                           .
                         </span>
                         <span className="text-black-100 font-semibold text-xl">
-                          {String(product.sale_price).split(".")[1]
-                            ? String(product.sale_price).split(".")[1]
-                            : "00"}
+                        {decimalPart && decimalPart}
                         </span>
                       </span>
                       <div className="flex items-center ml-3 mt-2 ">
@@ -1423,6 +1428,7 @@ export const BuyMoreSaveMore = ({
   setMaxBuyMoreSaveMore,
 }) => {
   const [quantity, setQuantity] = useState(1);
+  const [showCountButton, setShowCountButton] = useState(false);
   const [loader, setLoader] = useState(false);
   const { triggerUpdateCart } = useCart();
 
@@ -1560,6 +1566,8 @@ export const BuyMoreSaveMore = ({
           icon={true}
           product_id={product.id}
           quantity={quantity}
+          showCountButton={showCountButton}
+          setShowCountButton={setShowCountButton}
           setQuantity={setQuantity}
           name={product.name}
           image={product.image}
@@ -1740,7 +1748,7 @@ const RenderingBought = ({
                     return (
                       <div key={index2} className="">
                         <img
-                          src={"https://testhssite.com/storage/" + image}
+                          src={image}
                           alt="Product Title"
                           className="w-full"
                         />

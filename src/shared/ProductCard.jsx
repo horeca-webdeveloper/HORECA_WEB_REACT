@@ -32,7 +32,6 @@ export const ProductCard = ({
 }) => {
   const [deleteCartLoader, setDeleteCartLoader] = useState(false);
   const authToken = localStorage.getItem("authToken");
-
   const productId = product.id ? product.id : product.product_id;
   let wishListItems = localStorage.getItem("wishListItems");
   const [autoplay, setAutoplay] = useState(false);
@@ -206,6 +205,8 @@ export const ProductCard = ({
     localStorage.setItem("SaveForLater", JSON.stringify(updateProduct));
     notify(name, " has been removed from cart.");
   };
+
+  
   return (
     <React.Fragment>
       <div
@@ -358,13 +359,17 @@ export const ProductCard = ({
                 <span className="ml-0 sm:ml-1 text-[10px] sm:text-xl font-normal sm:font-bold">
                   {product.currency_title ? product.currency_title : "USD "}
                 </span>
+                price
+ 
+
                 {product.sale_price ? (
+                  
                   <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">
                     {product.sale_price}.
                   </span>
                 ) : (
                   <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">
-                    {product.original_price}.
+                    {product.front_sale_price}.
                   </span>
                 )}
 

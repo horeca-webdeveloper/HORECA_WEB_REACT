@@ -25,6 +25,7 @@ export const CartButton = ({
   images,
   video_path,
 }) => {
+ 
   const { triggerUpdateCart } = useCart();
   const { totalCartItems, incrementCartItems } = useLocalCartCount();
   const [loader, setLoader] = useState(false);
@@ -33,6 +34,13 @@ export const CartButton = ({
     toast.dismiss();
     toast(
       <span className="line-clamp-2">{`${text} has been added to your cart`}</span>
+    );
+  };
+
+  const notify2 = (text) => {
+    toast.dismiss();
+    toast(
+      <span className="line-clamp-2">{`${text}`}</span>
     );
   };
 
@@ -45,13 +53,20 @@ export const CartButton = ({
         const response = await apiClient.post(`/cart`, {
           product_id: product_id,
           quantity: quantity,
+           
         });
-        setLoader(false);
-        setShowCountButton(true);
-        setButtonShow(true);
-        setQuantity ? setQuantity(1) : console.log();
-        triggerUpdateCart();
-        notify(name);
+        if(response.data.success){
+          notify(name);
+          setLoader(false);
+          setShowCountButton(true);
+          setButtonShow(true);
+          setQuantity ? setQuantity(1) : console.log();
+          triggerUpdateCart();
+        }else{
+          notify2('Some error occured.');
+        }
+      
+      
       } catch (error) {
         console.error("Error:", error);
       } finally {

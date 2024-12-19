@@ -22,6 +22,7 @@ export const FeatureBrand = ({
 
   const bigScreenCss =
     "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
+ 
 
   return (
     <Wrapper>

@@ -26,25 +26,25 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
     const [tempDiscountPercent, setTempDiscountPercent] = useState(10);
     const [tempTotalAmount, setTempTotalAmount] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
+    const [discountAmount,setDiscountAmount]=useState(0);
+    // useEffect(() => {
+    //     handlerCartSummary();
+    // }, [cartSummaryFlag])
 
-    useEffect(() => {
-        handlerCartSummary();
-    }, [cartSummaryFlag])
 
+    // const handlerCartSummary = async () => {
 
-    const handlerCartSummary = async () => {
-
-        setCartSummaryLoader(true)
-        try {
-            const response = await apiClient.get(`/cart-summary`);
-            setSummary(response.data)
-            setTotalOrderPrice(response.data.total_with_tax)
-        } catch (error) {
-            console.error('Error:', error);
-        } finally {
-            setCartSummaryLoader(false)
-        }
-    }
+    //     setCartSummaryLoader(true)
+    //     try {
+    //         const response = await apiClient.get(`/cart-summary`);
+    //         setSummary(response.data)
+    //         setTotalOrderPrice(response.data.total_with_tax)
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //     } finally {
+    //         setCartSummaryLoader(false)
+    //     }
+    // }
 
 
     const handlerApplyCoupon = async (e) => {
@@ -91,46 +91,44 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
     }, []);
 
     useEffect(() => {
-
+        let tempSubtotal = 0;
+        let tempTempSaving = 0;
+        let tempTax = 0;
         if (authToken == null) {
-            let tempSubtotal = 0;
-            let tempTempSaving = 0;
-            let tempTax = 0;
-            let tempTotalAmount = 0;
+           
             !!tempCartItems && tempCartItems.forEach((item, index) => {
                 tempSubtotal += item.original_price * item.quantity;
                 tempTempSaving += item.front_sale_price * item.quantity;
             });
-
+            if(!!tempCartItems && tempCartItems.length>0){
             tempTax = tempSubtotal * (tempDiscountPercent / 100);
             setSubTotal(tempSubtotal);
             setTempSaving(tempTempSaving - tempSubTotal);
             setTempTax(tempTax);
             setTempTotalAmount(tempSubTotal + tempTax + tempShippingRate);
+            }
 
         } else {
-            let tempSubtotal = 0;
-            let tempTempSaving = 0;
-            let tempTax = 0;
-            let tempTotalAmount = 0;
             !!cartItems && cartItems.forEach((item, index) => {
                 tempSubtotal += item.product.sale_price ? (item.product.sale_price * item.quantity) : (item.product.original_price * item.quantity);
                 tempTempSaving += item.product.price * item.quantity;
             });
-
-
-            tempTax = tempSubtotal * (tempDiscountPercent / 100);
-            setSubTotal(tempSubtotal);
-            setTempSaving(tempTempSaving - tempSubTotal);
-            setTempTax(tempTax);
-            setTempTotalAmount(tempSubTotal + tempTax + tempShippingRate);
-            if (discountPercent) {
-
-                setTotalAmount(((tempSubTotal + tempTax + tempShippingRate) * ((100 - discountPercent) / 100)));
-            } else {
-                setTotalAmount((tempSubTotal + tempTax + tempShippingRate));
+            if(!!cartItems && cartItems.length>0){
+                tempTax = tempSubtotal * (tempDiscountPercent / 100);
+                setSubTotal(tempSubtotal);
+                setTempSaving(tempTempSaving - tempSubTotal);
+                setTempTax(tempTax);
+                setTempTotalAmount(tempSubTotal + tempTax + tempShippingRate);
+                if (discountPercent) {
+                    
+                    setDiscountAmount((tempSubTotal + tempTax + tempShippingRate)/discountPercent);
+                    setTotalAmount(((tempSubTotal + tempTax + tempShippingRate) * ((100 - discountPercent) / 100)));
+                } else {
+                    setTotalAmount((tempSubTotal + tempTax + tempShippingRate));
+                }
+    
             }
-
+           
         }
 
     }, [tempCartItems, cartItems]);
@@ -138,7 +136,9 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
     const navigation = (data) => {
         navigate('/review-checkout', data);
     }
-
+ 
+ 
+ 
     return (
         <React.Fragment>
             <Wrapper>
@@ -164,7 +164,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
 
 
 
-                        {tempSubTotal && cartItems.length > 0 && authToken != null ? (
+                        {(tempSubTotal && cartItems.length > 0) && authToken? (
                             <SideWrapper classes={"mt-4"}>
                                 {!cardSummaryLoader ? <React.Fragment>
 
@@ -204,7 +204,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                                             <span className="">{tempCurrencyTitle} {(tempTotalAmount / discountPercent).toFixed(2)}</span>
                                         </div>
                                     ) : null}
-
+ 
                                     <div className="w-full h-[1px] bg-gray-300 my-3"></div>
 
                                     {discountPercent && tempTotalAmount ? (
@@ -220,7 +220,7 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                                     {confirmAndPayFn && confirmAndPayFn ? <button onClick={confirmAndPayFn} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                         <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
                                     </button> :
-                                        <button onClick={() => navigation({ state: { totalAmount: totalAmount, sub_total: tempSubTotal, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
+                                        <button onClick={() => navigation({ state: { totalAmount: totalAmount, sub_total: tempSubTotal, tax: tempTax, shippingRate: tempShippingRate, savings: tempTempSaving, currencyTitle: tempCurrencyTitle,discountAmount:discountAmount } })} className="text-white text-base font-semibold text-center flex items-center justify-center py-3 px-3 bg-primary w-full rounded-md mt-5">
                                             <span className="mr-2">Confirm & Pay</span> <FaLongArrowAltRight />
                                         </button>}
 

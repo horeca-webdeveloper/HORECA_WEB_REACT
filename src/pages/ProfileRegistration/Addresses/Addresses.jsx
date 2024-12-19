@@ -7,6 +7,7 @@ import Skeleton from "react-loading-skeleton";
 import { ProductCard } from "../../../shared/ProductCard";
 import { apiClient } from "../../../utils/apiWrapper";
 import CommonProducts from "../CommonProducts/CommonProducts";
+import { notify } from "../../../utils/notify";
 
 const Addresses = () => {
   const [popupHeading, setPopupHeading] = useState("");
@@ -52,6 +53,25 @@ const Addresses = () => {
     }
 
   };
+
+  const defaultAddress = async (id) => {
+    setLoader(true);
+    try {
+      const response = await apiClient.post(`/addresses/update-default-address`, {
+        address_id: id,
+      });
+
+      notify("Success", response.data.message);
+      setStatus(!updateStatus);
+    } catch (error) {
+      console.log("error", error);
+    }
+    finally {
+      // setLoader(false);
+    }
+
+  };
+
   const updateAddress = (items) => {
     setItems(items);
     setShowPopup(true);
@@ -72,6 +92,10 @@ const Addresses = () => {
       url: "/",
       title: "Profile",
     },
+    {
+      
+      title: "Addresses",
+    },
   ];
   const bigScreenCss =
     "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
@@ -83,7 +107,7 @@ const Addresses = () => {
     fetchAddress();
   }, [updateStatus]);
 
- 
+
 
   return (
     <>
@@ -129,18 +153,18 @@ const Addresses = () => {
                     <div className="flex items-center items-center mt-[10px]">
                       <div className="flex w-[100%] items-center justify-between">
                         <div className="flex items-center">
-                          {item.is_default ? <input type="radio" checked /> : <input type="radio" />}
+                          <input type="radio"  checked={item.is_default}  onClick={() => defaultAddress(item.id)} />
 
                           <p className="font-sans text-[#64748B] p-[5px] ml-[5px] text-sm font-normal leading-[17.6px] text-left decoration-skip-ink-none underline-offset-4">
-                            Default {item.is_default}
+                            Default
                           </p>
                         </div>
-                        <div className="flex text-[14px] text-[#64748B]">
-             
+                        <div className="flex text-[14px] text-[#64748B] lg:hidden md:hidden xl:hidden sm:hidden">
+
                           <p className="px-[10px] border-r cursor-pointer" onClick={() => deleteAddress(item.id)}>Delete</p>
                           {/* <p className="px-[10px] border-r">Copy</p> */}
                           <p
-                            onClick={()=>updateAddress(item.id)}
+                            onClick={() => updateAddress(item.id)}
                             className="px-[10px] border-r cursor-pointer"
                           >
                             Edit
@@ -152,7 +176,7 @@ const Addresses = () => {
                   </div>
                   <div className="hidden sm:flex items-center justify-center flex-col p-[15px]">
                     <button
-                       onClick={()=>updateAddress(item)}
+                      onClick={() => updateAddress(item)}
                       className="flex m-[10px] items-center justify-center rounded-md font-sans w-[180px] h-[40px] border border-[#666666] text-[16px] text-[#666666] font-medium leading-[16px] text-left underline-offset-auto decoration-slice"
                     >
                       Edit
@@ -276,7 +300,7 @@ const Addresses = () => {
             </div>
           )}
           {showPopup && (
-            <Popup setShowPopup={setShowPopup} popupHeading={popupHeading} items={items}  updateStatus={updateStatus} setStatus={setStatus}/>
+            <Popup setShowPopup={setShowPopup} popupHeading={popupHeading} items={items} updateStatus={updateStatus} setStatus={setStatus} />
           )}
         </Wrapper>
       )}
