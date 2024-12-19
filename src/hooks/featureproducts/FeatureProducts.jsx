@@ -46,10 +46,10 @@ export const FeatureProduct = ({
         style={
           window.innerWidth < 640
             ? {
-                overflow: "auto",
-                scrollbarWidth: "none", // For Firefox
-                msOverflowStyle: "none", // For Internet Explorer and Edge
-              }
+              overflow: "auto",
+              scrollbarWidth: "none", // For Firefox
+              msOverflowStyle: "none", // For Internet Explorer and Edge
+            }
             : {}
         }
         className={bigScreenCss}

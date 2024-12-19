@@ -225,6 +225,33 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
     );
   };
 
+  const [maxIndex, setMaxIndex] = useState(4); // Default for lg screen
+
+  useEffect(() => {
+    const updateMaxIndex = () => {
+      const width = window.innerWidth;
+
+      if (width >= 1536) {
+        setMaxIndex(4); // 2xl: index <= 4
+      } else if (width >= 1280) {
+        setMaxIndex(3); // xl: index <= 3
+      } else if (width >= 1024) {
+        setMaxIndex(2); // lg: index <= 2
+      } else if (width >= 768) {
+        setMaxIndex(1); // md: index <= 1
+      } else {
+        setMaxIndex(0); // sm: index <= 0
+      }
+    };
+
+    updateMaxIndex(); // Set initial value
+    window.addEventListener("resize", updateMaxIndex);
+
+    return () => {
+      window.removeEventListener("resize", updateMaxIndex);
+    };
+  }, []);
+
   return (
     <React.Fragment>
       {openModel && !token ? (
@@ -441,7 +468,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   {categories?.map((item, index) => {
                     return (
                       <li
-                      key={item.id}
+                        key={item.id}
                         onClick={() => {
                           if (item?.children?.length > 0) {
                             setChildCategory(item?.children);
@@ -597,7 +624,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
 
         {/* Location Search Bar  */}
         <div
-          className="cursor-pointer relative w-[12.8rem]  flex items-center border border-gray-300 rounded-full h-12 px-3 ml-14 hidden sm:flex"
+          className="hidden 2xl:flex cursor-pointer relative w-[12.8rem] items-center border border-gray-300 rounded-full h-12 px-3 ml-14 "
           onClick={() => setOpenModel(true)}
         >
           <img
@@ -644,7 +671,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           {isFocused && (products || categoryList || brands) ? (
             <div className="max-h-[700px] rounded-lg absolute w-full z-[999] mt-3">
               {products && products.length > 0 && (
-                <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
+                <div className="flex border-b-2 border-b-[#e2e8f0] rounded-none sm:rounded-lg bg-[#f6f8fb]">
                   <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
                     Products
                   </div>
@@ -681,11 +708,11 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
               )}
 
               {categoryList && categoryList.length > 0 && (
-                <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
-                  <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
+                <div className="flex border-b-2 border-b-[#e2e8f0] rounded-none sm:rounded-lg bg-[#f6f8fb]">
+                  <div className="basis-1/4 py-4 px-3 w-[100px] sm:w-full text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
                     Categories
                   </div>
-                  <div className="basis-3/4 py-4 px-3 bg-white">
+                  <div className="basis-3/4 w-[100px] py-4 px-3 bg-white">
                     {categoryList.slice(0, 4).map((cat, index) => (
                       <Link
                         to={`/collections/${cat.slug}`}
@@ -706,7 +733,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
               )}
 
               {brands && brands.length > 0 && (
-                <div className="flex  border-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
+                <div className="flex  border-[#e2e8f0] rounded-none sm:rounded-lg bg-[#f6f8fb]">
                   <div className="basis-1/4 py-4 px-3 text-primary font-semibold border-r-2 text-base">
                     Brands
                   </div>
@@ -741,7 +768,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
         </div>
 
         <div className="flex flex-row  items-center justify-evenly ml-[15%] sm:ml-6  sm:mr-4  sm:min-w-[200px] ">
-          <div className="relative mx-2 hidden sm:flex">
+          <div className="hidden sm:flex relative mx-2">
             <img src={process.env.PUBLIC_URL + "/icons/graph.svg"} alt="" />
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
               0
@@ -749,7 +776,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
           </div>
 
           <div
-            className="relative mx-2 hidden sm:flex cursor-pointer"
+            className="hidden sm:flex relative mx-2  cursor-pointer"
             onClick={() => navigate("/wishlist")}
           >
             <img src={process.env.PUBLIC_URL + "/icons/heart.svg"} alt="" />
@@ -845,7 +872,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   SAR : 550.0
                 </p>
                 <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
-                Re Order
+                  Re Order
                 </button>
               </div>
             </div>
@@ -862,7 +889,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   SAR : 550.0
                 </p>
                 <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
-                Re Order
+                  Re Order
                 </button>
               </div>
             </div>
@@ -879,7 +906,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   SAR : 550.0
                 </p>
                 <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
-                Re Order
+                  Re Order
                 </button>
               </div>
             </div>
@@ -896,7 +923,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   SAR : 550.0
                 </p>
                 <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
-                Re Order
+                  Re Order
                 </button>
               </div>
             </div>
@@ -913,7 +940,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                   SAR : 550.0
                 </p>
                 <button className="flex items-center justify-center text-[white] mt-[5px] rounded-[4px] h-[28px] bg-[#186737] p-[10px] ">
-                Re Order
+                  Re Order
                 </button>
               </div>
             </div>
@@ -1074,7 +1101,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
                 ? categories.map((cat, index) => {
                     return (
                       <React.Fragment key={index}>
-                        {index <= 5 ? (
+                        {index <= maxIndex ? (
                           <Link
                             className={`text-base text-primary mx-2 `}
                             to={"/collections/" + cat.slug}
@@ -1212,7 +1239,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
         {isFocused && (products || categoryList || brands) ? (
           <div className="max-h-[700px] rounded-lg absolute w-full z-[999] mt-3">
             {products && products.length > 0 && (
-              <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
+              <div className="flex border-b-2 border-b-[#e2e8f0] rounded-none sm:rounded-lg bg-[#f6f8fb]">
                 <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
                   Products
                 </div>
@@ -1249,8 +1276,8 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             )}
 
             {categoryList && categoryList.length > 0 && (
-              <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
-                <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
+              <div className="flex border-b-2 border-b-[#e2e8f0] rounded-none sm:rounded-lg bg-[#f6f8fb]">
+                <div className="basis-1/4 py-4 px-3 w-[100px] sm:w-full text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
                   Categories
                 </div>
                 <div className="basis-3/4 py-4 px-3 bg-white">
@@ -1274,7 +1301,7 @@ export const Navigation = ({ categories, userProfile, currentLocation }) => {
             )}
 
             {brands && brands.length > 0 && (
-              <div className="flex  border-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
+              <div className="flex  border-[#e2e8f0] rounded-none sm:rounded-lg bg-[#f6f8fb]">
                 <div className="basis-1/4 py-4 px-3 text-primary font-semibold border-r-2 text-base">
                   Brands
                 </div>

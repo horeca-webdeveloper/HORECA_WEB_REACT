@@ -10,9 +10,9 @@ export const FeatureHeader = ({
   classes,
 }) => {
   const smScreen =
-    "flex items-center text-[12px] sm:text-lg overflow-x-auto space-x-4 px-2 py-1";
+    "flex items-center justify-between text-[12px] sm:text-lg overflow-x-auto space-x-4 px-2 py-1";
   const BgScreen =
-    "flex items-center text-[12px] sm:text-lg space-x-4 px-2 py-1";
+    "flex items-center justify-between text-[12px] sm:text-lg space-x-4 px-2 py-1";
 
   const flexSm = "flex-col";
   const flexBg = "flex";
@@ -26,7 +26,7 @@ export const FeatureHeader = ({
           className={`${
             window.innerWidth < 640
               ? "flex-col overflow-hidden text-black-100 font-semibold text-sm"
-              : "flex items-center overflow-hidden text-black-100 font-semibold text-sm sm:text-2xl"
+              : "flex items-center justify-between w-[100%] overflow-hidden text-black-100 font-semibold text-sm sm:text-2xl"
           }`}
         >
           <h2 className="text-black-100 font-semibold text-sm sm:text-2xl">

@@ -54,8 +54,6 @@ const BrowsingHistory = () => {
   const bigScreenCss =
     "grid grid-cols-2 lg:grid-cols-12 xl:grid-cols-12 sm:grid-cols-4 gap-4  mt-4 mb-10";
 
-
- 
   return (
     <>
       <Wrapper>
@@ -78,28 +76,24 @@ const BrowsingHistory = () => {
               Oct 19 2024, 5:45 P.M.
             </div>
             <div
-              style={
-                  {
-                      overflow: "auto",
-                      scrollbarWidth: "none", // For Firefox
-                      msOverflowStyle: "none", // For Internet Explorer and Edge
-                    }
-                  
-              }
-              className={bigScreenCss}
+              style={{
+                overflow: "auto",
+                scrollbarWidth: "none", // For Firefox
+                msOverflowStyle: "none", // For Internet Explorer and Edge
+              }}
+              className={viewedLoader ? "grid grid-cols-4 gap-4" : bigScreenCss}
             >
               {viewedLoader ? (
-                Array.from({ length: 10 }).map((_, index) => (
+                Array.from({ length: 4 }).map((_, index) => (
                   <Skeleton
                     key={index}
-                    className="col-span-1 mt-1 min-h-[400px]"
+                    style={{ width: "400px" }}
+                    className=" mt-1 min-h-[400px] w-[280px]"
                   />
                 ))
               ) : (
                 <React.Fragment>
-                  
                   {Array.isArray(viewedProducts) ? (
-                    
                     viewedProducts?.map((item, index) => {
                       return (
                         <ProductCard

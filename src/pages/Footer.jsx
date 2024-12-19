@@ -82,14 +82,14 @@ export const Footer = () => {
         )}
       </Wrapper>
       <hr />
-      <Wrapper classes="pt-0 sm:pt-7 pb-0 sm:pb-10">
-        <div className="grid grid-cols-1 gap-0 sm:gap-2 sm:flex sm:flex sm:gap-0">
+      <Wrapper classes="pt-0 lg:pt-7 pb-0 lg:pb-10">
+        <div className="grid grid-cols-1 gap-0 lg:gap-2 lg:flex lg:flex lg:gap-0">
           {window.innerWidth > 640 &&
             footerMenu.map((footer, index) => {
               return (
                 <div
                   key={footer.name}
-                  className="basis-1/5 border-t sm:border-none mt-3 text-black-100"
+                  className="basis-1/5 border-t lg:border-none mt-3 text-black-100"
                 >
                   <h4 className="mt-[20px]  text-[1.375rem] font-semibold">
                     {footer.name}
@@ -174,7 +174,7 @@ export const Footer = () => {
                 </div>
               );
             })}
-          <div className="basis-1/5 mt-7 hidden sm:block">
+          <div className="basis-1/5 mt-7 hidden md:block">
             <h4 className=" text-[1.375rem] font-semibold">Download</h4>
             <p className="text-gray-700 text-base mt-5">
               You can download our mobile application from app stores
@@ -230,7 +230,7 @@ export const Footer = () => {
 
       {/* Bottom Navigation  */}
 
-      <Wrapper classes="flex flex-col items-start sm:items-between inline-block sm:flex justify-between py-8 sm:flex-row">
+      <Wrapper classes="flex flex-col items-start sm:items-center inline-block sm:flex justify-between py-8 sm:flex-row">
         <div className="text-sm text-gray-700 ">
           © 2024,{" "}
           <Link to="#" className="font-bold text-primary">
@@ -239,7 +239,7 @@ export const Footer = () => {
           </Link>{" "}
           All rights reserved
         </div>
-        <div className="hidden sm:block">
+        <div className="hidden lg:block">
           <div className="flex items-center justify-center">
             <div className="flex items-center justify-center mx-5 hidden sm:flex m-[10px]">
               <img
