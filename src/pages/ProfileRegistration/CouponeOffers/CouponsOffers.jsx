@@ -7,6 +7,7 @@ import { apiClient } from "../../../utils/apiWrapper";
 import Skeleton from "react-loading-skeleton";
 import { useNavigate } from "react-router";
 import { ProductCard } from "../../../shared/ProductCard";
+import CommonProducts from "../CommonProducts/CommonProducts";
 
 const CouponsOffers = () => {
   const [loader, setLoader] = useState(true);
@@ -56,6 +57,10 @@ const CouponsOffers = () => {
       url: "/",
       title: "Profile",
     },
+    {
+      
+      title: "Coupons & offers",
+    },
   ];
   const bigScreenCss =
     "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
@@ -96,11 +101,11 @@ const CouponsOffers = () => {
         <div className="flex">
           <SidebarProfile />
           {/* Coupons Section */}
-          <div className="flex flex-col justify-between w-[100%] h-[100%]">
-            <div className="hidden sm:block">
-              <h1 className="text-center mt-[15px]">Coupons & Offers</h1>
-              <div className="flex  p-[10px] justify-between m-[5px] w-[100%]">
-                <div className="flex  mb-[10px] flex-wrap w-[100%] sm:w-[45%] justify-between mt-[5px]">
+          <div className="flex flex-col  w-[100%]">
+            <h1 className="text-center mt-[15px]">Coupons & Offers</h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 p-4 w-full">
+              <div className="hidden sm:block">
+                <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-[5px]">
                   <p className="font-work-sans text-[#186737] text-base font-normal leading-6 text-left decoration-none">
                     All Coupons
                   </p>
@@ -114,15 +119,17 @@ const CouponsOffers = () => {
                     Expired
                   </p>
                 </div>
-                <div className="hidden sm:block w[100%]">
-                  <input
-                    className="border rounded-[20px] border-2 w-[320px] p-[5px]"
-                    type="input"
-                    placeholder="Search Coupons or Vouchers"
-                  />
-                </div>
+              </div>
+
+              <div className="w-full  mx-auto">
+                <input
+                  className="border rounded-[20px] border-2 w-full p-[5px]"
+                  type="text"
+                  placeholder="Search Coupons or Vouchers"
+                />
               </div>
             </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {loader ? (
                 Array.from({ length: 2 }).map((_, index) => (
@@ -146,106 +153,7 @@ const CouponsOffers = () => {
             </div>
           </div>
         </div>
-        {window?.innerWidth < 640 && (
-          <div>
-            <div className="mb-10 mt-[20px] p-[10px]">
-              <img
-                className="h-[160px] w-[100vw] object-cover rounded-md"
-                src={process.env.PUBLIC_URL + "/images/RegistrationProfile.png"}
-              />
-              <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
-                <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
-                  Products you may also like
-                </h2>
-              </div>
-              <div
-                style={
-                  window.innerWidth < 640
-                    ? {
-                        overflow: "auto",
-                        scrollbarWidth: "none", // For Firefox
-                        msOverflowStyle: "none", // For Internet Explorer and Edge
-                      }
-                    : {}
-                }
-                className={bigScreenCss}
-              >
-                {false ? (
-                  Array.from({ length: 10 }).map((_, index) => (
-                    <Skeleton
-                      key={index}
-                      className="col-span-1 mt-1 min-h-[400px]"
-                    />
-                  ))
-                ) : (
-                  <React.Fragment>
-                    {products && products.length > 0 ? (
-                      products.map((product, index) =>
-                        index < 10 ? (
-                          <ProductCard
-                            key={index}
-                            classes="col-span-1 mt-1"
-                            product={product}
-                          />
-                        ) : null
-                      )
-                    ) : (
-                      <p className="col-span-5 font-semibold text-center text-base">
-                        No Product Found
-                      </p>
-                    )}
-                  </React.Fragment>
-                )}
-              </div>
-            </div>
-            <div className="mb-10">
-              <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
-                <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
-                  Inspired by your browsing history
-                </h2>
-              </div>
-              <div
-                style={
-                  window.innerWidth < 640
-                    ? {
-                        overflow: "auto",
-                        scrollbarWidth: "none", // For Firefox
-                        msOverflowStyle: "none", // For Internet Explorer and Edge
-                      }
-                    : {}
-                }
-                className={bigScreenCss}
-              >
-                {false ? (
-                  Array.from({ length: 10 }).map((_, index) => (
-                    <Skeleton
-                      key={index}
-                      className="col-span-1 mt-1 min-h-[400px]"
-                    />
-                  ))
-                ) : (
-                  <React.Fragment>
-                    {products && products.length > 0 ? (
-                      products.map((product, index) =>
-                        index < 10 ? (
-                          <ProductCard
-                            key={index}
-                            classes="col-span-1 mt-1"
-                            product={product}
-                          />
-                        ) : null
-                      )
-                    ) : (
-                      <p className="col-span-5 font-semibold text-center text-base">
-                        No Product Found
-                      </p>
-                    )}
-                  </React.Fragment>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+        <CommonProducts />
       </Wrapper>
     </>
   );

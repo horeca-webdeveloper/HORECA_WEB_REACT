@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Wrapper } from "./Wrapper";
 import { apiClient } from "../utils/apiWrapper";
 import Skeleton from "react-loading-skeleton";
 
 export const BlogsCard = ({ classes, data }) => {
+  const navigate = useNavigate();
   const [loader, setLoader] = useState(true);
   const [blogs, setBlogs] = useState([]);
 
@@ -41,7 +42,10 @@ export const BlogsCard = ({ classes, data }) => {
         <h2 className="text-black-100 font-semibold text-[16px] sm:text-2xl">
           Our Latest News & Blogs
         </h2>
-        <span className=" text-gray-700 text-[12px] sm:text-lg">
+        <span
+          onClick={() => navigate("/blog-listing")}
+          className=" text-gray-700 cursor-pointer text-[12px] sm:text-lg"
+        >
           View All Blogs
         </span>
       </div>
@@ -52,7 +56,10 @@ export const BlogsCard = ({ classes, data }) => {
               return (
                 <React.Fragment key={index}>
                   {index < 3 ? (
-                    <div className="border-2 rounded-md p-6 border-[#EEEEEE]">
+                    <div
+                      onClick={() => navigate("/blog-details")}
+                      className="border-2 rounded-md p-6 border-[#EEEEEE]"
+                    >
                       <React.Fragment>
                         <Link to="#">
                           <img

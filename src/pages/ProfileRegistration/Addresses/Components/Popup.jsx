@@ -4,15 +4,41 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { apiClient } from "../../../../utils/apiWrapper";
 import { InfinitySpin } from "react-loader-spinner";
-const Popup = ({ setShowPopup, popupHeading }) => {
+import { notify } from "../../../../utils/notify";
+const Popup = ({ setShowPopup, popupHeading,items,setStatus,updateStatus }) => {
   const [loader, setLoader] = useState(false);
   const [getData, setData] = useState([]);
-  const handleForm = async (data) => {
-    const datas = {};
+  const [countries, setCountries] = useState([]);
+  const userData = JSON.parse(localStorage.getItem('userProfile'));
 
+  const fetchCountry = async () => {
+    try {
+      const response = await apiClient.get('countries');
+      setCountries(response.data);
+    } catch (error) {
+      console.log("error", error);
+    }
+
+  }
+
+  const handleForm = async (data) => {
+    const datas = {
+      "name": userData.name,
+      "phone": userData.phone,
+      "email": userData.email,
+      "is_default":true
+    };
+    Object.assign(datas, data);
     try {
       setLoader(true);
-      const response = await apiClient.post(`/create-payment`, datas);
+      let response;
+      if(items){
+        response = await apiClient.put(`/addresses/${items.id}`, datas);
+      }else{
+        console.log('no');
+        response = await apiClient.post(`/addresses`, datas);
+      }
+       
       setData(response.data);
     } catch (error) {
       console.error("Error:", error);
@@ -23,19 +49,18 @@ const Popup = ({ setShowPopup, popupHeading }) => {
 
   const schema = yup
     .object({
-      name: yup.string().required(),
-      phone: yup.number().positive().integer().required(),
-      email: yup.string().required(),
       country: yup.string().required(),
       state: yup.string().required(),
       city: yup.string().required(),
       address: yup.string().required(),
+      zip_code: yup.string().required(),
     })
     .required();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -43,13 +68,22 @@ const Popup = ({ setShowPopup, popupHeading }) => {
 
   const onSubmit = (data) => {
     handleForm(data);
+    reset();
   };
 
   useEffect(() => {
-    if (getData.status == "success" && getData.redirect_url) {
-      window.location.href = getData.redirect_url;
+    if (getData.success) {
+      notify("Success",getData.message);
+      setStatus(!updateStatus)
+      setShowPopup(false);
     }
   }, [getData]);
+
+  useEffect(() => {
+    fetchCountry();
+  }, []);
+ 
+
   return (
     <div>
       <div className="fixed inset-0 p-[10px] flex items-center justify-center z-50 backdrop-blur-sm">
@@ -66,22 +100,31 @@ const Popup = ({ setShowPopup, popupHeading }) => {
             <div className="p-[5px]">
               <div className="mt-[10px]">
                 <p className="font-sans ml-[10px] p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                  Country :
+                  Select Country :
                 </p>
-                <input
+                <select
+                  id="country"
                   className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
-                  placeholder="Enter your country."
-                  {...register("country")}
-                />
+                  {...register("country", { required: "Country is required" })}
+                >
+                  {items?.country ?   <option value={items.country} selected>{items.country}</option>:   <option value="">Select Country</option>}
+               
+                  {countries.map(option => (
+                    <option key={option.name} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
                 <span>{errors.country?.message}</span>
               </div>
 
               <div className="mt-[10px]">
                 <p className="font-sans ml-[10px] p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                  City :
+                  Enter City :
                 </p>
                 <input
                   type="text"
+                  defaultValue={items && items.city}
                   className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
                   placeholder="Enter your city"
                   {...register("city")}
@@ -90,37 +133,42 @@ const Popup = ({ setShowPopup, popupHeading }) => {
               </div>
               <div className="mt-[10px]">
                 <p className="font-sans ml-[10px] p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                  State :
+                  Enter State :
                 </p>
                 <input
                   type="text"
+                  defaultValue={items && items.state}
                   className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
                   placeholder="Enter your state"
                   {...register("state")}
                 />
                 <span>{errors.state?.message}</span>
               </div>
-              {/* <div className="mt-[10px]">
-              <p className="font-sans ml-[10px] p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                ZIP Code :
-              </p>
-              <input
-                type="text"
-                className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
-                placeholder="Address"
-              />
-            </div> */}
 
               <div className="mt-[10px]">
                 <p className="font-sans ml-[10px] p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
-                  Address :
+                  Enter Zipcode :
                 </p>
                 <input
+                  type="number"
+                  defaultValue={items?.zip_code || ""}
+                  className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
+                  placeholder="Enter your zipcode"
+                  {...register("zip_code")}
+                />
+                <span>{errors.state?.message}</span>
+              </div>
+              <div className="mt-[10px]">
+                <p className="font-sans ml-[10px] p-[5px] text-base text-[#000000] font-medium leading-[21.11px] text-left decoration-skip-ink-none underline-offset-4">
+                  Enter Address :
+                </p>
+                <textarea
                   type="text"
+                  defaultValue={!!items && items.address}
                   className="border-2 rounded ml-[2%] p-[5px] w-[96%]"
                   placeholder="Enter your address"
                   {...register("address")}
-                />
+                /> 
                 <span>{errors.address?.message}</span>
               </div>
               <div className="flex items-center justify-end p-[15px]">

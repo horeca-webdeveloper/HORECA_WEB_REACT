@@ -46,17 +46,20 @@ export const FeatureProduct = ({
         style={
           window.innerWidth < 640
             ? {
-                overflow: "auto",
-                scrollbarWidth: "none", // For Firefox
-                msOverflowStyle: "none", // For Internet Explorer and Edge
-              }
+              overflow: "auto",
+              scrollbarWidth: "none", // For Firefox
+              msOverflowStyle: "none", // For Internet Explorer and Edge
+            }
             : {}
         }
         className={bigScreenCss}
       >
         {featureCatLoader ? (
           Array.from({ length: 10 }).map((_, index) => (
-            <Skeleton key={index} className="col-span-1 mt-1 min-h-[550px]" />
+            <Skeleton
+              key={index}
+              className="col-span-1 mt-1 min-h-[550px] w-[150px]"
+            />
           ))
         ) : (
           <React.Fragment>

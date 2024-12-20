@@ -69,14 +69,14 @@ const ContactUs = () => {
           </div>
         </div>
         <div>
-          <h1 className="font-bold leading-[35.19px] text-[30px]">
+          <h1 className="font-bold ml-[15px] leading-[35.19px] text-[30px]">
             Our Locations
           </h1>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-[100px] p-[15px]">
             <div className=" rounded">
               <div>
                 <img
-                  className="w-[527px] h-[353px] rounded"
+                  className="hidden sm:block object-cover w-[527px] h-[200px] sm:h-[353px] rounded"
                   src="https://images.pexels.com/photos/29497729/pexels-photo-29497729/free-photo-of-iconic-view-of-burj-khalifa-in-dubai-skyline.jpeg?auto=compress&cs=tinysrgb&w=800"
                 />
               </div>
@@ -99,10 +99,10 @@ const ContactUs = () => {
                 </p>
               </div>
             </div>
-            <div className=" h-[539px] rounded">
+            <div className=" h-[100%] rounded">
               <div>
                 <img
-                  className="w-[527px] h-[353px] rounded"
+                  className="hidden sm:block object-cover w-[527px] h-[200px] sm:h-[353px] rounded"
                   src="https://images.pexels.com/photos/29497729/pexels-photo-29497729/free-photo-of-iconic-view-of-burj-khalifa-in-dubai-skyline.jpeg?auto=compress&cs=tinysrgb&w=800"
                 />
               </div>
@@ -125,10 +125,10 @@ const ContactUs = () => {
                 </p>
               </div>
             </div>
-            <div className=" h-[539px] rounded">
+            <div className=" h-[100%] rounded">
               <div>
                 <img
-                  className="w-[527px] h-[353px] rounded"
+                  className="hidden sm:block object-cover w-[527px] h-[200px] sm:h-[353px] rounded"
                   src="https://images.pexels.com/photos/2730356/pexels-photo-2730356.jpeg?auto=compress&cs=tinysrgb&w=800"
                 />
               </div>
@@ -151,10 +151,10 @@ const ContactUs = () => {
                 </p>
               </div>
             </div>
-            <div className=" h-[539px] rounded">
+            <div className=" h-[100%] rounded">
               <div>
                 <img
-                  className="w-[527px] h-[353px] rounded"
+                  className="hidden sm:block object-cover w-[527px] h-[200px] sm:h-[353px] rounded"
                   src="https://media.istockphoto.com/id/1452888631/photo/corniche-in-old-town-jeddah.jpg?b=1&s=612x612&w=0&k=20&c=E9oQfnilMZIFLMpggPWgJr4BP6D87PZk9pRr2GqvaxQ="
                 />
               </div>
@@ -177,10 +177,10 @@ const ContactUs = () => {
                 </p>
               </div>
             </div>
-            <div className=" h-[539px] rounded">
+            <div className=" h-[100%] rounded">
               <div>
                 <img
-                  className="w-[527px] h-[353px] rounded"
+                  className="hidden sm:block object-cover w-[527px] h-[200px] sm:h-[353px] rounded"
                   src="https://media.istockphoto.com/id/482787909/photo/corniche-doha-qatar-modern-urban-skyscrapers.jpg?b=1&s=612x612&w=0&k=20&c=RrRJ9RTn6aCqwl_BvD3U9vILcIFSOgmmt1pTgaii7Io="
                 />
               </div>
@@ -203,10 +203,10 @@ const ContactUs = () => {
                 </p>
               </div>
             </div>
-            <div className=" h-[539px] rounded">
+            <div className=" h-[100%] rounded">
               <div>
                 <img
-                  className="w-[527px] h-[353px] rounded"
+                  className="hidden sm:block object-cover w-[527px] h-[353px] rounded"
                   src="https://images.pexels.com/photos/27858202/pexels-photo-27858202/free-photo-of-a-train-with-a-city-skyline-in-the-background.jpeg?auto=compress&cs=tinysrgb&w=800"
                 />
               </div>

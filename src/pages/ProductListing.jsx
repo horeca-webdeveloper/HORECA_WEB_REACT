@@ -150,7 +150,7 @@ export const ProductListing = () => {
     <div>
       <div
         style={{ zIndex: 999 }}
-        className={`block sm:hidden w-[80vw] h-[100vh] p-5 bg-[white] border absolute z-999 mt-[-215px] 
+        className={`lg:hidden xl:hidden md:hidden w-[80vw] h-[100vh] p-5 bg-[white] border absolute z-999 mt-[-215px] 
           ${openFilterPopup ? "translate-x-[0%]" : "translate-x-[-100%]"} 
           transition-transform duration-300 ease-in-out`}
       >
@@ -160,7 +160,7 @@ export const ProductListing = () => {
         </div>
         <div className="flex p-[12px] flex-row items-center justify-between">
           <span className="text-sm text-gray-700 mr-6">
-            Sort:
+            Sort :
             <span className="text-black-100 ml-1 relative">
               <Menu
                 arrow={true}
@@ -246,8 +246,8 @@ export const ProductListing = () => {
       <Wrapper>
         <Breadcrumb items={breadcrumb} classes={"mt-7"} />
         <RelatedSearch relatedSearch={relatedSearch} />
-        <div className="grid grid-cols-9 gap-4">
-          {window?.innerWidth > 640 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-9 xl:grid-cols-9 2xl:grid-cols-9 gap-4">
+          {window?.innerWidth > 1040 && (
             <FilterSection
               minDelivery={minDelivery}
               maxDelivery={maxDelivery}
@@ -282,11 +282,11 @@ export const ProductListing = () => {
               </span>
               <div
                 onClick={() => setOpenFilterPopup(true)}
-                className="block sm:hidden bg-[#E2E8F0] p-[10px] rounded"
+                className="lg:hidden xl:hidden bg-[#E2E8F0] p-[10px] rounded"
               >
                 <img src={process.env.PUBLIC_URL + "icons/FilterIcon.png"} />
               </div>
-              <div className="hidden sm:block flex flex-row items-center ">
+              <div className="hidden sm:hidden md:hidden lg:block flex flex-row items-center ">
                 <span className="text-sm text-gray-700 mr-6">
                   Sort:
                   <span className="text-black-100 ml-1 relative">
@@ -358,7 +358,7 @@ export const ProductListing = () => {
 
             {/* Product Display Here  */}
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 w-[96vw] sm:w-[100%] gap-4 mt-4 mb-10">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 w-[96vw] sm:w-[100%] gap-4 mt-4 mb-10">
               {loader ? (
                 Array.from({ length: 12 }).map((_, index) => (
                   <div key={index} className="col-span-1">

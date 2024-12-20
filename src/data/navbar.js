@@ -1,13 +1,15 @@
-const currencyMenu = [
-  {
-    title: "Sell On Horeca",
-    redirectUrl: "/sell-on-horeca"
-  },
-  {
-    title: "Track your order",
-    redirectUrl: "/order-details"
-  }
-]
+export const getCurrencyMenu = (token) => {
+  return [
+    {
+      title: "Sell On Horeca",
+      redirectUrl: "/sell-on-horeca"
+    },
+    {
+      title: "Track your order",
+      redirectUrl: `${token ? "/registration/all-orders" : "/login"}`
+    }
+  ];
+};
 
 const languageMenu = [
   {
@@ -2109,7 +2111,7 @@ const categories = [
 ];
 
 
-export { currencyMenu, languageMenu, recommendedCategories, categories }
+export { languageMenu, recommendedCategories, categories }
 
 
 

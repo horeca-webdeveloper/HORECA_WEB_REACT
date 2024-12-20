@@ -39,7 +39,10 @@ import PaymentFailed from "./pages/payment/PaymentFailed";
 import { PasswordReset } from "./pages/PasswordReset";
 import ProfileWishlist from "./pages/ProfileRegistration/Wishlist/ProfileWishlist";
 import Wishlist from "./pages/Wishlist";
-import ProfileDrawer from "./pages/ProfileRegistration/ProfileDrawer/ProfileDrawer";
+import SellOnHoreca from "./pages/FooterPages/SellonHoreca/SellOnHoreca";
+import AboutUs from "./pages/AboutUs/AboutUs";
+import BlogListing from "./pages/BlogsPage/BlogListing";
+import BlogDetails from "./pages/BlogsPage/BlogDetails";
 const App = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
@@ -137,12 +140,17 @@ const App = () => {
         <Route path="/registration/addresses" element={<Addresses />} />{" "}
         <Route path="/registration/creditBalance" element={<CreditBalance />} />{" "}
         <Route path="/registration/AccountSecurity" element={<AccountSecurity />} />{" "}
-        <Route path="/order-details" element={<OrderDetails />} />{" "}
+        <Route path="/order-details/" element={<OrderDetails />} />{" "}
         <Route path="/contact-us" element={<ContactUs />} />{" "}
         <Route path="/faq" element={<FAQ />} />{" "}
         <Route path="/terms-condition" element={<TermsConsition />} />{" "}
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />{" "}
+        <Route path="/sell-on-horeca" element={<SellOnHoreca />} />{" "}
+        <Route path="blog-listing" element={<BlogListing/>}/>
+        <Route path="blog-details" element={<BlogDetails/>}/>
         <Route path="/career" element={<Career />} />{" "}
+        <Route path="/career" element={<Career />} />{" "}AboutUs
+        <Route path="/about-us" element={<AboutUs />} />{" "}
         <Route path="/forgot-password" element={<ForgotPassword />} />{" "}
         <Route path="/password-reset" element={<PasswordReset />} />{" "}
         <Route path="/payment/success" element={<PaymentSuccess />} />{" "}

@@ -8,6 +8,7 @@ import { Breadcrumb } from "../../../shared/Breadcrumb";
 import ImagePopup from "../../../components/ImagePopup";
 import { useNavigate } from "react-router";
 import { ProductCard } from "../../../shared/ProductCard";
+import CommonProducts from "../CommonProducts/CommonProducts";
 
 const AllOrders = () => {
   const [viewedLoader, setViewedLoader] = useState(true);
@@ -16,6 +17,10 @@ const AllOrders = () => {
   const [imageView, setImageView] = useState("");
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+  const navigation = (data) => {
+    navigate("/order-details", data);
+  };
+
   const fetchAllOrders = async () => {
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
@@ -24,7 +29,6 @@ const AllOrders = () => {
     try {
       const response = await apiClient.get("/orders");
       setOrdersData(response?.data);
-      console.log(response);
       setViewedLoader(false);
     } catch (error) {
       console.error("Error:", error);
@@ -54,6 +58,10 @@ const AllOrders = () => {
     {
       url: "/",
       title: "Profile",
+    },
+    {
+      
+      title: "All Orders",
     },
   ];
   const bigScreenCss =
@@ -105,38 +113,32 @@ const AllOrders = () => {
               Your Orders
             </h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 w-full">
+              <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-[5px]">
+                <p className="font-work-sans text-[#186737] text-base font-normal leading-6 text-left decoration-none">
+                  All Orders
+                </p>
+                <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
+                  Processing
+                </p>
+                <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
+                  Shipped
+                </p>
+                <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
+                  Delivered
+                </p>
+                <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
+                  Returns
+                </p>
+              </div>
 
-
-<div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-[5px]">
-  <p className="font-work-sans text-[#186737] text-base font-normal leading-6 text-left decoration-none">
-    All Orders
-  </p>
-  <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
-    Processing
-  </p>
-  <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
-    Shipped
-  </p>
-  <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
-    Delivered
-  </p>
-  <p className="font-work-sans text-[#666666] text-base font-normal leading-6 text-left decoration-none">
-    Returns
-  </p>
-</div>
-
-
-<div className="w-full  mx-auto">
-  <input
-    className="border rounded-[20px] border-2 w-full p-[5px]"
-    type="text"
-    placeholder="Item Name / Order ID / Tracking No."
-  />
-</div>
-
-</div>
-
-
+              <div className="w-full  mx-auto">
+                <input
+                  className="border rounded-[20px] border-2 w-full p-[5px]"
+                  type="text"
+                  placeholder="Item Name / Order ID / Tracking No."
+                />
+              </div>
+            </div>
 
             {viewedLoader ? (
               Array.from({ length: 10 }).map((_, index) => (
@@ -155,6 +157,7 @@ const AllOrders = () => {
                         id={index}
                         setImageView={setImageView}
                         setShowPopup={setShowPopup}
+                        navigation={navigation}
                       />
                     );
                   })
@@ -172,106 +175,7 @@ const AllOrders = () => {
             <ImagePopup setShowPopup={setShowPopup} imageView={imageView} />
           )}
         </div>
-        {window?.innerWidth < 640 && (
-          <div>
-            <div className="mb-10 mt-[20px] p-[10px]">
-              <img
-                className="h-[160px] w-[100vw] object-cover rounded-md"
-                src={process.env.PUBLIC_URL + "/images/RegistrationProfile.png"}
-              />
-              <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
-                <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
-                  Products you may also like
-                </h2>
-              </div>
-              <div
-                style={
-                  window.innerWidth < 640
-                    ? {
-                      overflow: "auto",
-                      scrollbarWidth: "none", // For Firefox
-                      msOverflowStyle: "none", // For Internet Explorer and Edge
-                    }
-                    : {}
-                }
-                className={bigScreenCss}
-              >
-                {false ? (
-                  Array.from({ length: 10 }).map((_, index) => (
-                    <Skeleton
-                      key={index}
-                      className="col-span-1 mt-1 min-h-[400px]"
-                    />
-                  ))
-                ) : (
-                  <React.Fragment>
-                    {products && products.length > 0 ? (
-                      products.map((product, index) =>
-                        index < 10 ? (
-                          <ProductCard
-                            key={index}
-                            classes="col-span-1 mt-1"
-                            product={product}
-                          />
-                        ) : null
-                      )
-                    ) : (
-                      <p className="col-span-5 font-semibold text-center text-base">
-                        No Product Found
-                      </p>
-                    )}
-                  </React.Fragment>
-                )}
-              </div>
-            </div>
-            <div className="mb-10">
-              <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
-                <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
-                  Inspired by your browsing history
-                </h2>
-              </div>
-              <div
-                style={
-                  window.innerWidth < 640
-                    ? {
-                      overflow: "auto",
-                      scrollbarWidth: "none", // For Firefox
-                      msOverflowStyle: "none", // For Internet Explorer and Edge
-                    }
-                    : {}
-                }
-                className={bigScreenCss}
-              >
-                {false ? (
-                  Array.from({ length: 10 }).map((_, index) => (
-                    <Skeleton
-                      key={index}
-                      className="col-span-1 mt-1 min-h-[400px]"
-                    />
-                  ))
-                ) : (
-                  <React.Fragment>
-                    {products && products.length > 0 ? (
-                      products.map((product, index) =>
-                        index < 10 ? (
-                          <ProductCard
-                            key={index}
-                            classes="col-span-1 mt-1"
-                            product={product}
-                          />
-                        ) : null
-                      )
-                    ) : (
-                      <p className="col-span-5 font-semibold text-center text-base">
-                        No Product Found
-                      </p>
-                    )}
-                  </React.Fragment>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+        <CommonProducts />
       </Wrapper>
     </>
   );

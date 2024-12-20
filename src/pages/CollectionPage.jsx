@@ -31,8 +31,7 @@ export const CollectionPage = () => {
   const [filterCategories, setFilterCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const location = useLocation();
-
- 
+  const [productLoader, setProductLoader] = useState(false);
 
   const handleInput = (e) => {
     set_minValue(e.minValue);
@@ -59,6 +58,7 @@ export const CollectionPage = () => {
             }
           });
         });
+      console.log("----->>>>>>", filteredObject);
       setFilterCategories(filteredObject);
       setCategoryName(matchedCategory && matchedCategory.name);
     } catch (error) {
@@ -69,17 +69,19 @@ export const CollectionPage = () => {
   };
 
   const fetchProducts = async () => {
+    setProductLoader(true);
     const authToken = localStorage.getItem("authToken");
     const response = await apiClient.get(
       `${authToken ? "/products" : "/products-guest"}`
     );
+    setProductLoader(false);
     setProducts(response.data.data.data);
   };
 
   useEffect(() => {
     fetchCategories();
     fetchProducts();
-  }, [location]);
+  }, []);
 
   const collectionBreadCrumb = [
     {
@@ -99,7 +101,7 @@ export const CollectionPage = () => {
     "flex grid-cols-5 sm:grid md:grid lg:grid 2xl:grid gap-5 sm:gap-5 sm:grid sm:space-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5";
 
   return (
-    <div>
+    <>
       <Wrapper>
         <Breadcrumb items={collectionBreadCrumb} classes={"mt-7"} />
       </Wrapper>
@@ -177,8 +179,7 @@ export const CollectionPage = () => {
                     )
                   )}
             </div>
-            <div className="grid grid-cols-1 hidden sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 mt-8">
-             
+            <div className="grid grid-cols-2  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 mt-8">
               {selectedCat && selectedCat.children
                 ? selectedCat.children.map((cat, index) => {
                     return (
@@ -298,26 +299,33 @@ export const CollectionPage = () => {
             <h2 className="font-medium sm:font-semibold text-[16px] sm:text-2xl leading-[18.77px] text-black-100 ">
               Top Picks in Santos
             </h2>
-             
-            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+
+            {window?.innerWidth > 600 && window?.innerWidth < 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 3</span>
             )}
-             {window?.innerWidth>1024 && (
+            {window?.innerWidth > 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...settings} className="arrow__wrapper">
-              {BrandPicks.map((product, index) => {
-                return (
-                  <ProductCard
-                    classes="min-h-[600px] mr-[10px]  mx-2"
-                    key={index}
-                    product={product}
-                  />
-                );
-              })}
-            </Slider>
+            <div className="slider-container">
+              <Slider {...settings} className="arrow__wrapper">
+                {products && products.length > 0
+                  ? products.map((product, index) => (
+                      <ProductCard
+                        classes="min-h-[600px] mx-2"
+                        key={index}
+                        product={product}
+                      />
+                    ))
+                  : Array.from({ length: 10 }).map((_, index) => (
+                      <Skeleton
+                        key={index}
+                        className="col-span-1 mt-1 min-h-[400px]"
+                      />
+                    ))}
+              </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -332,7 +340,7 @@ export const CollectionPage = () => {
               }
               className={bigScreenCss}
             >
-              {false ? (
+              {productLoader ? (
                 Array.from({ length: 10 }).map((_, index) => (
                   <Skeleton
                     key={index}
@@ -341,21 +349,22 @@ export const CollectionPage = () => {
                 ))
               ) : (
                 <React.Fragment>
-                  {products && products.length > 0 ? (
-                    products.map((product, index) =>
-                      index < 10 ? (
-                        <ProductCard
+                  {products && products.length > 0
+                    ? products.map((product, index) =>
+                        index < 10 ? (
+                          <ProductCard
+                            key={index}
+                            classes="col-span-1 mt-1"
+                            product={product}
+                          />
+                        ) : null
+                      )
+                    : Array.from({ length: 10 }).map((_, index) => (
+                        <Skeleton
                           key={index}
-                          classes="col-span-1 mt-1"
-                          product={product}
+                          className="col-span-1 mt-1 min-h-[400px]"
                         />
-                      ) : null
-                    )
-                  ) : (
-                    <p className="col-span-5 font-semibold text-center text-base">
-                      No Product Found
-                    </p>
-                  )}
+                      ))}
                 </React.Fragment>
               )}
             </div>
@@ -389,27 +398,32 @@ export const CollectionPage = () => {
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Top deals from our sellers
             </h2>
-            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+            {window?.innerWidth > 600 && window?.innerWidth < 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 3</span>
             )}
-             {window?.innerWidth>1024 && (
+            {window?.innerWidth > 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...settings} className="arrow__wrapper">
-              {BrandPicks
-                ? BrandPicks.map((product, index) => {
-                    return (
+            <div className="slider-container">
+              <Slider {...settings} className="arrow__wrapper">
+                {products && products.length > 0
+                  ? products.map((product, index) => (
                       <ProductCard
                         classes="min-h-[600px] mx-2"
                         key={index}
                         product={product}
                       />
-                    );
-                  })
-                : null}
-            </Slider>
+                    ))
+                  : Array.from({ length: 10 }).map((_, index) => (
+                      <Skeleton
+                        key={index}
+                        className="col-span-1 mt-1 min-h-[400px]"
+                      />
+                    ))}
+              </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -424,7 +438,7 @@ export const CollectionPage = () => {
               }
               className={bigScreenCss}
             >
-              {false ? (
+              {productLoader ? (
                 Array.from({ length: 10 }).map((_, index) => (
                   <Skeleton
                     key={index}
@@ -433,21 +447,22 @@ export const CollectionPage = () => {
                 ))
               ) : (
                 <React.Fragment>
-                  {products && products.length > 0 ? (
-                    products.map((product, index) =>
-                      index < 10 ? (
-                        <ProductCard
+                  {products && products.length > 0
+                    ? products.map((product, index) =>
+                        index < 10 ? (
+                          <ProductCard
+                            key={index}
+                            classes="col-span-1 mt-1"
+                            product={product}
+                          />
+                        ) : null
+                      )
+                    : Array.from({ length: 10 }).map((_, index) => (
+                        <Skeleton
                           key={index}
-                          classes="col-span-1 mt-1"
-                          product={product}
+                          className="col-span-1 mt-1 min-h-[400px]"
                         />
-                      ) : null
-                    )
-                  ) : (
-                    <p className="col-span-5 font-semibold text-center text-base">
-                      No Product Found
-                    </p>
-                  )}
+                      ))}
                 </React.Fragment>
               )}
             </div>
@@ -481,25 +496,32 @@ export const CollectionPage = () => {
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Explore top picks
             </h2>
-            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+            {window?.innerWidth > 600 && window?.innerWidth < 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 3</span>
             )}
-             {window?.innerWidth>1024 && (
+            {window?.innerWidth > 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...settings} className="arrow__wrapper">
-              {BrandPicks.map((product, index) => {
-                return (
-                  <ProductCard
-                    classes="min-h-[600px] mx-2"
-                    key={index}
-                    product={product}
-                  />
-                );
-              })}
-            </Slider>
+            <div className="slider-container">
+              <Slider {...settings} className="arrow__wrapper">
+                {products && products.length > 0
+                  ? products.map((product, index) => (
+                      <ProductCard
+                        classes="min-h-[600px] mx-2"
+                        key={index}
+                        product={product}
+                      />
+                    ))
+                  : Array.from({ length: 10 }).map((_, index) => (
+                      <Skeleton
+                        key={index}
+                        className="col-span-1 mt-1 min-h-[400px]"
+                      />
+                    ))}
+              </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -514,7 +536,7 @@ export const CollectionPage = () => {
               }
               className={bigScreenCss}
             >
-              {false ? (
+              {productLoader ? (
                 Array.from({ length: 10 }).map((_, index) => (
                   <Skeleton
                     key={index}
@@ -523,21 +545,22 @@ export const CollectionPage = () => {
                 ))
               ) : (
                 <React.Fragment>
-                  {products && products.length > 0 ? (
-                    products.map((product, index) =>
-                      index < 10 ? (
-                        <ProductCard
+                  {products && products.length > 0
+                    ? products.map((product, index) =>
+                        index < 10 ? (
+                          <ProductCard
+                            key={index}
+                            classes="col-span-1 mt-1"
+                            product={product}
+                          />
+                        ) : null
+                      )
+                    : Array.from({ length: 10 }).map((_, index) => (
+                        <Skeleton
                           key={index}
-                          classes="col-span-1 mt-1"
-                          product={product}
+                          className="col-span-1 mt-1 min-h-[400px]"
                         />
-                      ) : null
-                    )
-                  ) : (
-                    <p className="col-span-5 font-semibold text-center text-base">
-                      No Product Found
-                    </p>
-                  )}
+                      ))}
                 </React.Fragment>
               )}
             </div>
@@ -568,27 +591,32 @@ export const CollectionPage = () => {
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Hot new releases
             </h2>
-            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+            {window?.innerWidth > 600 && window?.innerWidth < 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 3</span>
             )}
-             {window?.innerWidth>1024 && (
+            {window?.innerWidth > 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...settings} className="arrow__wrapper">
-              {products
-                ? products?.map((product, index) => {
-                    return (
+            <div className="slider-container">
+              <Slider {...settings} className="arrow__wrapper">
+                {products && products.length > 0
+                  ? products.map((product, index) => (
                       <ProductCard
                         classes="min-h-[600px] mx-2"
                         key={index}
                         product={product}
                       />
-                    );
-                  })
-                : null}
-            </Slider>
+                    ))
+                  : Array.from({ length: 10 }).map((_, index) => (
+                      <Skeleton
+                        key={index}
+                        className="col-span-1 mt-1 min-h-[400px]"
+                      />
+                    ))}
+              </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -603,7 +631,7 @@ export const CollectionPage = () => {
               }
               className={bigScreenCss}
             >
-              {false ? (
+              {productLoader ? (
                 Array.from({ length: 10 }).map((_, index) => (
                   <Skeleton
                     key={index}
@@ -612,21 +640,22 @@ export const CollectionPage = () => {
                 ))
               ) : (
                 <React.Fragment>
-                  {products && products.length > 0 ? (
-                    products.map((product, index) =>
-                      index < 10 ? (
-                        <ProductCard
+                  {products && products.length > 0
+                    ? products.map((product, index) =>
+                        index < 10 ? (
+                          <ProductCard
+                            key={index}
+                            classes="col-span-1 mt-1"
+                            product={product}
+                          />
+                        ) : null
+                      )
+                    : Array.from({ length: 10 }).map((_, index) => (
+                        <Skeleton
                           key={index}
-                          classes="col-span-1 mt-1"
-                          product={product}
+                          className="col-span-1 mt-1 min-h-[400px]"
                         />
-                      ) : null
-                    )
-                  ) : (
-                    <p className="col-span-5 font-semibold text-center text-base">
-                      No Product Found
-                    </p>
-                  )}
+                      ))}
                 </React.Fragment>
               )}
             </div>
@@ -802,27 +831,32 @@ export const CollectionPage = () => {
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Products you may also like
             </h2>
-            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+            {window?.innerWidth > 600 && window?.innerWidth < 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 3</span>
             )}
-             {window?.innerWidth>1024 && (
+            {window?.innerWidth > 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...settings} className="arrow__wrapper">
-              {BrandPicks
-                ? BrandPicks.map((product, index) => {
-                    return (
+            <div className="slider-container">
+              <Slider {...settings} className="arrow__wrapper">
+                {products && products.length > 0
+                  ? products.map((product, index) => (
                       <ProductCard
                         classes="min-h-[600px] mx-2"
                         key={index}
                         product={product}
                       />
-                    );
-                  })
-                : null}
-            </Slider>
+                    ))
+                  : Array.from({ length: 10 }).map((_, index) => (
+                      <Skeleton
+                        key={index}
+                        className="col-span-1 mt-1 min-h-[400px]"
+                      />
+                    ))}
+              </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -837,7 +871,7 @@ export const CollectionPage = () => {
               }
               className={bigScreenCss}
             >
-              {false ? (
+              {productLoader ? (
                 Array.from({ length: 10 }).map((_, index) => (
                   <Skeleton
                     key={index}
@@ -846,21 +880,22 @@ export const CollectionPage = () => {
                 ))
               ) : (
                 <React.Fragment>
-                  {products && products.length > 0 ? (
-                    products?.map((product, index) =>
-                      index < 10 ? (
-                        <ProductCard
+                  {products && products.length > 0
+                    ? products?.map((product, index) =>
+                        index < 10 ? (
+                          <ProductCard
+                            key={index}
+                            classes="col-span-1 mt-1"
+                            product={product}
+                          />
+                        ) : null
+                      )
+                    : Array.from({ length: 10 }).map((_, index) => (
+                        <Skeleton
                           key={index}
-                          classes="col-span-1 mt-1"
-                          product={product}
+                          className="col-span-1 mt-1 min-h-[400px]"
                         />
-                      ) : null
-                    )
-                  ) : (
-                    <p className="col-span-5 font-semibold text-center text-base">
-                      No Product Found
-                    </p>
-                  )}
+                      ))}
                 </React.Fragment>
               )}
             </div>
@@ -872,27 +907,32 @@ export const CollectionPage = () => {
             <h2 className=" font-medium sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
               Inspired by your browsing history
             </h2>
-            {window?.innerWidth > 600 && window?.innerWidth<1024 && (
+            {window?.innerWidth > 600 && window?.innerWidth < 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 3</span>
             )}
-             {window?.innerWidth>1024 && (
+            {window?.innerWidth > 1024 && (
               <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
           {window?.innerWidth > 640 && (
-            <Slider {...settings} className="arrow__wrapper">
-              {BrandPicks
-                ? BrandPicks.map((product, index) => {
-                    return (
+            <div className="slider-container">
+              <Slider {...settings} className="arrow__wrapper">
+                {products && products.length > 0
+                  ? products.map((product, index) => (
                       <ProductCard
                         classes="min-h-[600px] mx-2"
                         key={index}
                         product={product}
                       />
-                    );
-                  })
-                : null}
-            </Slider>
+                    ))
+                  : Array.from({ length: 10 }).map((_, index) => (
+                      <Skeleton
+                        key={index}
+                        className="col-span-1 mt-1 min-h-[400px]"
+                      />
+                    ))}
+              </Slider>
+            </div>
           )}
           {window?.innerWidth < 640 && (
             <div
@@ -907,7 +947,7 @@ export const CollectionPage = () => {
               }
               className={bigScreenCss}
             >
-              {false ? (
+              {productLoader ? (
                 Array.from({ length: 10 }).map((_, index) => (
                   <Skeleton
                     key={index}
@@ -916,28 +956,29 @@ export const CollectionPage = () => {
                 ))
               ) : (
                 <React.Fragment>
-                  {products && products.length > 0 ? (
-                    products.map((product, index) =>
-                      index < 10 ? (
-                        <ProductCard
+                  {products && products.length > 0
+                    ? products.map((product, index) =>
+                        index < 10 ? (
+                          <ProductCard
+                            key={index}
+                            classes="col-span-1 mt-1"
+                            product={product}
+                          />
+                        ) : null
+                      )
+                    : Array.from({ length: 10 }).map((_, index) => (
+                        <Skeleton
                           key={index}
-                          classes="col-span-1 mt-1"
-                          product={product}
+                          className="col-span-1 mt-1 min-h-[400px]"
                         />
-                      ) : null
-                    )
-                  ) : (
-                    <p className="col-span-5 font-semibold text-center text-base">
-                      No Product Found
-                    </p>
-                  )}
+                      ))}
                 </React.Fragment>
               )}
             </div>
           )}
         </div>
       </Wrapper>
-    </div>
+    </>
   );
 };
 

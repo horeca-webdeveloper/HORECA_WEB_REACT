@@ -5,8 +5,8 @@ import { FaRegThumbsUp } from "react-icons/fa6";
 import axios from "axios";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import { apiClient } from "../utils/apiWrapper";
-import { Link } from "react-router-dom";
-
+import { Link, Navigate } from "react-router-dom";
+import ReviewPopup from "../components/ReviewPopup";
 export const ReviewSection = ({ id }) => {
   const [reviewsLoader, setReviewsLoader] = useState(false);
   const [reviewsData, setReviewsData] = useState([]);
@@ -16,6 +16,8 @@ export const ReviewSection = ({ id }) => {
   const [TopReviews, setTopReviews] = useState("Top Reviews");
   const [topReviewsValue, setTopReviewsValue] = useState("");
   const [token, setToken] = useState("");
+  const [showPopup,setShowPopup]=useState(false);
+  const [updateReviews,setUpdateReviews]=useState(false);
 
   const convertTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -41,6 +43,14 @@ export const ReviewSection = ({ id }) => {
       setReviewsLoader(false);
     }
   };
+  const productReview=async()=>{
+        if(token){
+          setShowPopup(true);
+
+        }else{
+          Navigate('/login')
+        }
+  }
 
   useEffect(() => {
     let authToken = localStorage.getItem("authToken");
@@ -50,7 +60,9 @@ export const ReviewSection = ({ id }) => {
   useEffect(() => {
     setReviewsLoader(true);
     fetchProductReviews();
-  }, [AllStar, TopReviews]);
+  }, [AllStar, TopReviews,updateReviews]);
+
+  
   return (
     <React.Fragment>
       {reviewsData ? (
@@ -64,6 +76,7 @@ export const ReviewSection = ({ id }) => {
             <div className="p-5 mt-4 border border-[#E2E8F0] rounded-[4px]">
               <h3 className="font-semibold text-base text-black-100 ">
                 Leave a review of this product
+              
               </h3>
               <p className="text-[#64748B] text-sm mt-3 min-h-[100px]">
                 Share your thoughts by posting a detailed review, and in return,
@@ -77,7 +90,7 @@ export const ReviewSection = ({ id }) => {
                 >
                   Login OR Register
                 </Link>
-              ) : null}
+              ) :   <button    className="block mx-auto text-center bg-primary text-white text-base font-semibold rounded-sm p-2 w-full mt-3 py-3" onClick={productReview}>Add  Review</button>}
             </div>
             <div className="p-5 mt-4 border border-[#E2E8F0] rounded-[4px]">
               <h3 className="text-[#262626] font-semibold text-lg">
@@ -474,6 +487,8 @@ export const ReviewSection = ({ id }) => {
               </React.Fragment>
             </div>
           </div>
+          {showPopup? <ReviewPopup setShowPopup={setShowPopup} popupHeading="Add Review" setUpdateReviews={setUpdateReviews} updateReviews={updateReviews} id={id}/>:''}
+         
         </div>
       ) : null}
     </React.Fragment>

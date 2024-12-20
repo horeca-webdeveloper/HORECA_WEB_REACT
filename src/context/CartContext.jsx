@@ -33,6 +33,7 @@ export const CartProvider = ({ children }) => {
     }, [updateCart]);
 
     const triggerUpdateCart = () => {
+     
         setUpdateCart(prev => !prev); // Toggle to trigger re-fetch
     };
     const updateTempCart = (quantity) => {

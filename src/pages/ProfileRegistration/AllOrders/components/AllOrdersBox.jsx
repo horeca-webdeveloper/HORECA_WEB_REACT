@@ -1,9 +1,12 @@
 import React from "react";
-
-const AllOrdersBox = ({ data, id, setImageView, setShowPopup }) => {
+const AllOrdersBox = ({ data, id, setImageView, setShowPopup, navigation }) => {
+  const navigations = (data) => {
+    navigation({ state: { order_id: data } });
+  };
   const ordersImages = data?.products?.map((item) => {
     return item?.images;
   });
+
   return (
     <div key={id} className="border-2 w-[100%] rounded p-[10px] mb-[20px]">
       <div className="flex items-center justify-between">
@@ -23,7 +26,7 @@ const AllOrdersBox = ({ data, id, setImageView, setShowPopup }) => {
             <p className="font-sans text-[12px] sm:mt-[0px] sm:text-base font-normal leading-6 text-left text[#030303] decoration-slice">
               {data?.updated_at.split("T")[0]}
             </p>
-            <p className="lg:hiddenfont-sans text-[12px] sm:text-base font-normal leading-6 text-left text[#030303] decoration-slice">
+            <p className="lg:hidden xl:hidden font-sans text-[12px] sm:text-base font-normal leading-6 text-left text[#030303] decoration-slice">
               {data?.code}
             </p>
           </div>
@@ -56,7 +59,7 @@ const AllOrdersBox = ({ data, id, setImageView, setShowPopup }) => {
           <p className="hidden md:hidden lg:block font-sans mb-[4px] text-base text-right font-light leading-[24px] text-left text-[#666666] decoration-0">
             Order Total
           </p>
-          <p className="lg:hidden font-sans text-[12px] bg-[#E2E8F0] px-[10px] rounded-full text-black text-right font-light leading-[24px] text-left text-[#666666] decoration-0">
+          <p className="lg:hidden xl:hidden font-sans text-[12px] bg-[#E2E8F0] px-[10px] rounded-full text-black text-right font-light leading-[24px] text-left text-[#666666] decoration-0">
             In Progress
           </p>
           <p className="flex font-sans text-[13px] sm:text-[14px] font-normal leading-[24px] text-left text-[#666666] decoration-0">
@@ -64,7 +67,7 @@ const AllOrdersBox = ({ data, id, setImageView, setShowPopup }) => {
             <span className="hidden md:hidden lg:block font-sans text-[22px] font-semibold leading-[24px] text-left text-[black] decoration-0">
               {data?.amount.split(".")[0]}
             </span>
-            <span className="lg:hidden ml-[5px] font-sans text-[13px] font-semibold leading-[24px] text-left text-[black] decoration-0">
+            <span className="lg:hidden xl:hidden ml-[5px] font-sans text-[13px] font-semibold leading-[24px] text-left text-[black] decoration-0">
               {data?.amount.split(".")[0]}
             </span>
             .{data?.amount.split(".")[1]}
@@ -113,12 +116,15 @@ const AllOrdersBox = ({ data, id, setImageView, setShowPopup }) => {
           </div>
         </div>
         <div className="p-4 sm:p-5 md:p-6">
-  <div className="p-1 sm:p-2 rounded px-4 sm:px-6 text-white bg-[#186737] mx-auto">
-    <button className="font-work-sans w-[100px] sm:w-[122px] h-[30px] text-[14px] sm:text-[16px] font-normal text-center underline-from-font no-underline-skip">
-      Order Details
-    </button>
-  </div>
-</div>
+          <div className="p-1 sm:p-2 rounded px-4 sm:px-6 text-white bg-[#186737] mx-auto">
+            <button
+              onClick={() => navigations(data?.code)}
+              className="font-work-sans w-[100px] sm:w-[122px] h-[30px] text-[14px] sm:text-[16px] font-normal text-center underline-from-font no-underline-skip"
+            >
+              Order Details
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

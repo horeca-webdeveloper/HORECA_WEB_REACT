@@ -424,3 +424,12 @@
     line-height: 1.5; /* Adjust line-height according to your design */
     max-height: 3em; /* max height based on line-height (line-height * 2 for 2 lines) */
   }
+
+  
+  .address {
+    display: inline-block; /* Ensures the text stays in one line */
+    white-space: nowrap; /* Prevents the text from wrapping to the next line */
+    overflow: hidden; /* Hides the overflowing text */
+    text-overflow: ellipsis; /* Adds the ellipsis (...) for truncated text */
+    max-width: 100%; /* Optional: You can set a specific max-width if needed */
+  }

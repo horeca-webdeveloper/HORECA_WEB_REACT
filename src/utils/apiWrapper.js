@@ -1,8 +1,13 @@
 import axios from 'axios';
+const hostUrl = window.location.origin;
+let apiUrl='https://testhssite.com/api';
+if(hostUrl=='https://uaehorecastore.netlify.app'){
+    apiUrl='https://horeca-uae.testhssite.com/api';
+} 
 
 // Create an Axios instance
 const apiClient = axios.create({
-    baseURL: 'https://testhssite.com/api',
+    baseURL: apiUrl,
 });
 
 // Interceptor to add Authorization header if authToken exists
