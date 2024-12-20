@@ -44,7 +44,7 @@ export const Navigation = ({ categories, currentLocation }) => {
   const [isFocused, setIsFocused] = useState(false); // State to track focus
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [openModel, setOpenModel] = useState(false);
-
+  const [maxIndex, setMaxIndex] = useState(4); // Default for lg screen
   const { totalWishListCount, triggerUpdateWishList } = useWishlist();
 
   useEffect(() => {
@@ -195,16 +195,39 @@ export const Navigation = ({ categories, currentLocation }) => {
         setIsFocused(false); // Set isFocused to false if click is outside
       }
     };
-
     // Add event listener to the document
     document.addEventListener('mousedown', handleClickOutside);
-
     // Cleanup event listener on component unmount
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
+    
   }, []);
 
+  useEffect(() => {
+    const updateMaxIndex = () => {
+      const width = window.innerWidth;
+ 
+      if (width >= 1536) {
+        setMaxIndex(4); // 2xl: index <= 4
+      } else if (width >= 1280) {
+        setMaxIndex(3); // xl: index <= 3
+      } else if (width >= 1024) {
+        setMaxIndex(2); // lg: index <= 2
+      } else if (width >= 768) {
+        setMaxIndex(1); // md: index <= 1
+      } else {
+        setMaxIndex(0); // sm: index <= 0
+      }
+    };
+ 
+    updateMaxIndex(); // Set initial value
+    window.addEventListener("resize", updateMaxIndex);
+ 
+    return () => {
+      window.removeEventListener("resize", updateMaxIndex);
+    };
+  }, []);
 
 
   return (
@@ -909,9 +932,11 @@ export const Navigation = ({ categories, currentLocation }) => {
             <h1 className="text-[16px] leading-[16px] font-semibold">
               Track Your Order
             </h1>
+            <Link to={token?'registration/all-orders':'login'}>
             <h2 className="text-[14px] mb-[10px] text-[#186737] mt-[5px] leading-[16px] font-normal">
               View All & Manage
             </h2>
+            </Link>
             <div className="flex py-[10px]">
               <img
                 className="h-[90px] w-[90px] rounded-[4px] mr-[10px]"

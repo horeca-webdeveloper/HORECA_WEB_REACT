@@ -272,7 +272,7 @@ export const ProductCard = ({
             ) : (
               <React.Fragment>
                 <Slider {...settings} ref={sliderRef}>
-                  {product.images.map((image, index) => (
+                  {product?.images?.map((image, index) => (
                     <div
                       key={index}
                       className="flex items-center justify-center"

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Wrapper } from "./Wrapper";
-import { apiClient } from "../utils/apiWrapper";
+import { Wrapper } from "../../../shared/Wrapper";
+import { apiClient } from "../../../utils/apiWrapper";
+import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 
-export const BlogsCard = ({ classes, data }) => {
-  const navigate = useNavigate();
+export const BlogPostCard = ({ count }) => {
   const [loader, setLoader] = useState(true);
   const [blogs, setBlogs] = useState([]);
 
@@ -37,34 +36,24 @@ export const BlogsCard = ({ classes, data }) => {
   };
 
   return (
-    <Wrapper classes="my-14 hidden sm:block">
-      <div className="flex items-center justify-between">
-        <h2 className="text-black-100 font-semibold text-[16px] sm:text-2xl">
-          Our Latest News & Blogs
-        </h2>
-        <span
-          onClick={() => navigate("/blog-listing")}
-          className=" text-gray-700 cursor-pointer text-[12px] sm:text-lg"
-        >
-          View All Blogs
-        </span>
-      </div>
-      <div className={`${classes} `}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <>
+      <div>
+        <div className={`grid grid-cols-1 md:grid-cols-${count} gap-4`}>
           {!loader ? (
             blogs.map((item, index) => {
               return (
                 <React.Fragment key={index}>
                   {index < 3 ? (
-                    <div
-                      onClick={() => navigate("/blog-details")}
-                      className="border-2 rounded-md p-6 border-[#EEEEEE]"
-                    >
+                    <div className="border-2 rounded-md p-6 border-[#EEEEEE]">
                       <React.Fragment>
                         <Link to="#">
                           <img
-                            className="w-full col-span-1"
-                            src={`https://testhssite.com/storage/${item.image}`}
+                            className="w-full h-[350px] col-span-1"
+                            src={
+                              `https://testhssite.com/storage/${item.image}`
+
+                              // src={process.env.PUBLIC_URL + "/images/blogRestaurant.png"}
+                            }
                             alt=""
                           />
                           <div className="flex justify-between items-center my-3">
@@ -136,6 +125,6 @@ export const BlogsCard = ({ classes, data }) => {
           )}
         </div>
       </div>
-    </Wrapper>
+    </>
   );
 };

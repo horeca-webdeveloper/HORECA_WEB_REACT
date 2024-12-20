@@ -101,6 +101,7 @@ export const ProductsByCategory = () => {
       const response = await apiClient.get(`/categories/${id}/products`, {
         params,
       });
+      console.log("productType", response?.data);
       setProducts(response?.data?.products.data);
       setPaginationData(response?.data?.products?.total);
       setProducttypes(response?.data?.producttypes);
@@ -385,7 +386,7 @@ export const ProductsByCategory = () => {
                 </div>
 
                 <div className="grid grid-cols-6 gap-6 mt-8">
-                  {!!producttypes &&
+                  {producttypes &&
                     producttypes?.map((item) => {
                       return (
                         <div
