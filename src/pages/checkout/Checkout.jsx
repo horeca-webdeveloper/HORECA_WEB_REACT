@@ -13,7 +13,7 @@ import { apiClient } from "../../utils/apiWrapper.js";
 import { Layout } from "./Layout.jsx";
 import Skeleton from "react-loading-skeleton";
 
-export const Checkout = () => {
+  const Checkout = () => {
   const authToken = localStorage.getItem("authToken");
   const { triggerUpdateCart, updateTempCart } = useCart();
   const [loader, setLoader] = useState(false);
@@ -727,3 +727,5 @@ for mobile */}
     </React.Fragment>
   );
 };
+
+export default React.memo(Checkout);

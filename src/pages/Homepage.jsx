@@ -11,7 +11,7 @@ import { TimerBanner } from "../hooks/timerBanner/TimerBanner";
 import axios from "axios";
 import { apiClient } from "../utils/apiWrapper";
 
-export const Homepage = ({ categories }) => {
+const Homepage = ({ categories }) => {
   const [featureCat, setFeatureCat] = useState([]);
   const [featureCatList, setFeatureCatList] = useState([]);
   const [selectedCat, setSelectedCat] = useState("");
@@ -160,3 +160,5 @@ export const Homepage = ({ categories }) => {
     </div>
   );
 };
+
+export default React.memo(Homepage);

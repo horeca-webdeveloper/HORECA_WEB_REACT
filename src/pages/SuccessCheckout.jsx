@@ -4,7 +4,7 @@ import { HiOutlineMail } from "react-icons/hi";
 import { FaWhatsapp } from "react-icons/fa";
 
 
-export const SuccessCheckout = () =>{
+  const SuccessCheckout = () =>{
     return(
         <Wrapper>
             <div className="p-5 bg-[#E2E8F066] rounded-[10px] my-5">
@@ -85,3 +85,5 @@ export const SuccessCheckout = () =>{
         </Wrapper>
     )
 }
+
+export default React.memo(SuccessCheckout);

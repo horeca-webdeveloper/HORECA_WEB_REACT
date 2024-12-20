@@ -4,7 +4,7 @@ import axios from "axios";
 import { ButtonLoader } from "../shared/buttonLoader/ButtonLoader";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-export const PasswordReset = () => {
+  const PasswordReset = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -150,3 +150,6 @@ export const PasswordReset = () => {
     </React.Fragment>
   );
 };
+
+
+export default React.memo(PasswordReset);

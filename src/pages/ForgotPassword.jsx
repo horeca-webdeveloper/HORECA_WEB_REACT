@@ -7,7 +7,8 @@ import axios from "axios";
 import { InfinitySpin } from "react-loader-spinner";
 import { ButtonLoader } from "../shared/buttonLoader/ButtonLoader";
 import { useNavigate } from "react-router-dom";
-export const ForgotPassword = () => {
+
+ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loader, setLoading] = useState(false);
@@ -117,3 +118,5 @@ export const ForgotPassword = () => {
     </React.Fragment>
   );
 };
+
+export default React.memo(ForgotPassword);

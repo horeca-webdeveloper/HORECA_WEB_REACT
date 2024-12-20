@@ -42,7 +42,7 @@ function Model({ url, onLoaded }) {
   return <primitive object={scene} />;
 }
 
-export const ProductDetail = () => {
+  const ProductDetail = () => {
   const { id } = useParams(); // Access the id from the URL
   const [seeMore, setSeeMore] = useState(true);
   const videoRef = useRef(null);
@@ -1413,6 +1413,7 @@ export const ProductDetail = () => {
   );
 };
 
+export default React.memo(ProductDetail);
 export const BuyMoreSaveMore = ({
   buyMore,
   productLoader,

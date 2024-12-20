@@ -20,7 +20,7 @@ import Skeleton from "react-loading-skeleton";
 import { apiClient } from "../utils/apiWrapper";
 import { useParams } from "react-router-dom";
 
-export const CollectionPage = () => {
+  const CollectionPage = () => {
   const [selectedCat, setSelectedCat] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -982,6 +982,7 @@ export const CollectionPage = () => {
   );
 };
 
+export default React.memo(CollectionPage);
 const FilterTitle = ({ classes, title }) => {
   return (
     <h2 className={`${classes} text-black-100 font-semibold text-lg`}>
