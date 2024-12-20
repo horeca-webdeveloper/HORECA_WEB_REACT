@@ -425,6 +425,7 @@
     max-height: 3em; /* max height based on line-height (line-height * 2 for 2 lines) */
   }
 
+  
   .address {
     display: inline-block; /* Ensures the text stays in one line */
     white-space: nowrap; /* Prevents the text from wrapping to the next line */
