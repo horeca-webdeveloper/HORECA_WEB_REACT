@@ -30,6 +30,7 @@ export const ProductCard = ({
   removeItem,
   setTempSaveForLater,
 }) => {
+  
   const [deleteCartLoader, setDeleteCartLoader] = useState(false);
   const authToken = localStorage.getItem("authToken");
   const productId = product.id ? product.id : product.product_id;
@@ -51,7 +52,7 @@ export const ProductCard = ({
   const { totalWishListCount, triggerUpdateWishList } = useWishlist();
 
   const settings = {
-    dots: true,
+    dots: product?.images?.length > 1, // Show dots only if more than 1 image
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -206,7 +207,6 @@ export const ProductCard = ({
     notify(name, " has been removed from cart.");
   };
 
-  
   return (
     <React.Fragment>
       <div
@@ -289,19 +289,19 @@ export const ProductCard = ({
             )}
           </Link>
           <div className="absolute top-[35%] translate-y-[-50%] border border-gray-300 rounded-[4px] right-[-70px] group-hover:right-0 transition-all duration-500">
-            <VscGraph
+            {/* <VscGraph
               size={45}
               className="p-3 text-[#62666c] bg-white hover:text-white hover:bg-primary z-10 transition-all rounded-t-[4px]"
-            />
+            /> */}
             <LuEye
               size={45}
-              className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all"
+              className="p-3 border-b border-gray-300 mt-[10px] sm:mt-[0px] bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all"
             />
             {!productState.in_wishlist ? (
               <FaRegHeart
                 size={45}
                 onClick={(e) => handlerAddFavouriteItem(product)}
-                className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]"
+                className="p-3 border-b border-gray-300 bg-white  text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]"
               />
             ) : (
               <GoHeartFill
@@ -315,6 +315,15 @@ export const ProductCard = ({
 
         <div className="mt-1 p-4">
           <Link to={`/product/${productId}`}>
+            {product.leftStock <= 0 ? (
+              <p className="text-[#A6131D] text-[10px] mt-[-10px] mb-[10px] sm:text-sm mt-2">
+                Only available for pre-orders
+              </p>
+            ) : (
+              <p className="text-[white] text-[10px] mt-[-10px] mb-[10px] sm:text-sm mt-2">
+                .
+              </p>
+            )}
             <div className="">
               <h2 className="text-[12px] sm:text-lg font-normal sm:font-semibold line-clamp-2">
                 {product.name}
@@ -350,8 +359,14 @@ export const ProductCard = ({
             ) : null}
 
             <p className="font-normal sm:font-semibold text-[12px] sm:text-sm text-gray-700 mt-3">
-              <span className="text-black-100">Free DELIVERY</span> Get it as
-              soon as&nbsp;{product.best_delivery_date}
+              {product.delivery_days > 0 ? (
+                <span>
+                  {" "}
+                  Get it as soon as in&nbsp;{product.delivery_days} Days
+                </span>
+              ) : (
+                <span className=" text-[white]">.</span>
+              )}
             </p>
 
             <div className="flex overflow-hidden  sm:flex-row items-center">
@@ -361,7 +376,6 @@ export const ProductCard = ({
                 </span>
          
                 {product.sale_price ? (
-                  
                   <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">
                     {product.sale_price}.
                   </span>
@@ -370,7 +384,6 @@ export const ProductCard = ({
                     {product.front_sale_price}.
                   </span>
                 )}
-
                 <span className="ml-1 text-[10px] sm:text-3xl font-bold sm:font-extrabold">
                   {product.sale_price &&
                   String(product.sale_price).split(".")[1]
@@ -402,11 +415,11 @@ export const ProductCard = ({
                     Only {product.leftStock} left in stock - order soon.
                   </p>
                 ) : null}
-                {product.leftStock <= 0 ? (
+                {/* {product.leftStock <= 0 ? (
                   <p className="text-[#A6131D] text-[10px] sm:text-sm mt-2">
                     Only available for pre-orders
                   </p>
-                ) : null}
+                ) : null} */}
                 <span></span>
               </React.Fragment>
             ) : null}

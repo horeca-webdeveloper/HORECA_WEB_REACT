@@ -12,18 +12,16 @@ export const CompareProducts = ({
   product,
   compareProductFields,
 }) => {
-  const { triggerUpdateCart } = useCart();
-  const [firstRow, setFirstRow] = useState([]);
-
   const [firstLayer, setFirstLayer] = useState([]);
   const [secondLayer, setSecondLayer] = useState([]);
   const [thirdLayer, setThirdLayer] = useState([]);
   const [forthLayer, setForthLayer] = useState([]);
   const [fifthLayer, setFifthLayer] = useState([]);
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
-  const [loader, setLoader] = useState(false);
 
   const [priceLayer, setPriceLayer] = useState([]);
+
+  console.log("---->>>>", product);
 
   const options = {
     method: "open",
@@ -45,12 +43,6 @@ export const CompareProducts = ({
         useCORS: false,
       },
     },
-  };
-
-  const hanldePrint = () => {
-    setLoader(true);
-    generatePDF(targetRef, { filename: "CompareTable.pdf" }, options);
-    setTimeout(() => {}, [1000]);
   };
 
   useEffect(() => {
@@ -114,6 +106,16 @@ export const CompareProducts = ({
 
   const [price, setPrice] = useState([]);
 
+  const [isPrinting, setIsPrinting] = useState(false);
+
+  const handlePrint = () => {
+    setIsPrinting(true);
+    setTimeout(() => {
+      generatePDF(targetRef, { filename: "CompareTable.pdf" }, options);
+      setIsPrinting(false);
+    }, 500);
+  };
+
   return (
     <React.Fragment>
       {!productLoader ? (
@@ -123,23 +125,25 @@ export const CompareProducts = ({
           product.compare_products.length &&
           product.specifications ? (
             <div class="relative rounded-md overflow-x-auto">
-              <div className={`flex pb-[10px] items-center justify-between`}>
-                <img
-                  className=""
-                  src={`${process.env.PUBLIC_URL}/images/logo.png`}
-                />
-                <h1 className="text-center text-[24px]">
-                  Compare with similar products <br />
-                  فاتورة ضريبية
-                </h1>
-                <div className="text-right p-3 text-[14px]">
-                  <p>Horeca Store UAE</p>
-                  <p>
-                    SO1, Building 9 AI Quoz <br />
-                    Ind.3 PO Box 122851Dubai, UAE
-                  </p>
+              {isPrinting && (
+                <div className="flex pb-[10px] items-center justify-between">
+                  <img
+                    className=""
+                    src={`${process.env.PUBLIC_URL}/images/logo.png`}
+                  />
+                  <h1 className="text-center text-[24px]">
+                    Compare with similar products <br />
+                    فاتورة ضريبية
+                  </h1>
+                  <div className="text-right p-3 text-[14px]">
+                    <p>Horeca Store UAE</p>
+                    <p>
+                      SO1, Building 9 AI Quoz <br />
+                      Ind.3 PO Box 122851Dubai, UAE
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
               <table className="min-w-full table-auto border-collapse border-4 border-gray-300 rounded-md">
                 <thead>
                   <tr className="bg-green-100">
@@ -212,7 +216,7 @@ export const CompareProducts = ({
                                       alt=""
                                     />
                                     <CartButton
-                                      productId={compare.id}
+                                      product_id={compare.id}
                                       quantity={1}
                                       productName={compare.name}
                                     />
@@ -230,7 +234,7 @@ export const CompareProducts = ({
                     <td className="px-5 py-3 font-bold">Price</td>
                     {priceLayer.map((price, index) => (
                       <td key={`price-${index}`} className="px-5 py-3">
-                        {price}
+                        USD <strong> {price}</strong>
                       </td>
                     ))}
                   </tr>
@@ -258,12 +262,14 @@ export const CompareProducts = ({
           ) : (
             <div></div>
           )}
-          <div className="flex items-center mt-[0px] py-[20px]">
-            <p>Order Online for Fast Shipping & Lower Prices at</p>
-            <p className="text-[#1B6738] font-medium ml-[10px]">
-              www.horecastore.ae
-            </p>
-          </div>
+          {isPrinting && (
+            <div className="flex items-center mt-[0px] py-[20px]">
+              <p>Order Online for Fast Shipping & Lower Prices at</p>
+              <p className="text-[#1B6738] font-medium ml-[10px]">
+                www.horecastore.ae
+              </p>
+            </div>
+          )}
         </div>
       ) : (
         <div className="col-span-12 my-8">
@@ -279,7 +285,7 @@ export const CompareProducts = ({
               <p>Share</p>
             </button>
             <button
-              onClick={() => hanldePrint()}
+              onClick={() => handlePrint()}
               className="text-white bg-primary rounded-md py-2 px-5 text-base font-semibold flex items-center"
             >
               <IoPrintOutline className="mr-1" />

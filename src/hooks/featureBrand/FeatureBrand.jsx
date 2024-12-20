@@ -58,20 +58,42 @@ const productList=products && products.filter((item)=>{
           ))
         ) : (
           <React.Fragment>
-            {productList && productList.length > 0 ? (
-              productList.map((product, index) =>
-                index < 10 ? (
-                  <ProductCard
-                    key={index}
-                    classes="col-span-1 mt-1 "
-                    product={product}
-                  />
-                ) : null
-              )
+            {window?.innerWidth < 640 ? (
+              <>
+                {productList && productList.length > 0 ? (
+                  productList.map((product, index) =>
+                    index < 10 ? (
+                      <ProductCard
+                        key={index}
+                        classes="col-span-1 mt-1"
+                        product={product}
+                      />
+                    ) : null
+                  )
+                ) : (
+                  <p className="col-span-5 font-semibold text-center text-base">
+                    No Product Found
+                  </p>
+                )}
+              </>
             ) : (
-              <p className="col-span-5 font-semibold text-center text-base">
-                No Product Found
-              </p>
+              <div className="grid grid-cols-1 gap-4 w-[85vw] sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                {productList && productList.length > 0 ? (
+                  productList.map((product, index) =>
+                    index < 10 ? (
+                      <ProductCard
+                        key={index}
+                        classes="col-span-1 mt-1"
+                        product={product}
+                      />
+                    ) : null
+                  )
+                ) : (
+                  <p className="col-span-5 font-semibold text-center text-base">
+                    No Product Found
+                  </p>
+                )}
+              </div>
             )}
           </React.Fragment>
         )}

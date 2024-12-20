@@ -196,16 +196,6 @@ export const Navigation = ({ categories, currentLocation }) => {
         setIsFocused(false); // Set isFocused to false if click is outside
       }
     };
-    // Add event listener to the document
-    document.addEventListener('mousedown', handleClickOutside);
-    // Cleanup event listener on component unmount
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-    
-  }, []);
-
-  useEffect(() => {
     const updateMaxIndex = () => {
       const width = window.innerWidth;
  
@@ -224,11 +214,17 @@ export const Navigation = ({ categories, currentLocation }) => {
  
     updateMaxIndex(); // Set initial value
     window.addEventListener("resize", updateMaxIndex);
- 
+    // Add event listener to the document
+    document.addEventListener('mousedown', handleClickOutside);
+    // Cleanup event listener on component unmount
     return () => {
       window.removeEventListener("resize", updateMaxIndex);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
+    
   }, []);
+
+ 
 
 
   return (
