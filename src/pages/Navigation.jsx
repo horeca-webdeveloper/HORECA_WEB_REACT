@@ -19,6 +19,7 @@ import { useLocation } from "react-router-dom";
 import { useWishlist } from "../context/WishListContext";
 import { debounce } from "lodash";
 import ProfileDrawer from "./ProfileRegistration/ProfileDrawer/ProfileDrawer";
+import SidebarProfile from "../components/SidebarProfile";
 
 export const Navigation = ({ categories, currentLocation }) => {
   const token = localStorage.getItem("authToken");
@@ -1007,56 +1008,16 @@ export const Navigation = ({ categories, currentLocation }) => {
             </div>
           </div>
           <div className="col-span-1 sm:col-span-2 md:col-span-12 lg:col-span-6     p-5">
+
+            {/* <SidebarProfile/> */}
             <div className="flex items-center p-5 border-b-2 justify-between">
               <p className="text-[16px] leading-[18.77px]">Account</p>
               <p className="text-[13px] leading-[15.75px]">
                 Your info at a glance
               </p>
             </div>
-            <div className="flex items-center p-5 border-b-2 justify-between">
-              <p className="text-[16px] leading-[18.77px]">Purchased</p>
-              <p className="text-[13px] leading-[15.75px]">
-                Your info at a glance
-              </p>
-            </div>
-            <div className="flex items-center p-5 border-b-2 justify-between">
-              <p className="text-[16px] leading-[18.77px]">Product Purchases</p>
-              <p className="text-[13px] leading-[15.75px]">
-                Your info at a glance
-              </p>
-            </div>
-            <div className="flex items-center p-5 border-b-2 justify-between">
-              <p className="text-[16px] leading-[18.77px]">Payment Methods</p>
-              <p className="text-[13px] leading-[15.75px]">
-                Your info at a glance
-              </p>
-            </div>
-            <div className="flex items-center p-5 border-b-2 justify-between">
-              <p className="text-[16px] leading-[18.77px]">Purchases</p>
-              <p className="text-[13px] leading-[15.75px]">
-                Your info at a glance
-              </p>
-            </div>
-            <div className="flex items-center p-5 border-b-2 justify-between">
-              <p className="text-[16px] leading-[18.77px]">Subscription</p>
-              <p className="text-[13px] leading-[15.75px]">
-                Your info at a glance
-              </p>
-            </div>
-            <div className="flex items-center p-5 border-b-2 justify-between">
-              <p className="text-[16px] leading-[18.77px]">Customer Support</p>
-              <p className="text-[13px] leading-[15.75px]">
-                Your info at a glance
-              </p>
-            </div>
-            <div className="flex items-center p-5 border-b-2 justify-between">
-              <p className="text-[16px] leading-[18.77px]">
-                Your Seller Account
-              </p>
-              <p className="text-[13px] leading-[15.75px]">
-                Your info at a glance
-              </p>
-            </div>
+          
+            
           </div>
         </div>
       )}

@@ -1,22 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,lazy,Suspense } from "react";
 import { useLocation } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { apiClient } from "./utils/apiWrapper";
+import { ToastContainer } from "react-toastify";
+import { FaRegCircleCheck } from "react-icons/fa6";
+import { Loader } from "./shared/Loader";
+
+
 import { Homepage } from "./pages/Homepage";
 import { Navigation } from "./pages/Navigation";
 import { Footer } from "./pages/Footer";
 import { ProductListing } from "./pages/ProductListing";
-import { Routes, Route, Navigate } from "react-router-dom";
+
 import { ProductDetail } from "./pages/ProductDetail";
 import { CollectionPage } from "./pages/CollectionPage";
 import { FirstCheckout } from "./pages/FirstCheckout";
 import { Login } from "./pages/Login";
 import { FinalCheckout } from "./pages/FinalCheckout";
 import { SuccessCheckout } from "./pages/SuccessCheckout";
-import { Loader } from "./shared/Loader";
+
 import { SignUp } from "./pages/SignUp";
 import { SettingsLayout } from "./pages/settings/SettingsLayout";
-import { apiClient } from "./utils/apiWrapper";
-import { ToastContainer } from "react-toastify";
-import { FaRegCircleCheck } from "react-icons/fa6";
+
+
+
 import { Checkout } from "./pages/checkout/Checkout";
 import { ReviewCheckout } from "./pages/checkout/ReviewCheckout";
 import { ProductsByCategory } from "./pages/ProductsByCategory";

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,lazy,Suspense } from "react";
 import { useLocation } from "react-router-dom";
-import { Homepage } from "./pages/Homepage";
+const Homepage=lazy(()=>import('./pages/Homepage'));
+ 
 import { Navigation } from "./pages/Navigation";
 import { Footer } from "./pages/Footer";
 import { ProductListing } from "./pages/ProductListing";
@@ -84,11 +85,14 @@ const App = () => {
       />
 
       <Routes>
+      <Suspense fallback={<div>Loading ...</div>}>
         <Route
           path="/home"
           element={
             !loader ? (
+             
               <Homepage categories={categories} />
+            
             ) : (
               <div className="w-full h-[100vh] flex items-center justify-center bg-white fixed left-0 top-0 z-[999]">
                 <Loader />
@@ -109,6 +113,7 @@ const App = () => {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/review-checkout" element={<ReviewCheckout />} />
         <Route path="/" element={<Navigate replace to="/home" />} />
+        </Suspense>
       </Routes>
 
       <ToastContainer
