@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 
-export const FinalCheckout = () => {
+  const FinalCheckout = () => {
 
     const [isVisible, setIsVisible] = useState(false);
 
@@ -247,7 +247,7 @@ export const FinalCheckout = () => {
         </Wrapper>
     )
 }
-
+export default React.memo(FinalCheckout);
 
 const SideWrapper = ({ children, classes }) => {
     return (

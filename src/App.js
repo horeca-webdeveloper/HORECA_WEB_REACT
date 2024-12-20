@@ -5,51 +5,49 @@ import { apiClient } from "./utils/apiWrapper";
 import { ToastContainer } from "react-toastify";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { Loader } from "./shared/Loader";
+// Lazy load components
+const Footer=lazy(()=>import('./pages/Footer'));
+const Navigation=lazy(()=>import('./pages/Navigation'));
+const Homepage=lazy(()=>import('./pages/Homepage'));
+const ProductListing = lazy(() => import("./pages/ProductListing"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const CollectionPage = lazy(() => import("./pages/CollectionPage"));
+const FirstCheckout = lazy(() => import("./pages/FirstCheckout"));
+const Login = lazy(() => import("./pages/Login"));
+const FinalCheckout = lazy(() => import("./pages/FinalCheckout"));
+const SuccessCheckout = lazy(() => import("./pages/SuccessCheckout"));
+const SignUp = lazy(() => import("./pages/SignUp"));
+const SettingsLayout = lazy(() => import("./pages/settings/SettingsLayout"));
+const Checkout = lazy(() => import("./pages/checkout/Checkout"));
+const ReviewCheckout = lazy(() => import("./pages/checkout/ReviewCheckout"));
+const ProductsByCategory = lazy(() => import("./pages/ProductsByCategory"));
+const AllOrders = lazy(() => import("./pages/ProfileRegistration/AllOrders/AllOrders"));
+const Reviews = lazy(() => import("./pages/ProfileRegistration/Reviews/Reviews"));
+const BrowsingHistory = lazy(() => import("./pages/ProfileRegistration/BrowsingHistory/BrowsingHistory"));
+const CouponsOffers = lazy(() => import("./pages/ProfileRegistration/CouponeOffers/CouponsOffers"));
+const Addresses = lazy(() => import("./pages/ProfileRegistration/Addresses/Addresses"));
+const CreditBalance = lazy(() => import("./pages/ProfileRegistration/CreditBalance/CreditBalance"));
+const AccountSecurity = lazy(() => import("./pages/ProfileRegistration/AccountSecurity/AccountSecurity"));
+const OrderDetails = lazy(() => import("./pages/ProfileRegistration/OrderDetails/OrderDetails"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ContactUs = lazy(() => import("./pages/FooterPages/ContactUs/ContactUs"));
+const FAQ = lazy(() => import("./pages/FooterPages/FAQ/Component/FAQ"));
+const TermsConsition = lazy(() => import("./pages/FooterPages/TermsAndConditions/TermsConsition"));
+const PrivacyPolicy = lazy(() => import("./pages/FooterPages/PrivacyPolicy/PrivacyPolicy"));
+const Career = lazy(() => import("./pages/FooterPages/Career/Career"));
+const PaymentSuccess = lazy(() => import("./pages/payment/PaymentSuccess"));
+const PaymentFailed = lazy(() => import("./pages/payment/PaymentFailed"));
+const PasswordReset = lazy(() => import("./pages/PasswordReset"));
+const ProfileWishlist = lazy(() => import("./pages/ProfileRegistration/Wishlist/ProfileWishlist"));
+const Wishlist = lazy(() => import("./pages/Wishlist"));
+const SellOnHoreca = lazy(() => import("./pages/FooterPages/SellonHoreca/SellOnHoreca"));
+const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
+const BlogListing = lazy(() => import("./pages/BlogsPage/BlogListing"));
+const BlogDetails = lazy(() => import("./pages/BlogsPage/BlogDetails"));
 
 
-import { Homepage } from "./pages/Homepage";
-import { Navigation } from "./pages/Navigation";
-import { Footer } from "./pages/Footer";
-import { ProductListing } from "./pages/ProductListing";
-
-import { ProductDetail } from "./pages/ProductDetail";
-import { CollectionPage } from "./pages/CollectionPage";
-import { FirstCheckout } from "./pages/FirstCheckout";
-import { Login } from "./pages/Login";
-import { FinalCheckout } from "./pages/FinalCheckout";
-import { SuccessCheckout } from "./pages/SuccessCheckout";
-
-import { SignUp } from "./pages/SignUp";
-import { SettingsLayout } from "./pages/settings/SettingsLayout";
 
 
-
-import { Checkout } from "./pages/checkout/Checkout";
-import { ReviewCheckout } from "./pages/checkout/ReviewCheckout";
-import { ProductsByCategory } from "./pages/ProductsByCategory";
-import AllOrders from "./pages/ProfileRegistration/AllOrders/AllOrders";
-import Reviews from "./pages/ProfileRegistration/Reviews/Reviews";
-import BrowsingHistory from "./pages/ProfileRegistration/BrowsingHistory/BrowsingHistory";
-import CouponsOffers from "./pages/ProfileRegistration/CouponeOffers/CouponsOffers";
-import Addresses from "./pages/ProfileRegistration/Addresses/Addresses";
-import CreditBalance from "./pages/ProfileRegistration/CreditBalance/CreditBalance";
-import AccountSecurity from "./pages/ProfileRegistration/AccountSecurity/AccountSecurity";
-import OrderDetails from "./pages/ProfileRegistration/OrderDetails/OrderDetails";
-import { ForgotPassword } from "./pages/ForgotPassword";
-import ContactUs from "./pages/FooterPages/ContactUs/ContactUs";
-import FAQ from "./pages/FooterPages/FAQ/Component/FAQ";
-import TermsConsition from "./pages/FooterPages/TermsAndConditions/TermsConsition";
-import PrivacyPolicy from "./pages/FooterPages/PrivacyPolicy/PrivacyPolicy";
-import Career from "./pages/FooterPages/Career/Career";
-import PaymentSuccess from "./pages/payment/PaymentSuccess";
-import PaymentFailed from "./pages/payment/PaymentFailed";
-import { PasswordReset } from "./pages/PasswordReset";
-import ProfileWishlist from "./pages/ProfileRegistration/Wishlist/ProfileWishlist";
-import Wishlist from "./pages/Wishlist";
-import SellOnHoreca from "./pages/FooterPages/SellonHoreca/SellOnHoreca";
-import AboutUs from "./pages/AboutUs/AboutUs";
-import BlogListing from "./pages/BlogsPage/BlogListing";
-import BlogDetails from "./pages/BlogsPage/BlogDetails";
 const App = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === "/login";
@@ -106,6 +104,7 @@ const App = () => {
  
   return (
     <>
+     <Suspense fallback={<div></div>}>
       <Navigation
         categories={categories}
         currentLocation={currentLocation}
@@ -177,6 +176,7 @@ const App = () => {
         limit={3}
       />{" "}
       <Footer />
+      </Suspense>
     </>
   );
 };

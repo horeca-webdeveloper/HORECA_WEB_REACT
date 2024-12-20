@@ -5,7 +5,7 @@ import axios from "axios";
 import { ButtonLoader } from "../shared/buttonLoader/ButtonLoader"
 import { IoMdEye, IoMdEyeOff } from "react-icons/io"
 import { apiClient } from "../utils/apiWrapper";
-export const SignUp = () => {
+ const SignUp = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -201,3 +201,5 @@ export const SignUp = () => {
         </Wrapper>
     );
 };
+
+export default React.memo(SignUp);

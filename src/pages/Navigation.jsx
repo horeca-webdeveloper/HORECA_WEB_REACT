@@ -21,7 +21,7 @@ import { debounce } from "lodash";
 import ProfileDrawer from "./ProfileRegistration/ProfileDrawer/ProfileDrawer";
 import SidebarProfile from "../components/SidebarProfile";
 
-export const Navigation = ({ categories, currentLocation }) => {
+ const Navigation = ({ categories, currentLocation }) => {
   const token = localStorage.getItem("authToken");
   const [currencyMenu, setCurrencyMenu] = useState(getCurrencyMenu(token));
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
@@ -1285,3 +1285,5 @@ export const Navigation = ({ categories, currentLocation }) => {
     </React.Fragment>
   );
 };
+
+export default React.memo(Navigation);

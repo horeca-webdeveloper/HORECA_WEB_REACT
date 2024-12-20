@@ -14,7 +14,7 @@ import { apiClient } from "../utils/apiWrapper";
 import { useLocation, useNavigate } from "react-router";
 import { IoClose } from "react-icons/io5";
 
-export const ProductListing = () => {
+  const ProductListing = () => {
   const [page, setPage] = useState("1");
   const [perPage, setPerPage] = useState("20");
   const [loader, setLoader] = useState(true);
@@ -507,6 +507,8 @@ export const ProductListing = () => {
   );
 };
 
+
+export default React.memo(ProductListing);
 // Filter Title
 const FilterTitle = ({ classes, title }) => {
   return (

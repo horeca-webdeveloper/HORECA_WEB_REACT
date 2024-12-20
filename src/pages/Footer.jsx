@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import { apiClient } from "../utils/apiWrapper";
 
-export const Footer = () => {
+ const Footer = () => {
   const [footerMenu, setFooterMenu] = useState([]);
   const [footerIndex, setFooterIndex] = useState(0);
 
@@ -317,3 +317,5 @@ export const Footer = () => {
     </div>
   );
 };
+
+export default React.memo(Footer);

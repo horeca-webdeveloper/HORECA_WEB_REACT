@@ -21,7 +21,7 @@ import { InfinitySpin } from 'react-loader-spinner';
 import { notify } from "../utils/notify.js";
 
 
-export const FirstCheckout = () => {
+  const FirstCheckout = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [activeTab, setActiveTab] = useState('saved');
     const [loader, setLoader] = useState(false);
@@ -185,7 +185,7 @@ export const FirstCheckout = () => {
     )
 }
 
-
+export default React.memo(FirstCheckout);
 const SideWrapper = ({ children, classes }) => {
     return (
         <div className={`${classes} bg-[#F6F8FA] border-[#E2E8F033] border-2 rounded-[10px] p-5`}>{children}</div>

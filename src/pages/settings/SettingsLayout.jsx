@@ -1,9 +1,11 @@
 import React from "react";
 
-export const SettingsLayout = () =>{
+  const SettingsLayout = () =>{
     return(
         <div>
             
         </div>
     )
 }
+
+export default React.memo(SettingsLayout);

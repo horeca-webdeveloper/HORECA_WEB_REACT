@@ -15,7 +15,7 @@ import { useLocation, useNavigate } from "react-router";
 import { IoClose } from "react-icons/io5";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 
-export const ProductsByCategory = () => {
+ const ProductsByCategory = () => {
   const [searchParams] = useSearchParams();
   const type = searchParams.get("type");
   const { id, category, subcategory } = useParams();
@@ -597,6 +597,7 @@ export const ProductsByCategory = () => {
   );
 };
 
+export default React.memo(ProductsByCategory)
 // Filter Title
 const FilterTitle = ({ classes, title }) => {
   return (

@@ -12,7 +12,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-export const Login = () => {
+  const Login = () => {
   const location = useLocation();
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
@@ -512,3 +512,5 @@ export const Login = () => {
     </React.Fragment>
   );
 };
+
+export default React.memo(Login);

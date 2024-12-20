@@ -12,7 +12,7 @@ import Popup from "../ProfileRegistration/Addresses/Components/Popup.jsx";
 import Skeleton from 'react-loading-skeleton';
 import { reviewCheckout } from "../../data/checkoutConfig";
 import { Breadcrumb } from "../../shared/Breadcrumb";
-export const ReviewCheckout = ({ currentLocation }) => {
+  const ReviewCheckout = ({ currentLocation }) => {
     const authToken = localStorage.getItem("authToken");
     const userProfile = JSON.parse(localStorage.getItem('userProfile'));
 
@@ -365,3 +365,5 @@ export const ReviewCheckout = ({ currentLocation }) => {
         </React.Fragment>
     )
 }
+
+export default React.memo(ReviewCheckout);
