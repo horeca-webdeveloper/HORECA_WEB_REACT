@@ -359,9 +359,7 @@ export const ProductCard = ({
                 <span className="ml-0 sm:ml-1 text-[10px] sm:text-xl font-normal sm:font-bold">
                   {product.currency_title ? product.currency_title : "USD "}
                 </span>
-                price
- 
-
+         
                 {product.sale_price ? (
                   
                   <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">

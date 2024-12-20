@@ -11,7 +11,7 @@ import {
 import { useCart } from "../context/CartContext";
 import { CiSearch } from "react-icons/ci";
 import { useLocalCartCount } from "../context/LocalCartCount";
-import { currencyMenu } from "../data/navbar";
+import { getCurrencyMenu } from "../data/navbar";
 import { IoMdClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "../utils/apiWrapper";
@@ -21,6 +21,8 @@ import { debounce } from "lodash";
 import ProfileDrawer from "./ProfileRegistration/ProfileDrawer/ProfileDrawer";
 
 export const Navigation = ({ categories, currentLocation }) => {
+  const token = localStorage.getItem("authToken");
+  const [currencyMenu, setCurrencyMenu] = useState(getCurrencyMenu(token));
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [currency, setCurrency] = useState(["USD", "AED", "PKR"]);
   const [selectedLang, setSelectedLang] = useState("English");
@@ -42,8 +44,14 @@ export const Navigation = ({ categories, currentLocation }) => {
   const [isFocused, setIsFocused] = useState(false); // State to track focus
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [openModel, setOpenModel] = useState(false);
-  const token = localStorage.getItem("authToken");
+
   const { totalWishListCount, triggerUpdateWishList } = useWishlist();
+
+  useEffect(() => {
+    // Whenever the authToken changes, update the menu
+    setCurrencyMenu(getCurrencyMenu(token));
+  }, [token]);
+
   const combinedItems = [
     ...(products ? products.slice(0, 7) : []),
     ...(categoryList ? categoryList.slice(0, 4) : []),
@@ -161,7 +169,7 @@ export const Navigation = ({ categories, currentLocation }) => {
   }, [isFocused]);
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
+ 
     const name = localStorage.getItem("username");
     if (token) {
       setIsLoggedIn(true);
@@ -273,9 +281,11 @@ export const Navigation = ({ categories, currentLocation }) => {
                 ) : null}
                 <p className="text-sm text-[#64748B] mt-2">Default Address</p>
               </div>
+              <Link to={token?'registration/addresses':'login'}>
               <p className="text-primary text-sm mt-3 mb-6 cursor-pointer">
                 Manage your addresses
               </p>
+              </Link>
             </div>
           </div>
         </React.Fragment>
@@ -579,9 +589,9 @@ export const Navigation = ({ categories, currentLocation }) => {
             alt="Location"
           />
           {currentLocation ? (
-            <span className="text-[#64748B] text-sm ml-3">
-              {currentLocation.city} {currentLocation.regionName},{" "}
-              {currentLocation.country}
+            <span className="text-[#64748B] text-sm ml-3 address">
+            {currentLocation.as}, {currentLocation.city},{" "}
+              {currentLocation.zip}
             </span>
           ) : (
             <span className="text-[#64748B] text-sm ml-3">
@@ -717,19 +727,19 @@ export const Navigation = ({ categories, currentLocation }) => {
           )}
         </div>
 
-        <div className="flex flex-row  items-center justify-evenly ml-[15%] sm:ml-6  sm:mr-4  sm:min-w-[200px] ">
-          <div className="relative mx-2 hidden sm:flex">
+        <div className="flex flex-row  items-center justify-evenly ml-[10%] sm:ml-6  sm:mr-2  sm:min-w-[125px] ">
+          {/* <div className="relative mx-2 hidden sm:flex">
             <img src={process.env.PUBLIC_URL + "/icons/graph.svg"} alt="" />
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
               0
             </span>
-          </div>
+          </div> */}
 
           <div
             className="relative mx-2 hidden sm:flex cursor-pointer"
             onClick={() => navigate("/wishlist")}
           >
-            <img src={process.env.PUBLIC_URL + "/icons/heart.svg"} alt="" />
+            <img src={process.env.PUBLIC_URL + "/icons/heart.svg"} alt="wishlist" />
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
               {totalWishListCount}
             </span>
