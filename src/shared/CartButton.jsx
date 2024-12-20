@@ -25,7 +25,6 @@ export const CartButton = ({
   images,
   video_path,
 }) => {
- 
   const { triggerUpdateCart } = useCart();
   const { totalCartItems, incrementCartItems } = useLocalCartCount();
   const [loader, setLoader] = useState(false);
@@ -39,9 +38,7 @@ export const CartButton = ({
 
   const notify2 = (text) => {
     toast.dismiss();
-    toast(
-      <span className="line-clamp-2">{`${text}`}</span>
-    );
+    toast(<span className="line-clamp-2">{`${text}`}</span>);
   };
 
   const handlerSubmit = async () => {
@@ -53,20 +50,17 @@ export const CartButton = ({
         const response = await apiClient.post(`/cart`, {
           product_id: product_id,
           quantity: quantity,
-           
         });
-        if(response.data.success){
+        if (response.data.success) {
           notify(name);
           setLoader(false);
           setShowCountButton(true);
           setButtonShow(true);
           setQuantity ? setQuantity(1) : console.log();
           triggerUpdateCart();
-        }else{
-          notify2('Some error occured.');
+        } else {
+          notify2("Some error occured.");
         }
-      
-      
       } catch (error) {
         console.error("Error:", error);
       } finally {
@@ -123,8 +117,8 @@ export const CartButton = ({
               : "text-[#F9FAFC] bg-primary px-4 py-2 pt-[20px]   rounded-md w-full sm:max-w-32 mx-auto font-semibold"
           }`}
           style={{ opacity: `${loader ? "0.5" : ""}` }}
-          onClick={() => handlerSubmit()}
           disabled={loader}
+          onClick={() => handlerSubmit()}
         >
           <p className="mt-[-15px]">Buy Now</p>
         </button>

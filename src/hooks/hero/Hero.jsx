@@ -18,7 +18,7 @@ export const Hero = ({ sliderLoader, heroSlider }) => {
                       <Link
                         className="outline-none"
                         key={index}
-                        to={`/product/${banner.id}`}
+                        to={`/products?search=`}
                       >
                         <img
                           className="w-full "
@@ -46,7 +46,7 @@ export const Hero = ({ sliderLoader, heroSlider }) => {
                   <img
                     src={banner.imgSource}
                     alt="Horeca Product Banner"
-                    className="min-h-[140px] sm:min-h-[235px]"
+                    className="min-h-[140px] lg:min-h-[100px] xl:min-h-[180px]"
                   />
                 </Link>
               );

@@ -58,7 +58,6 @@ export const CollectionPage = () => {
             }
           });
         });
-      console.log("----->>>>>>", filteredObject);
       setFilterCategories(filteredObject);
       setCategoryName(matchedCategory && matchedCategory.name);
     } catch (error) {
@@ -122,21 +121,17 @@ export const CollectionPage = () => {
               <h2 className="text-black-100 text-[16px] sm:text-[22px] font-medium sm:font-semibold">
                 {categoryName}{" "}
               </h2>
-              {window?.innerWidth > 640 && (
-                <p className="hidden sm:block text-base w-[100vw] text-gray-700 px-16 mt-2">
-                  Find top-notch commercial kitchen equipment for restaurants.
-                  We offer a wide range of products from trusted brands
-                  like Beckers, Rational, Cambro, Empero, Coupe, Lacor,
-                  and Roller Grill. Whether you're outfitting a new kitchen or
-                  upgrading your current setup.
-                </p>
-              )}
-              {window?.innerWidth < 640 && (
-                <p className="block sm:hidden text-[14px] font-normal w-[100vw] text-gray-700 px-[5px] mt-2">
-                  Find top-notch commercial kitchen equipment restaurants We
-                  offer a wide range products.
-                </p>
-              )}
+              <p className="hidden sm:block text-base text-gray-700 px-16 mt-2">
+                Find top-notch commercial kitchen equipment for restaurants. We
+                offer a wide range of products from trusted brands
+                like Beckers, Rational, Cambro, Empero, Coupe, Lacor, and Roller
+                Grill. Whether you're outfitting a new kitchen or upgrading your
+                current setup.
+              </p>
+              <p className="block sm:hidden text-[14px] font-normal w-[100vw] text-gray-700 px-[5px] mt-2">
+                Find top-notch commercial kitchen equipment restaurants We offer
+                a wide range products.
+              </p>
             </div>
 
             {/* Collection Category  */}
@@ -148,23 +143,28 @@ export const CollectionPage = () => {
 
                     return isVisible ? (
                       <React.Fragment key={index}>
-                        <div
-                          className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md ${
-                            cat?.id === selectedCat?.id
-                              ? "border-primary"
-                              : "border-transparent"
-                          }`}
-                        >
-                          <img
-                            className="w-28"
-                            src={`https://testhssite.com/storage/${cat.image}`}
-                            alt={cat.name}
-                          />
-                          <h4 className="mt-2 text-base text-black font-semibold sm:text-primary text-center">
+                        <div className="flex flex-col">
+                          <div
+                            className={`bg-[#F5F5F5] border-[#D9D9D9] col-span-1 flex items-center justify-center flex-col cursor-pointer transition-all border-2 hover:border-primary p-4 rounded-md ${
+                              cat?.id === selectedCat?.id
+                                ? "border-primary"
+                                : "border-transparent"
+                            }`}
+                          >
+                            <img
+                              className="w-[193px] h-[188px]"
+                              src={`https://testhssite.com/storage/${cat.image}`}
+                              alt={cat.name}
+                            />
+                            <h4 className="block sm:hidden mt-2 text-base text-black font-semibold sm:text-primary text-left">
+                              {cat.name}
+                            </h4>
+                            <h4 className="block sm:hidden mt-2 w-[100%] text-base font-semibold text-primary text-left sm:text-center">
+                              {cat.count} Products
+                            </h4>
+                          </div>
+                          <h4 className="hidden sm:block mt-2 text-base text-black font-semibold sm:text-primary text-center">
                             {cat.name}
-                          </h4>
-                          <h4 className="block sm:hidden mt-2 text-base font-semibold text-primary text-center">
-                            {cat.count} Products
                           </h4>
                         </div>
                       </React.Fragment>
@@ -179,7 +179,7 @@ export const CollectionPage = () => {
                     )
                   )}
             </div>
-            <div className="grid grid-cols-2  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 mt-8">
+            <div className="hidden sm:grid grid-cols-2  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 mt-8">
               {selectedCat && selectedCat.children
                 ? selectedCat.children.map((cat, index) => {
                     return (

@@ -32,6 +32,7 @@ import { toast } from "react-toastify";
 import Documents from "../components/Documents";
 function Model({ url, onLoaded }) {
   const { scene, isLoading } = useGLTF(url);
+
   useEffect(() => {
     if (!isLoading) {
       onLoaded();
@@ -396,8 +397,9 @@ export const ProductDetail = () => {
                                             <div className="flex justify-center relative">
                                               {isImage(item) ? (
                                                 <>
+                                                  {/* Hide 3d button for the first phase */}
                                                   <div
-                                                    className="absolute right-4 top-4 bg-primary text-white flex items-center justify-center rounded-full p-2 cursor-pointer"
+                                                    className="hidden absolute right-4 top-4 bg-primary text-white flex items-center justify-center rounded-full p-2 cursor-pointer"
                                                     onClick={() =>
                                                       setThreeDView(true)
                                                     }
@@ -466,7 +468,8 @@ export const ProductDetail = () => {
                                   </React.Fragment>
                                 ) : (
                                   <React.Fragment>
-                                    <div className="relative">
+                                    {/* hidden for the 3d view */}
+                                    <div className="hidden relative">
                                       <div
                                         className="absolute top-4 right-4 z-[50] p-2 bg-primary text-white rounded-full cursor-pointer"
                                         onClick={() => setThreeDView(false)}
@@ -581,8 +584,9 @@ export const ProductDetail = () => {
                     >
                       <FaWhatsapp size={16} />
                     </div>
+                    {/* hidden because we don't have full functionality of sendEmail */}
                     <div
-                      className="border-[#E2E8F0] border-2 rounded-full p-3 ml-3 cursor-pointer hover:bg-primary transition-all hover:text-white"
+                      className="hidden border-[#E2E8F0] border-2 rounded-full p-3 ml-3 cursor-pointer hover:bg-primary transition-all hover:text-white"
                       onClick={() => handlerSendEmail()}
                     >
                       <MdOutlineEmail size={16} />

@@ -13,7 +13,7 @@ export const Categories = ({ categories }) => {
         </h2>
         <Link
           to="/collections"
-          className="text-gray-700 text-[14px] sm:text-lg"
+          className="text-gray-700 text-[14px] sm:text-[16px]"
         >
           All Categories
         </Link>

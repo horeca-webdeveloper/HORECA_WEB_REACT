@@ -140,6 +140,8 @@ export const Navigation = ({ categories, currentLocation }) => {
     );
   };
 
+
+
   const [maxIndex, setMaxIndex] = useState(4); // Default for lg screen
 
   useEffect(() => {
