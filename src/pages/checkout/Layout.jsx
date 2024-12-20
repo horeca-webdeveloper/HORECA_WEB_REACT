@@ -161,9 +161,6 @@ export const Layout = ({ children, cartItems, cartSummaryFlag, removeItemsLoader
                                     <button type="submit" className="bg-primary text-center text-white block p-3 mt-2 w-full rounded-md font-semibold">Remove Coupon</button>}
                             </form>
                         </SideWrapper>) : null}
-
-
-
                         {(tempSubTotal && cartItems.length > 0) && authToken? (
                             <SideWrapper classes={"mt-4"}>
                                 {!cardSummaryLoader ? <React.Fragment>
