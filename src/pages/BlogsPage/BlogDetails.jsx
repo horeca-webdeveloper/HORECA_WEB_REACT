@@ -21,7 +21,6 @@ const BlogDetails = () => {
 
   const formatDateString = (dateString) => {
     const date = new Date(dateString);
-
     // Options for formatting
     const options = { day: "2-digit", month: "short", year: "numeric" };
     const formattedDate = date.toLocaleDateString("en-GB", options); // Format as 'DD-MMM-YYYY'
@@ -69,7 +68,7 @@ const BlogDetails = () => {
               </h1>
               <p
                 dangerouslySetInnerHTML={{
-                  __html: data?.content.replace(/<\/?p>/g, ""),
+                  __html: data?.content?.replace(/<\/?p>/g, ""),
                 }}
                 className="text-[20px] leading-[35px] font-light"
               ></p>
@@ -177,7 +176,7 @@ const BlogDetails = () => {
                 {/* Image Section */}
                 <div className="w-1/3">
                   <img
-                    src={process.PUBLIC_URL.env} // Replace with your actual image URL
+                    // src={process?.PUBLIC_URL.env} // Replace with your actual image URL
                     alt="Knife Station"
                     className="w-full h-auto rounded-md"
                   />
@@ -215,7 +214,7 @@ const BlogDetails = () => {
                 {/* Image Section */}
                 <div className="w-1/3">
                   <img
-                    src={process.PUBLIC_URL.env} // Replace with your actual image URL
+                    // src={process.PUBLIC_URL.env} // Replace with your actual image URL
                     alt="Knife Station"
                     className="w-full h-auto rounded-md"
                   />
@@ -234,7 +233,7 @@ const BlogDetails = () => {
                 {/* Image Section */}
                 <div className="w-1/3">
                   <img
-                    src={process.PUBLIC_URL.env} // Replace with your actual image URL
+                    // src={process.PUBLIC_URL.env} // Replace with your actual image URL
                     alt="Knife Station"
                     className="w-full h-auto rounded-md"
                   />
@@ -253,7 +252,7 @@ const BlogDetails = () => {
                 {/* Image Section */}
                 <div className="w-1/3">
                   <img
-                    src={process.PUBLIC_URL.env} // Replace with your actual image URL
+                    // src={process.PUBLIC_URL.env} // Replace with your actual image URL
                     alt="Knife Station"
                     className="w-full h-auto rounded-md"
                   />
