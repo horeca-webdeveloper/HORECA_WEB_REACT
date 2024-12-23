@@ -150,3 +150,5 @@ export const BlogsCard = ({ classes }) => {
     </Wrapper>
   );
 };
+
+export default React.memo(BlogsCard);

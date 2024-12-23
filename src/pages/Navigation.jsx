@@ -484,7 +484,7 @@ const Navigation = ({ categories, currentLocation }) => {
                 </p>
                 <ul className="">
                   {childCategory?.map((item, index) => {
-                    // console.log("subcategories", item);
+         
 
                     return (
                       <li

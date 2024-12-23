@@ -20,9 +20,6 @@ export const CompareProducts = ({
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
 
   const [priceLayer, setPriceLayer] = useState([]);
-
-  console.log("---->>>>", product);
-
   const options = {
     method: "open",
     resolution: Resolution.HIGH,
