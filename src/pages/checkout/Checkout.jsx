@@ -235,7 +235,7 @@ for mobile */}
                                 <img
                                   className="max-w-[130px]"
                                   src={
-                                    "https://testhssite.com/storage/" +
+                                     
                                     prod.product.image
                                   }
                                   alt={prod.product.name}
@@ -314,7 +314,7 @@ for mobile */}
                                   <img
                                     className="max-w-[130px]"
                                     src={
-                                      "https://testhssite.com/storage/" +
+                                       
                                       prod?.product?.images[0]
                                     }
                                     alt={prod.product.name}
@@ -560,7 +560,7 @@ for mobile */}
                                         <img
                                           className="max-w-[130px]"
                                           src={
-                                            "https://testhssite.com/storage/" +
+                                            
                                             prod.image
                                           }
                                           alt={prod.name}
