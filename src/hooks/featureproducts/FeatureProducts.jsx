@@ -1,9 +1,9 @@
-import React, { useEffect, useState,lazy } from "react";
+import React, { useEffect, useState, lazy } from "react";
 import { Wrapper } from "../../shared/Wrapper";
 import { FeatureHeader } from "../../shared/FeatureHeader";
 import Skeleton from "react-loading-skeleton";
-const  ProductCard =lazy(()=>import("../../shared/ProductCard"));
-  const FeatureProduct = ({
+const ProductCard = lazy(() => import("../../shared/ProductCard"));
+const FeatureProduct = ({
   featureCat,
   featureCatList,
   selectedCat,

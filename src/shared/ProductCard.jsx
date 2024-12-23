@@ -348,7 +348,6 @@ const ProductCard = ({
                 </ul>
               </div>
             ) : null}
-
             <p className="font-normal sm:font-semibold text-[12px] sm:text-sm text-gray-700 mt-3">
               {product.delivery_days > 0 ? (
                 <span>
@@ -360,19 +359,29 @@ const ProductCard = ({
               )}
             </p>
 
-            <div className="flex overflow-hidden sm:flex-row items-center">
-              <span className="flex items-center sm:flex-none text-primary font-semibold">
+            <div className="flex overflow-hidden sm:flex-row items-baseline">
+              <span className="flex items-baseline sm:flex-none text-primary font-semibold">
                 <span className="ml-0 text-[10px] sm:text-xl font-normal sm:font-bold">
                   {product.currency_title ? product.currency_title : "USD "}
                 </span>
-
                 {product.sale_price ? (
                   <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">
-                    {Number(product.sale_price).toFixed(2)}
+                    {Number(product.sale_price).toFixed(2).split(".")[0]}
+                    <span className="text-[10px] font-bold sm:text-[20px]">
+                      .{Number(product.sale_price).toFixed(2).split(".")[1]}
+                    </span>
                   </span>
                 ) : (
                   <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">
-                    {Number(product.front_sale_price).toFixed(2)}
+                    {Number(product.front_sale_price).toFixed(2).split(".")[0]}
+                    <span className="text-[10px] font-bold sm:text-[20px]">
+                      .
+                      {
+                        Number(product.front_sale_price)
+                          .toFixed(2)
+                          .split(".")[1]
+                      }
+                    </span>
                   </span>
                 )}
               </span>
@@ -385,7 +394,7 @@ const ProductCard = ({
                     {product.currency_title ? product.currency_title : "USD"}
                     &nbsp;
                   </span>
-                  <span>
+                  <span className="">
                     {product.original_price
                       ? Number(product.original_price).toFixed(2)
                       : "0.00"}
