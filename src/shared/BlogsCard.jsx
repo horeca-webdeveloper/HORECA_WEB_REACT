@@ -4,7 +4,7 @@ import { Wrapper } from "./Wrapper";
 import { apiClient } from "../utils/apiWrapper";
 import Skeleton from "react-loading-skeleton";
 
-export const BlogsCard = ({ classes, data }) => {
+ const BlogsCard = ({ classes }) => {
   const navigate = useNavigate();
   const [loader, setLoader] = useState(true);
   const [blogs, setBlogs] = useState([]);
@@ -139,3 +139,6 @@ export const BlogsCard = ({ classes, data }) => {
     </Wrapper>
   );
 };
+
+
+export default React.memo(BlogsCard);

@@ -5,10 +5,8 @@ import { BsPlusLg } from "react-icons/bs";
 import { FiMinus } from "react-icons/fi";
 import { FaRegHeart } from "react-icons/fa";
 import { GoHeartFill } from "react-icons/go";
-import { LuEye } from "react-icons/lu";
-import { VscGraph } from "react-icons/vsc";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
-import { FaRegClock, FaHeart } from "react-icons/fa";
+import { FaRegClock } from "react-icons/fa";
 import { FiTruck } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { FiShoppingCart } from "react-icons/fi";
@@ -16,14 +14,12 @@ import { apiClient } from "../utils/apiWrapper";
 import { useCart } from "../context/CartContext";
 import { useLocalCartCount } from "../context/LocalCartCount";
 import { CartButton } from "./CartButton";
-import { MdPlayCircle } from "react-icons/md";
 import { FaPlay } from "react-icons/fa";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useWishlist } from "../context/WishListContext";
-import { Counter } from "./CheckoutPage/Counter";
 import { ProductCardCounter } from "../components/ProductCardCounter";
 
-export const ProductCard = ({
+ const ProductCard = ({
   classes,
   product,
   flashSale,
@@ -40,15 +36,14 @@ export const ProductCard = ({
   const [inWishList, setWishList] = useState(false);
   const sliderRef = useRef();
   const { triggerUpdateCart } = useCart();
-  const { totalWishListItems, incrementWishListItems } = useLocalCartCount();
+  const { incrementWishListItems } = useLocalCartCount();
   const [cartSummaryFlag, setCartSummaryFlag] = useState(false);
   const [showCountButton, setShowCountButton] = useState(false);
 
   const videoRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
-  const navigate = useNavigate();
   const [productState, setProductState] = useState(product);
-  const { totalWishListCount, triggerUpdateWishList } = useWishlist();
+  const { triggerUpdateWishList } = useWishlist();
 
   const settings = {
     dots: product?.images?.length > 1, // Show dots only if more than 1 image
@@ -160,7 +155,7 @@ export const ProductCard = ({
           .then((_) => {
             videoRef.current.pause();
           })
-          .catch((error) => {});
+          .catch(() => {});
       }
     } else {
       sliderRef.current.slickPause();
@@ -176,7 +171,7 @@ export const ProductCard = ({
             .then((_) => {
               videoRef.current.play();
             })
-            .catch((error) => {});
+            .catch(() => {});
         }
       }, 300);
     } else {
@@ -186,9 +181,6 @@ export const ProductCard = ({
 
   const handleRemoveFromSaveForlater = async (id, name) => {
     try {
-      const response = apiClient.post("remove-from-save-for-later", {
-        product_id: id,
-      });
       notify(name, " has been removed from cart.");
     } catch (error) {
       console.log("error", error);
@@ -251,7 +243,7 @@ export const ProductCard = ({
                     </video>
                   ) : (
                     <img
-                      src={`https://testhssite.com/storage/${product.images[0]}`}
+                      src={`${product.images[0]}`}
                       alt={product.altText}
                       className="w-[100px] h-[110px] sm:h-[250px] sm:w-full object-contain"
                     />
@@ -277,7 +269,7 @@ export const ProductCard = ({
                       className="flex items-center justify-center"
                     >
                       <img
-                        src={`https://testhssite.com/storage/${image}`}
+                        src={`${image}`}
                         alt={product.altText}
                         className="w-full w-[100px] h-[110px] sm:h-[250px] flex items-center justify-center object-contain"
                       />
@@ -299,13 +291,13 @@ export const ProductCard = ({
             {!productState.in_wishlist ? (
               <FaRegHeart
                 size={45}
-                onClick={(e) => handlerAddFavouriteItem(product)}
+                onClick={() => handlerAddFavouriteItem(product)}
                 className="p-3 border-b border-gray-300 bg-white  text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]"
               />
             ) : (
               <GoHeartFill
                 size={45}
-                onClick={(e) => handlerRemoveFavouriteItem(product)}
+                onClick={() => handlerRemoveFavouriteItem(product)}
                 className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]"
               />
             )}
@@ -510,3 +502,6 @@ export const ProductCard = ({
     </React.Fragment>
   );
 };
+
+
+export default React.memo(ProductCard);
