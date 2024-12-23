@@ -4,7 +4,7 @@ import { Wrapper } from "./Wrapper";
 import { apiClient } from "../utils/apiWrapper";
 import Skeleton from "react-loading-skeleton";
 
- const BlogsCard = ({ classes }) => {
+export const BlogsCard = ({ classes }) => {
   const navigate = useNavigate();
   const [loader, setLoader] = useState(true);
   const [blogs, setBlogs] = useState([]);
@@ -25,13 +25,24 @@ import Skeleton from "react-loading-skeleton";
     fetchBlogs();
   }, []);
 
+  const handleNavigation = (item) => {
+    const blogData = {
+      image: item.image,
+      name: item.author.username,
+      updatedAt: item.updated_at,
+      heading: item.name,
+      content: item.content,
+      views: item.views,
+    };
+    navigate("/blog-details", { state: blogData });
+  };
+
   const formatDateString = (dateString) => {
     const date = new Date(dateString);
 
     // Options for formatting
     const options = { day: "2-digit", month: "short", year: "numeric" };
     const formattedDate = date.toLocaleDateString("en-GB", options); // Format as 'DD-MMM-YYYY'
-
     // Replace the comma with a space and return the result
     return formattedDate.replace(",", "").replace(/\s+/g, "-").toLowerCase();
   };
@@ -57,7 +68,7 @@ import Skeleton from "react-loading-skeleton";
                 <React.Fragment key={index}>
                   {index < 3 ? (
                     <div
-                      onClick={() => navigate("/blog-details")}
+                      onClick={() => handleNavigation(item)}
                       className="border-2 rounded-md p-6 border-[#EEEEEE]"
                     >
                       <React.Fragment>
@@ -139,6 +150,5 @@ import Skeleton from "react-loading-skeleton";
     </Wrapper>
   );
 };
-
 
 export default React.memo(BlogsCard);

@@ -1,14 +1,18 @@
-import React, { useState, useEffect,lazy } from "react";
+import React, { useState, useEffect, lazy } from "react";
 
 import { Hero } from "../hooks/hero/Hero";
 import { RowNews } from "../hooks/rownews/RowNews";
 import { TimerBanner } from "../hooks/timerBanner/TimerBanner";
 import { apiClient } from "../utils/apiWrapper";
-const  FeatureProduct =lazy(()=>import("../hooks/featureproducts/FeatureProducts"));
-const  FeatureClearance =lazy(()=>import("../hooks/featureClearance/FeatureClearance"));
-const  FeatureBrand =lazy(()=>import("../hooks/featureBrand/FeatureBrand"));
-const BlogsCard = lazy(()=>import('../shared/BlogsCard'))
-const  Categories =lazy(()=>import('../hooks/categories/Categories'));
+const FeatureProduct = lazy(() =>
+  import("../hooks/featureproducts/FeatureProducts")
+);
+const FeatureClearance = lazy(() =>
+  import("../hooks/featureClearance/FeatureClearance")
+);
+const FeatureBrand = lazy(() => import("../hooks/featureBrand/FeatureBrand"));
+const BlogsCard = lazy(() => import("../shared/BlogsCard"));
+const Categories = lazy(() => import("../hooks/categories/Categories"));
 
 const Homepage = ({ categories }) => {
   const [featureCat, setFeatureCat] = useState([]);
@@ -22,7 +26,6 @@ const Homepage = ({ categories }) => {
   const [sliderLoader, setSliderLoader] = useState(true);
   const [brandCatLoader, setBrandCatLoader] = useState(true);
   const authToken = localStorage.getItem("authToken");
- 
 
   const fetchCategoriesProducts = async (tempCat) => {
     try {
@@ -109,7 +112,7 @@ const Homepage = ({ categories }) => {
       />
       <FeatureClearance />
       <TimerBanner />
-      <BlogsCard/>
+      <BlogsCard />
     </div>
   );
 };
