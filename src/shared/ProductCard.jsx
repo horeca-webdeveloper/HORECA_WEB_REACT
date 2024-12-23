@@ -287,7 +287,7 @@ export const ProductCard = ({
               </React.Fragment>
             )}
           </Link>
-          <div className="absolute top-[20%] sm:top-[8%] translate-y-[-50%] border border-gray-300 rounded-[4px] right-0 transition-all duration-500">
+          <div className="absolute top-[20%] sm:top-[8%] translate-y-[-50%] border-gray-300 rounded-[4px] right-0 transition-all duration-500">
             {/* <VscGraph
               size={45}
               className="p-3 text-[#62666c] bg-white hover:text-white hover:bg-primary z-10 transition-all rounded-t-[4px]"
@@ -300,13 +300,13 @@ export const ProductCard = ({
               <FaRegHeart
                 size={45}
                 onClick={(e) => handlerAddFavouriteItem(product)}
-                className="p-3 border-b border-gray-300 bg-white  text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]"
+                className="p-3 text-[#62666c] hover:text-[#186737] z-10 transition-all rounded-b-[4px]"
               />
             ) : (
               <GoHeartFill
                 size={45}
                 onClick={(e) => handlerRemoveFavouriteItem(product)}
-                className="p-3 border-b border-gray-300 bg-white text-[#62666c] hover:text-white hover:bg-primary z-10 transition-all rounded-b-[4px]"
+                className="p-3   text-[#186737] hover:text-[gray] z-10 transition-all rounded-b-[4px]"
               />
             )}
           </div>
@@ -368,27 +368,21 @@ export const ProductCard = ({
               )}
             </p>
 
-            <div className="flex overflow-hidden  sm:flex-row items-center">
-              <span className="flex items-center sm:flex-none text-primary font-semibold ">
+            <div className="flex overflow-hidden sm:flex-row items-center">
+              <span className="flex items-center sm:flex-none text-primary font-semibold">
                 <span className="ml-0 text-[10px] sm:text-xl font-normal sm:font-bold">
                   {product.currency_title ? product.currency_title : "USD "}
                 </span>
 
                 {product.sale_price ? (
                   <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">
-                    {product.sale_price}.
+                    {Number(product.sale_price).toFixed(2)}
                   </span>
                 ) : (
                   <span className="ml-1 text-[14px] sm:text-3xl font-bold sm:font-extrabold">
-                    {product.front_sale_price}.
+                    {Number(product.front_sale_price).toFixed(2)}
                   </span>
                 )}
-                <span className="ml-1 text-[10px] sm:text-3xl font-bold sm:font-extrabold">
-                  {product.sale_price &&
-                  String(product.sale_price).split(".")[1]
-                    ? String(product.sale_price).split(".")[1]
-                    : "00"}
-                </span>
               </span>
             </div>
             <div className="h-[20px]">
@@ -399,15 +393,15 @@ export const ProductCard = ({
                     {product.currency_title ? product.currency_title : "USD"}
                     &nbsp;
                   </span>
-                  <span>{product.original_price || "."}.</span>
                   <span>
-                    {product.price && String(product.price).split(".")[1]
-                      ? String(product.price).split(".")[1]
-                      : "00"}
+                    {product.original_price
+                      ? Number(product.original_price).toFixed(2)
+                      : "0.00"}
                   </span>
                 </span>
               )}
             </div>
+
             {!flashSale ? (
               <React.Fragment>
                 {product.leftStock > 0 && product.leftStock <= 5 ? (

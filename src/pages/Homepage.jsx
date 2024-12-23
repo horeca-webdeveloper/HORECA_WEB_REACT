@@ -156,7 +156,7 @@ const Homepage = ({ categories }) => {
       />
       <FeatureClearance />
       <TimerBanner />
-      <BlogsCard data={data} />
+      <BlogsCard />
     </div>
   );
 };
