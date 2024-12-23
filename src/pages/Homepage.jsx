@@ -60,7 +60,6 @@ const Homepage = ({ categories }) => {
 
   const fetchBrandProducts = async (tempBrand) => {
     const authToken = localStorage.getItem("authToken");
-
     try {
       const response = await apiClient.get(
         `${authToken ? "/brandproducts" : "/brandguestproducts"}`

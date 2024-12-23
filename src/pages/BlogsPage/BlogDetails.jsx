@@ -3,6 +3,7 @@ import { Wrapper } from "../../shared/Wrapper";
 import { Breadcrumb } from "../../shared/Breadcrumb";
 import { BlogPostCard } from "./components/BlogPostCard";
 import { useLocation } from "react-router";
+import { formatDateString } from "../../utils/formatDate";
 
 const BlogDetails = () => {
   const location = useLocation();
@@ -18,15 +19,6 @@ const BlogDetails = () => {
       title: "BlogDetails",
     },
   ];
-
-  const formatDateString = (dateString) => {
-    const date = new Date(dateString);
-    // Options for formatting
-    const options = { day: "2-digit", month: "short", year: "numeric" };
-    const formattedDate = date.toLocaleDateString("en-GB", options); // Format as 'DD-MMM-YYYY'
-    // Replace the comma with a space and return the result
-    return formattedDate.replace(",", "").replace(/\s+/g, "-").toLowerCase();
-  };
   return (
     <>
       <Wrapper>
