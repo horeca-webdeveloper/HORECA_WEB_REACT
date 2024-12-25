@@ -193,11 +193,11 @@ const Navigation = ({ categories, currentLocation }) => {
       const width = window.innerWidth;
 
       if (width >= 1536) {
-        setMaxIndex(4); // 2xl: index <= 4
+        setMaxIndex(7); // 2xl: index <= 4
       } else if (width >= 1280) {
-        setMaxIndex(3); // xl: index <= 3
+        setMaxIndex(6); // xl: index <= 3
       } else if (width >= 1024) {
-        setMaxIndex(2); // lg: index <= 2
+        setMaxIndex(3); // lg: index <= 2
       } else if (width >= 768) {
         setMaxIndex(1); // md: index <= 1
       } else {
@@ -329,11 +329,12 @@ const Navigation = ({ categories, currentLocation }) => {
             {currencyMenu
               ? currencyMenu.map((currency, index) => {
                   return (
-                    <li
-                      key={index}
-                      className="after:content-['|'] after:mx-2 after:text-gray-700"
-                    >
-                      <Link to={currency.redirectUrl}>{currency.title}</Link>
+                    <li key={index} className="flex items-center">
+                      <Link to={currency.redirectUrl} className="mr-2">
+                        {currency.title}
+                      </Link>
+                      {/* for responsive right line after sell on horeca heading */}
+                      <span className="hidden sm:block text-gray-700 w-[1px] h-[40px] lg:h-[12px] bg-[black] mr-[10px]"></span>
                     </li>
                   );
                 })
@@ -391,13 +392,13 @@ const Navigation = ({ categories, currentLocation }) => {
                 />
               </div>
               <ul
-                className={`absolute top-5 left-[-10px] w-full hidden group-hover:block bg-gray-200 rounded-md `}
+                className={`absolute top-5 left-[-10px] w-full hidden group-hover:block w-[100px] bg-gray-200 rounded-md `}
               >
                 {lang.map((lang, index) => {
                   return (
                     <li
                       key={index}
-                      className=" px-3 border border-white text-xs"
+                      className=" px-3 py-[4px] border border-white text-xs"
                       onClick={() => {
                         setSelectedLang(lang);
                       }}
@@ -411,9 +412,32 @@ const Navigation = ({ categories, currentLocation }) => {
           </ul>
         </Wrapper>
       </div>
+      <div className="hidden sm:flex md:flex lg:flex xl:flex 2xl:hidden items-center justify-left bg-[#def9ec] p-[10px]">
+        <Wrapper>
+          <div className="flex items-center">
+            <img
+              className="p-[2px] rounded-[2px]"
+              src={process.env.PUBLIC_URL + "/icons/location.svg"}
+              alt="Location"
+            />
+            <p className="text-[14px] ml-[10px] leading-[16.42px] font-semibold text-[#196637]">
+              Deliver To :
+            </p>
+            {currentLocation ? (
+              <span className="text-[#196637] text-sm ml-3">
+                {currentLocation.city}, {currentLocation.country}
+              </span>
+            ) : (
+              <span className="text-[#196637] text-sm ml-3">
+                Fetching Location...
+              </span>
+            )}
+          </div>
+        </Wrapper>
+      </div>
 
       {/* Main Nav*/}
-      <Wrapper classes="flex items-center flex-row justify-start sm:justify-between py-5">
+      <Wrapper classes="flex items-center flex-row justify-between sm:justify-start sm:justify-between py-5">
         {/* Drawer */}
         <div>
           {/* Main Drawer */}
@@ -484,8 +508,6 @@ const Navigation = ({ categories, currentLocation }) => {
                 </p>
                 <ul className="">
                   {childCategory?.map((item, index) => {
-         
-
                     return (
                       <li
                         onClick={() => {
@@ -570,7 +592,7 @@ const Navigation = ({ categories, currentLocation }) => {
             />
           )}
         </div>
-        <div className={window.innerWidth < 640 ? "mr-[15%]" : "ml-[0]"}>
+        <div className={window.innerWidth < 640 ? "mr-[15%]" : "mr-[0%]"}>
           <Link to="/home">
             <img
               onClick={toggleDrawer}
@@ -580,6 +602,9 @@ const Navigation = ({ categories, currentLocation }) => {
             />
           </Link>
         </div>
+        {window?.innerWidth > 640 && (
+          <div className="mr-[10%] h-[40px] w-[10px] bg-[white] block sm:hidden"></div>
+        )}
         <Link to="/home">
           <img
             className="ml-[40px] sm:ml-[0px]"
@@ -587,10 +612,14 @@ const Navigation = ({ categories, currentLocation }) => {
             alt="Horeca Store"
           />
         </Link>
-
+        {/* for responsiveness */}
+        {window?.innerWidth > 640 && (
+          <div className="mr-[10%] h-[40px] w-[20px] ml-[40px] bg-[white] block sm:hidden"></div>
+        )}
+        {/* for responsiveness */}
         {/* Location Search Bar  */}
         <div
-          className="cursor-pointer relative w-[12.8rem]  flex items-center border border-gray-300 rounded-full h-12 px-3 ml-14 hidden sm:flex"
+          className="cursor-pointer relative w-[12.8rem]  flex items-center border border-gray-300 rounded-full h-12 px-3 ml-14 hidden xl:flex"
           onClick={() => setOpenModel(true)}
         >
           <img
@@ -615,12 +644,19 @@ const Navigation = ({ categories, currentLocation }) => {
         </div>
 
         {/* Search Option Button */}
-        <div className="w-[50%] rounded-full border border-gray-300  relative ml-2 hidden sm:block">
+        <div className="w-[60%] rounded-full border border-gray-300  relative ml-2 hidden sm:block">
           <form
             className="flex items-center h-12"
             onSubmit={(e) => handlerFormSubmit(e)}
           >
-            <span className="ml-2 text-primary text-base px-5">All</span>
+            <span className="ml-2 cursor-pointer text-primary text-base px-5">
+              All
+            </span>
+            <img
+              className="mr-[10px] cursor-pointer  ml-[-10px]"
+              src={process.env.PUBLIC_URL + "/icons/arrow.svg"}
+              alt="arrow"
+            />
             <input
               type="text"
               className="h-full w-full border-l border-r-gray-300 px-3 text-base text-[#64748B] outline-none"
@@ -736,7 +772,7 @@ const Navigation = ({ categories, currentLocation }) => {
           )}
         </div>
 
-        <div className="flex flex-row  items-center justify-evenly ml-[10%] sm:ml-6  sm:mr-2  sm:min-w-[125px] ">
+        <div className="flex flex-row  items-center justify-evenly ml-[10%] sm:ml-0  sm:mr-2  sm:min-w-[125px] ">
           {/* <div className="relative mx-2 hidden sm:flex">
             <img src={process.env.PUBLIC_URL + "/icons/graph.svg"} alt="" />
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
@@ -745,7 +781,7 @@ const Navigation = ({ categories, currentLocation }) => {
           </div> */}
 
           <div
-            className="relative mx-2 hidden sm:flex cursor-pointer"
+            className="relative mx-2 hidden sm:flex cursor-pointer group"
             onClick={() => navigate("/wishlist")}
           >
             <img
@@ -755,15 +791,25 @@ const Navigation = ({ categories, currentLocation }) => {
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
               {totalWishListCount}
             </span>
+
+            {/* Tooltip */}
+            <div className="absolute bottom-full mb-2 right-0 hidden group-hover:block bg-[#DEF9EC] text-[#186737] text-xs rounded py-1 px-2">
+              Wishlist
+            </div>
           </div>
           <div
-            className="relative mx-2 cursor-pointer"
+            className="relative mx-2 cursor-pointer group mr-[10px] sm:mr-[0px]"
             onClick={() => navigate("/checkout")}
           >
-            <img src={process.env.PUBLIC_URL + "/icons/cart.svg"} alt="" />
+            <img src={process.env.PUBLIC_URL + "/icons/cart.svg"} alt="cart" />
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
               {totalCartCount}
             </span>
+
+            {/* Tooltip */}
+            <div className="absolute bottom-full mb-2 right-0 hidden group-hover:block bg-[#DEF9EC] text-[#186737] text-xs rounded py-1 px-2">
+              Cart
+            </div>
           </div>
         </div>
         <div className="flex flex-row">
@@ -1018,7 +1064,7 @@ const Navigation = ({ categories, currentLocation }) => {
                 src={process.env.PUBLIC_URL + "/icons/category.svg"}
                 alt=""
               />
-              <span className="font-bold text-lg text-primary ml-2">
+              <span className="font-bold text-base text-primary ml-2 w-[215px]">
                 Shop By Categories
               </span>
               <img
@@ -1034,7 +1080,7 @@ const Navigation = ({ categories, currentLocation }) => {
                       <React.Fragment key={index}>
                         {index <= maxIndex && (
                           <Link
-                            className="text-base text-primary mx-2"
+                            className="text-[13px] font-normal text-primary mx-2"
                             to={`/collections/${cat.slug}`}
                           >
                             {cat.name}
@@ -1042,7 +1088,7 @@ const Navigation = ({ categories, currentLocation }) => {
                         )}
                         {index === 7 && (
                           <Link
-                            className="text-base text-primary mx-2 font-bold"
+                            className="text-[13px] font-bold text-primary mx-2 "
                             to="/collections/deal-of-a-days"
                           >
                             Deal of the day
