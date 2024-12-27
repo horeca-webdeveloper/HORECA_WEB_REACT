@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 
 const SidebarProfile = () => {
-  const userData=JSON.parse(localStorage.getItem('userProfile'));
+  const userData = JSON.parse(localStorage.getItem("userProfile"));
   const navigate = useNavigate();
   const navItems = [
     {
@@ -10,6 +10,12 @@ const SidebarProfile = () => {
       name: "Your Orders",
       link: "/registration/all-orders",
       icon: `${process.env.PUBLIC_URL}/profileIcons/Frame.png`,
+    },
+    {
+      id: "",
+      name: "Return/Refund",
+      link: "/registration/Return",
+      icon: `${process.env.PUBLIC_URL}/profileIcons/ReturnIcon.png`,
     },
     {
       id: "",
@@ -85,7 +91,7 @@ const SidebarProfile = () => {
     // },
   ];
   return (
-    <div className="w-[320px] mb-[20px] hidden md:block mr-[30px]">
+    <div className="w-[320px] mb-[20px] hidden xl:block mr-[30px]">
       <div className="flex items-center w-[280px] h-[170px] bg-[#def9ec] mt-[10px] rounded-md">
         <div className="flex-col m-[10px]">
           <p className="font-work-sans text-[18px] font-normal">

@@ -5,6 +5,7 @@ import { apiClient } from "./utils/apiWrapper";
 import { ToastContainer } from "react-toastify";
 import { FaRegCircleCheck } from "react-icons/fa6";
 import { Loader } from "./shared/Loader";
+import ReturnOrders from "./pages/ReturnOrder/ReturnOrders";
 // Lazy load components
 const Footer=lazy(()=>import('./pages/Footer'));
 const Navigation=lazy(()=>import('./pages/Navigation'));
@@ -44,8 +45,6 @@ const SellOnHoreca = lazy(() => import("./pages/FooterPages/SellonHoreca/SellOnH
 const AboutUs = lazy(() => import("./pages/AboutUs/AboutUs"));
 const BlogListing = lazy(() => import("./pages/BlogsPage/BlogListing"));
 const BlogDetails = lazy(() => import("./pages/BlogsPage/BlogDetails"));
-
-
 
 
 const App = () => {
@@ -140,6 +139,7 @@ const App = () => {
         <Route path="/sign-up" element={<SignUp />} />{" "}
         <Route path="/review-checkout"  element={<ReviewCheckout  currentLocation={currentLocation} />} />{" "}
         <Route path="/registration/all-orders" element={<AllOrders />} />{" "}
+        <Route path="/registration/Return" element={<ReturnOrders/>}/>
         <Route path="/registration/reviews" element={<Reviews />} />{" "}
         <Route path="/registration/browsing-history" element={<BrowsingHistory />} />{" "}
         <Route path="/registration/wishlist" element={<ProfileWishlist />} />{" "}
@@ -157,7 +157,6 @@ const App = () => {
         <Route path="blog-listing" element={<BlogListing/>}/>
         <Route path="blog-details" element={<BlogDetails/>}/>
         <Route path="/career" element={<Career />} />{" "}
-        <Route path="/career" element={<Career />} />{" "}AboutUs
         <Route path="/about-us" element={<AboutUs />} />{" "}
         <Route path="/forgot-password" element={<ForgotPassword />} />{" "}
         <Route path="/password-reset" element={<PasswordReset />} />{" "}

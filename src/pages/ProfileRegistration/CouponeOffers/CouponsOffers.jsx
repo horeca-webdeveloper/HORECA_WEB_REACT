@@ -1,4 +1,4 @@
-import React, { useEffect, useState,lazy } from "react";
+import React, { useEffect, useState, lazy } from "react";
 import { Wrapper } from "../../../shared/Wrapper";
 import SidebarProfile from "../../../components/SidebarProfile";
 import { Breadcrumb } from "../../../shared/Breadcrumb";
@@ -20,7 +20,7 @@ const CouponsOffers = () => {
     try {
       const response = await apiClient.get("/customer/coupons");
       setCouponData(response?.data?.coupons);
- 
+
       setLoader(false);
     } catch (error) {
       console.error("Error:", error);
@@ -56,7 +56,6 @@ const CouponsOffers = () => {
       title: "Profile",
     },
     {
-      
       title: "Coupons & offers",
     },
   ];

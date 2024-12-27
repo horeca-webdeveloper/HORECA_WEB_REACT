@@ -1,9 +1,9 @@
-import React, { useEffect, useState,lazy } from "react";
+import React, { useEffect, useState, lazy } from "react";
 import { Wrapper } from "../../shared/Wrapper";
 import { FeatureHeader } from "../../shared/FeatureHeader";
 import Skeleton from "react-loading-skeleton";
-const  ProductCard =lazy(()=>import("../../shared/ProductCard"));
-  const FeatureProduct = ({
+const ProductCard = lazy(() => import("../../shared/ProductCard"));
+const FeatureProduct = ({
   featureCat,
   featureCatList,
   selectedCat,
@@ -42,7 +42,7 @@ const  ProductCard =lazy(()=>import("../../shared/ProductCard"));
         selectedItem={selectedCat}
         setSelectedItem={setSelectedCat}
         loader={featureCatLoader}
-        classes={"mt-14 mb-6"}
+        classes={"mt-8 mb-[10px] sm:mt-14 sm:mb-6 "}
       />
       <div
         style={
@@ -72,7 +72,7 @@ const  ProductCard =lazy(()=>import("../../shared/ProductCard"));
                     index < 10 ? (
                       <ProductCard
                         key={index}
-                        classes="col-span-1 mt-1 w-full"
+                        classes="col-span-1 mt-1"
                         product={product}
                       />
                     ) : null

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Wrapper } from "./Wrapper";
 import { apiClient } from "../utils/apiWrapper";
 import Skeleton from "react-loading-skeleton";
+import { formatDateString } from "../utils/formatDate";
 
 export const BlogsCard = ({ classes }) => {
   const navigate = useNavigate();
@@ -35,16 +36,6 @@ export const BlogsCard = ({ classes }) => {
       views: item.views,
     };
     navigate("/blog-details", { state: blogData });
-  };
-
-  const formatDateString = (dateString) => {
-    const date = new Date(dateString);
-
-    // Options for formatting
-    const options = { day: "2-digit", month: "short", year: "numeric" };
-    const formattedDate = date.toLocaleDateString("en-GB", options); // Format as 'DD-MMM-YYYY'
-    // Replace the comma with a space and return the result
-    return formattedDate.replace(",", "").replace(/\s+/g, "-").toLowerCase();
   };
 
   return (
