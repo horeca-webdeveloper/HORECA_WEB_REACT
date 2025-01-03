@@ -25,3 +25,4 @@ artifacts:
     - '**/*'  # Include all files
   base-directory: build  # This is the folder where the React app's build output is generated
   discard-paths: yes  # Optional: To discard the directory structure in the artifact (useful for S3)
+
