@@ -20,6 +20,7 @@ import { useWishlist } from "../context/WishListContext";
 import { debounce } from "lodash";
 import ProfileDrawer from "./ProfileRegistration/ProfileDrawer/ProfileDrawer";
 import SidebarProfile from "../components/SidebarProfile";
+import { navItems } from "../data/sidebar";
 
 const Navigation = ({ categories, currentLocation }) => {
   const token = localStorage.getItem("authToken");
@@ -191,17 +192,26 @@ const Navigation = ({ categories, currentLocation }) => {
     };
     const updateMaxIndex = () => {
       const width = window.innerWidth;
+      // 1600
+      // 1920
+      // 2560
 
-      if (width >= 1536) {
-        setMaxIndex(7); // 2xl: index <= 4
-      } else if (width >= 1280) {
+      if (width >= 1920) {
+        setMaxIndex(8); // xl: index <= 3
+      } else if (width >= 1600) {
+        setMaxIndex(7); // xl: index <= 3
+      } else if (width >= 1536) {
         setMaxIndex(6); // xl: index <= 3
+      } else if (width >= 1400) {
+        setMaxIndex(6); // xl: index <= 3
+      } else if (width >= 1280) {
+        setMaxIndex(5); // xl: index <= 3
       } else if (width >= 1024) {
         setMaxIndex(3); // lg: index <= 2
       } else if (width >= 768) {
-        setMaxIndex(1); // md: index <= 1
+        setMaxIndex(1); // lg: index <= 1
       } else {
-        setMaxIndex(0); // sm: index <= 0
+        setMaxIndex(0); // lg: index <= 0
       }
     };
 
@@ -221,12 +231,12 @@ const Navigation = ({ categories, currentLocation }) => {
       {openModel && !token ? (
         <React.Fragment>
           <div
-            className="bg-[#000000a1] translate-x-[100px] bg-[red] primary w-[10px] h-[100vh] z-[999] fixed flex items-center justify-center"
+            className="bg-[#000000a1] primary w-full h-[100vh] z-[999] fixed flex items-center justify-center"
             onClick={() => setOpenModel(false)}
           ></div>
-          <div className="w-[375px] bg-white rounded-[10px] z-[9999] fixed top-[50%] left-[50%] translate-x-[-50%] hidden translate-y-[-50%]">
-            <div className="bg-[#f6f8fb] border-b  border-b-[#e2e8f0] flex items-center justify-start sm:justify-between p-5 py-3 rounded-t-[10px]">
-              <span></span>
+          <div className="w-[375px] bg-white rounded-[10px] z-[9999] fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+            <div className="bg-[#f6f8fb] border-b  border-b-[#e2e8f0] flex items-center justify-between p-5 py-3 rounded-t-[10px]">
+              <span className="text-[#2E2F32] text-sm font-semibold"></span>
               <span
                 className="cursor-pointer"
                 onClick={() => setOpenModel(false)}
@@ -239,6 +249,7 @@ const Navigation = ({ categories, currentLocation }) => {
                 Delivery options and delivery speeds may vary for different
                 locations
               </p>
+
               <button
                 onClick={() => {
                   navigate("/login");
@@ -252,7 +263,6 @@ const Navigation = ({ categories, currentLocation }) => {
           </div>
         </React.Fragment>
       ) : null}
-
       {openModel && token ? (
         <React.Fragment>
           <div
@@ -284,8 +294,8 @@ const Navigation = ({ categories, currentLocation }) => {
                 ) : null}
                 {currentLocation ? (
                   <p className="text-[13px] text-black mt-2">
-                    {currentLocation.as} {currentLocation.regionName}
-                    {currentLocation.country}
+                    {currentLocation.city}, {currentLocation.zip},{" "}
+                    {currentLocation.regionName}, {currentLocation.country}
                   </p>
                 ) : null}
                 <p className="text-sm text-[#64748B] mt-2">Default Address</p>
@@ -299,28 +309,26 @@ const Navigation = ({ categories, currentLocation }) => {
           </div>
         </React.Fragment>
       ) : null}
-      {window.innerWidth < 640 && (
-        <div className="flex items-center bg-[#186737] p-[10px]">
-          <img
-            className="p-[2px] rounded-[2px]"
-            src={process.env.PUBLIC_URL + "/icons/location.svg"}
-            alt="Location"
-          />
-          <p className="text-[14px] ml-[10px] leading-[16.42px] font-semibold text-[white]">
-            Deliver To :
-          </p>
-          {currentLocation ? (
-            <span className="text-[white] text-sm ml-3">
-              {currentLocation.city}, {currentLocation.country}
-            </span>
-          ) : (
-            <span className="text-[white] text-sm ml-3">
-              Fetching Location...
-            </span>
-          )}
-        </div>
-      )}
-      <div className="bg-gray-200 hidden sm:block">
+      <div className="flex lg:hidden items-center bg-[#186737] p-[10px]">
+        <img
+          className="p-[2px] rounded-[2px]"
+          src={process.env.PUBLIC_URL + "/icons/LocationMobileWhite.svg"}
+          alt="Location"
+        />
+        <p className="text-[14px] ml-[10px] leading-[16.42px] font-semibold text-[white]">
+          Deliver To :
+        </p>
+        {currentLocation ? (
+          <span className="text-[white] text-sm ml-3">
+            {currentLocation.city}, {currentLocation.country}
+          </span>
+        ) : (
+          <span className="text-[white] text-sm ml-3">
+            Fetching Location...
+          </span>
+        )}
+      </div>
+      <div className="bg-gray-200 hidden lg:block">
         <Wrapper classes="flex items-center justify-between text-sm text-gray-400 py-2">
           <p className="">
             Discover Exceptional Products and Unmatched Service.
@@ -334,7 +342,7 @@ const Navigation = ({ categories, currentLocation }) => {
                         {currency.title}
                       </Link>
                       {/* for responsive right line after sell on horeca heading */}
-                      <span className="hidden sm:block text-gray-700 w-[1px] h-[40px] lg:h-[12px] bg-[black] mr-[10px]"></span>
+                      <span className="hidden lg:block text-gray-700 w-[1px] h-[40px] lg:h-[12px] bg-[black] mr-[10px]"></span>
                     </li>
                   );
                 })
@@ -412,7 +420,7 @@ const Navigation = ({ categories, currentLocation }) => {
           </ul>
         </Wrapper>
       </div>
-      <div className="hidden sm:flex md:flex lg:flex xl:flex 2xl:hidden items-center justify-left bg-[#def9ec] p-[10px]">
+      <div className="hidden  lg:flex lg:flex lg:flex xl:flex 2xl:hidden items-center justify-left bg-[#def9ec] p-[10px]">
         <Wrapper>
           <div className="flex items-center">
             <img
@@ -435,11 +443,11 @@ const Navigation = ({ categories, currentLocation }) => {
           </div>
         </Wrapper>
       </div>
-
       {/* Main Nav*/}
-      <Wrapper classes="flex items-center flex-row justify-between sm:justify-start sm:justify-between py-5">
-        {/* Drawer */}
-        <div>
+      <Wrapper classes="flex items-center flex-row py-5">
+        <div className="flex items-center justify-between w-full">
+          {/* Drawer */}
+
           {/* Main Drawer */}
           <div
             className={`fixed inset-y-0 left-0 w-[80vw] bg-white z-[1000] text-black transform ${
@@ -448,7 +456,7 @@ const Navigation = ({ categories, currentLocation }) => {
           >
             {activeCategory == null ? (
               // Main Categories
-              <div>
+              <div className="">
                 <ul className="z-[999]">
                   <li className="text-[14px] font-light border-b-[1px] text-[black] cursor-pointer">
                     <p className="p-4 bg-[#186737] text-[20px] leading-[23.46px] font-normal text-white">
@@ -591,271 +599,285 @@ const Navigation = ({ categories, currentLocation }) => {
               onClick={toggleDrawer}
             />
           )}
-        </div>
-        <div className={window.innerWidth < 640 ? "mr-[15%]" : "mr-[0%]"}>
+          <div className={"mr-[15%] lg:mr-[0%]"}>
+            <Link to="/home">
+              <img
+                onClick={toggleDrawer}
+                src={process.env.PUBLIC_URL + "/icons/Drawer.png"}
+                alt="Horeca Store"
+                className="block lg:hidden"
+              />
+            </Link>
+          </div>
+          {/* {window?.innerWidth > 640 && (
+          <div className="mr-[10%] h-[40px] w-[10px] bg-[white] block lg:hidden"></div>
+        )} */}
           <Link to="/home">
             <img
-              onClick={toggleDrawer}
-              src={process.env.PUBLIC_URL + "/icons/Drawer.png"}
+              className="mr-[0px] lg:ml-[0px]"
+              src={process.env.PUBLIC_URL + "/images/logo.png"}
               alt="Horeca Store"
-              className="block sm:hidden"
             />
           </Link>
-        </div>
-        {window?.innerWidth > 640 && (
-          <div className="mr-[10%] h-[40px] w-[10px] bg-[white] block sm:hidden"></div>
-        )}
-        <Link to="/home">
-          <img
-            className="ml-[40px] sm:ml-[0px]"
-            src={process.env.PUBLIC_URL + "/images/logo.png"}
-            alt="Horeca Store"
-          />
-        </Link>
-        {/* for responsiveness */}
-        {window?.innerWidth > 640 && (
-          <div className="mr-[10%] h-[40px] w-[20px] ml-[40px] bg-[white] block sm:hidden"></div>
-        )}
-        {/* for responsiveness */}
-        {/* Location Search Bar  */}
-        <div
-          className="cursor-pointer relative w-[12.8rem]  flex items-center border border-gray-300 rounded-full h-12 px-3 ml-14 hidden xl:flex"
-          onClick={() => setOpenModel(true)}
-        >
-          <img
-            src={process.env.PUBLIC_URL + "/icons/location.svg"}
-            alt="Location"
-          />
-          {currentLocation ? (
-            <span className="text-[#64748B] text-sm ml-3 address">
-              {currentLocation.as}, {currentLocation.city},{" "}
-              {currentLocation.zip}
-            </span>
-          ) : (
-            <span className="text-[#64748B] text-sm ml-3">
-              Fetching Location...
-            </span>
-          )}
-          <img
+          {/* for responsiveness */}
+          {/* {window?.innerWidth > 640 && (
+          <div className="mr-[10%] h-[40px] w-[20px] ml-[40px] bg-[white] block lg:hidden"></div>
+        )} */}
+          {/* for responsiveness */}
+          {/* Location Search Bar  */}
+          <div
+            className="hidden xl:flex cursor-pointer relative w-[12.8rem]  flex items-center border border-gray-300 rounded-full h-12 px-3 ml-14"
+            onClick={() => setOpenModel(true)}
+          >
+            <img
+              src={process.env.PUBLIC_URL + "/icons/location.svg"}
+              alt="Location"
+            />
+            {currentLocation ? (
+              <span className="text-[#64748B] text-sm ml-3 address">
+                {currentLocation.city}, {currentLocation.zip},{" "}
+                {currentLocation.regionName}, {currentLocation.country}
+              </span>
+            ) : (
+              <span className="text-[#64748B] text-sm ml-3">
+                Fetching Location...
+              </span>
+            )}
+            {/* <img
             className="absolute right-3"
             src={process.env.PUBLIC_URL + "/icons/arrow.svg"}
             alt="arrow"
-          />
-        </div>
-
-        {/* Search Option Button */}
-        <div className="w-[60%] rounded-full border border-gray-300  relative ml-2 hidden sm:block">
-          <form
-            className="flex items-center h-12"
-            onSubmit={(e) => handlerFormSubmit(e)}
-          >
-            <span className="ml-2 cursor-pointer text-primary text-base px-5">
-              All
-            </span>
-            <img
-              className="mr-[10px] cursor-pointer  ml-[-10px]"
-              src={process.env.PUBLIC_URL + "/icons/arrow.svg"}
-              alt="arrow"
-            />
-            <input
-              type="text"
-              className="h-full w-full border-l border-r-gray-300 px-3 text-base text-[#64748B] outline-none"
-              placeholder="I'm shopping for..."
-              // value={searchValue}
-              onChange={(e) => handlerSearchValue(e.target.value)}
-              onFocus={handleFocus}
-            />
-            <button type="submit" className="bg-primary p-2 rounded-full mr-2">
-              <CiSearch color="white" size={26} />
-            </button>
-          </form>
-
-          {isFocused && (products || categoryList || brands) ? (
-            <div
-              ref={divRef}
-              className="max-h-[700px] rounded-lg absolute w-full z-[999] mt-3"
+          /> */}
+          </div>
+          {/* Search Option Button */}
+          <div className="w-[60%] rounded-full border border-gray-300  relative ml-2 hidden lg:block">
+            {/* <Wrapper> */}
+            <form
+              className="flex items-center h-12"
+              onSubmit={(e) => handlerFormSubmit(e)}
             >
-              {products && products.length > 0 && (
-                <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
-                  <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
-                    Products
-                  </div>
-                  <div className="basis-3/4 py-4 px-3 bg-white">
-                    {products.slice(0, 7).map((prod, index) => (
-                      <div
-                        onClick={() => navigateToProduct(prod.id, prod.name)}
-                        key={prod.id}
-                        className={`flex p-2 ${
-                          selectedIndex === index
-                            ? "bg-[#def9ec]"
-                            : "hover:bg-[#def9ec]"
-                        }`}
-                      >
-                        <div>
-                          <img
-                            className="max-w-[40px]"
-                            src={`${prod.image}`}
-                            alt={prod.name}
-                          />
-                        </div>
-                        <div className="ml-3">
-                          <span className="line-clamp-1 text-[#2E2F32] font-semibold text-[14px]">
-                            {highlightText(prod.name, searchValue)}
-                          </span>
-                          <span className="text-[#64748B] text-sm">
-                            SAR {prod.sale_price}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {categoryList && categoryList.length > 0 && (
-                <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
-                  <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
-                    Categories
-                  </div>
-                  <div className="basis-3/4 py-4 px-3 bg-white">
-                    {categoryList.slice(0, 4).map((cat, index) => (
-                      <Link
-                        to={`/collections/${cat.slug}`}
-                        key={cat.id}
-                        className={`flex p-2 ${
-                          selectedIndex === index + products.length
-                            ? "bg-[#def9ec]"
-                            : "hover:bg-[#def9ec]"
-                        }`}
-                      >
-                        <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
-                          {cat.name}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {brands && brands.length > 0 && (
-                <div className="flex  border-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
-                  <div className="basis-1/4 py-4 px-3 text-primary font-semibold border-r-2 text-base">
-                    Brands
-                  </div>
-                  <div className="basis-3/4 py-4 px-3 bg-white">
-                    {brands.slice(0, 4).map((brand, index) => (
-                      <Link
-                        to={`/collections/${brand.id}`}
-                        key={brand.id}
-                        className={`flex p-2 ${
-                          selectedIndex ===
-                          index + products.length + categoryList.length
-                            ? "bg-[#def9ec]"
-                            : "hover:bg-[#def9ec]"
-                        }`}
-                      >
-                        <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
-                          {brand.name}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            isFocused && (
-              <div className="max-h-[300px] rounded-lg absolute w-full z-[999] mt-3">
-                No Product Found...
+              <span className="ml-2 cursor-pointer text-primary text-base px-5">
+                All
+              </span>
+              <img
+                className="mr-[10px] cursor-pointer  ml-[-10px]"
+                src={process.env.PUBLIC_URL + "/icons/arrow.svg"}
+                alt="arrow"
+              />
+              {/* dsaf */}
+              <input
+                type="text"
+                className="h-full w-full border-l border-r-gray-300 px-3 text-base text-[#64748B] outline-none"
+                placeholder="I'm shopping for..."
+                // value={searchValue}
+                onChange={(e) => handlerSearchValue(e.target.value)}
+                onFocus={handleFocus}
+              />
+              <div className="">
+                <button
+                  type="submit"
+                  className="bg-primary p-2 rounded-full mr-2"
+                >
+                  <CiSearch color="white" size={26} />
+                </button>
               </div>
-            )
-          )}
-        </div>
+            </form>
+            {/* </Wrapper> */}
 
-        <div className="flex flex-row  items-center justify-evenly ml-[10%] sm:ml-0  sm:mr-2  sm:min-w-[125px] ">
-          {/* <div className="relative mx-2 hidden sm:flex">
+            {isFocused && (products || categoryList || brands) ? (
+              <div
+                ref={divRef}
+                className="max-h-[700px] rounded-lg absolute w-full z-[999] mt-3"
+              >
+                {products && products.length > 0 && (
+                  <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
+                    <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
+                      Products
+                    </div>
+                    <div className="basis-3/4 py-4 px-3 bg-white">
+                      {products.slice(0, 7).map((prod, index) => (
+                        <div
+                          onClick={() => navigateToProduct(prod.id, prod.name)}
+                          key={prod.id}
+                          className={`flex p-2 ${
+                            selectedIndex === index
+                              ? "bg-[#def9ec]"
+                              : "hover:bg-[#def9ec]"
+                          }`}
+                        >
+                          <div>
+                            <img
+                              className="max-w-[40px]"
+                              src={`${prod.image}`}
+                              alt={prod.name}
+                            />
+                          </div>
+                          <div className="ml-3">
+                            <span className="line-clamp-1 text-[#2E2F32] font-semibold text-[14px]">
+                              {highlightText(prod.name, searchValue)}
+                            </span>
+                            <span className="text-[#64748B] text-sm">
+                              SAR {prod.sale_price}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {categoryList && categoryList.length > 0 && (
+                  <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
+                    <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
+                      Categories
+                    </div>
+                    <div className="basis-3/4 py-4 px-3 bg-white">
+                      {categoryList.slice(0, 4).map((cat, index) => (
+                        <Link
+                          to={`/collections/${cat.slug}`}
+                          key={cat.id}
+                          className={`flex p-2 ${
+                            selectedIndex === index + products.length
+                              ? "bg-[#def9ec]"
+                              : "hover:bg-[#def9ec]"
+                          }`}
+                        >
+                          <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
+                            {cat.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {brands && brands.length > 0 && (
+                  <div className="flex  border-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
+                    <div className="basis-1/4 py-4 px-3 text-primary font-semibold border-r-2 text-base">
+                      Brands
+                    </div>
+                    <div className="basis-3/4 py-4 px-3 bg-white">
+                      {brands.slice(0, 4).map((brand, index) => (
+                        <Link
+                          to={`/collections/${brand.id}`}
+                          key={brand.id}
+                          className={`flex p-2 ${
+                            selectedIndex ===
+                            index + products.length + categoryList.length
+                              ? "bg-[#def9ec]"
+                              : "hover:bg-[#def9ec]"
+                          }`}
+                        >
+                          <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
+                            {brand.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              isFocused && (
+                <div className="max-h-[300px] rounded-lg absolute w-full z-[999] mt-3">
+                  No Product Found...
+                </div>
+              )
+            )}
+          </div>
+          <div className="flex items-center justify-between ml-[20px] sm:ml-[0px]">
+            <div className="flex flex-row  items-center justify-evenly ml-[10%] lg:ml-0  lg:mr-2  lg:min-w-[125px] ">
+              {/* <div className="relative mx-2 hidden lg:flex">
             <img src={process.env.PUBLIC_URL + "/icons/graph.svg"} alt="" />
             <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
               0
             </span>
-          </div> */}
+           </div> */}
 
-          <div
-            className="relative mx-2 hidden sm:flex cursor-pointer group"
-            onClick={() => navigate("/wishlist")}
-          >
-            <img
-              src={process.env.PUBLIC_URL + "/icons/heart.svg"}
-              alt="wishlist"
-            />
-            <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
-              {totalWishListCount}
-            </span>
+              <div
+                className="relative mx-2 hidden lg:flex cursor-pointer group"
+                onClick={() => navigate("/wishlist")}
+              >
+                <img
+                  src={process.env.PUBLIC_URL + "/icons/heart.svg"}
+                  alt="wishlist"
+                />
+                <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
+                  {totalWishListCount}
+                </span>
 
-            {/* Tooltip */}
-            <div className="absolute bottom-full mb-2 right-0 hidden group-hover:block bg-[#DEF9EC] text-[#186737] text-xs rounded py-1 px-2">
-              Wishlist
+                {/* Tooltip */}
+                <div className="absolute bottom-full mb-2 right-0 hidden group-hover:block bg-[#DEF9EC] text-[#186737] text-xs rounded py-1 px-2">
+                  Wishlist
+                </div>
+              </div>
+              <div
+                className="relative mx-2 cursor-pointer group mr-[10px] lg:mr-[0px]"
+                onClick={() => navigate("/checkout")}
+              >
+                <img
+                  src={process.env.PUBLIC_URL + "/icons/cart.svg"}
+                  alt="cart"
+                />
+                <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
+                  {totalCartCount}
+                </span>
+
+                {/* Tooltip */}
+                <div className="absolute bottom-full mb-2 right-0 hidden group-hover:block bg-[#DEF9EC] text-[#186737] text-xs rounded py-1 px-2">
+                  Cart
+                </div>
+              </div>
             </div>
-          </div>
-          <div
-            className="relative mx-2 cursor-pointer group mr-[10px] sm:mr-[0px]"
-            onClick={() => navigate("/checkout")}
-          >
-            <img src={process.env.PUBLIC_URL + "/icons/cart.svg"} alt="cart" />
-            <span className="absolute bottom-[-10px] right-[-6px] text-white bg-primary size-[22px] flex items-center justify-center text-sm rounded-full">
-              {totalCartCount}
-            </span>
-
-            {/* Tooltip */}
-            <div className="absolute bottom-full mb-2 right-0 hidden group-hover:block bg-[#DEF9EC] text-[#186737] text-xs rounded py-1 px-2">
-              Cart
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-row">
-          <img
-            onMouseEnter={() => {
-              window?.innerWidth > 640
-                ? setOnHoverProfile(true)
-                : setShowProfileDrawer(true);
-            }}
-            src={process.env.PUBLIC_URL + "/icons/user.svg"}
-            alt=""
-            className="w-[35px] rounded-full cursor-pointer"
-            onClick={() => {
-              window?.innerWidth > 640
-                ? navigate("/registration/all-orders")
-                : setShowProfileDrawer(!showProfileDrawer);
-            }}
-          />
-          <div className="flex hidden sm:flex flex-col ml-2 ">
-            {isLoggedIn ? (
-              <span
-                onClick={() => {
-                  handlerSignOut();
+            <div className="flex flex-row">
+              <img
+                onMouseEnter={() => {
+                  window?.innerWidth > 640
+                    ? setOnHoverProfile(true)
+                    : setShowProfileDrawer(true);
                 }}
-                className="cursor-pointer text-[11px] text-gray-700"
-              >
-                Sign out
-              </span>
-            ) : (
-              <Link to="/login" className="text-[11px] text-gray-700">
-                Login
-              </Link>
-            )}
-            {isLoggedIn ? (
-              <span
-                to=""
-                onClick={() => navigate("registration/all-orders")}
-                className="text-black text-sm font-semibold capitalize cursor-pointer"
-              >
-                {userName}
-              </span>
-            ) : (
-              <Link to="/sign-up" className="text-black text-sm font-semibold">
-                Register
-              </Link>
-            )}
+                src={process.env.PUBLIC_URL + "/icons/user.svg"}
+                alt=""
+                className="w-[35px] rounded-full cursor-pointer"
+                onClick={() => {
+                  window?.innerWidth > 640
+                    ? navigate("/registration/all-orders")
+                    : setShowProfileDrawer(!showProfileDrawer);
+                }}
+              />
+              <div className="flex hidden lg:flex flex-col ml-2 ">
+                {isLoggedIn ? (
+                  <span
+                    onClick={() => {
+                      handlerSignOut();
+                    }}
+                    className="cursor-pointer text-[11px] text-gray-700"
+                  >
+                    Sign out
+                  </span>
+                ) : (
+                  <Link to="/login" className="text-[11px] text-gray-700">
+                    Login
+                  </Link>
+                )}
+                {isLoggedIn ? (
+                  <span
+                    to=""
+                    onClick={() => navigate("registration/all-orders")}
+                    className="text-black text-sm font-semibold capitalize cursor-pointer"
+                  >
+                    {userName}
+                  </span>
+                ) : (
+                  <Link
+                    to="/sign-up"
+                    className="text-black text-sm font-semibold"
+                  >
+                    Register
+                  </Link>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </Wrapper>
@@ -868,7 +890,7 @@ const Navigation = ({ categories, currentLocation }) => {
               : setShowProfileDrawer(false);
           }}
           style={{ zIndex: 1000 }}
-          className="hidden sm:grid  grid grid-cols-1 sm:grid-cols-12 md:grid-cols-12 lg:grid-cols-12 bg-[white] absolute z-1000 overflow-hidden w-[80vw] border-2 shadow-md m-[10px] ml-[12%] mt-[-20px] rounded-[10px] h-[714px] overflow-x-auto overflow-y-auto"
+          className="hidden sm:grid  grid grid-cols-1 sm:grid-cols-8 md:grid-cols-8 lg:grid-cols-8 bg-[white] absolute z-1000 overflow-hidden w-[80vw] border-2 shadow-md m-[10px] ml-[12%] mt-[-70px] rounded-[10px] h-[714px] overflow-x-auto overflow-y-auto"
         >
           <div className="col-span-1 sm:col-span-2 md:col-span-6 lg:col-span-3 p-4  border-r-2 mr-[20px]">
             <h1 className="text-[16px] leading-[16px] font-semibold">
@@ -1041,18 +1063,28 @@ const Navigation = ({ categories, currentLocation }) => {
               </div>
             </div>
           </div>
-          <div className="col-span-1 sm:col-span-2 md:col-span-12 lg:col-span-6     p-5">
-            {/* <SidebarProfile/> */}
-            <div className="flex items-center p-5 border-b-2 justify-between">
-              <p className="text-[16px] leading-[18.77px]">Account</p>
-              <p className="text-[13px] leading-[15.75px]">
-                Your info at a glance
-              </p>
-            </div>
+          <div className="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2 p-5">
+            {navItems.map((item, index) => {
+              return (
+                <div
+                  className="flex items-center p-5 border-b-2 justify-between cursor-pointer"
+                  key={index}
+                  onClick={() => {
+                    navigate(item.link);
+                    setOnHoverProfile(false);
+                  }}
+                >
+                  <div className="flex items-center">
+                    <img className="h-[25px] mr-[10px]" src={item.icon} />
+                    <p className="text-[16px] leading-[18.77px]">{item.name}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
-      <div className="bg-[#DEF9EC] py-3 hidden sm:flex">
+      <div className="bg-[#DEF9EC] py-3 hidden lg:flex">
         <Wrapper classes="flex flex-row items-center justify-between">
           <div className="flex group relative group/cat1 mr-3  items-center justify-between w-full">
             <div
@@ -1064,7 +1096,7 @@ const Navigation = ({ categories, currentLocation }) => {
                 src={process.env.PUBLIC_URL + "/icons/category.svg"}
                 alt=""
               />
-              <span className="font-bold text-base text-primary ml-2 w-[215px]">
+              <span className="font-bold text-base xl:text-[18px] text-primary ml-2 w-[215px]">
                 Shop By Categories
               </span>
               <img
@@ -1073,22 +1105,22 @@ const Navigation = ({ categories, currentLocation }) => {
                 alt=""
               />
             </div>
-            <div className="w-[80%] flex flex-row items-center justify-between">
+            <div className="w-[100%] flex flex-row items-center justify-between">
               {categories
                 ? categories.map((cat, index) => {
                     return (
                       <React.Fragment key={index}>
                         {index <= maxIndex && (
                           <Link
-                            className="text-[13px] font-normal text-primary mx-2"
+                            className="text-[16px] font-normal text-primary mx-2"
                             to={`/collections/${cat.slug}`}
                           >
-                            {cat.name}
+                            <p className="hover:text-[gray]">{cat.name}</p>
                           </Link>
                         )}
-                        {index === 7 && (
+                        {index === categories.length - 1 && (
                           <Link
-                            className="text-[13px] font-bold text-primary mx-2 "
+                            className="text-[16px] font-bold text-primary mx-2 "
                             to="/collections/deal-of-a-days"
                           >
                             Deal of the day
@@ -1188,127 +1220,131 @@ const Navigation = ({ categories, currentLocation }) => {
           </div>
         </Wrapper>
       </div>
-      <div className="w-[94%] m-auto rounded-[5px] sm:rounded-full border  border-gray-300 relative block sm:hidden">
-        <form
-          className="flex items-center h-10"
-          onSubmit={(e) => handlerFormSubmit(e)}
-        >
-          <span className="ml-2 text-primary text-base px-5">All</span>
-          <input
-            type="text"
-            className="h-full w-full border-l border-r-gray-300 px-3 text-base text-[#64748B] outline-none"
-            placeholder="I'm shopping for..."
-            value={searchValue}
-            onChange={(e) => handlerSearchValue(e.target.value)}
-            onFocus={handleFocus}
-            //  onBlur={handleBlur}
-          />
-          <button
-            type="submit"
-            className="bg-primary p-2 rounded-[5px] sm:rounded-full mr-1"
+      {/* this code is for mobile header or responsive */}
+      <Wrapper>
+        <div className="m-auto rounded-[5px] lg:rounded-full border  border-gray-300 relative block lg:hidden">
+          <form
+            className="flex items-center h-10"
+            onSubmit={(e) => handlerFormSubmit(e)}
           >
-            <CiSearch color="white" size={18} />
-          </button>
-        </form>
-
-        {isFocused && (products || categoryList || brands) ? (
-          <div className="max-h-[700px] rounded-lg absolute w-full z-[999] mt-3">
-            {products && products.length > 0 && (
-              <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
-                <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
-                  Products
-                </div>
-                <div className="basis-3/4 py-4 px-3 bg-white">
-                  {products.slice(0, 7).map((prod, index) => (
-                    <Link
-                      to={`product/${prod.id}`}
-                      key={prod.id}
-                      className={`flex p-2 ${
-                        selectedIndex === index
-                          ? "bg-[#def9ec]"
-                          : "hover:bg-[#def9ec]"
-                      }`}
-                    >
-                      <div>
-                        <img
-                          className="max-w-[40px]"
-                          src={`${prod.image}`}
-                          alt={prod.name}
-                        />
-                      </div>
-                      <div className="ml-3">
-                        <span className="line-clamp-1 text-[#2E2F32] font-semibold text-[14px]">
-                          {prod.name}
-                        </span>
-                        <span className="text-[#64748B] text-sm">
-                          SAR {prod.sale_price}
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {categoryList && categoryList.length > 0 && (
-              <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
-                <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
-                  Categories
-                </div>
-                <div className="basis-3/4 py-4 px-3 bg-white">
-                  {categoryList.slice(0, 4).map((cat, index) => (
-                    <Link
-                      to={`/collections/${cat.slug}`}
-                      key={cat.id}
-                      className={`flex p-2 ${
-                        selectedIndex === index + products.length
-                          ? "bg-[#def9ec]"
-                          : "hover:bg-[#def9ec]"
-                      }`}
-                    >
-                      <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
-                        {cat.name}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {brands && brands.length > 0 && (
-              <div className="flex  border-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
-                <div className="basis-1/4 py-4 px-3 text-primary font-semibold border-r-2 text-base">
-                  Brands
-                </div>
-                <div className="basis-3/4 py-4 px-3 bg-white">
-                  {brands.slice(0, 4).map((brand, index) => (
-                    <Link
-                      to={`/collections/${brand.id}`}
-                      key={brand.id}
-                      className={`flex p-2 ${
-                        selectedIndex ===
-                        index + products.length + categoryList.length
-                          ? "bg-[#def9ec]"
-                          : "hover:bg-[#def9ec]"
-                      }`}
-                    >
-                      <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
-                        {brand.name}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        ) : (
-          isFocused && (
-            <div className="max-h-[300px] rounded-lg absolute w-full z-[999] mt-3">
-              No Product Found...
+            <span className="ml-2 text-primary text-base px-5">All</span>
+            <input
+              type="text"
+              className="h-full w-full border-l border-r-gray-300 px-3 text-base text-[#64748B] outline-none"
+              placeholder="I'm shopping for..."
+              // value={searchValue}
+              onChange={(e) => handlerSearchValue(e.target.value)}
+              onFocus={handleFocus}
+            />
+            <div className="">
+              <button
+                type="submit"
+                className="bg-primary p-2 rounded-[5px] lg:rounded-full mr-1"
+              >
+                <CiSearch color="white" size={18} />
+              </button>
             </div>
-          )
-        )}
-      </div>
+          </form>
+
+          {isFocused && (products || categoryList || brands) ? (
+            <div className="max-h-[700px] rounded-lg absolute w-full bg-[red] z-[999] mt-3">
+              {products && products.length > 0 && (
+                <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
+                  <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
+                    Products
+                  </div>
+                  <div className="basis-3/4 py-4 px-3 bg-white">
+                    {products.slice(0, 7).map((prod, index) => (
+                      <Link
+                        to={`product/${prod.id}`}
+                        key={prod.id}
+                        className={`flex p-2 ${
+                          selectedIndex === index
+                            ? "bg-[#def9ec]"
+                            : "hover:bg-[#def9ec]"
+                        }`}
+                      >
+                        <div>
+                          <img
+                            className="max-w-[40px]"
+                            src={`${prod.image}`}
+                            alt={prod.name}
+                          />
+                        </div>
+                        <div className="ml-3">
+                          <span className="line-clamp-1 text-[#2E2F32] font-semibold text-[14px]">
+                            {prod.name}
+                          </span>
+                          <span className="text-[#64748B] text-sm">
+                            SAR {prod.sale_price}
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {categoryList && categoryList.length > 0 && (
+                <div className="flex border-b-2 border-b-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
+                  <div className="basis-1/4 py-4 px-3 text-primary font-semibold text-base border-r-2 border-r-[#e2e8f0]">
+                    Categories
+                  </div>
+                  <div className="basis-3/4 py-4 px-3 bg-white">
+                    {categoryList.slice(0, 4).map((cat, index) => (
+                      <Link
+                        to={`/collections/${cat.slug}`}
+                        key={cat.id}
+                        className={`flex p-2 ${
+                          selectedIndex === index + products.length
+                            ? "bg-[#def9ec]"
+                            : "hover:bg-[#def9ec]"
+                        }`}
+                      >
+                        <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
+                          {cat.name}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {brands && brands.length > 0 && (
+                <div className="flex  border-[#e2e8f0] rounded-lg bg-[#f6f8fb]">
+                  <div className="basis-1/4 py-4 px-3 text-primary font-semibold border-r-2 text-base">
+                    Brands
+                  </div>
+                  <div className="basis-3/4 py-4 px-3 bg-white">
+                    {brands.slice(0, 4).map((brand, index) => (
+                      <Link
+                        to={`/collections/${brand.id}`}
+                        key={brand.id}
+                        className={`flex p-2 ${
+                          selectedIndex ===
+                          index + products.length + categoryList.length
+                            ? "bg-[#def9ec]"
+                            : "hover:bg-[#def9ec]"
+                        }`}
+                      >
+                        <span className="line-clamp-1 text-[#64748B] font-semibold text-base">
+                          {brand.name}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            isFocused && (
+              <div className="max-h-[300px] rounded-lg absolute w-full z-[999] mt-3">
+                No Product Found...
+              </div>
+            )
+          )}
+        </div>
+      </Wrapper>
       {showProfileDrawer && (
         <div>
           <ProfileDrawer />

@@ -10,8 +10,8 @@ import Skeleton from "react-loading-skeleton";
 import { apiClient } from "../utils/apiWrapper";
 import { useLocation, useNavigate } from "react-router";
 import { IoClose } from "react-icons/io5";
-const  ProductCard =lazy(()=>import("../shared/ProductCard"));
-  const ProductListing = () => {
+const ProductCard = lazy(() => import("../shared/ProductCard"));
+const ProductListing = () => {
   const [page, setPage] = useState("1");
   const [perPage, setPerPage] = useState("20");
   const [loader, setLoader] = useState(true);
@@ -50,7 +50,6 @@ const  ProductCard =lazy(()=>import("../shared/ProductCard"));
       title: "Products",
     },
   ];
-
   const fetchProducts = async () => {
     const authToken = localStorage.getItem("authToken");
     setLoader(true);
@@ -140,9 +139,8 @@ const  ProductCard =lazy(()=>import("../shared/ProductCard"));
     selectedMaxPrice,
   ]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [sortBy, perPage]);
+  useEffect(() => {}, [sortBy, perPage]);
+
   return (
     <div>
       <div
@@ -218,8 +216,10 @@ const  ProductCard =lazy(()=>import("../shared/ProductCard"));
           minDelivery={minDelivery}
           maxDelivery={maxDelivery}
           priceRangeBool={priceRangeBool}
+          setBrands={setBrands}
           setPriceRangeBool={setPriceRangeBool}
           brands={brands}
+          setPage={setPage}
           selectedBrands={selectedBrands}
           setSelectedBrands={setSelectedBrands}
           categories={categories}
@@ -251,6 +251,8 @@ const  ProductCard =lazy(()=>import("../shared/ProductCard"));
               priceRangeBool={priceRangeBool}
               setPriceRangeBool={setPriceRangeBool}
               brands={brands}
+              setPage={setPage}
+              setBrands={setBrands}
               selectedBrands={selectedBrands}
               setSelectedBrands={setSelectedBrands}
               categories={categories}
@@ -386,7 +388,7 @@ const  ProductCard =lazy(()=>import("../shared/ProductCard"));
             </div>
 
             {/* Related Searched  */}
-            {!loader && products.length == perPage ? (
+            {!loader && products.length <= perPage ? (
               <Pagination
                 page={page}
                 paginationData={paginationData}
@@ -504,7 +506,6 @@ const  ProductCard =lazy(()=>import("../shared/ProductCard"));
   );
 };
 
-
 export default React.memo(ProductListing);
 // Filter Title
 const FilterTitle = ({ classes, title }) => {
@@ -618,12 +619,15 @@ const Rating = ({ rating, classes }) => {
 // Filter Section
 const FilterSection = ({
   brands,
+  setBrands,
   priceMin,
+  selectedBrands,
   priceMax,
   setSelectedReview,
   selectedReview,
   setSelectedBrands,
   products,
+  setPage,
   minDelivery,
   maxDelivery,
   setSelectedDelivery,
@@ -651,6 +655,12 @@ const FilterSection = ({
   const [minValue, set_minValue] = useState(priceMin);
   const [maxValue, set_maxValue] = useState(priceMax);
 
+  const [btnActive, setBtnActive] = useState(true);
+  const [btnActiveRating, setBtnActiveRating] = useState(true);
+
+  useEffect(() => {
+    setPage(1);
+  }, [btnActive, btnActiveRating]);
   const numberOfRanges = 5;
   // let timeoutId; // Keep track of the timeout ID
 
@@ -671,6 +681,7 @@ const FilterSection = ({
   const handlerPriceRange = () => {
     setSelectedMinPrice(minValue);
     setSelectedMaxPrice(maxValue);
+    setBtnActive(false);
   };
 
   return (
@@ -682,9 +693,13 @@ const FilterSection = ({
             <React.Fragment>
               <div className="flex items-center justify-between">
                 <FilterTitle title="Applied Search" />
-                <span className="underline cursor-pointer text-gray-400 font-semibold text-sm">
+                <button
+                  className={`underline cursor-pointer ${
+                    btnActive ? "text-[red]" : "text-[red]"
+                  } font-semibold text-sm`}
+                >
                   Clear All
-                </span>
+                </button>
               </div>
 
               <div className="mt-5 mb-5">
@@ -705,17 +720,31 @@ const FilterSection = ({
         <React.Fragment>
           <div className="flex items-center justify-between">
             <FilterTitle title="Price" />
-            <span
-              className="text-sm underline text-gray-400 font-semibold cursor-pointer"
+            <button
+              disabled={btnActive ? true : false}
+              className={`underline cursor-pointer ${
+                btnActive == false ? "text-[black]" : "text-[gray]"
+              } font-semibold text-sm`}
               onClick={() => {
                 set_minValue(10);
                 set_maxValue(20000);
                 setSelectedMaxPrice(20000);
                 setSelectedMinPrice(10);
+                setBtnActive(true);
+                setSelectedBrands((prev) => {
+                  const newState = []; // Set the new state as an empty array
+                  console.log("----->>>>>>", newState); // Log immediately after updating state
+                  return newState;
+                });
+                setBrands((prev) => {
+                  const newState = []; // Set the new state as an empty array
+                  console.log("----->>>>>>", newState); // Log immediately after updating state
+                  return newState;
+                });
               }}
             >
               Clear All
-            </span>
+            </button>
           </div>
           <span className="text-gray-700 text-sm text-center block my-1">
             ${minValue} - ${maxValue}+
@@ -752,28 +781,32 @@ const FilterSection = ({
           <div className="relative mt-1">
             <div className="mt-3">
               {brands ? (
-                brands.map((brand, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      {!seeMoreBrand && index < 5 ? (
-                        <CustomCheckbox
-                          key={index}
-                          id={brand.id}
-                          title={brand.name}
-                          onClick={() => handleCheckboxChange(brand.id)}
-                        />
-                      ) : null}
-                      {seeMoreBrand ? (
-                        <CustomCheckbox
-                          key={index}
-                          id={brand.id}
-                          title={brand.name}
-                          onClick={() => handleCheckboxChange(brand.id)}
-                        />
-                      ) : null}
-                    </React.Fragment>
-                  );
-                })
+                brands.map((brand, index) => (
+                  <React.Fragment key={index}>
+                    {/* Show the first 5 brands initially */}
+                    {!seeMoreBrand && index < 5 ? (
+                      <CustomCheckbox
+                        id={brand.id}
+                        title={brand.name}
+                        onClick={() => {
+                          handleCheckboxChange(brand.id);
+                          setBtnActive(false);
+                        }}
+                      />
+                    ) : null}
+                    {/* Show all brands if 'See More' is clicked */}
+                    {seeMoreBrand ? (
+                      <CustomCheckbox
+                        id={brand.id}
+                        title={brand.name}
+                        onClick={() => {
+                          handleCheckboxChange(brand.id);
+                          setBtnActive(false);
+                        }}
+                      />
+                    ) : null}
+                  </React.Fragment>
+                ))
               ) : (
                 <p>No Brand Found</p>
               )}
@@ -787,16 +820,16 @@ const FilterSection = ({
           </div>
           <div className="w-full h-[1px] bg-[#E2E8F0] my-5"></div>
         </React.Fragment>
-
-        <React.Fragment>
+        {/* <React.Fragment>
           <div className="flex items-center justify-between">
             <FilterTitle title="Fulfillment Speed" />
-            <span
+            <button
+              disabled={btnActive ? true : false}
               className="font-semibold text-gray-400 text-sm underline cursor-pointer"
               onClick={() => setSelectedDelivery()}
             >
               Clear All
-            </span>
+            </button>
           </div>
           <div className="relative flex flex-row h-1 w-full bg-gray-700 items-center justify-between mt-3">
             <span
@@ -821,48 +854,69 @@ const FilterSection = ({
             </span>
           </div>
           <div className="w-full h-[1px] bg-[#E2E8F0] mt-4 mb-3"></div>
-        </React.Fragment>
+        </React.Fragment> */}
 
         <React.Fragment>
           <div className="flex items-center justify-between">
             <FilterTitle title={"Reviews"} />
-            <span
-              className="text-gray-400 font-semibold text-sm underline cursor-pointer"
-              onClick={() => setSelectedReview()}
+            <button
+              disabled={btnActiveRating ? true : false}
+              className={`${
+                btnActiveRating == false ? "text-[black]" : "text-[gray]"
+              } font-semibold text-sm underline cursor-pointer`}
+              onClick={() => {
+                setSelectedReview();
+                setBtnActiveRating(true);
+              }}
             >
               Clear All
-            </span>
+            </button>
           </div>
           <div className="mt-3">
             <CustomRadio
               id={"ratting"}
               rating={5}
               checked={selectedReview === 5}
-              onClick={() => setSelectedReview(5)}
+              onClick={() => {
+                setSelectedReview(5);
+                setBtnActiveRating(false);
+              }}
             />
             <CustomRadio
               id={"ratting"}
               rating={4}
               checked={selectedReview === 4}
-              onClick={() => setSelectedReview(4)}
+              onClick={() => {
+                setSelectedReview(4);
+                setBtnActiveRating(false);
+              }}
             />
             <CustomRadio
               id={"ratting"}
               rating={3}
               checked={selectedReview === 3}
-              onClick={() => setSelectedReview(3)}
+              onClick={() => {
+                setSelectedReview(3);
+                setBtnActiveRating(false);
+              }}
             />
             <CustomRadio
               id={"ratting"}
               rating={2}
               checked={selectedReview === 2}
-              onClick={() => setSelectedReview(2)}
+              onClick={() => {
+                setSelectedReview(2);
+                setBtnActiveRating(false);
+              }}
             />
             <CustomRadio
               id={"ratting"}
               rating={1}
               checked={selectedReview === 1}
-              onClick={() => setSelectedReview(1)}
+              onClick={() => {
+                setSelectedReview(1);
+                setBtnActiveRating(false);
+              }}
             />
           </div>
         </React.Fragment>
