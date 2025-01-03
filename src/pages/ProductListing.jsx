@@ -10,10 +10,12 @@ import Skeleton from "react-loading-skeleton";
 import { apiClient } from "../utils/apiWrapper";
 import { useLocation, useNavigate } from "react-router";
 import { IoClose } from "react-icons/io5";
+import Slider from "react-slick";
+import { settings } from "../utils/slicksettings";
 const ProductCard = lazy(() => import("../shared/ProductCard"));
 const ProductListing = () => {
   const [page, setPage] = useState("1");
-  const [perPage, setPerPage] = useState("20");
+  const [perPage, setPerPage] = useState("50");
   const [loader, setLoader] = useState(true);
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -50,6 +52,7 @@ const ProductListing = () => {
       title: "Products",
     },
   ];
+
   const fetchProducts = async () => {
     const authToken = localStorage.getItem("authToken");
     setLoader(true);
@@ -287,7 +290,7 @@ const ProductListing = () => {
               </div>
               <div className="hidden sm:hidden md:hidden lg:block flex flex-row items-center ">
                 <span className="text-sm text-gray-700 mr-6">
-                  Sort:
+                  Default Sorting:
                   <span className="text-black-100 ml-1 relative">
                     <Menu
                       arrow={true}
@@ -397,110 +400,160 @@ const ProductListing = () => {
             ) : null}
           </div>
         </div>
-        {window?.innerWidth > 640 && (
-          <SuggestionSlider
-            title={"Products you may also like"}
-            productList={products}
-          />
-        )}
-        {window?.innerWidth < 640 && (
-          <h1 className="mt-[20px] text-[16px] leading-[18.77px] font-normal">
-            Products you may also like
-          </h1>
-        )}
-        {window?.innerWidth < 640 && (
-          <div
-            style={
-              window.innerWidth < 640
-                ? {
-                    overflow: "auto",
-                    scrollbarWidth: "none", // For Firefox
-                    msOverflowStyle: "none", // For Internet Explorer and Edge
-                  }
-                : {}
-            }
-            className={bigScreenCss}
-          >
-            {false ? (
-              Array.from({ length: 10 }).map((_, index) => (
-                <Skeleton
-                  key={index}
-                  className="col-span-1 mt-1 min-h-[400px]"
-                />
-              ))
-            ) : (
-              <React.Fragment>
-                {products && products.length > 0 ? (
-                  products.map((product, index) =>
-                    index < 10 ? (
-                      <ProductCard
-                        key={index}
-                        classes="col-span-1 mt-1"
-                        product={product}
-                      />
-                    ) : null
-                  )
-                ) : (
-                  <p className="col-span-5 font-semibold text-center text-base">
-                    No Product Found
-                  </p>
-                )}
-              </React.Fragment>
+        <div className="mb-10">
+          <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
+            <h2 className=" font-medium ml-[8px] sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
+              Products you may also like
+            </h2>
+            {window?.innerWidth > 600 && window?.innerWidth < 1024 && (
+              <span className="text-gray-700 text-sm">Page 1 of 3</span>
+            )}
+            {window?.innerWidth > 1024 && (
+              <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
-        )}
-        {window?.innerWidth > 640 && (
-          <SuggestionSlider
-            title={"Inspired by your browsing history"}
-            productList={products}
-          />
-        )}
-        {window?.innerWidth < 640 && (
-          <h1 className="mt-[20px] text-[16px] leading-[18.77px] font-normal">
-            Inspired by your browsing history
-          </h1>
-        )}
-        {window?.innerWidth < 640 && (
-          <div
-            style={
-              window.innerWidth < 640
-                ? {
-                    overflow: "auto",
-                    scrollbarWidth: "none", // For Firefox
-                    msOverflowStyle: "none", // For Internet Explorer and Edge
-                  }
-                : {}
-            }
-            className={bigScreenCss}
-          >
-            {false ? (
-              Array.from({ length: 10 }).map((_, index) => (
-                <Skeleton
-                  key={index}
-                  className="col-span-1 mt-1 min-h-[550px]"
-                />
-              ))
-            ) : (
-              <React.Fragment>
-                {products && products.length > 0 ? (
-                  products.map((product, index) =>
-                    index < 10 ? (
-                      <ProductCard
+          {window?.innerWidth > 640 && (
+            <div className="slider-container">
+              <Slider {...settings} className="arrow__wrapper">
+                {products && products.length > 0
+                  ? products.map((product, index) => (
+                      <div className="px-2">
+                        <ProductCard
+                          classes="min-h-[600px] mx-2"
+                          key={index}
+                          product={product}
+                        />
+                      </div>
+                    ))
+                  : Array.from({ length: 10 }).map((_, index) => (
+                      <Skeleton
                         key={index}
-                        classes="col-span-1 mt-1"
-                        product={product}
+                        className="col-span-1 mt-1 min-h-[400px]"
                       />
-                    ) : null
-                  )
-                ) : (
-                  <p className="col-span-5 font-semibold text-center text-base">
-                    No Product Found
-                  </p>
-                )}
-              </React.Fragment>
+                    ))}
+              </Slider>
+            </div>
+          )}
+          {window?.innerWidth < 640 && (
+            <div
+              style={
+                window.innerWidth < 640
+                  ? {
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
+                  : {}
+              }
+              className={bigScreenCss}
+            >
+              {false ? (
+                Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="col-span-1 mt-1 min-h-[400px]"
+                  />
+                ))
+              ) : (
+                <React.Fragment>
+                  {products && products.length > 0
+                    ? products?.map((product, index) =>
+                        index < 10 ? (
+                          <ProductCard
+                            key={index}
+                            classes="col-span-1 mt-1"
+                            product={product}
+                          />
+                        ) : null
+                      )
+                    : Array.from({ length: 10 }).map((_, index) => (
+                        <Skeleton
+                          key={index}
+                          className="col-span-1 mt-1 min-h-[400px]"
+                        />
+                      ))}
+                </React.Fragment>
+              )}
+            </div>
+          )}
+        </div>
+        <div className="mb-10 ">
+          <div className="flex items-center justify-between mx-2 my-[10px] sm:my-8">
+            <h2 className=" font-medium ml-[8px] sm:font-semibold text-[16px] sm:text-2xl text-black-100 ">
+              Inspired by your browsing history
+            </h2>
+            {window?.innerWidth > 600 && window?.innerWidth < 1024 && (
+              <span className="text-gray-700 text-sm">Page 1 of 3</span>
+            )}
+            {window?.innerWidth > 1024 && (
+              <span className="text-gray-700 text-sm">Page 1 of 5</span>
             )}
           </div>
-        )}
+          {window?.innerWidth > 640 && (
+            <div className="slider-container">
+              <Slider {...settings} className="arrow__wrapper">
+                {products && products.length > 0
+                  ? products.map((product, index) => (
+                      <div className="px-2">
+                        <ProductCard
+                          classes="min-h-[600px] mx-2"
+                          key={index}
+                          product={product}
+                        />
+                      </div>
+                    ))
+                  : Array.from({ length: 10 }).map((_, index) => (
+                      <Skeleton
+                        key={index}
+                        className="col-span-1 mt-1 min-h-[400px]"
+                      />
+                    ))}
+              </Slider>
+            </div>
+          )}
+          {window?.innerWidth < 640 && (
+            <div
+              style={
+                window.innerWidth < 640
+                  ? {
+                      overflow: "auto",
+                      scrollbarWidth: "none", // For Firefox
+                      msOverflowStyle: "none", // For Internet Explorer and Edge
+                    }
+                  : {}
+              }
+              className={bigScreenCss}
+            >
+              {false ? (
+                Array.from({ length: 10 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="col-span-1 mt-1 min-h-[400px]"
+                  />
+                ))
+              ) : (
+                <React.Fragment>
+                  {products && products.length > 0
+                    ? products.map((product, index) =>
+                        index < 10 ? (
+                          <ProductCard
+                            key={index}
+                            classes="col-span-1 mt-1"
+                            product={product}
+                          />
+                        ) : null
+                      )
+                    : Array.from({ length: 10 }).map((_, index) => (
+                        <Skeleton
+                          key={index}
+                          className="col-span-1 mt-1 min-h-[400px]"
+                        />
+                      ))}
+                </React.Fragment>
+              )}
+            </div>
+          )}
+        </div>
       </Wrapper>
     </div>
   );
@@ -678,6 +731,16 @@ const FilterSection = ({
     );
   };
 
+  useEffect(() => {
+    if (selectedBrands == []) {
+      setBtnActive((prev) => {
+        const newState = true; // Set the new state to true
+        console.log(newState); // Log immediately after updating state
+        return newState; // Return the updated state
+      });
+    }
+  }, [selectedBrands, brands]);
+
   const handlerPriceRange = () => {
     setSelectedMinPrice(minValue);
     setSelectedMaxPrice(maxValue);
@@ -695,7 +758,7 @@ const FilterSection = ({
                 <FilterTitle title="Applied Search" />
                 <button
                   className={`underline cursor-pointer ${
-                    btnActive ? "text-[red]" : "text-[red]"
+                    btnActive ? "text-[black]" : "text-[gray]"
                   } font-semibold text-sm`}
                 >
                   Clear All
@@ -733,12 +796,14 @@ const FilterSection = ({
                 setBtnActive(true);
                 setSelectedBrands((prev) => {
                   const newState = []; // Set the new state as an empty array
-                  console.log("----->>>>>>", newState); // Log immediately after updating state
                   return newState;
                 });
                 setBrands((prev) => {
-                  const newState = []; // Set the new state as an empty array
-                  console.log("----->>>>>>", newState); // Log immediately after updating state
+                  const newState = []; // Set the new state as an empty array; // Log immediately after updating state
+                  return newState;
+                });
+                setBtnActive((prev) => {
+                  const newState = true; // Set the new state as an empty array; // Log immediately after updating state
                   return newState;
                 });
               }}
